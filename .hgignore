@@ -1,0 +1,16 @@
+syntax: glob
+*.orig
+*.rej
+*~
+*.o
+*.pyc
+*.pyo
+tests/*.err
+*.swp
+store/*
+.project
+.pydevproject
+
+syntax: regexp
+.*\#.*\#$
+
