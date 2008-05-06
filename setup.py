@@ -1,11 +1,19 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -
 #
-# Copyright (C) 2007 Christopher Lenz
-# All rights reserved.
+# Copyright (c) 2008 Benoit Chesneau <benoitc@e-engura.com> 
 #
-# This software is licensed as described in the file COPYING, which
-# you should have received as part of this distribution.
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 try:
     from setuptools import setup
@@ -14,11 +22,11 @@ except ImportError:
 import sys
 
 setup(
-    name = 'restclient',
+    name = 'py-restclient',
     version = '0.1',
     description = 'Python REST client',
     long_description = \
-"""A simple REST client for Python, inspired by the microframework (Camping, Sinatra…) style of specifying actions: get, put, post, delete.""",
+"""A simple REST client for Python, inspired by the microframework (Camping, Sinatra) style of specifying actions: get, put, post, delete.""",
     author = 'Benoit Chesneau',
     author_email = 'benoitc@e-engura.com',
     license = 'BSD',
@@ -32,8 +40,8 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Software Development :: Libraries',
     ],
     packages = ['restclient'],
     test_suite = 'restclient.tests.suite',
