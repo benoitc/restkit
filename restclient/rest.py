@@ -16,10 +16,10 @@
 #
 
 """A simple REST client"""
-
-
-import httplib2
 from urllib import quote, urlencode
+
+from restclient.http import getDefaultHTTPClient, HTTPClient 
+
 
 __all__ = ['Resource', 'RestClient', 'RestClientFactory', 'ResourceNotFound', \
         'Unauthorised', 'RequestFailed']
@@ -46,18 +46,18 @@ class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
     including authentication.
 
-    >>> res = Resource('http://pypaste.com/Lf68Zatx')
+    >>> res = Resource('http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru')
     >>> res.get(headers={'accept': 'application/json'})
-    '{"snippet": "test", "title": "", "id": "Lf68Zatx", "language": "python", "revid": "bad17d41ea10"}'
+    '{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
     >>> res.status_code
     200
-    >>> res = Resource('http://pypaste.com/')
-    >>> post = res.post(payload='{"snippet": "test"}', headers={'accept': 'application/json', 'content-type': 'application/json'})
+    >>> res = Resource('http://127.0.0.1:5000')
+    >>> post = res.post(payload='{"snippet": "test"}', headers={'Accept': 'application/json', 'Content-type': 'application/json'})
     >>> res.status_code
     200
     """
-    def __init__(self, uri, username=None, password=None, http=None):
-        self.client = RestClient(username, password, http)
+    def __init__(self, uri, http=None):
+        self.client = RestClient(http)
         self.uri = uri
         self.http = http
 
@@ -89,20 +89,17 @@ class RestClient(object):
     """Basic rest client
     >>> res = RestClient()
     >>> xml = res.get('http://pypaste.com/about')
-    >>> json = res.get('http://pypaste.com/Lf68Zatx', headers={'accept': 'application/json'})
+    >>> json = res.get('http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru', headers={'accept': 'application/json'})
     >>> json
-    '{"snippet": "test", "title": "", "id": "Lf68Zatx", "language": "python", "revid": "bad17d41ea10"}'
+    '{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
     """
-    
-    def __init__(self, username=None, password=None, http=None):
-        if http is None:
-            http = httplib2.Http()
-            http.force_exception_to_status_code = False
-        self.http = http
-        self.username = username
-        self.password = password
-        if self.username is not None and self.password is not None:
-            self.http.add_credentials(username, password)
+
+    def __init__(self, httpclient=None):
+
+        if httpclient is None:
+            httpclient = getDefaultHTTPClient()
+
+        self.httpclient = httpclient
 
         self.status_code = None
         self.response = None
@@ -117,21 +114,15 @@ class RestClient(object):
         return self.make_request("HEAD", uri, path=path, headers=headers, **params)
 
     def post(self, uri, path=None, body=None, headers=None, **params):
-        return self.make_request('POST', uri, path=path, body=body, headers=headers,
-                             **params)
+        return self.make_request("POST", uri, path=path, body=body, headers=headers, **params)
 
     def put(self, uri, path=None, body=None, headers=None, **params):
-        return self.make_request('PUT', uri, path=path, body=body, headers=headers,
-                             **params)
+        return self.make_request('PUT', uri, path=path, body=body, headers=headers, **params)
 
     def make_request(self, method, uri, path=None, body=None, headers=None, **params):
         headers = headers or {}
 
-        # body should never be null
-        if body is None:
-            body = ""
-
-        resp, data = self.http.request(make_uri(uri, path, **params), method,
+        resp, data = self.httpclient.request(make_uri(uri, path, **params), method=method,
                 body=body, headers=headers)
 
         self.status_code = int(resp.status)

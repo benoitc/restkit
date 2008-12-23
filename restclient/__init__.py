@@ -13,4 +13,12 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+try:
+    __version__ = __import__('pkg_resources').get_distribution('restclient').version
+except:
+    __version__ = '?'
+
+
 from restclient.rest import Resource, RestClient
+
+
