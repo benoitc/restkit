@@ -23,12 +23,12 @@ import sys
 
 setup(
     name = 'py-restclient',
-    version = '0.1',
+    version = '0.2',
     description = 'Python REST client',
     long_description = \
 """A simple REST client for Python, inspired by the microframework (Camping, Sinatra) style of specifying actions: get, put, post, delete.""",
     author = 'Benoit Chesneau',
-    author_email = 'benoitc@e-engura.com',
+    author_email = 'benoitc@e-engura.org',
     license = 'BSD',
     url = 'http://dev.e-engura.com/hg/python-restclient',
     zip_safe = True,
@@ -45,8 +45,5 @@ setup(
     ],
     packages = ['restclient'],
     test_suite = 'restclient.tests.suite',
-
-    setup_requires = ['httplib2']
-
 )
 
