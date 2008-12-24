@@ -258,7 +258,7 @@ class RestClient(object):
 
             from restclient import RestClient
             client = RestClient()
-            client.make_request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP',
+            client.make_request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
                 headers={'Accept': 'application/json'})
 
         :param method: str, the HTTP action to be performed: 
