@@ -124,6 +124,16 @@ class HTTPClientTestCase(unittest.TestCase):
 class CurlHTTPClientTestCase(HTTPClientTestCase):
     httpclient = CurlHTTPClient()
 
+    def testAuth(self):
+        httpclient = CurlHTTPClient()
+        httpclient.add_credentials("test", "test")
+        
+        res = Resource(self.url, httpclient)
+        result = res.get('/auth')
+        self.assert_(res.status_code == 200)
+
+
+
 class HTTPLib2HTTPClientTestCase(HTTPClientTestCase):
     httpclient = HTTPLib2HTTPClient() 
 

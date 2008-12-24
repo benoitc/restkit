@@ -185,7 +185,16 @@ class CurlHTTPClient(HTTPClient):
             raise RuntimeError('Cannot find pycurl library')
 
         self.timeout = timeout
-        self.follow_redirects = True
+        self._credentials = {}
+
+    def add_credentials(self, user, password):
+        self._credentials = {
+                "user": user,
+                "password": password
+        }
+
+    def _get_credentials(self):
+        return self._credentials
 
     def _parseHeaders(self, status_and_headers):
         status_and_headers.seek(0)
@@ -229,11 +238,21 @@ class CurlHTTPClient(HTTPClient):
             c.setopt(pycurl.WRITEFUNCTION, data.write)
             c.setopt(pycurl.HEADERFUNCTION, header.write)
             c.setopt(pycurl.URL ,url)
-            if self.follow_redirects:
-                c.setopt(pycurl.FOLLOWLOCATION, 1)
-                c.setopt(pycurl.MAXREDIRS, 5)
+            c.setopt(pycurl.FOLLOWLOCATION, 1)
+            c.setopt(pycurl.MAXREDIRS, 5)
 
-            #c.setopt(pycurl.VERBOSE, 1)
+            auth = self._get_credentials()
+            user = auth.get('user', None)
+            password = auth.get('password', None)
+            if user is not None:
+                # accept any auth methode
+                c.setopt(pycurl.HTTPAUTH, pycurl.HTTPAUTH_ANY)
+                c.setopt(pycurl.PROXYAUTH, pycurl.HTTPAUTH_ANY)
+                userpass = user + ':'
+                if password is not None: # '' is a valid password
+                    userpass += password
+                c.setopt(pycurl.USERPWD, userpass)
+            #.setopt(pycurl.VERBOSE, 1)
 
             if headers:
                 c.setopt(pycurl.HTTPHEADER,

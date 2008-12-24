@@ -130,7 +130,8 @@ class ResourceTestCase(unittest.TestCase):
         httpclient = Urllib2HTTPClient(auth_handler)
         
         res = Resource(self.url, httpclient)
-        
+        result = res.get('/auth')
+        self.assert_(res.status_code == 200) 
     
 if __name__ == '__main__':
     from _server_test import run_server_test

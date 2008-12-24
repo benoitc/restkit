@@ -60,16 +60,19 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             else:
                 self.error_Response()
         elif path == "/auth":
-            if self.headers.get('authorization') != self.auth:
-                realm = "test"
-                self.send_response(401)
-                self.send_header('WWW-Authenticate', 'Basic realm="%s"' % realm)
-                self.end_headers()
-                return
+            extra_headers = [('Content-type', 'text/plain')]
 
+            if not 'Authorization' in self.headers:
+                realm = "test"
+                extra_headers.append(('WWW-Authenticate', 'Basic realm="%s"' % realm))
+                self._respond(401, extra_headers, "")
+            else:
+                auth = self.headers['Authorization'][len('Basic')+1:]
+                auth = base64.b64decode(auth).split(':')
+                self._respond(200, extra_headers, "ok")
         else:
             self._respond(404, 
-                    [('Content-type', 'text/plain')], "Not Found" )
+                [('Content-type', 'text/plain')], "Not Found" )
 
 
     def do_POST(self):

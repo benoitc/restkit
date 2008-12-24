@@ -31,7 +31,7 @@ class ResourceNotFound(Exception):
     request.
     """
 
-class Unauthorised(Exception):
+class Unauthorized(Exception):
     """Exception raised when a 401 HTTP error is received in response to a
     request.
     """
