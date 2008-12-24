@@ -16,7 +16,7 @@ Example:
 
 
 Resource class
----------------------
+--------------
 
 .. autoclass:: restclient.rest.Resource
 
@@ -95,9 +95,9 @@ Resource class
 Exceptions
 ----------
 
-.. autoexception:: simplecouchdb.resource.ResourceNotFound
-.. autoexception:: simplecouchdb.resource.Unauthorized
-.. autoexception:: simplecouchdb.resource.RequestFailed
+.. autoexception:: restclient.rest.ResourceNotFound
+.. autoexception:: restclient.rest.Unauthorized
+.. autoexception:: restclient.rest.RequestFailed
 
 
 

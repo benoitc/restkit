@@ -15,14 +15,15 @@ restclient.http.Urllib2HTTPClient class httpclient.html
 restclient.rest.Resource.clone method resource.html
 restclient.RestClient.httpclient attribute resource.html
 restclient.rest.RestClient class resource.html
+restclient.rest.Unauthorized exception resource.html
 restclient.http.Urllib2HTTPClient.__init__ method httpclient.html
-simplecouchdb.resource.RequestFailed exception resource.html
+restclient.rest.RequestFailed exception resource.html
+restclient.rest.ResourceNotFound exception resource.html
 restclient.rest.Resource.__call__ method resource.html
 restclient.http.setDefaultHTTPClient function httpclient.html
 restclient.rest.Resource.post method resource.html
 restclient.rest.Resource.head method resource.html
 restclient.rest.Resource.delete method resource.html
-simplecouchdb.resource.ResourceNotFound exception resource.html
 restclient.rest.RestClient.Resource.delete method resource.html
 restclient.rest.RestClient.Resource.put method resource.html
 restclient.Resource.uri attribute resource.html

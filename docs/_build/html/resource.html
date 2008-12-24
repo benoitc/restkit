@@ -278,14 +278,22 @@ be added to HTTP request.</li>
 <div class="section" id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
-<dt id="simplecouchdb.resource.ResourceNotFound">
-<!--[simplecouchdb.resource.ResourceNotFound]-->exception <tt class="descclassname">simplecouchdb.resource.</tt><tt class="descname">ResourceNotFound</tt><a class="headerlink" href="#simplecouchdb.resource.ResourceNotFound" title="Permalink to this definition">¶</a></dt>
-<dd>Exception raised when a resource is not found</dd></dl>
+<dt id="restclient.rest.ResourceNotFound">
+<!--[restclient.rest.ResourceNotFound]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">ResourceNotFound</tt><a class="headerlink" href="#restclient.rest.ResourceNotFound" title="Permalink to this definition">¶</a></dt>
+<dd>Exception raised when a 404 HTTP error is received in response to a
+request.</dd></dl>
 
 <dl class="exception">
-<dt id="simplecouchdb.resource.RequestFailed">
-<!--[simplecouchdb.resource.RequestFailed]-->exception <tt class="descclassname">simplecouchdb.resource.</tt><tt class="descname">RequestFailed</tt><a class="headerlink" href="#simplecouchdb.resource.RequestFailed" title="Permalink to this definition">¶</a></dt>
-<dd>Exception raised when request failed</dd></dl>
+<dt id="restclient.rest.Unauthorized">
+<!--[restclient.rest.Unauthorized]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">Unauthorized</tt><a class="headerlink" href="#restclient.rest.Unauthorized" title="Permalink to this definition">¶</a></dt>
+<dd>Exception raised when a 401 HTTP error is received in response to a
+request.</dd></dl>
+
+<dl class="exception">
+<dt id="restclient.rest.RequestFailed">
+<!--[restclient.rest.RequestFailed]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">RequestFailed</tt><a class="headerlink" href="#restclient.rest.RequestFailed" title="Permalink to this definition">¶</a></dt>
+<dd>Exception raised when an unexpected HTTP error is received in response
+to a request.</dd></dl>
 
 </div>
 </div>
