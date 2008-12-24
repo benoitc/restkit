@@ -137,6 +137,7 @@ class Urllib2HTTPClient(HTTPClient):
 
     def request(self, url, method='GET', body=None, headers=None):
         headers = headers or {}
+        body = body or ''
 
         headers.setdefault('User-Agent',
             "%s Python-urllib/%s" % (USER_AGENT, urllib2.__version__,))
@@ -210,6 +211,11 @@ class CurlHTTPClient(HTTPClient):
 
         if put:
             headers.setdefault('Expect', '100-continue')
+        
+        if method in ['POST', 'PUT']:
+            body = body or ''
+            headers.setdefault('Content-Length', str(len(body))) 
+
 
         c = pycurl.Curl()
         try:
@@ -248,9 +254,9 @@ class CurlHTTPClient(HTTPClient):
             else:
                 c.setopt(pycurl.CUSTOMREQUEST, method)
 
-            if body or put:
+            if method in ('POST','PUT'):
                 if put:
-                    c.setopt(pycurl.HTTPHEADER, ['Content-Length: %d' % len(body)])
+                    c.setopt(pycurl.INFILESIZE, len(body))
                 if method in ('POST'):
                     c.setopt(pycurl.POSTFIELDSIZE, len(body))
                 s = StringIO.StringIO(body)
@@ -300,36 +306,28 @@ class HTTPLib2HTTPClient(HTTPClient):
 
     def request(self, url, method='GET', body=None, headers=None):
         headers = headers or {}
+       
+        if method in ['POST', 'PUT']:
+            body = body or ''
+            headers.setdefault('Content-Length', str(len(body))) 
 
-
-        # httplib2 doesn't check to make sure that the URL's scheme is
-        # 'http' so we do it here.
         if not (url.startswith('http://') or url.startswith('https://')):
             raise ValueError('URL is not a HTTP URL: %r' % (url,))
 
         headers.setdefault('User-Agent', USER_AGENT)
 
-        httplib2_response, content = self.http.request(
-            url, method, body=body, headers=headers)
+        httplib2_response, content = self.http.request(url,
+                method=method, body=body, headers=headers)
 
-        # Translate the httplib2 response to our HTTP response abstraction
 
-        # When a 400 is returned, there is no "content-location"
-        # header set. This seems like a bug to me. I can't think of a
-        # case where we really care about the final URL when it is an
-        # error response, but being careful about it can't hurt.
         try:
             final_url = httplib2_response['content-location']
         except KeyError:
-            # We're assuming that no redirects occurred
-            assert not httplib2_response.previous
-
-            # And this should never happen for a successful response
-            assert httplib2_response.status != 200
             final_url = url
 
-        return HTTPResponse(
-            final_url=final_url,
-            headers=dict(httplib2_response.items()),
-            status=httplib2_response.status,
-        ), content
+        resp = HTTPResponse()
+        resp.headers = dict(httplib2_response.items())
+        resp.status = int(httplib2_response.status)
+        resp.final_url = final_url
+
+        return resp, content

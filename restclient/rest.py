@@ -70,10 +70,10 @@ class Resource(object):
     def head(self, path=None, headers=None, **params):
         return self.client.head(self.uri, path=path, headers=headers, **params)
 
-    def post(self, payload=None, path=None, headers=None, **params):
+    def post(self, path=None, payload=None, headers=None, **params):
         return self.client.post(self.uri, path=path, body=payload, headers=headers, **params)
 
-    def put(self, payload=None, path=None, headers=None, **params):
+    def put(self, path=None, payload=None, headers=None, **params):
         return self.client.put(self.uri, path=path, body=payload, headers=headers, **params)
 
     def get_status_code(self):
