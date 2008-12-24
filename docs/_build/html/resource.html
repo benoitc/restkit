@@ -209,14 +209,15 @@ own depending of the option you need to access to the serve
 
 <p><strong>Methods</strong></p>
 <dl class="method">
-<dt id="restclient.rest.RestClient.Resource.get">
-<!--[restclient.rest.RestClient.Resource.get]--><tt class="descclassname">Resource.</tt><tt class="descname">get</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.get" title="Permalink to this definition">¶</a></dt>
+<dt id="restclient.rest.RestClient.get">
+<!--[restclient.rest.RestClient.get]--><tt class="descname">get</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTTP GET</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>uri</em> &#8211; str, uri on which you make the request</li>
 <li><em>path</em> &#8211; string  additionnal path to the uri</li>
 <li><em>headers</em> &#8211; dict, optionnal headers that will
 be added to HTTP request.</li>
@@ -229,31 +230,29 @@ be added to HTTP request.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="restclient.rest.RestClient.Resource.head">
-<!--[restclient.rest.RestClient.Resource.head]--><tt class="descclassname">Resource.</tt><tt class="descname">head</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.head" title="Permalink to this definition">¶</a></dt>
+<dt id="restclient.rest.RestClient.head">
+<!--[restclient.rest.RestClient.head]--><tt class="descname">head</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.head" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTTP HEAD</p>
 <p>see GET for params description.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="restclient.rest.RestClient.Resource.delete">
-<!--[restclient.rest.RestClient.Resource.delete]--><tt class="descclassname">Resource.</tt><tt class="descname">delete</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.delete" title="Permalink to this definition">¶</a></dt>
+<dt id="restclient.rest.RestClient.delete">
+<!--[restclient.rest.RestClient.delete]--><tt class="descname">delete</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTTP DELETE</p>
 <p>see GET for params description.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="restclient.rest.RestClient.Resource.post">
-<!--[restclient.rest.RestClient.Resource.post]--><tt class="descclassname">Resource.</tt><tt class="descname">post</tt><big>(</big><em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.post" title="Permalink to this definition">¶</a></dt>
+<dt id="restclient.rest.RestClient.post">
+<!--[restclient.rest.RestClient.post]--><tt class="descname">post</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>body=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.post" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTTP POST</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Payload:</th><td class="field-body"><p class="first">string passed to the body of the request</p>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>uri</em> &#8211; str, uri on which you make the request</li>
 <li><em>path</em> &#8211; string  additionnal path to the uri</li>
 <li><em>headers</em> &#8211; dict, optionnal headers that will
 be added to HTTP request.</li>
@@ -261,15 +260,57 @@ be added to HTTP request.</li>
 </ul>
 </td>
 </tr>
+<tr class="field"><th class="field-name">Body:</th><td class="field-body"><p class="first last">string passed to the body of the request</p>
+</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="restclient.rest.RestClient.Resource.put">
-<!--[restclient.rest.RestClient.Resource.put]--><tt class="descclassname">Resource.</tt><tt class="descname">put</tt><big>(</big><em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.put" title="Permalink to this definition">¶</a></dt>
+<dt id="restclient.rest.RestClient.put">
+<!--[restclient.rest.RestClient.put]--><tt class="descname">put</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>body=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.put" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTTP PUT</p>
 <p>see POST for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.RestClient.make_request">
+<!--[restclient.rest.RestClient.make_request]--><tt class="descname">make_request</tt><big>(</big><em>method</em>, <em>uri</em>, <em>path=None</em>, <em>body=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.make_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform HTTP call support GET, HEAD, POST, PUT and DELETE.</p>
+<p>Usage example, get friendpaste page :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or get a paste in JSON :</p>
+<div class="highlight-python"><pre>from restclient import RestClient
+client = RestClient()
+client.make_request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
+    headers={'Accept': 'application/json'})</pre>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>method</em> &#8211; str, the HTTP action to be performed: 
+&#8216;GET&#8217;, &#8216;HEAD&#8217;, &#8216;POST&#8217;, &#8216;PUT&#8217;, or &#8216;DELETE&#8217;</li>
+<li><em>path</em> &#8211; str or list, path to add to the uri</li>
+<li><em>data</em> &#8211; str or string or any object that could be
+converted to JSON.</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

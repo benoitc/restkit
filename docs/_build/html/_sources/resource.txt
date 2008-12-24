@@ -79,17 +79,17 @@ Resource class
 
     **Methods**
 
-    .. automethod:: restclient.rest.Resource.get
+    .. automethod:: restclient.rest.RestClient.get
 
-    .. automethod:: restclient.rest.Resource.head
+    .. automethod:: restclient.rest.RestClient.head
 
-    .. automethod:: restclient.rest.Resource.delete
+    .. automethod:: restclient.rest.RestClient.delete
 
-    .. automethod:: restclient.rest.Resource.post
+    .. automethod:: restclient.rest.RestClient.post
 
-    .. automethod:: restclient.rest.Resource.put
+    .. automethod:: restclient.rest.RestClient.put
 
-    .. automethod:: restclient.rest.Resource.make_request
+    .. automethod:: restclient.rest.RestClient.make_request
 
 
 Exceptions
