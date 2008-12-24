@@ -8,8 +8,8 @@ syntax: glob
 tests/*.err
 *.swp
 store/*
-.project
-.pydevproject
+*.DS_Store
+*.beam
 
 syntax: regexp
 .*\#.*\#$

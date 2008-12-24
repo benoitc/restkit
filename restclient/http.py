@@ -92,7 +92,7 @@ class HTTPClient(object):
     """ Interface for HTTP clients """
 
     def request(self, url, method='GET', body=None, headers=None):
-        """Prform HTTP call and manage , support GET, HEAD, POST, PUT and
+        """Perform HTTP call and manage , support GET, HEAD, POST, PUT and
         DELETE
 
         :param url: url on which to perform the actuib

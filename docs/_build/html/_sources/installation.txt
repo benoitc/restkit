@@ -1,0 +1,36 @@
+.. _installation:
+
+Installation
+============
+
+The most recent release is always available in the `cheeseshop`_ and can be
+installed using `easy_install`_::
+
+    easy_install python-restclient
+
+Alternatly, you can also install the development version from 
+our `Mercurial`_ repository::
+
+    hg clone https://dev.e-engura.org/hg/python-restclient
+    cd python-restclient
+    sudo python setup.py install
+
+Last command will install pthon-restclient as a package via setuptools. This
+will make it available in your python path. Alternately you can copy or symlink
+the simplecouchdb subdirectory into your site-packages directory or
+anywhere in your PYTHONPATH.
+
+You could also get source from  `Bitbucket`_ ::
+
+    hg clone https://benoitc@bitbucket.org/benoitc/python-restclient/
+
+Requirements
+============
+
+To use py-simplecouchdb you will need **Python 2.5** or later. 
+
+.. _cheeseshop: http://pypi.python.org/pypi/WTForms/
+.. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
+.. _Mercurial: http://www.selenic.com/mercurial/
+.. _Bitbucket: http://www.bitbucket.org/benoitc/python-restclient
+

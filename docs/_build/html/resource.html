@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Resource &mdash; python-restclient v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="python-restclient v0.2 documentation" href="index.html" />
+    <link rel="prev" title="Getting Started" href="gettingstarted.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="gettingstarted.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-restclient">
+<h1>Resource<a class="headerlink" href="#module-restclient" title="Permalink to this headline">¶</a></h1>
+<p>This module provide a common interface for all HTTP request. This
+module make HTTP request using <a class="reference" href="http://pycurl.sourceforge.net/">Pycurl</a> by edfault if installed or
+<a class="reference" href="http://docs.python.org/library/urllib2.html">Urllib2</a> if not. You could also use <a class="reference" href="http://code.google.com/p/httplib2/">Httplib2</a>.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
+<span class="go">&#39;{&quot;snippet&quot;: &quot;hi!&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;5rOqE9XTz7lccLgZoQS4IP&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;386233396230&quot;}&#39;</span>
+</pre></div>
+</div>
+<div class="section" id="resource-class">
+<h2>Resource class<a class="headerlink" href="#resource-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="restclient.rest.Resource">
+<!--[restclient.rest.Resource]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">Resource</tt><big>(</big><em>uri</em>, <em>httpclient=None</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that can be instantiated for access to a RESTful resource, 
+including authentication.</p>
+<p>It can use pycurl, urllib2, httplib2 or any interface over
+<cite>restclient.http.HTTPClient</cite>.</p>
+<p><strong>Properties</strong></p>
+<dl class="attribute">
+<dt id="restclient.Resource.uri">
+<!--[restclient.Resource.uri]--><tt class="descname">uri</tt><a class="headerlink" href="#restclient.Resource.uri" title="Permalink to this definition">¶</a></dt>
+<dd>Str, full uri to the server.</dd></dl>
+
+<dl class="attribute">
+<dt id="restclient.Resource.httpclient">
+<!--[restclient.Resource.httpclient]--><tt class="descname">httpclient</tt><a class="headerlink" href="#restclient.Resource.httpclient" title="Permalink to this definition">¶</a></dt>
+<dd>Any http instance of object based on
+<cite>restclient.http.HTTPClient</cite>. By default it will use
+a client based on <a class="reference" href="http://pycurl.sourceforge.net/">pycurl</a> if
+installed or urllib2. You could also use
+<cite>restclient.http.HTTPLib2HTTPClient</cite>,a client based on
+<a class="reference" href="http://code.google.com/p/httplib2/">Httplib2</a> or make your
+own depending of the option you need to access to the serve
+(authentification, proxy, ....).</dd></dl>
+
+<p><strong>Methods</strong></p>
+<dl class="method">
+<dt id="restclient.rest.Resource.clone">
+<!--[restclient.rest.Resource.clone]--><tt class="descname">clone</tt><big>(</big><big>)</big><a class="headerlink" href="#restclient.rest.Resource.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>if you want to add a path to resource uri, you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">resr2</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.Resource.__call__">
+<!--[restclient.rest.Resource.__call__]--><tt class="descname">__call__</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>if you want to add a path to resource uri, you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Resource</span><span class="p">(</span><span class="s">&quot;/path&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.Resource.get">
+<!--[restclient.rest.Resource.get]--><tt class="descname">get</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP GET</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.Resource.head">
+<!--[restclient.rest.Resource.head]--><tt class="descname">head</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP HEAD</p>
+<p>see GET for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.Resource.delete">
+<!--[restclient.rest.Resource.delete]--><tt class="descname">delete</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP DELETE</p>
+<p>see GET for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.Resource.post">
+<!--[restclient.rest.Resource.post]--><tt class="descname">post</tt><big>(</big><em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP POST</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Payload:</th><td class="field-body"><p class="first">string passed to the body of the request</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.Resource.put">
+<!--[restclient.rest.Resource.put]--><tt class="descname">put</tt><big>(</big><em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP PUT</p>
+<p>see POST for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.Resource.get_status_code">
+<!--[restclient.rest.Resource.get_status_code]--><tt class="descname">get_status_code</tt><big>(</big><big>)</big><a class="headerlink" href="#restclient.rest.Resource.get_status_code" title="Permalink to this definition">¶</a></dt>
+<dd>get status code of the last request</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.Resource.update_uri">
+<!--[restclient.rest.Resource.update_uri]--><tt class="descname">update_uri</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.update_uri" title="Permalink to this definition">¶</a></dt>
+<dd>to set a new uri absolute path</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="restclient.rest.RestClient">
+<!--[restclient.rest.RestClient]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">RestClient</tt><big>(</big><em>httpclient=None</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic rest client
+&gt;&gt;&gt; res = RestClient()
+&gt;&gt;&gt; xml = res.get(&#8216;<a class="reference" href="http://pypaste.com/about">http://pypaste.com/about</a>&#8216;)
+&gt;&gt;&gt; json = res.get(&#8216;<a class="reference" href="http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru">http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru</a>&#8216;, headers={&#8216;accept&#8217;: &#8216;application/json&#8217;})
+&gt;&gt;&gt; json
+&#8216;{&#8220;snippet&#8221;: &#8220;testing API.&#8221;, &#8220;title&#8221;: &#8220;&#8221;, &#8220;id&#8221;: &#8220;3XDqQ8G83LlzVWgCeWdwru&#8221;, &#8220;language&#8221;: &#8220;text&#8221;, &#8220;revision&#8221;: &#8220;363934613139&#8221;}&#8217;</p>
+<p>RestClient represent an HTTP client.</p>
+<p><strong>Properties</strong></p>
+<dl class="attribute">
+<dt id="restclient.RestClient.httpclient">
+<!--[restclient.RestClient.httpclient]--><tt class="descname">httpclient</tt><a class="headerlink" href="#restclient.RestClient.httpclient" title="Permalink to this definition">¶</a></dt>
+<dd>Any http instance of object based on
+<cite>restclient.http.HTTPClient</cite>. By default it will use
+a client based on <a class="reference" href="http://pycurl.sourceforge.net/">pycurl</a> if
+installed or urllib2. You could also use
+<cite>restclient.http.HTTPLib2HTTPClient</cite>,a client based on
+<a class="reference" href="http://code.google.com/p/httplib2/">Httplib2</a> or make your
+own depending of the option you need to access to the serve
+(authentification, proxy, ....).</dd></dl>
+
+<p><strong>Methods</strong></p>
+<dl class="method">
+<dt id="restclient.rest.RestClient.Resource.get">
+<!--[restclient.rest.RestClient.Resource.get]--><tt class="descclassname">Resource.</tt><tt class="descname">get</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP GET</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.RestClient.Resource.head">
+<!--[restclient.rest.RestClient.Resource.head]--><tt class="descclassname">Resource.</tt><tt class="descname">head</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP HEAD</p>
+<p>see GET for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.RestClient.Resource.delete">
+<!--[restclient.rest.RestClient.Resource.delete]--><tt class="descclassname">Resource.</tt><tt class="descname">delete</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP DELETE</p>
+<p>see GET for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.RestClient.Resource.post">
+<!--[restclient.rest.RestClient.Resource.post]--><tt class="descclassname">Resource.</tt><tt class="descname">post</tt><big>(</big><em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP POST</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Payload:</th><td class="field-body"><p class="first">string passed to the body of the request</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.rest.RestClient.Resource.put">
+<!--[restclient.rest.RestClient.Resource.put]--><tt class="descclassname">Resource.</tt><tt class="descname">put</tt><big>(</big><em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.Resource.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP PUT</p>
+<p>see POST for params description.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="simplecouchdb.resource.ResourceNotFound">
+<!--[simplecouchdb.resource.ResourceNotFound]-->exception <tt class="descclassname">simplecouchdb.resource.</tt><tt class="descname">ResourceNotFound</tt><a class="headerlink" href="#simplecouchdb.resource.ResourceNotFound" title="Permalink to this definition">¶</a></dt>
+<dd>Exception raised when a resource is not found</dd></dl>
+
+<dl class="exception">
+<dt id="simplecouchdb.resource.RequestFailed">
+<!--[simplecouchdb.resource.RequestFailed]-->exception <tt class="descclassname">simplecouchdb.resource.</tt><tt class="descname">RequestFailed</tt><a class="headerlink" href="#simplecouchdb.resource.RequestFailed" title="Permalink to this definition">¶</a></dt>
+<dd>Exception raised when request failed</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Resource</a><ul>
+<li><a class="reference" href="#resource-class">Resource class</a></li>
+<li><a class="reference" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="gettingstarted.html" title="previous chapter">Getting Started</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/resource.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="gettingstarted.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Benoit Chesneau &lt;benoitc@e-engura.org&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

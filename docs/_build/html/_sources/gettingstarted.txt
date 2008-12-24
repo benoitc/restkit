@@ -1,0 +1,45 @@
+.. _gettingstarted:
+
+Getting Started
+===============
+
+This tutoriall exposes key features of this library through mainly code
+examples. For in-depth description of the modules, you'll want to read 
+the :ref:`API <api>` documentation.
+
+If you have not installed python-restclient yet, the :ref:`installation docs <installation>`
+will get you started. 
+
+Perform HTTP call support  with `restclient.rest.Resource`.
+-----------------------------------------------------------
+Usage example, get friendpaste page :
+
+
+.. code-block:: python
+
+    from restclient import Resource
+    res = Resource('http://friendpaste.com')
+    page = res.get()
+
+
+Perform HTTP call support  with `restclient.rest.RestClient`.
+-------------------------------------------------------------
+
+Usage example, get friendpaste page :
+
+
+.. code-block:: python
+
+    from restclient import RestClient
+    client = RestClient()
+    page = resource.request('GET', 'http://friendpaste.com')
+
+Or get a paste in JSON :
+
+.. code-block:: python
+
+    from restclient import RestClient
+    client = RestClient()
+    client.make_request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP',
+    headers={'Accept': 'application/json'})
+

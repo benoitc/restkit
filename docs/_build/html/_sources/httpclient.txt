@@ -1,0 +1,38 @@
+HTTP Clients
+============
+.. module:: restclient
+
+Http Clients are class based on :mod:`restclient.http.HTTPClient` that
+operform http operations.
+
+You can choose the one you want as httpclient in Resource or RestClient:
+
+.. code-block:: python
+
+    from restclient.http import CurlHTTPClient
+    httpclient = CurlHTTPClient()
+    res = Resource(httpclient=httpclient)
+    
+Functions
+---------
+
+.. autofunction:: restclient.http.createHTTPClient
+.. autofunction:: restclient.http.getDefaultHTTPClient
+.. autofunction:: restclient.http.setDefaultHTTPClient
+
+Clients:
+--------
+.. autoclass:: restclient.http.HTTPClient
+
+    .. automethod:: restclient.http.HTTPClient.request
+
+
+.. autoclass:: restclient.http.Urllib2HTTPClient
+
+    .. automethod:: restclient.http.Urllib2HTTPClient.__init__
+
+.. autoclass:: restclient.http.CurlHTTPClient
+    
+    .. automethod:: restclient.http.HTTPClient.add_credentials
+
+.. autoclass:: restclient.http.HTTPLib2HTTPClient

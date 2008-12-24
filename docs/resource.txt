@@ -1,0 +1,107 @@
+Resource
+========
+
+.. module:: restclient
+
+This module provide a common interface for all HTTP request. This
+module make HTTP request using `Pycurl`_ by edfault if installed or
+`Urllib2`_ if not. You could also use `Httplib2`_.
+
+Example: 
+
+    >>> from restclient import Resource
+    >>> res = Resource('http://friendpaste.com')
+    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
+    '{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
+
+
+Resource class
+---------------------
+
+.. autoclass:: restclient.rest.Resource
+
+    **Properties**
+
+    .. attribute:: uri
+
+        Str, full uri to the server.
+
+    .. attribute:: httpclient
+
+        Any http instance of object based on 
+        `restclient.http.HTTPClient`. By default it will use 
+        a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
+        installed or urllib2. You could also use 
+        `restclient.http.HTTPLib2HTTPClient`,a client based on 
+        `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
+        own depending of the option you need to access to the serve
+        (authentification, proxy, ....).
+
+
+    **Methods**
+
+    .. automethod:: restclient.rest.Resource.clone
+
+    .. automethod:: restclient.rest.Resource.__call__
+
+    .. automethod:: restclient.rest.Resource.get
+
+    .. automethod:: restclient.rest.Resource.head
+
+    .. automethod:: restclient.rest.Resource.delete
+
+    .. automethod:: restclient.rest.Resource.post
+
+    .. automethod:: restclient.rest.Resource.put
+
+    .. automethod:: restclient.rest.Resource.get_status_code
+
+    .. automethod:: restclient.rest.Resource.update_uri
+
+
+.. autoclass:: restclient.rest.RestClient
+
+    RestClient represent an HTTP client.
+
+    **Properties**
+
+    .. attribute:: httpclient
+
+        Any http instance of object based on 
+        `restclient.http.HTTPClient`. By default it will use 
+        a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
+        installed or urllib2. You could also use 
+        `restclient.http.HTTPLib2HTTPClient`,a client based on 
+        `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
+        own depending of the option you need to access to the serve
+        (authentification, proxy, ....).
+
+
+    **Methods**
+
+    .. automethod:: restclient.rest.Resource.get
+
+    .. automethod:: restclient.rest.Resource.head
+
+    .. automethod:: restclient.rest.Resource.delete
+
+    .. automethod:: restclient.rest.Resource.post
+
+    .. automethod:: restclient.rest.Resource.put
+
+    .. automethod:: restclient.rest.Resource.make_request
+
+
+Exceptions
+----------
+
+.. autoexception:: simplecouchdb.resource.ResourceNotFound
+.. autoexception:: simplecouchdb.resource.Unauthorized
+.. autoexception:: simplecouchdb.resource.RequestFailed
+
+
+
+.. _Pycurl: http://pycurl.sourceforge.net/
+.. _Httplib2: http://code.google.com/p/httplib2/
+.. _Urllib2: http://docs.python.org/library/urllib2.html
+

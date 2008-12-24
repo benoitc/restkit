@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; python-restclient v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="python-restclient v0.2 documentation" href="index.html" />
+    <link rel="next" title="Resource" href="resource.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="resource.html" title="Resource"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="getting-started">
+<span id="gettingstarted"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>This tutoriall exposes key features of this library through mainly code
+examples. For in-depth description of the modules, you&#8217;ll want to read
+the <a class="reference" href="index.html#api"><em>API</em></a> documentation.</p>
+<p>If you have not installed python-restclient yet, the <a class="reference" href="installation.html#installation"><em>installation docs</em></a>
+will get you started.</p>
+<div class="section" id="perform-http-call-support-with-restclient-rest-resource">
+<h2>Perform HTTP call support  with <cite>restclient.rest.Resource</cite>.<a class="headerlink" href="#perform-http-call-support-with-restclient-rest-resource" title="Permalink to this headline">¶</a></h2>
+<p>Usage example, get friendpaste page :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="perform-http-call-support-with-restclient-rest-restclient">
+<h2>Perform HTTP call support  with <cite>restclient.rest.RestClient</cite>.<a class="headerlink" href="#perform-http-call-support-with-restclient-rest-restclient" title="Permalink to this headline">¶</a></h2>
+<p>Usage example, get friendpaste page :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or get a paste in JSON :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="n">client</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span>
+<span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Getting Started</a><ul>
+<li><a class="reference" href="#perform-http-call-support-with-restclient-rest-resource">Perform HTTP call support  with <cite>restclient.rest.Resource</cite>.</a></li>
+<li><a class="reference" href="#perform-http-call-support-with-restclient-rest-restclient">Perform HTTP call support  with <cite>restclient.rest.RestClient</cite>.</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="installation.html" title="previous chapter">Installation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="resource.html" title="next chapter">Resource</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/gettingstarted.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="resource.html" title="Resource"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Benoit Chesneau &lt;benoitc@e-engura.org&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>
