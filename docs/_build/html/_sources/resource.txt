@@ -58,10 +58,14 @@ Resource class
 
     .. automethod:: restclient.rest.Resource.update_uri
 
+RestClient class
+----------------
+
+RestClient represent a simple HTTP client.
 
 .. autoclass:: restclient.rest.RestClient
 
-    RestClient represent an HTTP client.
+    
 
     **Properties**
 
