@@ -2,8 +2,8 @@ HTTP Clients
 ============
 .. module:: restclient
 
-Http Clients are class based on :mod:`restclient.http.HTTPClient` that
-operform http operations.
+HTTP Clients are object based on :mod:`restclient.http.HTTPClient` that
+perform HTPP operations.
 
 You can choose the one you want as httpclient in Resource or RestClient:
 

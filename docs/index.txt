@@ -7,8 +7,9 @@ Welcome to python-restclient's documentation!
 
 .. rubric:: Everything you need to know about python-restclient.
 
-**Python-restclient** is simple REST client for Python, inspired by the
-microframework (Camping, Sinatra) style of specifying actions: get, head put, post, delete
+**Python-restclient** is simple **REST client for Python**, inspired by the
+microframework (Camping, Sinatra) style of specifying actions: get, head
+put, post, delete.
 
 Fisrt steps
 ===========
@@ -28,7 +29,7 @@ Reference
    resource
    httpclient
 
-* Follow developent on `Bitbucket <http://www.bitbucket.org/benoitc/python-restclient/overview/>`_.
+* Follow development on `Bitbucket <http://www.bitbucket.org/benoitc/python-restclient/overview/>`_.
 * Report bugs, report features and browse the source through `Tracker <http://www.bitbucket.org/benoitc/python-restclient/issues/>`_.
 
 
