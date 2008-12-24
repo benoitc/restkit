@@ -20,6 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="python-restclient v0.2 documentation" href="index.html" />
+    <link rel="next" title="HTTP Clients" href="httpclient.html" />
     <link rel="prev" title="Getting Started" href="gettingstarted.html" /> 
   </head>
   <body>
@@ -32,6 +33,9 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="httpclient.html" title="HTTP Clients"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="gettingstarted.html" title="Getting Started"
              accesskey="P">previous</a> |</li>
@@ -181,12 +185,14 @@ be added to HTTP request.</li>
 <dl class="class">
 <dt id="restclient.rest.RestClient">
 <!--[restclient.rest.RestClient]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">RestClient</tt><big>(</big><em>httpclient=None</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Basic rest client
-&gt;&gt;&gt; res = RestClient()
-&gt;&gt;&gt; xml = res.get(&#8216;<a class="reference" href="http://pypaste.com/about">http://pypaste.com/about</a>&#8216;)
-&gt;&gt;&gt; json = res.get(&#8216;<a class="reference" href="http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru">http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru</a>&#8216;, headers={&#8216;accept&#8217;: &#8216;application/json&#8217;})
-&gt;&gt;&gt; json
-&#8216;{&#8220;snippet&#8221;: &#8220;testing API.&#8221;, &#8220;title&#8221;: &#8220;&#8221;, &#8220;id&#8221;: &#8220;3XDqQ8G83LlzVWgCeWdwru&#8221;, &#8220;language&#8221;: &#8220;text&#8221;, &#8220;revision&#8221;: &#8220;363934613139&#8221;}&#8217;</p>
+<dd><p>Basic rest client</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/about&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span>
+<span class="go">&#39;{&quot;snippet&quot;: &quot;testing API.&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;3XDqQ8G83LlzVWgCeWdwru&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;363934613139&quot;}&#39;</span>
+</pre></div>
+</div>
 <p>RestClient represent an HTTP client.</p>
 <p><strong>Properties</strong></p>
 <dl class="attribute">
@@ -301,6 +307,8 @@ be added to HTTP request.</li>
 
             <h4>Previous topic</h4>
             <p class="topless"><a href="gettingstarted.html" title="previous chapter">Getting Started</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="httpclient.html" title="next chapter">HTTP Clients</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/resource.txt">Show Source</a></li>
@@ -324,6 +332,9 @@ be added to HTTP request.</li>
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="httpclient.html" title="HTTP Clients"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="gettingstarted.html" title="Getting Started"
              accesskey="P">previous</a> |</li>

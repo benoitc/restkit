@@ -1,7 +1,7 @@
 # Sphinx inventory version 1
 # Project: python-restclient
 # Version: 0.2
-restclient mod httpclient.html
+restclient mod resource.html
 restclient.rest.Resource.put method resource.html
 restclient.rest.Resource.get method resource.html
 restclient.http.HTTPClient class httpclient.html
