@@ -30,7 +30,7 @@ setup(
     author = 'Benoit Chesneau',
     author_email = 'benoitc@e-engura.org',
     license = 'BSD',
-    url = 'http://dev.e-engura.com/hg/python-restclient',
+    url = 'http://ipython-restclient.e-engura.org',
     zip_safe = True,
 
     classifiers = [
@@ -44,6 +44,9 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     packages = ['restclient'],
-    test_suite = 'restclient.tests.suite',
+    setup_requires = [
+        'setuptools>=0.6b1',
+    ],
+
 )
 

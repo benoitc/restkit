@@ -164,11 +164,12 @@ class Resource(object):
 
 class RestClient(object):
     """Basic rest client
-    >>> res = RestClient()
-    >>> xml = res.get('http://pypaste.com/about')
-    >>> json = res.get('http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru', headers={'accept': 'application/json'})
-    >>> json
-    '{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
+
+        >>> res = RestClient()
+        >>> xml = res.get('http://pypaste.com/about')
+        >>> json = res.get('http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru', headers={'accept': 'application/json'})
+        >>> json
+        '{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
     """
 
     def __init__(self, httpclient=None):
