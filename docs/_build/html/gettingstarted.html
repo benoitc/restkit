@@ -73,11 +73,11 @@ will get you started.</p>
 </pre></div>
 </div>
 <p>Or get a paste in JSON :</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span>
-<span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
-</pre></div>
+<div class="highlight-python"><pre>from restclient import RestClient
+client = RestClient()
+client.make_request('GET',
+    'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
+headers={'Accept': 'application/json'})</pre>
 </div>
 </div>
 </div>
