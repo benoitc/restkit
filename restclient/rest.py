@@ -138,7 +138,7 @@ class RestClient(object):
 
             if self.status_code == 404:
                 raise ResourceNotFound(error)
-            elif self.status_code == 401:
+            elif self.status_code == 401 or self.status_code == 403:
                 raise Unauthorized
             else:
                 raise RequestFailed((self.status_code, error))

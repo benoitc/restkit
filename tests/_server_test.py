@@ -69,7 +69,10 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             else:
                 auth = self.headers['Authorization'][len('Basic')+1:]
                 auth = base64.b64decode(auth).split(':')
-                self._respond(200, extra_headers, "ok")
+                if auth[0] == "test" and auth[1] == "test":
+                    self._respond(200, extra_headers, "ok")
+                else:
+                    self._respond(403, extra_headers, "niet!")
         else:
             self._respond(404, 
                 [('Content-type', 'text/plain')], "Not Found" )

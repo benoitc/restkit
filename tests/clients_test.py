@@ -27,7 +27,7 @@ import urlparse
 from restclient.http import Urllib2HTTPClient, CurlHTTPClient, \
 HTTPLib2HTTPClient
 from restclient.rest import Resource, RestClient, RequestFailed, \
-ResourceNotFound
+ResourceNotFound, Unauthorized
 from _server_test import HOST, PORT
 
 class HTTPClientTestCase(unittest.TestCase):
@@ -131,6 +131,13 @@ class CurlHTTPClientTestCase(HTTPClientTestCase):
         res = Resource(self.url, httpclient)
         result = res.get('/auth')
         self.assert_(res.status_code == 200)
+
+        httpclient.add_credentials("test", "test2")
+        
+        def niettest():
+            res = Resource(self.url, httpclient)
+            result = res.get('/auth')
+        self.assertRaises(Unauthorized, niettest)
 
 
 
