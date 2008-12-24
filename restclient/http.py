@@ -88,8 +88,6 @@ class HTTPResponse(dict):
                                           self.status,
                                           self.final_url)
 
-
-
 class HTTPClient(object):
     """ Interface for HTTP clients """
 
@@ -129,12 +127,13 @@ class CustomRequest(urllib2.Request):
 
 class Urllib2HTTPClient(HTTPClient):
     """ HTTP Client that use urllib2 """
-    def __init__(self, handler=None):
-        if handler is not None:
-            self.handler = handler
-        else:
-            self.handler = False
 
+    def __init__(self, *handlers):
+        openers = []
+        if handlers:
+            openers = [handler for handler in handlers]
+        self.openers = openers
+    
     def request(self, url, method='GET', body=None, headers=None):
         headers = headers or {}
         body = body or ''
@@ -142,8 +141,8 @@ class Urllib2HTTPClient(HTTPClient):
         headers.setdefault('User-Agent',
             "%s Python-urllib/%s" % (USER_AGENT, urllib2.__version__,))
 
-        if self.handler:
-            opener = urllib2.build_opener(self.handler)
+        if self.openers:
+            opener = urllib2.build_opener(*self.openers)
             urllib2.install_opener(opener)
 
         req = CustomRequest(url=url, data=body, method=method)

@@ -15,6 +15,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
+import base64
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
 import os
@@ -28,6 +29,10 @@ PORT = (os.getpid() % 31000) + 1024
 
 class HTTPTestHandler(BaseHTTPRequestHandler):
 
+    def __init__(self, request, client_address, server):
+        self.auth = 'Basic ' + base64.encodestring('test:test')[:-1]
+        BaseHTTPRequestHandler.__init__(self, request, client_address, server)
+        
     def do_GET(self):
         self.parsed_uri = urlparse.urlparse(self.path)
         self.query = {}
@@ -54,6 +59,14 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self._respond(200, extra_headers, "ok")
             else:
                 self.error_Response()
+        elif path == "/auth":
+            if self.headers.get('authorization') != self.auth:
+                realm = "test"
+                self.send_response(401)
+                self.send_header('WWW-Authenticate', 'Basic realm="%s"' % realm)
+                self.end_headers()
+                return
+
         else:
             self._respond(404, 
                     [('Content-type', 'text/plain')], "Not Found" )
