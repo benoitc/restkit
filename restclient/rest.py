@@ -15,7 +15,19 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-"""A simple REST client"""
+"""
+restclient.rest
+~~~~~~~~~~~~~~~
+
+This module provide a common interface for all HTTP equest. 
+
+    >>> from restclient import Resource
+    >>> res = Resource('http://friendpaste.com')
+    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
+    '{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
+
+
+"""
 from urllib import quote, urlencode
 
 from restclient.http import getDefaultHTTPClient, HTTPClient 
@@ -44,45 +56,110 @@ class RequestFailed(Exception):
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
-    including authentication.
+    including authentication. 
 
-    >>> res = Resource('http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru')
-    >>> res.get(headers={'accept': 'application/json'})
-    '{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
-    >>> res.status_code
-    200
-    >>> res = Resource('http://127.0.0.1:5000')
-    >>> post = res.post(payload='{"snippet": "test"}', headers={'Accept': 'application/json', 'Content-type': 'application/json'})
-    >>> res.status_code
-    200
+    It can use pycurl, urllib2, httplib2 or any interface over
+    `restclient.http.HTTPClient`.
+
     """
-    def __init__(self, uri, http=None):
-        self.client = RestClient(http)
+    def __init__(self, uri, httpclient=None):
+        """Constructor for a `Resource` object.
+
+        Resource represent an HTTP resource.
+
+        :param uri: str, full uri to the server.
+        :param httpclient: any http instance of object based on 
+                `restclient.http.HTTPClient`. By default it will use 
+                a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
+                installed or urllib2. You could also use 
+                `restclient.http.HTTPLib2HTTPClient`,a client based on 
+                `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
+                own depending of the option you need to access to the serve
+                (authentification, proxy, ....).
+        """
+
+        self.client = RestClient(httpclient)
         self.uri = uri
-        self.http = http
+        self.httpclient = httpclient
 
-    def delete(self, path=None, headers=None, **params):
-        return self.client.delete(self.uri, path=path, headers=headers, **params)
+    def __repr__(self):
+        return '<%s %s>' % (self.__class__.__name__, self.uri)
 
+    def clone(self):
+        """if you want to add a path to resource uri, you can do:
+
+        .. code-block:: python
+
+            resr2 = res.clone()
+        
+        """
+        obj = self.__class__(self.uri, http=self.httpclient)
+        return obj
+   
+    def __call__(self, path):
+        """if you want to add a path to resource uri, you can do:
+        
+        .. code-block:: python
+
+            Resource("/path").request("GET")
+        """
+
+        return type(self)(make_uri(self.uri, path), http=self.httpclient)
+
+    
     def get(self, path=None, headers=None, **params):
+        """ HTTP GET         
+        
+        :param path: string  additionnal path to the uri
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request.
+        """
         return self.client.get(self.uri, path=path, headers=headers, **params)
 
+    def delete(self, path=None, headers=None, **params):
+        """ HTTP DELETE
+
+        see GET for params description.
+        """
+        return self.client.delete(self.uri, path=path, headers=headers, **params)
+
     def head(self, path=None, headers=None, **params):
+        """ HTTP HEAD
+
+        see GET for params description.
+        """
         return self.client.head(self.uri, path=path, headers=headers, **params)
 
     def post(self, path=None, payload=None, headers=None, **params):
+        """ HTTP POST
+
+        :payload: string passed to the body of the request
+        :param path: string  additionnal path to the uri
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request
+        """
+
         return self.client.post(self.uri, path=path, body=payload, headers=headers, **params)
 
     def put(self, path=None, payload=None, headers=None, **params):
+        """ HTTP PUT
+
+        see POST for params description.
+        """
         return self.client.put(self.uri, path=path, body=payload, headers=headers, **params)
 
     def get_status_code(self):
+        """ get status code of the last request """
         return self.client.status_code
     status_code = property(get_status_code)
 
-    def get_message_error(self):
-        return self.client.error
-    error = property(get_message_error)
+    def update_uri(self, path):
+        """
+        to set a new uri absolute path
+        """
+        self.uri = make_uri(self.uri, path)
 
 
 class RestClient(object):
@@ -95,6 +172,19 @@ class RestClient(object):
     """
 
     def __init__(self, httpclient=None):
+        """Constructor for a `RestClient` object.
+
+        RestClient represent an HTTP client.
+
+        :param httpclient: any http instance of object based on 
+                `restclient.http.HTTPClient`. By default it will use 
+                a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
+                installed or urllib2. You could also use 
+                `restclient.http.HTTPLib2HTTPClient`,a client based on 
+                `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
+                own depending of the option you need to access to the serve
+                (authentification, proxy, ....).
+        """ 
 
         if httpclient is None:
             httpclient = getDefaultHTTPClient()
@@ -104,22 +194,84 @@ class RestClient(object):
         self.status_code = None
         self.response = None
 
-    def delete(self, uri, path=None, headers=None, **params):
-        return self.make_request('DELETE', uri, path=path, headers=headers, **params)
-
     def get(self, uri, path=None, headers=None, **params):
+        """ HTTP GET         
+        
+        :param uri: str, uri on which you make the request
+        :param path: string  additionnal path to the uri
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request.
+        """
+
         return self.make_request('GET', uri, path=path, headers=headers, **params)
 
     def head(self, uri, path=None, headers=None, **params):
+        """ HTTP HEAD
+
+        see GET for params description.
+        """
         return self.make_request("HEAD", uri, path=path, headers=headers, **params)
 
+    def delete(self, uri, path=None, headers=None, **params):
+        """ HTTP DELETE
+
+        see GET for params description.
+        """
+        return self.make_request('DELETE', uri, path=path, headers=headers, **params)
+
     def post(self, uri, path=None, body=None, headers=None, **params):
+        """ HTTP POST
+
+        :param uri: str, uri on which you make the request
+        :body: string passed to the body of the request
+        :param path: string  additionnal path to the uri
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request
+        """
         return self.make_request("POST", uri, path=path, body=body, headers=headers, **params)
 
     def put(self, uri, path=None, body=None, headers=None, **params):
+        """ HTTP PUT
+
+        see POST for params description.
+        """
+
         return self.make_request('PUT', uri, path=path, body=body, headers=headers, **params)
 
     def make_request(self, method, uri, path=None, body=None, headers=None, **params):
+        """ Perform HTTP call support GET, HEAD, POST, PUT and DELETE.
+        
+        Usage example, get friendpaste page :
+
+        .. code-block:: python
+
+            from restclient import RestClient
+            client = RestClient()
+            page = resource.request('GET', 'http://friendpaste.com')
+
+        Or get a paste in JSON :
+
+        .. code-block:: python
+
+            from restclient import RestClient
+            client = RestClient()
+            client.make_request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP',
+                headers={'Accept': 'application/json'})
+
+        :param method: str, the HTTP action to be performed: 
+            'GET', 'HEAD', 'POST', 'PUT', or 'DELETE'
+        :param path: str or list, path to add to the uri
+        :param data: str or string or any object that could be
+            converted to JSON.
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request.
+        
+        :return: str.
+        """
+        
         headers = headers or {}
 
         resp, data = self.httpclient.request(make_uri(uri, path, **params), method=method,
@@ -189,8 +341,4 @@ def unicode_urlencode(data):
             value = value.encode('utf-8')
         params.append((name, value))
     return urlencode(params)
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
 

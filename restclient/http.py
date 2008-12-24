@@ -126,9 +126,38 @@ class CustomRequest(urllib2.Request):
             return "GET"
 
 class Urllib2HTTPClient(HTTPClient):
-    """ HTTP Client that use urllib2 """
+    """ HTTP Client that use urllib2.
+    This module is included in python so i mean that you don't need any
+    dependancy to run this client and restclient.
+
+    urllib2 is very powerfull and you can use many handlers to manage
+    authentification and proxies.
+
+    .. seealso::
+        
+        `Urllib2 <http://docs.python.org/library/urllib2.html>`_
+    
+    """
 
     def __init__(self, *handlers):
+        """ Constructor for Urllib2HTTPClien
+
+        :param *handlers: add here any urllib2 handlers.
+
+        For example here is a way to have your urllib2 based client
+        using http basic authentification :
+
+        .. code-block:: python
+
+            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, "%s/%s" % (self.url, "auth"),
+                "test", "test")
+            auth_handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+
+            httpclient = Urllib2HTTPClient(auth_handler)
+                    
+        """
+
         openers = []
         if handlers:
             openers = [handler for handler in handlers]
@@ -177,6 +206,23 @@ class Urllib2HTTPClient(HTTPClient):
 class CurlHTTPClient(HTTPClient):
     """
     An HTTPClient that uses pycurl.
+
+    Pycurl is recommanded when you want fast access to http resources.
+    We have added some basic management of authentification and proxies,
+    but in case you want something specific you should use urllib2 or 
+    httplib2 http clients. Any patch is welcome though ;)
+
+
+    Here is an example to use authentification with curl httpclient :
+    
+    .. code-block:: python
+
+        httpclient = CurlHTTPClient()
+        httpclient.add_credentials("test", "test")        
+
+    .. seealso::
+        
+        `Pycurl <http://pycurl.sourceforge.net>`_
     """
 
     def __init__(self, timeout=None):
@@ -299,10 +345,12 @@ class CurlHTTPClient(HTTPClient):
 
     
 class HTTPLib2HTTPClient(HTTPClient):
-    """A fetcher that uses httplib2 for performing HTTP
+    """An http client that uses httplib2 for performing HTTP
     requests. This implementation supports HTTP caching.
 
-    @see: http://bitworking.org/projects/httplib2/
+    .. seealso::
+        
+        `Httplib2 <http://code.google.com/p/httplib2/>`_
     """
 
     def __init__(self, http=None, cache=None):
