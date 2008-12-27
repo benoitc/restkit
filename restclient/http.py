@@ -37,6 +37,34 @@ _default_http = None
 USER_AGENT = "py-restclient/%s (%s)" % (restclient.__version__, sys.platform)
 DEFAULT_MAX_REDIRECT = 3
 
+def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):
+    """
+    Returns a bytestring version of 's', encoded as specified in 'encoding'.
+
+    If strings_only is True, don't convert (some) non-string-like objects.
+    """
+    if strings_only and isinstance(s, (types.NoneType, int)):
+        return s
+   
+    if not isinstance(s, basestring):
+        try:
+            return str(s)
+        except UnicodeEncodeError:
+            if isinstance(s, Exception):
+                # An Exception subclass containing non-ASCII data that doesn't
+                # know how to print itself properly. We shouldn't raise a
+                # further exception.
+                return ' '.join([smart_str(arg, encoding, strings_only,
+                        errors) for arg in s])
+            return unicode(s).encode(encoding, errors)
+    elif isinstance(s, unicode):
+        return s.encode(encoding, errors)
+    elif s and encoding != 'utf-8':
+        return s.decode('utf-8', errors).encode(encoding, errors)
+    else:
+        return s
+
+
 def createHTTPClient():
     """Create default HTTP client instance
     prefers Curl to urllib"""
@@ -283,7 +311,7 @@ class CurlHTTPClient(HTTPClient):
             header = StringIO.StringIO()
             c.setopt(pycurl.WRITEFUNCTION, data.write)
             c.setopt(pycurl.HEADERFUNCTION, header.write)
-            c.setopt(pycurl.URL ,url)
+            c.setopt(pycurl.URL , smart_str(url))
             c.setopt(pycurl.FOLLOWLOCATION, 1)
             c.setopt(pycurl.MAXREDIRS, 5)
 
