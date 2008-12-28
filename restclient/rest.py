@@ -79,8 +79,9 @@ class ResourceResult(str):
 
             from restclient import RestClient
             client = RestClient()
-            page = resource.request('GET', 'http://friendpaste.com'
-            print page.http_code
+            page = resource.request('GET', 'http://friendpaste.com')
+            print page
+            print "http code %s" % page.http_code
 
     """
     def __new__(cls, s, http_code, response):
