@@ -33,8 +33,9 @@ from urllib import quote, urlencode
 from restclient.http import getDefaultHTTPClient, HTTPClient 
 
 
-__all__ = ['Resource', 'RestClient', 'RestClientFactory', 'ResourceNotFound', \
-        'Unauthorised', 'RequestFailed']
+__all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
+        'Unauthorized', 'RequestFailed', 'ResourceError',
+        'ResourceResult']
 __docformat__ = 'restructuredtext en'
 
 

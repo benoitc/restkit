@@ -19,6 +19,6 @@ except:
     __version__ = '?'
 
 
-from restclient.rest import Resource, RestClient
+from restclient.rest import * 
 
 
