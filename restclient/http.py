@@ -106,10 +106,12 @@ class HTTPResponse(dict):
     status = 200
     final_url = None
     
-    def __init__(self, final_url=None, status=None, headers=None):
+    def __init__(self, final_url=None, status=None, headers=None,
+            body=None):
         self.final_url = final_url
         self.status_code = status
         self.headers = headers
+        self.body = body
 
     def __repr__(self):
         return "<%s status %s for %s>" % (self.__class__.__name__,
@@ -223,13 +225,14 @@ class Urllib2HTTPClient(HTTPClient):
         resp = HTTPResponse()
         resp.final_url = response.geturl()
         resp.headers = dict(response.info().items())
+        resp.body = response.read()
 
         if hasattr(response, 'code'):
             resp.status = response.code
         else:
             resp.status = 200
 
-        return resp, response.read()
+        return resp, resp.body
 
 class CurlHTTPClient(HTTPClient):
     """
@@ -357,20 +360,26 @@ class CurlHTTPClient(HTTPClient):
             try:
                 c.perform()
             except pycurl.error, e:
-                raise HTTPError('curl error %s' % e)
+                errno, message = e
+                return self._make_response(final_url=url, status=errno,
+                        body=message)
 
             response_headers = self._parseHeaders(header)
             code = c.getinfo(pycurl.RESPONSE_CODE)
             
-            resp = HTTPResponse()
-            resp.headers = response_headers
-            resp.status = code
-            resp.final_url = url
-
-            return resp, data.getvalue()
+            return self._make_response(url, code, response_headers,
+                data.getvalue())
         finally:
             c.close()
 
+    def _make_response(self, final_url=None, status=None, headers=None,
+            body=None):
+        resp = HTTPResponse()
+        resp.headers = headers
+        resp.status = status
+        resp.final_url = final_url
+        resp.body = body
+        return resp, body 
     
 class HTTPLib2HTTPClient(HTTPClient):
     """An http client that uses httplib2 for performing HTTP
@@ -423,5 +432,6 @@ class HTTPLib2HTTPClient(HTTPClient):
         resp.headers = dict(httplib2_response.items())
         resp.status = int(httplib2_response.status)
         resp.final_url = final_url
+        resp.body = content
 
         return resp, content
