@@ -30,7 +30,7 @@ setup(
     author = 'Benoit Chesneau',
     author_email = 'benoitc@e-engura.org',
     license = 'BSD',
-    url = 'http://ipython-restclient.e-engura.org',
+    url = 'http://py-restclient.e-engura.org',
     zip_safe = True,
 
     classifiers = [

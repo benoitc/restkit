@@ -6,12 +6,12 @@ Installation
 The most recent release is always available in the `cheeseshop`_ and can be
 installed using `easy_install`_::
 
-    easy_install python-restclient
+    easy_install py-restclient
 
 Alternatly, you can also install the development version from 
 our `Mercurial`_ repository::
 
-    hg clone https://dev.e-engura.org/hg/python-restclient
+    hg clone https://dev.e-engura.org/hg/py-restclient
     cd python-restclient
     sudo python setup.py install
 
@@ -22,15 +22,15 @@ anywhere in your PYTHONPATH.
 
 You could also get source from  `Bitbucket`_ ::
 
-    hg clone https://benoitc@bitbucket.org/benoitc/python-restclient/
+    hg clone https://benoitc@bitbucket.org/benoitc/py-restclient/
 
 Requirements
 ============
 
-To use py-simplecouchdb you will need **Python 2.5** or later. 
+To use py-restclient you will need **Python 2.5** or later. 
 
 .. _cheeseshop: http://pypi.python.org/pypi/WTForms/
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
 .. _Mercurial: http://www.selenic.com/mercurial/
-.. _Bitbucket: http://www.bitbucket.org/benoitc/python-restclient
+.. _Bitbucket: http://www.bitbucket.org/benoitc/py-restclient
 
