@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>What&#8217;s New in python-restclient 1.0 &mdash; py-restclient v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="py-restclient v1.0 documentation" href="index.html" />
+    <link rel="next" title="Resource" href="resource.html" />
+    <link rel="prev" title="Getting Started" href="gettingstarted.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="resource.html" title="Resource"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gettingstarted.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">py-restclient v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="what-s-new-in-python-restclient-1-0">
+<span id="whatsnew"></span><h1>What&#8217;s New in python-restclient 1.0<a class="headerlink" href="#what-s-new-in-python-restclient-1-0" title="Permalink to this headline">¶</a></h1>
+<p>This article explain new feature of python-restclient 1.0. This is a
+feature complete version.</p>
+<div class="section" id="change-in-results-returned">
+<h2>Change in results returned<a class="headerlink" href="#change-in-results-returned" title="Permalink to this headline">¶</a></h2>
+<p>Results and Exceptions returned have been improved. You can now have all
+the http response :</p>
+<div class="section" id="results">
+<h3>Results:<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
+<p>Results returned by <cite>restclient.rest.RestClient.request</cite> are an
+instance of <cite>restclient.rest.RestourceResult</cite>.</p>
+<p>You can get result as string as usual and  status code by result.http_code,
+or see anything about the response via result.response. For example, the entire
+result body is result.response.body.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">page</span>
+<span class="k">print</span> <span class="s">&quot;http code </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">page</span><span class="o">.</span><span class="n">http_code</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h3>Exceptions:<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h3>
+<p>Exceptions raised when an unexpected HTTP error is received in response
+to a request are now instance of <cite>restclient.rest.RestourceError</cite></p>
+<p>The request failed, meaning the remote HTTP server returned a code
+other than success, unauthorized, or NotFound.</p>
+<p>The exception message attempts to extract the error</p>
+<p>You can get the status code by e.http_code, or see anything about the
+response via e.response. For example, the entire result body (which is
+probably an HTML error page) is e.response.body</p>
+</div>
+</div>
+<div class="section" id="choose-http-client-backend">
+<h2>Choose http client backend<a class="headerlink" href="#choose-http-client-backend" title="Permalink to this headline">¶</a></h2>
+<p>With version 1.0 you can now choose http client backend used to make request. You can choose for now between <strong>Urllib2</strong>, <strong>Pycurl</strong> or <strong>HTTPLib2</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient.http</span> <span class="kn">import</span> <span class="n">CurlHTTPClient</span>
+<span class="n">httpclient</span> <span class="o">=</span> <span class="n">CurlHTTPClient</span><span class="p">()</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="n">httpclient</span><span class="o">=</span><span class="n">httpclient</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each HTTP Client are subclasses of <cite>restclient.http.HTTPClient</cite>.</p>
+<p>By default it will use client based on <a class="reference" href="http://pycurl.sourceforge.net/">pycurl</a> if installed or urllib2. You could also use <cite>restclient.http.HTTPLib2HTTPClient</cite>,a client based on  <a class="reference" href="http://code.google.com/p/httplib2/">Httplib2</a> or make your own depending of the option you need to access to the serve (authentification, proxy, ....).</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference" href="httpclient.html#httpclient"><em>HTTP Clients</em></a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">What&#8217;s New in python-restclient 1.0</a><ul>
+<li><a class="reference" href="#change-in-results-returned">Change in results returned</a><ul>
+<li><a class="reference" href="#results">Results:</a></li>
+<li><a class="reference" href="#exceptions">Exceptions:</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#choose-http-client-backend">Choose http client backend</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="gettingstarted.html" title="previous chapter">Getting Started</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="resource.html" title="next chapter">Resource</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/whatsnew.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="resource.html" title="Resource"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gettingstarted.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">py-restclient v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, 2009 Benoit Chesneau &lt;benoitc@e-engura.org&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>
