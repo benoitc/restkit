@@ -18,11 +18,11 @@ restclient.rest.Resource.clone method resource.html
 restclient.http.CurlHTTPClient.__init__ method httpclient.html
 restclient.rest.RestClient.post method resource.html
 restclient.RestClient.httpclient attribute resource.html
-restclient.rest.RestClient class resource.html
+restclient.Resource.httpclient attribute resource.html
 restclient.rest.RestClient.delete method resource.html
 restclient.rest.Unauthorized exception resource.html
 restclient.http.Urllib2HTTPClient.__init__ method httpclient.html
-restclient.rest.RequestFailed exception resource.html
+restclient.rest.Resource.update_uri method resource.html
 restclient.rest.ResourceNotFound exception resource.html
 restclient.rest.Resource.__call__ method resource.html
 restclient.http.setDefaultHTTPClient function httpclient.html
@@ -32,8 +32,8 @@ restclient.rest.Resource.delete method resource.html
 restclient.http.CurlHTTPClient.add_credentials method httpclient.html
 restclient.Resource.uri attribute resource.html
 restclient.rest.RestClient.make_request method resource.html
-restclient.Resource.httpclient attribute resource.html
+restclient.rest.RestClient class resource.html
 restclient.rest.RestClient.head method resource.html
 restclient.http.HTTPClient.request method httpclient.html
 restclient.http.CurlHTTPClient class httpclient.html
-restclient.rest.Resource.update_uri method resource.html
+restclient.rest.RequestFailed exception resource.html
