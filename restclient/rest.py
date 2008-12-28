@@ -68,6 +68,28 @@ class RequestFailed(ResourceError):
     probably an HTML error page) is e.response.body.
     """
 
+class ResourceResult(str):
+    """ result returned by `restclient.rest.RestClient`.
+    
+    you can get result like any string and  status code by result.http_code, 
+    or see anything about the response via e.response. For example, the entire 
+    result body is resulte.response.body.
+
+    .. code-block:: python
+
+            from restclient import RestClient
+            client = RestClient()
+            page = resource.request('GET', 'http://friendpaste.com'
+            print page.http_code
+
+    """
+    def __new__(cls, s, http_code, response):
+        self = str.__new__(cls, s)
+        self.http_code = http_code
+        self.response = response
+        return self
+
+
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
@@ -165,10 +187,6 @@ class Resource(object):
         """
         return self.client.put(self.uri, path=path, body=payload, headers=headers, **params)
 
-    def get_status_code(self):
-        """ get status code of the last request """
-        return self.client.status_code
-    status_code = property(get_status_code)
 
     def update_uri(self, path):
         """
@@ -294,7 +312,6 @@ class RestClient(object):
                 body=body, headers=headers)
 
         status_code = int(resp.status)
-        self.status_code = status_code
 
         if status_code >= 400:
             if type(data) is dict:
@@ -304,14 +321,14 @@ class RestClient(object):
 
             if status_code == 404:
                 raise ResourceNotFound(error, http_code=404, response=resp)
-            elif self.status_code == 401 or self.status_code == 403:
+            elif status_code == 401 or status_code == 403:
                 raise Unauthorized(error, http_code=status_code,
                         response=resp)
             else:
                 raise RequestFailed(error, http_code=status_code,
                         response=resp)
 
-        return data
+        return ResourceResult(data, status_code, resp)
 
 
 def make_uri(base, *path, **query):

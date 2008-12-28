@@ -46,7 +46,7 @@ class HTTPClientTestCase(unittest.TestCase):
 
     def testGetWithContentType(self):
         result = self.res.get('/json', headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.status_code == 200)
+        self.assert_(result.http_code == 200)
         def bad_get():
             result = self.res.get('/json', headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_get) 
@@ -59,7 +59,7 @@ class HTTPClientTestCase(unittest.TestCase):
 
     def testGetWithQuery(self):
         result = self.res.get('/query', test="testing")
-        self.assert_(self.res.status_code == 200)
+        self.assert_(result.http_code == 200)
 
 
     def testSimplePost(self):
@@ -69,7 +69,7 @@ class HTTPClientTestCase(unittest.TestCase):
     def testPostWithContentType(self):
         result = self.res.post('/json', payload="test",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.status_code == 200 )
+        self.assert_(result.http_code == 200 )
         def bad_post():
             result = self.res.post('/json', payload="test",
                     headers={'Content-Type': 'text/plain'})
@@ -78,13 +78,13 @@ class HTTPClientTestCase(unittest.TestCase):
     def testEmptyPost(self):
         result = self.res.post('/empty', payload="",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.status_code == 200 )
+        self.assert_(result.http_code == 200 )
         result = self.res.post('/empty',headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.status_code == 200 )
+        self.assert_(result.http_code == 200 )
 
     def testPostWithQuery(self):
         result = self.res.post('/query', test="testing")
-        self.assert_(self.res.status_code == 200)
+        self.assert_(result.http_code == 200)
 
     def testSimplePut(self):
         result = self.res.put(payload="test")
@@ -93,7 +93,7 @@ class HTTPClientTestCase(unittest.TestCase):
     def testPutWithContentType(self):
         result = self.res.put('/json', payload="test",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.status_code == 200 )
+        self.assert_(result.http_code == 200 )
         def bad_put():
             result = self.res.put('/json', payload="test",
                     headers={'Content-Type': 'text/plain'})
@@ -102,21 +102,21 @@ class HTTPClientTestCase(unittest.TestCase):
     def testEmptyPut(self):
         result = self.res.put('/empty', payload="",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.status_code == 200 )
+        self.assert_(result.http_code == 200 )
         result = self.res.put('/empty',headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.status_code == 200 )
+        self.assert_(result.http_code == 200 )
 
     def testPuWithQuery(self):
         result = self.res.put('/query', test="testing")
-        self.assert_(self.res.status_code == 200)
+        self.assert_(result.http_code == 200)
 
     def testHead(self):
         result = self.res.head('/ok')
-        self.assert_(self.res.status_code == 200)
+        self.assert_(result.http_code == 200)
 
     def testDelete(self):
         result = self.res.delete('/delete')
-        self.assert_(self.res.status_code == 200)
+        self.assert_(result.http_code == 200)
 
 
 
@@ -130,7 +130,7 @@ class CurlHTTPClientTestCase(HTTPClientTestCase):
         
         res = Resource(self.url, httpclient)
         result = res.get('/auth')
-        self.assert_(res.status_code == 200)
+        self.assert_(result.http_code == 200)
 
         httpclient.add_credentials("test", "test2")
         

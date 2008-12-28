@@ -367,8 +367,8 @@ class CurlHTTPClient(HTTPClient):
             response_headers = self._parseHeaders(header)
             code = c.getinfo(pycurl.RESPONSE_CODE)
             
-            return self._make_response(url, code, response_headers,
-                data.getvalue())
+            return self._make_response(final_url=url, status=code,
+                    headers=response_headers, body=data.getvalue())
         finally:
             c.close()
 
