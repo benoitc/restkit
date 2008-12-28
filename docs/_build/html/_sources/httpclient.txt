@@ -1,6 +1,9 @@
+.. _httpclient:
+
 HTTP Clients
 ============
-.. module:: restclient
+
+.. module:: restclient.http
 
 HTTP Clients are object based on :mod:`restclient.http.HTTPClient` that
 perform HTPP operations.
@@ -32,7 +35,9 @@ Clients:
     .. automethod:: restclient.http.Urllib2HTTPClient.__init__
 
 .. autoclass:: restclient.http.CurlHTTPClient
-    
-    .. automethod:: restclient.http.HTTPClient.add_credentials
+
+    .. automethod:: restclient.http.CurlHTTPClient.__init__
+    .. automethod:: restclient.http.CurlHTTPClient.add_credentials
 
 .. autoclass:: restclient.http.HTTPLib2HTTPClient
+

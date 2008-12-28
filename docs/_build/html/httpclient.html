@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Clients &mdash; python-restclient v0.2 documentation</title>
+    <title>HTTP Clients &mdash; python-restclient v1.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.2',
+        VERSION:     '1.0',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="python-restclient v0.2 documentation" href="index.html" />
+    <link rel="top" title="python-restclient v1.0 documentation" href="index.html" />
     <link rel="prev" title="Resource" href="resource.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="resource.html" title="Resource"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">python-restclient v1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
     <div class="document">
@@ -44,8 +44,8 @@
           <div class="body">
             
   
-  <div class="section" id="module-restclient">
-<h1>HTTP Clients<a class="headerlink" href="#module-restclient" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-restclient.http">
+<span id="httpclient"></span><h1>HTTP Clients<a class="headerlink" href="#module-restclient.http" title="Permalink to this headline">¶</a></h1>
 <p>HTTP Clients are object based on <tt class="xref docutils literal"><span class="pre">restclient.http.HTTPClient</span></tt> that
 perform HTPP operations.</p>
 <p>You can choose the one you want as httpclient in Resource or RestClient:</p>
@@ -175,6 +175,16 @@ httplib2 http clients. Any patch is welcome though ;)</p>
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference" href="http://pycurl.sourceforge.net">Pycurl</a></p>
 </div>
+<dl class="method">
+<dt id="restclient.http.CurlHTTPClient.__init__">
+<!--[restclient.http.CurlHTTPClient.__init__]--><tt class="descname">__init__</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#restclient.http.CurlHTTPClient.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="restclient.http.CurlHTTPClient.add_credentials">
+<!--[restclient.http.CurlHTTPClient.add_credentials]--><tt class="descname">add_credentials</tt><big>(</big><em>user</em>, <em>password</em><big>)</big><a class="headerlink" href="#restclient.http.CurlHTTPClient.add_credentials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -234,7 +244,7 @@ requests. This implementation supports HTTP caching.</p>
         <li class="right" >
           <a href="resource.html" title="Resource"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">python-restclient v1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

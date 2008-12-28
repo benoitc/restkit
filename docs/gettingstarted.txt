@@ -20,6 +20,9 @@ Usage example, get friendpaste page :
     from restclient import Resource
     res = Resource('http://friendpaste.com')
     page = res.get()
+    print page
+    print page.http_code
+    
 
 
 Perform HTTP call support  with `restclient.rest.RestClient`.

@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started &mdash; python-restclient v0.2 documentation</title>
+    <title>Getting Started &mdash; python-restclient v1.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.2',
+        VERSION:     '1.0',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,8 +19,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="python-restclient v0.2 documentation" href="index.html" />
-    <link rel="next" title="Resource" href="resource.html" />
+    <link rel="top" title="python-restclient v1.0 documentation" href="index.html" />
+    <link rel="next" title="What&#8217;s New in python-restclient 1.0" href="whatsnew.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
   <body>
@@ -34,12 +34,12 @@
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="resource.html" title="Resource"
+          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.0"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">python-restclient v1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
     <div class="document">
@@ -61,6 +61,8 @@ will get you started.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">Resource</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
 <span class="n">page</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">page</span>
+<span class="k">print</span> <span class="n">page</span><span class="o">.</span><span class="n">http_code</span>
 </pre></div>
 </div>
 </div>
@@ -100,7 +102,7 @@ headers={'Accept': 'application/json'})</pre>
             <h4>Previous topic</h4>
             <p class="topless"><a href="installation.html" title="previous chapter">Installation</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="resource.html" title="next chapter">Resource</a></p>
+            <p class="topless"><a href="whatsnew.html" title="next chapter">What&#8217;s New in python-restclient 1.0</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/gettingstarted.txt">Show Source</a></li>
@@ -125,12 +127,12 @@ headers={'Accept': 'application/json'})</pre>
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="resource.html" title="Resource"
+          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.0"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">python-restclient v1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

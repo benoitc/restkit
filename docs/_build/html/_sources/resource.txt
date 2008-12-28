@@ -55,8 +55,6 @@ Resource class
 
     .. automethod:: restclient.rest.Resource.put
 
-    .. automethod:: restclient.rest.Resource.get_status_code
-
     .. automethod:: restclient.rest.Resource.update_uri
 
 RestClient class
