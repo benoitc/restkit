@@ -25,8 +25,8 @@ This module provide a common interface for all HTTP equest.
     >>> res = Resource('http://friendpaste.com')
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
     '{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
-
-
+    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).http_code
+    200
 """
 from urllib import quote, urlencode
 
@@ -71,9 +71,9 @@ class RequestFailed(ResourceError):
 class ResourceResult(str):
     """ result returned by `restclient.rest.RestClient`.
     
-    you can get result like any string and  status code by result.http_code, 
-    or see anything about the response via e.response. For example, the entire 
-    result body is resulte.response.body.
+    you can get result like as string and  status code by result.http_code, 
+    or see anything about the response via result.response. For example, the entire 
+    result body is result.response.body.
 
     .. code-block:: python
 

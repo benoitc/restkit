@@ -8,6 +8,7 @@ restclient.rest.Resource.get method resource.html
 restclient.http.HTTPClient class httpclient.html
 restclient.rest.Resource class resource.html
 restclient.http.createHTTPClient function httpclient.html
+restclient.rest.ResourceResult class resource.html
 restclient.http.HTTPLib2HTTPClient class httpclient.html
 restclient.http.getDefaultHTTPClient function httpclient.html
 restclient.http.Urllib2HTTPClient class httpclient.html
@@ -30,7 +31,6 @@ restclient.Resource.uri attribute resource.html
 restclient.rest.RestClient.make_request method resource.html
 restclient.rest.RestClient class resource.html
 restclient.rest.RestClient.head method resource.html
-restclient.rest.Resource.get_status_code method resource.html
 restclient.http.HTTPClient.request method httpclient.html
 restclient.http.CurlHTTPClient class httpclient.html
 restclient.rest.RequestFailed exception resource.html

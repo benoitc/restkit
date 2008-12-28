@@ -21,7 +21,7 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="python-restclient v0.2 documentation" href="index.html" />
     <link rel="next" title="HTTP Clients" href="httpclient.html" />
-    <link rel="prev" title="Getting Started" href="gettingstarted.html" /> 
+    <link rel="prev" title="What&#8217;s New in python-restclient 1.0" href="whatsnew.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
           <a href="httpclient.html" title="HTTP Clients"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="gettingstarted.html" title="Getting Started"
+          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.0"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
       </ul>
@@ -58,6 +58,8 @@ module make HTTP requests using <a class="reference" href="http://pycurl.sourcef
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
 <span class="go">&#39;{&quot;snippet&quot;: &quot;hi!&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;5rOqE9XTz7lccLgZoQS4IP&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;386233396230&quot;}&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">http_code</span>
+<span class="go">200</span>
 </pre></div>
 </div>
 <div class="section" id="resource-class">
@@ -101,7 +103,7 @@ own depending of the option you need to access to the serve
 <dt id="restclient.rest.Resource.__call__">
 <!--[restclient.rest.Resource.__call__]--><tt class="descname">__call__</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>if you want to add a path to resource uri, you can do:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Resource</span><span class="p">(</span><span class="s">&quot;/path&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Resource</span><span class="p">(</span><span class="s">&quot;/path&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -169,11 +171,6 @@ be added to HTTP request.</li>
 <dd><p>HTTP PUT</p>
 <p>see POST for params description.</p>
 </dd></dl>
-
-<dl class="method">
-<dt id="restclient.rest.Resource.get_status_code">
-<!--[restclient.rest.Resource.get_status_code]--><tt class="descname">get_status_code</tt><big>(</big><big>)</big><a class="headerlink" href="#restclient.rest.Resource.get_status_code" title="Permalink to this definition">¶</a></dt>
-<dd>get status code of the last request</dd></dl>
 
 <dl class="method">
 <dt id="restclient.rest.Resource.update_uri">
@@ -319,25 +316,50 @@ be added to HTTP request.</li>
 </dd></dl>
 
 </div>
+<div class="section" id="resourceresult-class">
+<h2>ResourceResult class<a class="headerlink" href="#resourceresult-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="restclient.rest.ResourceResult">
+<!--[restclient.rest.ResourceResult]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">ResourceResult</tt><a class="headerlink" href="#restclient.rest.ResourceResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>result returned by <cite>restclient.rest.RestClient</cite>.</p>
+<p>you can get result like as string and  status code by result.http_code, 
+or see anything about the response via result.response. For example, the entire 
+result body is result.response.body.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">page</span>
+<span class="k">print</span> <span class="s">&quot;http code </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">page</span><span class="o">.</span><span class="n">http_code</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
 <div class="section" id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="restclient.rest.ResourceNotFound">
 <!--[restclient.rest.ResourceNotFound]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">ResourceNotFound</tt><a class="headerlink" href="#restclient.rest.ResourceNotFound" title="Permalink to this definition">¶</a></dt>
-<dd>Exception raised when a 404 HTTP error is received in response to a
-request.</dd></dl>
+<dd>Exception raised when no resource was found at the given url.</dd></dl>
 
 <dl class="exception">
 <dt id="restclient.rest.Unauthorized">
 <!--[restclient.rest.Unauthorized]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">Unauthorized</tt><a class="headerlink" href="#restclient.rest.Unauthorized" title="Permalink to this definition">¶</a></dt>
-<dd>Exception raised when a 401 HTTP error is received in response to a
-request.</dd></dl>
+<dd>Exception raised when an authorization is required to access to
+the resource specified.</dd></dl>
 
 <dl class="exception">
 <dt id="restclient.rest.RequestFailed">
 <!--[restclient.rest.RequestFailed]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">RequestFailed</tt><a class="headerlink" href="#restclient.rest.RequestFailed" title="Permalink to this definition">¶</a></dt>
-<dd>Exception raised when an unexpected HTTP error is received in response
-to a request.</dd></dl>
+<dd><p>Exception raised when an unexpected HTTP error is received in response
+to a request.</p>
+<p>The request failed, meaning the remote HTTP server returned a code 
+other than success, unauthorized, or NotFound.</p>
+<p>The exception message attempts to extract the error</p>
+<p>You can get the status code by e.http_code, or see anything about the 
+response via e.response. For example, the entire result body (which is 
+probably an HTML error page) is e.response.body.</p>
+</dd></dl>
 
 </div>
 </div>
@@ -353,13 +375,14 @@ to a request.</dd></dl>
 <li><a class="reference" href="">Resource</a><ul>
 <li><a class="reference" href="#resource-class">Resource class</a></li>
 <li><a class="reference" href="#restclient-class">RestClient class</a></li>
+<li><a class="reference" href="#resourceresult-class">ResourceResult class</a></li>
 <li><a class="reference" href="#exceptions">Exceptions</a></li>
 </ul>
 </li>
 </ul>
 
             <h4>Previous topic</h4>
-            <p class="topless"><a href="gettingstarted.html" title="previous chapter">Getting Started</a></p>
+            <p class="topless"><a href="whatsnew.html" title="previous chapter">What&#8217;s New in python-restclient 1.0</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="httpclient.html" title="next chapter">HTTP Clients</a></p>
             <h3>This Page</h3>
@@ -389,7 +412,7 @@ to a request.</dd></dl>
           <a href="httpclient.html" title="HTTP Clients"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="gettingstarted.html" title="Getting Started"
+          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.0"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">python-restclient v0.2 documentation</a> &raquo;</li> 
       </ul>

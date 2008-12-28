@@ -18,6 +18,7 @@ Fisrt steps
    
    installation
    gettingstarted
+   whatsnew
 
 .. _api:
 

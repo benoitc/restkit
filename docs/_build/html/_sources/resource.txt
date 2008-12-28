@@ -13,7 +13,8 @@ Example:
     >>> res = Resource('http://friendpaste.com')
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
     '{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
-
+    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).http_code
+    200
 
 Resource class
 --------------
@@ -95,7 +96,11 @@ RestClient represent a simple HTTP client.
 
     .. automethod:: restclient.rest.RestClient.make_request
 
+ResourceResult class
+--------------------
 
+.. autoclass:: restclient.rest.ResourceResult
+ 
 Exceptions
 ----------
 
