@@ -1,5 +1,5 @@
 # Sphinx inventory version 1
-# Project: python-restclient
+# Project: py-restclient
 # Version: 1.0
 restclient.http mod httpclient.html
 restclient mod resource.html

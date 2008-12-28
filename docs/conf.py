@@ -41,8 +41,8 @@ source_suffix = '.txt'
 master_doc = 'index'
 
 # General information about the project.
-project = u'python-restclient'
-copyright = u'2008, Benoit Chesneau <benoitc@e-engura.org>'
+project = u'py-restclient'
+copyright = u'2008, 2009 Benoit Chesneau <benoitc@e-engura.org>'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
