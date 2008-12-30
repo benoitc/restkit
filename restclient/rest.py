@@ -173,7 +173,7 @@ class Resource(object):
     def post(self, path=None, payload=None, headers=None, **params):
         """ HTTP POST
 
-        :payload: string passed to the body of the request
+        :param payload: string passed to the body of the request
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
@@ -195,7 +195,7 @@ class Resource(object):
         This method may be the only one you want to override when
         subclassing `restclient.rest.Resource`.
         
-        :payload: string passed to the body of the request
+        :param payload: string passed to the body of the request
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
@@ -275,7 +275,7 @@ class RestClient(object):
         """ HTTP POST
 
         :param uri: str, uri on which you make the request
-        :body: string passed to the body of the request
+        :param body: string passed to the body of the request
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
