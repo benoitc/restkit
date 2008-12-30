@@ -54,6 +54,8 @@ Resource class
     .. automethod:: restclient.rest.Resource.post
 
     .. automethod:: restclient.rest.Resource.put
+    
+    .. automethod:: restclient.rest.Resource.request
 
     .. automethod:: restclient.rest.Resource.update_uri
 

@@ -23,7 +23,7 @@ import sys
 
 setup(
     name = 'py-restclient',
-    version = '1.0.1',
+    version = '1.0.2',
     description = 'Python REST client',
     long_description = \
 """A simple REST client for Python, inspired by the microframework (Camping, Sinatra) style of specifying actions: get, put, post, delete.""",
