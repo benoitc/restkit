@@ -154,21 +154,21 @@ class Resource(object):
             be added to HTTP request.
         :param params: Optionnal parameterss added to the request.
         """
-        return self.client.get(self.uri, path=path, headers=headers, **params)
+        return self.request("GET", path=path, headers=headers, **params)
 
     def delete(self, path=None, headers=None, **params):
         """ HTTP DELETE
 
         see GET for params description.
         """
-        return self.client.delete(self.uri, path=path, headers=headers, **params)
+        return self.request("DELETE", path=path, headers=headers, **params)
 
     def head(self, path=None, headers=None, **params):
         """ HTTP HEAD
 
         see GET for params description.
         """
-        return self.client.head(self.uri, path=path, headers=headers, **params)
+        return self.request("HEAD", path=path, headers=headers, **params)
 
     def post(self, path=None, payload=None, headers=None, **params):
         """ HTTP POST
@@ -180,15 +180,30 @@ class Resource(object):
         :param params: Optionnal parameterss added to the request
         """
 
-        return self.client.post(self.uri, path=path, body=payload, headers=headers, **params)
+        return self.request("POST", path=path, payload=payload, headers=headers, **params)
 
     def put(self, path=None, payload=None, headers=None, **params):
         """ HTTP PUT
 
         see POST for params description.
         """
-        return self.client.put(self.uri, path=path, body=payload, headers=headers, **params)
+        return self.request("PUT", path=path, payload=payload, headers=headers, **params)
 
+    def request(self, method, path=None, payload=None, headers=None, **params):
+        """ HTTP request
+
+        This method may be the only one you want to override when
+        sublclassing `restclient.rest.Resource`.
+        
+        :payload: string passed to the body of the request
+        :param path: string  additionnal path to the uri
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request
+        """
+
+        return self.client.make_request(method, self.uri, path=path,
+                body=payload, headers=headers, **params)
 
     def update_uri(self, path):
         """
