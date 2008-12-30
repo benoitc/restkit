@@ -193,7 +193,7 @@ class Resource(object):
         """ HTTP request
 
         This method may be the only one you want to override when
-        sublclassing `restclient.rest.Resource`.
+        subclassing `restclient.rest.Resource`.
         
         :payload: string passed to the body of the request
         :param path: string  additionnal path to the uri
