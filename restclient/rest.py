@@ -325,8 +325,8 @@ class RestClient(object):
         
         headers = headers or {}
 
-        resp, data = self.httpclient.request(make_uri(uri, path, **params), method=method,
-                body=body, headers=headers)
+        resp, data = self.httpclient.request(make_uri(uri, path, **params), 
+                method=method, body=body, headers=headers)
 
         status_code = int(resp.status)
 
@@ -361,11 +361,12 @@ def make_uri(base, *path, **query):
     retval = [base]
 
     # build the path
-    path = '/'.join([''] +
-                    [unicode_quote(s.strip('/')) for s in path
-                     if s is not None])
+    path_ = ''
+    for p in path:
+        path_ = '/'.join([unicode_quote(s) for s in p.split('/') if s is not None])
+    
     if path:
-        retval.append(path)
+        retval.append(path_)
 
     params = []
     for k, v in query.items():
