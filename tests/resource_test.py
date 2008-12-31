@@ -27,7 +27,7 @@ import urllib2
 from restclient.http import Urllib2HTTPClient, CurlHTTPClient, \
 HTTPLib2HTTPClient
 from restclient.rest import Resource, RestClient, RequestFailed, \
-ResourceNotFound
+ResourceNotFound, Unauthorized
 
 
 from _server_test import HOST, PORT
@@ -123,16 +123,20 @@ class ResourceTestCase(unittest.TestCase):
 
 
     def testAuth(self):
-        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password(None, "%s/%s" % (self.url, "auth"),
-                "test", "test")
-        auth_handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+        httpclient = Urllib2HTTPClient()
+        httpclient.add_credentials("test", "test")
 
-        httpclient = Urllib2HTTPClient(auth_handler)
-        
         res = Resource(self.url, httpclient)
         result = res.get('/auth')
-        self.assert_(result.http_code == 200) 
+        self.assert_(result.http_code == 200)
+
+        httpclient.add_credentials("test", "test2")
+
+        def niettest():
+            res = Resource(self.url, httpclient)
+            result = res.get('/auth')
+        self.assertRaises(Unauthorized, niettest)
+ 
     
 if __name__ == '__main__':
     from _server_test import run_server_test

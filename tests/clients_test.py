@@ -118,14 +118,8 @@ class HTTPClientTestCase(unittest.TestCase):
         result = self.res.delete('/delete')
         self.assert_(result.http_code == 200)
 
-
-
-
-class CurlHTTPClientTestCase(HTTPClientTestCase):
-    httpclient = CurlHTTPClient()
-
     def testAuth(self):
-        httpclient = CurlHTTPClient()
+        httpclient = self.httpclient 
         httpclient.add_credentials("test", "test")
         
         res = Resource(self.url, httpclient)
@@ -139,6 +133,9 @@ class CurlHTTPClientTestCase(HTTPClientTestCase):
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
 
+
+class CurlHTTPClientTestCase(HTTPClientTestCase):
+    httpclient = CurlHTTPClient()
 
 
 class HTTPLib2HTTPClientTestCase(HTTPClientTestCase):
