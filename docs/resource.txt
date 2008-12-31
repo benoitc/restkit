@@ -94,7 +94,7 @@ RestClient represent a simple HTTP client.
 
     .. automethod:: restclient.rest.RestClient.put
 
-    .. automethod:: restclient.rest.RestClient.make_request
+    .. automethod:: restclient.rest.RestClient.request
 
 ResourceResult class
 --------------------

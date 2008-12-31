@@ -202,7 +202,7 @@ class Resource(object):
         :param params: Optionnal parameterss added to the request
         """
 
-        return self.client.make_request(method, self.uri, path=path,
+        return self.client.request(method, self.uri, path=path,
                 body=payload, headers=headers, **params)
 
     def update_uri(self, path):
@@ -255,21 +255,21 @@ class RestClient(object):
         :param params: Optionnal parameterss added to the request.
         """
 
-        return self.make_request('GET', uri, path=path, headers=headers, **params)
+        return self.request('GET', uri, path=path, headers=headers, **params)
 
     def head(self, uri, path=None, headers=None, **params):
         """ HTTP HEAD
 
         see GET for params description.
         """
-        return self.make_request("HEAD", uri, path=path, headers=headers, **params)
+        return self.request("HEAD", uri, path=path, headers=headers, **params)
 
     def delete(self, uri, path=None, headers=None, **params):
         """ HTTP DELETE
 
         see GET for params description.
         """
-        return self.make_request('DELETE', uri, path=path, headers=headers, **params)
+        return self.request('DELETE', uri, path=path, headers=headers, **params)
 
     def post(self, uri, path=None, body=None, headers=None, **params):
         """ HTTP POST
@@ -281,7 +281,7 @@ class RestClient(object):
             be added to HTTP request.
         :param params: Optionnal parameterss added to the request
         """
-        return self.make_request("POST", uri, path=path, body=body, headers=headers, **params)
+        return self.request("POST", uri, path=path, body=body, headers=headers, **params)
 
     def put(self, uri, path=None, body=None, headers=None, **params):
         """ HTTP PUT
@@ -289,9 +289,9 @@ class RestClient(object):
         see POST for params description.
         """
 
-        return self.make_request('PUT', uri, path=path, body=body, headers=headers, **params)
+        return self.request('PUT', uri, path=path, body=body, headers=headers, **params)
 
-    def make_request(self, method, uri, path=None, body=None, headers=None, **params):
+    def request(self, method, uri, path=None, body=None, headers=None, **params):
         """ Perform HTTP call support GET, HEAD, POST, PUT and DELETE.
         
         Usage example, get friendpaste page :
@@ -308,7 +308,7 @@ class RestClient(object):
 
             from restclient import RestClient
             client = RestClient()
-            client.make_request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
+            client.request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
                 headers={'Accept': 'application/json'})
 
         :param method: str, the HTTP action to be performed: 
