@@ -361,12 +361,15 @@ def make_uri(base, *path, **query):
     retval = [base]
 
     # build the path
-    path = '/'.join([''] +
-                    [unicode_quote(s.strip('/')) for s in path
-                     if s is not None])
-    if path:
-        retval.append(path)
+    path_ = ''
+    for p in path:
+        if p is not None:
+            path_ += "/".join([unicode_quote(s) for s in p.split('/')
+                if s is not None])
 
+    if path_:
+        retval.append(path_)
+    
     params = []
     for k, v in query.items():
         if type(v) in (list, tuple):
