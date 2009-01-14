@@ -27,13 +27,12 @@ Resource class
 
         Str, full uri to the server.
 
-    .. attribute:: httpclient
+    .. attribute:: transport
 
-        Any http instance of object based on 
-        `restclient.http.HTTP`. By default it will use 
+        Any instance of object based on 
+        `restclient.transport.HTTPTransportBase`. By default it will use 
         a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-        installed or urllib2. You could also use 
-        `restclient.http.HTTPLib2HTTPClient`,a client based on 
+        installed or `restclient.http.HTTPLib2Transport`,a transport based on 
         `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
         own depending of the option you need to access to the serve
         (authentification, proxy, ....).
@@ -73,10 +72,9 @@ RestClient represent a simple HTTP client.
     .. attribute:: httpclient
 
         Any http instance of object based on 
-        `restclient.http.HTTPClient`. By default it will use 
+        `restclient.http.HTTPTransportBase`. By default it will use 
         a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-        installed or urllib2. You could also use 
-        `restclient.http.HTTPLib2HTTPClient`,a client based on 
+        installed or `restclient.http.HTTPLib2Transport`,a transport based on 
         `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
         own depending of the option you need to access to the serve
         (authentification, proxy, ....).
@@ -112,5 +110,4 @@ Exceptions
 
 .. _Pycurl: http://pycurl.sourceforge.net/
 .. _Httplib2: http://code.google.com/p/httplib2/
-.. _Urllib2: http://docs.python.org/library/urllib2.html
 
