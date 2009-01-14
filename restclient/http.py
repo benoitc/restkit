@@ -165,6 +165,10 @@ class CurlHTTPClient(HTTPClient):
     def __init__(self, timeout=None):
         HTTPClient.__init__(self)
         self._credentials = {}
+
+        # path to certificate file
+        self.cabundle = None
+
         if pycurl is None:
             raise RuntimeError('Cannot find pycurl library')
 
@@ -215,6 +219,9 @@ class CurlHTTPClient(HTTPClient):
             c.setopt(pycurl.URL , smart_str(url))
             c.setopt(pycurl.FOLLOWLOCATION, 1)
             c.setopt(pycurl.MAXREDIRS, 5)
+
+            if self.cabundle:
+                c.setopt(pycurl.CAINFO, celf.cabundle)
 
             auth = self._get_credentials()
             user = auth.get('user', None)
