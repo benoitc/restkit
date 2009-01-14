@@ -142,7 +142,21 @@ class ResourceTestCase(unittest.TestCase):
 
         self.assertRaises(RequestError, bad_post)
 
+    def testAuth(self):
+        import httplib2
+        h = httplib2.Http()
+        h.add_credentials("test", "test")
+        transport = HTTPLib2Transport(h)
 
+        res = Resource(self.url, transport)
+        result = res.get('/auth')
+        self.assert_(result.http_code == 200)
+
+        transport = HTTPLib2Transport()
+        def niettest():
+            res = Resource(self.url, transport)
+            result = res.get('/auth')
+        self.assertRaises(Unauthorized, niettest)
 
  
     
