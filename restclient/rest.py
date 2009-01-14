@@ -30,7 +30,7 @@ This module provide a common interface for all HTTP equest.
 """
 from urllib import quote, urlencode
 
-from restclient.http import getDefaultHTTPClient, HTTPClient 
+from restclient.transport import getDefaultHTTPTransport, HTTPTransportBase 
 
 
 __all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
@@ -101,13 +101,13 @@ class Resource(object):
     `restclient.http.HTTPClient`.
 
     """
-    def __init__(self, uri, httpclient=None):
+    def __init__(self, uri, transport=None):
         """Constructor for a `Resource` object.
 
         Resource represent an HTTP resource.
 
         :param uri: str, full uri to the server.
-        :param httpclient: any http instance of object based on 
+        :param transport: any http instance of object based on 
                 `restclient.http.HTTPClient`. By default it will use 
                 a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
                 installed or urllib2. You could also use 
@@ -117,9 +117,9 @@ class Resource(object):
                 (authentification, proxy, ....).
         """
 
-        self.client = RestClient(httpclient)
+        self.client = RestClient(transport)
         self.uri = uri
-        self.httpclient = httpclient
+        self.transport = transport
 
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
@@ -132,7 +132,7 @@ class Resource(object):
             resr2 = res.clone()
         
         """
-        obj = self.__class__(self.uri, http=self.httpclient)
+        obj = self.__class__(self.uri, http=self.transport)
         return obj
    
     def __call__(self, path):
@@ -143,7 +143,7 @@ class Resource(object):
             Resource("/path").get()
         """
 
-        return type(self)(make_uri(self.uri, path), http=self.httpclient)
+        return type(self)(make_uri(self.uri, path), http=self.transport)
 
     
     def get(self, path=None, headers=None, **params):
@@ -222,25 +222,24 @@ class RestClient(object):
         '{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
     """
 
-    def __init__(self, httpclient=None):
+    def __init__(self, transport=None):
         """Constructor for a `RestClient` object.
 
         RestClient represent an HTTP client.
 
-        :param httpclient: any http instance of object based on 
-                `restclient.http.HTTPClient`. By default it will use 
+        :param transport: any http instance of object based on 
+                `restclient.transport.HTTPTransportBase`. By default it will use 
                 a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-                installed or urllib2. You could also use 
-                `restclient.http.HTTPLib2HTTPClient`,a client based on 
+                installed or `restclient.transport.HTTPLib2Transport`,a client based on 
                 `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
                 own depending of the option you need to access to the serve
                 (authentification, proxy, ....).
         """ 
 
-        if httpclient is None:
-            httpclient = getDefaultHTTPClient()
+        if transport is None:
+            transport = getDefaultHTTPTransport()
 
-        self.httpclient = httpclient
+        self.transport = transport
 
         self.status_code = None
         self.response = None
@@ -325,7 +324,7 @@ class RestClient(object):
         
         headers = headers or {}
 
-        resp, data = self.httpclient.request(make_uri(uri, path, **params), 
+        resp, data = self.transport.request(make_uri(uri, path, **params), 
                 method=method, body=body, headers=headers)
 
         status_code = int(resp.status)

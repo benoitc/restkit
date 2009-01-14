@@ -30,7 +30,7 @@ import module_test_runner
 from _server_test import run_server_test
 
 import resource_test
-import clients_test
+import transports_test
 
 
    
@@ -38,7 +38,7 @@ import clients_test
 def RunAllTests():
     run_server_test()
     test_runner = module_test_runner.ModuleTestRunner()
-    test_runner.modules = [resource_test, clients_test]
+    test_runner.modules = [resource_test, transports_test]
     test_runner.RunAllTests()
 
 if __name__ == '__main__':

@@ -1,0 +1,39 @@
+.. _transports:
+
+HTTP Clients
+============
+
+.. module:: restclient.transport
+
+HTTP Clients are object based on :mod:`restclient.transport.HTTPClient` that
+perform HTPP operations.
+
+You can choose the one you want as transports in Resource or RestClient:
+
+.. code-block:: python
+
+    from restclient.transport import CurlTransport
+    transport = CurlTransport()
+    res = Resource(transport=transport)
+    
+Functions
+---------
+
+.. autofunction:: restclient.transport.createHTTPTransport
+.. autofunction:: restclient.transport.getDefaultHTTPTRansport
+.. autofunction:: restclient.transport.setDefaultHTTPTransport
+
+Clients:
+--------
+.. autoclass:: restclient.transport.HTTPTransportBase
+
+    .. automethod:: restclient.transport.HTTPTransportBase.request
+
+
+.. autoclass:: restclient.transport.CurlTransport
+
+    .. automethod:: restclient.transport.CurlTransport.__init__
+    .. automethod:: restclient.transport.CurlTransport.add_credentials
+
+.. autoclass:: restclient.transport.HTTPLib2Transport
+

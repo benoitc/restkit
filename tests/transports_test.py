@@ -24,17 +24,17 @@ import unittest
 import urlparse
 
 
-from restclient.http import CurlHTTPClient
+from restclient.transport import CurlTransport
 from restclient.rest import Resource, RestClient, RequestFailed, \
 ResourceNotFound, Unauthorized
 from _server_test import HOST, PORT
 
 class HTTPClientTestCase(unittest.TestCase):
-    httpclient = CurlHTTPClient()
+    httptransport = CurlTransport()
 
     def setUp(self):
         self.url = 'http://%s:%s' % (HOST, PORT)
-        self.res = Resource(self.url, self.httpclient)
+        self.res = Resource(self.url, self.httptransport)
 
     def tearDown(self):
         self.res = None
@@ -118,17 +118,17 @@ class HTTPClientTestCase(unittest.TestCase):
         self.assert_(result.http_code == 200)
 
     def testAuth(self):
-        httpclient = self.httpclient 
-        httpclient.add_credentials("test", "test")
+        httptransport = self.httptransport 
+        httptransport.add_credentials("test", "test")
         
-        res = Resource(self.url, httpclient)
+        res = Resource(self.url, httptransport)
         result = res.get('/auth')
         self.assert_(result.http_code == 200)
 
-        httpclient.add_credentials("test", "test2")
+        httptransport.add_credentials("test", "test2")
         
         def niettest():
-            res = Resource(self.url, httpclient)
+            res = Resource(self.url, httptransport)
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
 

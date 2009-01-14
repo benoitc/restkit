@@ -70,14 +70,14 @@ def createHTTPClient():
     prefers Curl to urllib"""
 
     if pycurl is None:
-        http = HTTPLib2HTTPClient()
+        http = HTTPLib2Transport()
     else:
-        http = CurlHTTPClient()
+        http = CurlTransport()
 
     return http
 
-def getDefaultHTTPClient():
-    """ Return the default http client instance instance
+def getDefaultHTTPTransport():
+    """ Return the default http transport instance instance
     if no client has been set, it will create a default client.
 
     :return: the default client
@@ -86,21 +86,21 @@ def getDefaultHTTPClient():
     global _default_http
 
     if _default_http is None:
-        setDefaultHTTPClient(createHTTPClient())
+        setDefaultHTTPTransport(createHTTPTransport())
 
     return _default_http
 
-def setDefaultHTTPClient(httpclient):
-    """ set default httpClient 
+def setDefaultHTTPTransport(httptransport):
+    """ set default http transport 
     :param http: RestClient
     """
     global _default_http
 
-    _default_http = httpclient
+    _default_http = httptransport
 
 def useCurl():
     global _default_http
-    return isinstance(_default_http, CurlHTTPClient)
+    return isinstance(_default_http, CurlHTTPTransport)
 
 class HTTPError(Exception):
     """ raised when there is an HTTP error """
@@ -122,7 +122,7 @@ class HTTPResponse(dict):
                                           self.status,
                                           self.final_url)
 
-class HTTPClient(object):
+class HTTPTransportBase(object):
     """ Interface for HTTP clients """
 
     def request(self, url, method='GET', body=None, headers=None):
@@ -140,9 +140,9 @@ class HTTPClient(object):
 
     
 
-class CurlHTTPClient(HTTPClient):
+class CurlTransport(HTTPTransportBase):
     """
-    An HTTPClient that uses pycurl.
+    An HTTP transportthat uses pycurl.
 
     Pycurl is recommanded when you want fast access to http resources.
     We have added some basic management of authentification and proxies,
@@ -154,7 +154,7 @@ class CurlHTTPClient(HTTPClient):
     
     .. code-block:: python
 
-        httpclient = CurlHTTPClient()
+        httpclient = CurlTransport()
         httpclient.add_credentials("test", "test")        
 
     .. seealso::
@@ -163,7 +163,7 @@ class CurlHTTPClient(HTTPClient):
     """
 
     def __init__(self, timeout=None):
-        HTTPClient.__init__(self)
+        HTTPTransportBase.__init__(self)
         self._credentials = {}
 
         # path to certificate file
@@ -296,7 +296,7 @@ class CurlHTTPClient(HTTPClient):
         resp.body = body
         return resp, body 
     
-class HTTPLib2HTTPClient(HTTPClient):
+class HTTPLib2Transport(HTTPTransportBase):
     """An http client that uses httplib2 for performing HTTP
     requests. This implementation supports HTTP caching.
 
@@ -312,7 +312,7 @@ class HTTPLib2HTTPClient(HTTPClient):
             raise RuntimeError('Cannot find httplib2 library. '
                                'See http://bitworking.org/projects/httplib2/')
 
-        super(HTTPLib2HTTPClient, self).__init__()
+        super(HTTPLib2Transport, self).__init__()
         
         if http is None:
             http = httplib2.Http()

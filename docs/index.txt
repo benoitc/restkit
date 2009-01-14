@@ -28,7 +28,7 @@ Reference
    :maxdepth: 2
 
    resource
-   httpclient
+   transports
 
 * Follow development on `Bitbucket <http://www.bitbucket.org/benoitc/python-restclient/overview/>`_.
 * Report bugs, report features and browse the source through `Tracker <http://www.bitbucket.org/benoitc/python-restclient/issues/>`_.

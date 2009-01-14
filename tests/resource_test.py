@@ -24,7 +24,7 @@ import unittest
 import urlparse
 import urllib2
 
-from restclient.http import HTTPLib2HTTPClient
+from restclient.transport import HTTPLib2Transport
 from restclient.rest import Resource, RestClient, RequestFailed, \
 ResourceNotFound, Unauthorized
 
@@ -34,9 +34,9 @@ from _server_test import HOST, PORT
 class ResourceTestCase(unittest.TestCase):
 
     def setUp(self):
-        httpclient = HTTPLib2HTTPClient()
+        transport = HTTPLib2Transport()
         self.url = 'http://%s:%s' % (HOST, PORT)
-        self.res = Resource(self.url, httpclient)
+        self.res = Resource(self.url, transport)
 
     def tearDown(self):
         self.res = None
