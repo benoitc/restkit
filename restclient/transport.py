@@ -34,6 +34,9 @@ except ImportError:
 
 _default_http = None
 
+class TransportError(Exception):
+    """Error raised by a transport """
+
 USER_AGENT = "py-restclient/%s (%s)" % (restclient.__version__, sys.platform)
 DEFAULT_MAX_REDIRECT = 3
 
@@ -65,7 +68,7 @@ def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):
         return s
 
 
-def createHTTPClient():
+def createHTTPTransport():
     """Create default HTTP client instance
     prefers Curl to urllib"""
 
@@ -138,7 +141,27 @@ class HTTPTransportBase(object):
         """
         raise NotImplementedError
 
-    
+def _get_pycurl_errcode(symbol, default):
+    """
+    Returns the numerical error code for a symbol defined by pycurl.
+
+    Different pycurl implementations define different symbols for error
+    codes. Old versions never define some symbols (wether they can return the
+    corresponding error code or not). The following addresses the problem by
+    defining the symbols we care about.  Note: this allows to define symbols
+    for errors that older versions will never return, which is fine.
+    """
+    return pycurl.__dict__.get(symbol, default)
+
+CURLE_COULDNT_CONNECT = _get_pycurl_errcode('E_COULDNT_CONNECT', 7)
+CURLE_COULDNT_RESOLVE_HOST = _get_pycurl_errcode('E_COULDNT_RESOLVE_HOST', 6)
+CURLE_COULDNT_RESOLVE_PROXY = _get_pycurl_errcode('E_COULDNT_RESOLVE_PROXY', 5)
+CURLE_GOT_NOTHING = _get_pycurl_errcode('E_GOT_NOTHING', 52)
+CURLE_PARTIAL_FILE = _get_pycurl_errcode('E_PARTIAL_FILE', 18)
+CURLE_SEND_ERROR = _get_pycurl_errcode('E_SEND_ERROR', 55)
+CURLE_SSL_CACERT = _get_pycurl_errcode('E_SSL_CACERT', 60)
+CURLE_SSL_CACERT_BADFILE = _get_pycurl_errcode('E_SSL_CACERT_BADFILE', 77)    
+
 
 class CurlTransport(HTTPTransportBase):
     """
@@ -273,9 +296,8 @@ class CurlTransport(HTTPTransportBase):
             try:
                 c.perform()
             except pycurl.error, e:
-                errno, message = e
-                return self._make_response(final_url=url, status=errno,
-                        body=message)
+                if e[0] != CURLE_SEND_ERROR:
+                    raise TransportError(e)
 
             response_headers = self._parseHeaders(header)
             code = c.getinfo(pycurl.RESPONSE_CODE)
@@ -298,7 +320,7 @@ class CurlTransport(HTTPTransportBase):
     def _make_response(self, final_url=None, status=None, headers=None,
             body=None):
         resp = HTTPResponse()
-        resp.headers = headers
+        resp.headers = headers or {}
         resp.status = status
         resp.final_url = final_url
         resp.body = body

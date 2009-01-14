@@ -30,12 +30,12 @@ This module provide a common interface for all HTTP equest.
 """
 import urllib
 
-from restclient.transport import getDefaultHTTPTransport, HTTPTransportBase 
+from restclient.transport import getDefaultHTTPTransport, HTTPTransportBase, TransportError 
 
 
 __all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
         'Unauthorized', 'RequestFailed', 'ResourceError',
-        'ResourceResult']
+        'ResourceResult', 'RequestError']
 __docformat__ = 'restructuredtext en'
 
 
@@ -337,8 +337,11 @@ class RestClient(object):
             if not 'Content-Length' in headers:
                 raise RequestError("'Content-Lenght' should be specified when body is a File like instance") 
 
-        resp, data = self.transport.request(self.make_uri(uri, path, **params), 
+        try:
+            resp, data = self.transport.request(self.make_uri(uri, path, **params), 
                 method=method, body=body, headers=headers)
+        except TransportError, e:
+            raise RequestError(e)
 
         status_code = int(resp.status)
 
@@ -355,7 +358,7 @@ class RestClient(object):
                         response=resp)
             else:
                 raise RequestFailed(error, http_code=status_code,
-                        response=resp)
+                    response=resp)
 
         return ResourceResult(data, status_code, resp)
 
