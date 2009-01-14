@@ -117,6 +117,18 @@ class HTTPClientTestCase(unittest.TestCase):
         result = self.res.delete('/delete')
         self.assert_(result.http_code == 200)
 
+    def testFileSend(self):
+        content_length = len("test")
+        import StringIO
+        content = StringIO.StringIO("test")
+        result = self.res.post('/json', payload=content,
+                headers={
+                    'Content-Type': 'application/json',
+                    'Content-Length': str(content_length)
+                })
+
+        self.assert_(result.http_code == 200 )
+
     def testAuth(self):
         httptransport = self.httptransport 
         httptransport.add_credentials("test", "test")

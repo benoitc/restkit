@@ -26,7 +26,7 @@ import urllib2
 
 from restclient.transport import HTTPLib2Transport
 from restclient.rest import Resource, RestClient, RequestFailed, \
-ResourceNotFound, Unauthorized
+ResourceNotFound, Unauthorized, RequestError
 
 
 from _server_test import HOST, PORT
@@ -119,6 +119,30 @@ class ResourceTestCase(unittest.TestCase):
     def testDelete(self):
         result = self.res.delete('/delete')
         self.assert_(result.http_code == 200)
+
+    def testFileSend(self):
+        content_length = len("test")
+        import StringIO
+        content = StringIO.StringIO("test")
+        result = self.res.post('/json', payload=content,
+                headers={
+                    'Content-Type': 'application/json',
+                    'Content-Length': str(content_length)
+                })
+
+        self.assert_(result.http_code == 200 )
+
+    def testFileSend2(self):
+        import StringIO
+        content = StringIO.StringIO("test")
+
+        def bad_post():
+            result = self.res.post('/json', payload=content,
+                headers={'Content-Type': 'application/json'})
+
+        self.assertRaises(RequestError, bad_post)
+
+
 
  
     

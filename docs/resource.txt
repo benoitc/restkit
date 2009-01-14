@@ -30,7 +30,7 @@ Resource class
     .. attribute:: httpclient
 
         Any http instance of object based on 
-        `restclient.http.HTTPClient`. By default it will use 
+        `restclient.http.HTTP`. By default it will use 
         a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
         installed or urllib2. You could also use 
         `restclient.http.HTTPLib2HTTPClient`,a client based on 
@@ -107,7 +107,7 @@ Exceptions
 .. autoexception:: restclient.rest.ResourceNotFound
 .. autoexception:: restclient.rest.Unauthorized
 .. autoexception:: restclient.rest.RequestFailed
-
+.. autoexception:: restclient.rest.RequestError
 
 
 .. _Pycurl: http://pycurl.sourceforge.net/

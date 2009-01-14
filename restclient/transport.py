@@ -201,7 +201,8 @@ class CurlTransport(HTTPTransportBase):
         
         if method in ['POST', 'PUT']:
             body = body or ''
-            headers.setdefault('Content-Length', str(len(body))) 
+            if not hasattr(body, 'read'):
+                headers.setdefault('Content-Length', str(len(body))) 
 
 
         c = pycurl.Curl()
@@ -255,12 +256,19 @@ class CurlTransport(HTTPTransportBase):
                 c.setopt(pycurl.CUSTOMREQUEST, method)
 
             if method in ('POST','PUT'):
+                if hasattr(body, 'read'):
+                    content_length = int(headers.get('Content-Length',
+                        0))
+                    content = body
+                else:
+                    content = StringIO.StringIO(body)
+                    content_length = len(body)
+
                 if put:
-                    c.setopt(pycurl.INFILESIZE, len(body))
+                    c.setopt(pycurl.INFILESIZE, content_length)
                 if method in ('POST'):
-                    c.setopt(pycurl.POSTFIELDSIZE, len(body))
-                s = StringIO.StringIO(body)
-                c.setopt(pycurl.READFUNCTION, s.read)
+                    c.setopt(pycurl.POSTFIELDSIZE, content_length)
+                c.setopt(pycurl.READFUNCTION, content.read)
             
             try:
                 c.perform()
@@ -322,10 +330,15 @@ class HTTPLib2Transport(HTTPTransportBase):
 
     def request(self, url, method='GET', body=None, headers=None):
         headers = headers or {}
-       
+      
+        content = ''
         if method in ['POST', 'PUT']:
             body = body or ''
-            headers.setdefault('Content-Length', str(len(body))) 
+            if hasattr(body, 'read'): # httplib2 don't suppport file read
+                content = body.read()
+            else:
+                content = body
+                headers.setdefault('Content-Length', str(len(body))) 
 
         if not (url.startswith('http://') or url.startswith('https://')):
             raise ValueError('URL is not a HTTP URL: %r' % (url,))
@@ -333,7 +346,7 @@ class HTTPLib2Transport(HTTPTransportBase):
         headers.setdefault('User-Agent', USER_AGENT)
         
         httplib2_response, content = self.http.request(url,
-                method=method, body=body, headers=headers)
+                method=method, body=content, headers=headers)
 
 
         try:

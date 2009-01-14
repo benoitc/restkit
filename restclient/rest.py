@@ -39,6 +39,8 @@ __all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
 __docformat__ = 'restructuredtext en'
 
 
+
+
 class ResourceError(Exception):
     def __init__(self, message=None, http_code=None, response=None):
         self.message = message
@@ -68,6 +70,10 @@ class RequestFailed(ResourceError):
     response via e.response. For example, the entire result body (which is 
     probably an HTML error page) is e.response.body.
     """
+
+class RequestError(Exception):
+    """Exception raised when a request is malformed"""
+
 
 class ResourceResult(str):
     """ result returned by `restclient.rest.RestClient`.
@@ -323,6 +329,10 @@ class RestClient(object):
         """
         
         headers = headers or {}
+
+        if hasattr(body, 'read'):
+            if not 'Content-Length' in headers:
+                raise RequestError("'Content-Lenght' should be specified when body is a File like instance") 
 
         resp, data = self.transport.request(make_uri(uri, path, **params), 
                 method=method, body=body, headers=headers)
