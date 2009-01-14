@@ -28,7 +28,7 @@ This module provide a common interface for all HTTP equest.
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).http_code
     200
 """
-from urllib import quote, urlencode
+import urllib
 
 from restclient.transport import getDefaultHTTPTransport, HTTPTransportBase 
 
@@ -228,6 +228,10 @@ class RestClient(object):
         '{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
     """
 
+    charset = 'utf-8'
+    encode_keys = True
+    safe = "/:"
+
     def __init__(self, transport=None):
         """Constructor for a `RestClient` object.
 
@@ -334,7 +338,7 @@ class RestClient(object):
             if not 'Content-Length' in headers:
                 raise RequestError("'Content-Lenght' should be specified when body is a File like instance") 
 
-        resp, data = self.transport.request(make_uri(uri, path, **params), 
+        resp, data = self.transport.request(self.make_uri(uri, path, **params), 
                 method=method, body=body, headers=headers)
 
         status_code = int(resp.status)
@@ -357,50 +361,62 @@ class RestClient(object):
         return ResourceResult(data, status_code, resp)
 
 
-def make_uri(base, *path, **query):
-    """Assemble a uri based on a base, any number of path segments, and query
-    string parameters.
+    def make_uri(self, base, *path, **query):
+        """Assemble a uri based on a base, any number of path segments, and query
+        string parameters.
 
-    >>> make_uri('http://example.org/', '/_all_dbs')
-    'http://example.org/_all_dbs'
-    """
+        """
+        if base and base.endswith("/"):
+            base = base[:-1]
+        retval = [base]
 
-    if base and base.endswith("/"):
-        base = base[:-1]
-    retval = [base]
+        # build the path
+        path = "/".join([''] +
+                        [url_quote(s.strip('/'), self.charset, self.safe) for s in path
+                         if s is not None])
 
-    # build the path
-    path_ = ''
-    for p in path:
-        if p is not None:
-            path_ += "/".join([unicode_quote(s) for s in p.split('/')
-                if s is not None])
+        if path:
+            retval.append(path)
     
-    if path_:
-        retval.append(path_)
-    
-    params = []
-    for k, v in query.items():
-        if type(v) in (list, tuple):
-            params.extend([(name, i) for i in v if i is not None])
-        elif v is not None:
-            params.append((k,v))
-    if params:
-        retval.extend(['?', unicode_urlencode(params)])
-    return ''.join(retval)
+        params = []
+        for k, v in query.items():
+            if type(v) in (list, tuple):
+                params.extend([(name, i) for i in v if i is not None])
+            elif v is not None:
+                params.append((k,v))
+        if params:
+            retval.extend(['?', url_encode(params, self.charset, self.encode_keys)])
 
-def unicode_quote(string, safe=''):
-    if isinstance(string, unicode):
-        string = string.encode('utf-8')
-    return quote(string, safe)
+        return ''.join(retval)
 
-def unicode_urlencode(data):
-    if isinstance(data, dict):
-        data = data.items()
-    params = []
-    for name, value in data:
-        if isinstance(value, unicode):
-            value = value.encode('utf-8')
-        params.append((name, value))
-    return urlencode(params)
+
+# code borrowed to Wekzeug with minor changes
+
+def url_quote(s, charset='utf-8', safe='/:'):
+    """URL encode a single string with a given encoding."""
+    if isinstance(s, unicode):
+        s = s.encode(charset)
+    elif not isinstance(s, str):
+        s = str(s)
+    return urllib.quote(s, safe=safe)
+
+def url_encode(obj, charset="utf8", encode_keys=False):
+    if isinstance(obj, dict):
+        for k, v in obj.iteritems():
+            if not isinstance(v, (tuple, list)):
+                v = [v]
+            items.append((k, v))
+    else:
+        items = obj or ()
+
+    tmp = []
+    for key, value in items:
+        if encode_keys and isinstance(key, unicode):
+            key = key.encode(charset)
+        else:
+            key = str(key)
+        tmp.append('%s=%s' % (urllib.quote(key),
+            urllib.quote_plus(value)))
+
+    return '&'.join(tmp)
 
