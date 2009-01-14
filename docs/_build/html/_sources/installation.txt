@@ -27,10 +27,12 @@ You could also get source from  `Bitbucket`_ ::
 Requirements
 ============
 
-To use py-restclient you will need **Python 2.5** or later. 
+To use py-restclient you will need **Python 2.5** or later and
+`Httplib2`_ :: . 
 
 .. _cheeseshop: http://pypi.python.org/pypi/WTForms/
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
 .. _Mercurial: http://www.selenic.com/mercurial/
 .. _Bitbucket: http://www.bitbucket.org/benoitc/py-restclient
+.. _Httplib2: http://code.google.com/p/httplib2
 

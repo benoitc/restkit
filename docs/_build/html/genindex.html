@@ -2,23 +2,24 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Index &mdash; py-restclient v1.0.2 documentation</title>
+    
+    <title>Index &mdash; py-restclient v1.1 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '',
-          VERSION:     '1.0.2',
-          COLLAPSE_MODINDEX: false,
-          FILE_SUFFIX: '.html'
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="contents" title="Global table of contents" href="contents.html" />
-    <link rel="index" title="Global index" href="" />
+    <link rel="index" title="Index" href="" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="py-restclient v1.0.2 documentation" href="index.html" />
+    <link rel="top" title="py-restclient v1.1 documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -30,9 +31,9 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">py-restclient v1.0.2 documentation</a> &raquo;</li>
+        <li><a href="index.html">py-restclient v1.1 documentation</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
@@ -41,7 +42,7 @@
 
    <h1 id="index">Index</h1>
 
-   <a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#U"><strong>U</strong></a> 
+   <a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> 
 
    <hr />
 
@@ -51,17 +52,14 @@
 <dl>
 
 <dt><a href="resource.html#restclient.rest.Resource.__call__">__call__() (restclient.rest.Resource method)</a></dt>
-<dt><a href="httpclient.html#restclient.http.CurlHTTPClient.__init__">__init__() (restclient.http.CurlHTTPClient method)</a></dt>
-  <dd><dl>
-    <dt><a href="httpclient.html#restclient.http.Urllib2HTTPClient.__init__">(restclient.http.Urllib2HTTPClient method)</a></dt>
-  </dl></dd></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="transports.html#restclient.transport.CurlTransport.__init__">__init__() (restclient.transport.CurlTransport method)</a></dt></dl></td><td width="33%" valign="top"><dl>
 </dl></td></tr></table>
 
 <h2 id="A">A</h2>
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
-<dt><a href="httpclient.html#restclient.http.CurlHTTPClient.add_credentials">add_credentials() (restclient.http.CurlHTTPClient method)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="transports.html#restclient.transport.CurlTransport.add_credentials">add_credentials() (restclient.transport.CurlTransport method)</a></dt></dl></td><td width="33%" valign="top"><dl>
 </dl></td></tr></table>
 
 <h2 id="C">C</h2>
@@ -69,8 +67,7 @@
 <dl>
 
 <dt><a href="resource.html#restclient.rest.Resource.clone">clone() (restclient.rest.Resource method)</a></dt>
-<dt><a href="httpclient.html#restclient.http.createHTTPClient">createHTTPClient() (in module restclient.http)</a></dt></dl></td><td width="33%" valign="top"><dl>
-<dt><a href="httpclient.html#restclient.http.CurlHTTPClient">CurlHTTPClient (class in restclient.http)</a></dt>
+<dt><a href="transports.html#restclient.transport.CurlTransport">CurlTransport (class in restclient.transport)</a></dt></dl></td><td width="33%" valign="top"><dl>
 </dl></td></tr></table>
 
 <h2 id="D">D</h2>
@@ -91,7 +88,7 @@
   <dd><dl>
     <dt><a href="resource.html#restclient.rest.RestClient.get">(restclient.rest.RestClient method)</a></dt>
   </dl></dd></dl></td><td width="33%" valign="top"><dl>
-<dt><a href="httpclient.html#restclient.http.getDefaultHTTPClient">getDefaultHTTPClient() (in module restclient.http)</a></dt>
+<dt><a href="transports.html#restclient.transport.getDefaultHTTPTransport">getDefaultHTTPTransport() (in module restclient.transport)</a></dt>
 </dl></td></tr></table>
 
 <h2 id="H">H</h2>
@@ -102,19 +99,8 @@
   <dd><dl>
     <dt><a href="resource.html#restclient.rest.RestClient.head">(restclient.rest.RestClient method)</a></dt>
   </dl></dd>
-<dt><a href="httpclient.html#restclient.http.HTTPClient">HTTPClient (class in restclient.http)</a></dt>
-<dt><a href="resource.html#restclient.Resource.httpclient">httpclient (restclient.Resource attribute)</a></dt>
-  <dd><dl>
-    <dt><a href="resource.html#restclient.RestClient.httpclient">(restclient.RestClient attribute)</a></dt>
-  </dl></dd></dl></td><td width="33%" valign="top"><dl>
-<dt><a href="httpclient.html#restclient.http.HTTPLib2HTTPClient">HTTPLib2HTTPClient (class in restclient.http)</a></dt>
-</dl></td></tr></table>
-
-<h2 id="M">M</h2>
-<table width="100%" class="indextable"><tr><td width="33%" valign="top">
-<dl>
-
-<dt><a href="resource.html#restclient.rest.RestClient.make_request">make_request() (restclient.rest.RestClient method)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="transports.html#restclient.transport.HTTPLib2Transport">HTTPLib2Transport (class in restclient.transport)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="transports.html#restclient.transport.HTTPTransportBase">HTTPTransportBase (class in restclient.transport)</a></dt>
 </dl></td></tr></table>
 
 <h2 id="P">P</h2>
@@ -135,24 +121,36 @@
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
-<dt><a href="httpclient.html#restclient.http.HTTPClient.request">request() (restclient.http.HTTPClient method)</a></dt>
+<dt><a href="resource.html#restclient.rest.Resource.request">request() (restclient.rest.Resource method)</a></dt>
   <dd><dl>
-    <dt><a href="resource.html#restclient.rest.Resource.request">(restclient.rest.Resource method)</a></dt>
+    <dt><a href="resource.html#restclient.rest.RestClient.request">(restclient.rest.RestClient method)</a></dt>
+    <dt><a href="transports.html#restclient.transport.HTTPTransportBase.request">(restclient.transport.HTTPTransportBase method)</a></dt>
   </dl></dd>
+<dt><a href="resource.html#restclient.rest.RequestError">RequestError</a></dt>
 <dt><a href="resource.html#restclient.rest.RequestFailed">RequestFailed</a></dt>
-<dt><a href="resource.html#restclient.rest.Resource">Resource (class in restclient.rest)</a></dt>
-<dt><a href="resource.html#restclient.rest.ResourceNotFound">ResourceNotFound</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="resource.html#restclient.rest.Resource">Resource (class in restclient.rest)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="resource.html#restclient.rest.ResourceNotFound">ResourceNotFound</a></dt>
 <dt><a href="resource.html#restclient.rest.ResourceResult">ResourceResult (class in restclient.rest)</a></dt>
 <dt><a href="resource.html#restclient.rest.RestClient">RestClient (class in restclient.rest)</a></dt>
 <dt><a href="resource.html#module-restclient">restclient (module)</a></dt>
-<dt><a href="httpclient.html#module-restclient.http">restclient.http (module)</a></dt>
+<dt><a href="transports.html#module-restclient.transport">restclient.transport (module)</a></dt>
 </dl></td></tr></table>
 
 <h2 id="S">S</h2>
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
-<dt><a href="httpclient.html#restclient.http.setDefaultHTTPClient">setDefaultHTTPClient() (in module restclient.http)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="transports.html#restclient.transport.setDefaultHTTPTransport">setDefaultHTTPTransport() (in module restclient.transport)</a></dt></dl></td><td width="33%" valign="top"><dl>
+</dl></td></tr></table>
+
+<h2 id="T">T</h2>
+<table width="100%" class="indextable"><tr><td width="33%" valign="top">
+<dl>
+
+<dt><a href="resource.html#restclient.Resource.transport">transport (restclient.Resource attribute)</a></dt>
+  <dd><dl>
+    <dt><a href="resource.html#restclient.RestClient.transport">(restclient.RestClient attribute)</a></dt>
+  </dl></dd></dl></td><td width="33%" valign="top"><dl>
 </dl></td></tr></table>
 
 <h2 id="U">U</h2>
@@ -160,9 +158,8 @@
 <dl>
 
 <dt><a href="resource.html#restclient.rest.Unauthorized">Unauthorized</a></dt>
-<dt><a href="resource.html#restclient.rest.Resource.update_uri">update_uri() (restclient.rest.Resource method)</a></dt>
-<dt><a href="resource.html#restclient.Resource.uri">uri (restclient.Resource attribute)</a></dt></dl></td><td width="33%" valign="top"><dl>
-<dt><a href="httpclient.html#restclient.http.Urllib2HTTPClient">Urllib2HTTPClient (class in restclient.http)</a></dt>
+<dt><a href="resource.html#restclient.rest.Resource.update_uri">update_uri() (restclient.rest.Resource method)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="resource.html#restclient.Resource.uri">uri (restclient.Resource attribute)</a></dt>
 </dl></td></tr></table>
 
 
@@ -175,7 +172,7 @@
 
    
 
-            <h3>Quick search</h3>
+          <h3>Quick search</h3>
             <form class="search" action="search.html" method="get">
               <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
               <input type="hidden" name="check_keywords" value="yes" />
@@ -194,13 +191,12 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">py-restclient v1.0.2 documentation</a> &raquo;</li>
+        <li><a href="index.html">py-restclient v1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2008, 2009 Benoit Chesneau <benoitc@e-engura.org>.
-      Last updated on Dec 31, 2008.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+      &copy; Copyright 2008, 2009 Benoit Chesneau &lt;benoitc@e-engura.org&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
     </div>
   </body>
 </html>

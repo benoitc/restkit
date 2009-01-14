@@ -201,7 +201,7 @@ class Resource(object):
         This method may be the only one you want to override when
         subclassing `restclient.rest.Resource`.
         
-        :param payload: string passed to the body of the request
+        :param payload: string or File object passed to the body of the request
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
@@ -284,7 +284,7 @@ class RestClient(object):
         """ HTTP POST
 
         :param uri: str, uri on which you make the request
-        :param body: string passed to the body of the request
+        :param body: string or File object passed to the body of the request
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
@@ -323,8 +323,7 @@ class RestClient(object):
         :param method: str, the HTTP action to be performed: 
             'GET', 'HEAD', 'POST', 'PUT', or 'DELETE'
         :param path: str or list, path to add to the uri
-        :param data: str or string or any object that could be
-            converted to JSON.
+        :param data: tring or File object.
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
         :param params: Optionnal parameterss added to the request.

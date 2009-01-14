@@ -1,3 +1,5 @@
+.. _resource_ref:
+
 Resource
 ========
 
@@ -27,13 +29,12 @@ Resource class
 
         Str, full uri to the server.
 
-    .. attribute:: httpclient
+    .. attribute:: transport
 
-        Any http instance of object based on 
-        `restclient.http.HTTPClient`. By default it will use 
+        Any instance of object based on 
+        `restclient.transport.HTTPTransportBase`. By default it will use 
         a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-        installed or urllib2. You could also use 
-        `restclient.http.HTTPLib2HTTPClient`,a client based on 
+        installed or `restclient.http.HTTPLib2Transport`,a transport based on 
         `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
         own depending of the option you need to access to the serve
         (authentification, proxy, ....).
@@ -62,7 +63,9 @@ Resource class
 RestClient class
 ----------------
 
-RestClient represent a simple HTTP client.
+RestClient represent a simple HTTP client. **New in 1.1** By default all urls are utf8
+encoded. But you could change default charset, safe characters and
+decide that keys don't need to be encoded.
 
 .. autoclass:: restclient.rest.RestClient
 
@@ -70,16 +73,28 @@ RestClient represent a simple HTTP client.
 
     **Properties**
 
-    .. attribute:: httpclient
+    .. attribute:: transport
 
         Any http instance of object based on 
-        `restclient.http.HTTPClient`. By default it will use 
+        `restclient.http.HTTPTransportBase`. By default it will use 
         a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-        installed or urllib2. You could also use 
-        `restclient.http.HTTPLib2HTTPClient`,a client based on 
+        installed or `restclient.http.HTTPLib2Transport`,a transport based on 
         `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
         own depending of the option you need to access to the serve
         (authentification, proxy, ....).
+
+    .. describe:: charset
+        
+        By default it's 'utf-8', it define charset of urls.
+
+    .. describe:: encode_keys
+
+        By default True. Encode params keys
+
+    .. describe:: safe
+
+        By default is ":/", define which charaters are safe in url and
+        don't need to be encoded.
 
 
     **Methods**
@@ -94,7 +109,7 @@ RestClient represent a simple HTTP client.
 
     .. automethod:: restclient.rest.RestClient.put
 
-    .. automethod:: restclient.rest.RestClient.make_request
+    .. automethod:: restclient.rest.RestClient.request
 
 ResourceResult class
 --------------------
@@ -107,10 +122,9 @@ Exceptions
 .. autoexception:: restclient.rest.ResourceNotFound
 .. autoexception:: restclient.rest.Unauthorized
 .. autoexception:: restclient.rest.RequestFailed
-
+.. autoexception:: restclient.rest.RequestError
 
 
 .. _Pycurl: http://pycurl.sourceforge.net/
 .. _Httplib2: http://code.google.com/p/httplib2/
-.. _Urllib2: http://docs.python.org/library/urllib2.html
 

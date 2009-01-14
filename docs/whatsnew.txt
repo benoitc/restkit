@@ -1,68 +1,42 @@
 .. _whatsnew:
 
+
 ***************************************
-What's New in python-restclient 1.0 
+What's New in python-restclient 1.1
 ***************************************
 
-This article explain new feature of python-restclient 1.0. This is a
-feature complete version.
 
-Change in results returned
-===========================
+Transports changes
+------------------
 
-Results and Exceptions returned have been improved. You can now have all
-the http response :
+* :mod:`restclient.http` have renamed to :mod:`restclient.transport`. In
+the same time all "clients" are now called "transports".
 
-Results:
---------
-
-Results returned by `restclient.rest.RestClient.request` are an
-instance of `restclient.rest.RestourceResult`.
-
-You can get result as string as usual and  status code by result.http_code, 
-or see anything about the response via result.response. For example, the entire 
-result body is result.response.body.
-
-.. code-block:: python
-
-    from restclient import RestClient
-    client = RestClient()
-    page = resource.request('GET', 'http://friendpaste.com')
-    print page
-    print "http code %s" % page.http_code
-
-Exceptions:
------------
-
-Exceptions raised when an unexpected HTTP error is received in response 
-to a request are now instance of `restclient.rest.RestourceError`
-    
-The request failed, meaning the remote HTTP server returned a code 
-other than success, unauthorized, or NotFound.
-
-The exception message attempts to extract the error
-
-You can get the status code by e.http_code, or see anything about the 
-response via e.response. For example, the entire result body (which is 
-probably an HTML error page) is e.response.body
-
-Choose http client backend
-==========================
-
-With version 1.0 you can now choose http client backend used to make request. You can choose for now between **Urllib2**, **Pycurl** or **HTTPLib2**:
-
-.. code-block:: python
-
-    from restclient.http import CurlHTTPClient
-    httpclient = CurlHTTPClient()
-    res = Resource(httpclient=httpclient)
-  
-
-Each HTTP Client are subclasses of `restclient.http.HTTPClient`. 
-
-By default it will use client based on `pycurl <http://pycurl.sourceforge.net/>`_ if installed or urllib2. You could also use `restclient.http.HTTPLib2HTTPClient`,a client based on  `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your own depending of the option you need to access to the serve (authentification, proxy, ....).
-
+* urllib2 ytransport have been removed, Now httplib2 is used when pycurl
+  isn't installed. This change was needed to simplify the code. And
+  there was no need to rewrite another httplib2 transport but based on
+  urllib2.
 
 .. seealso::
         
-          :ref:`httpclient`
+          :ref:`transports`
+
+Support of File objects as body
+-------------------------------
+
+Now a body could be file object. If you use httplib2 all the content
+will be read before sending. Pycurl will send it as it read.
+
+
+Url encoding
+------------
+
+By default all urls are utf8
+encoded. But you could change default charset, safe characters and
+decide that keys don't need to be encoded.
+
+
+.. seealso::
+
+        :ref:`resource_ref`
+

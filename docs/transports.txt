@@ -20,7 +20,7 @@ Functions
 ---------
 
 .. autofunction:: restclient.transport.createHTTPTransport
-.. autofunction:: restclient.transport.getDefaultHTTPTRansport
+.. autofunction:: restclient.transport.getDefaultHTTPTransport
 .. autofunction:: restclient.transport.setDefaultHTTPTransport
 
 Clients:

@@ -2,25 +2,26 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Resource &mdash; py-restclient v1.0.2 documentation</title>
+    
+    <title>Resource &mdash; py-restclient v1.1 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '',
-          VERSION:     '1.0.2',
-          COLLAPSE_MODINDEX: false,
-          FILE_SUFFIX: '.html'
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="contents" title="Global table of contents" href="contents.html" />
-    <link rel="index" title="Global index" href="genindex.html" />
+    <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="py-restclient v1.0.2 documentation" href="index.html" />
-    <link rel="next" title="HTTP Clients" href="httpclient.html" />
-    <link rel="prev" title="What&#8217;s New in python-restclient 1.0" href="whatsnew.html" />
+    <link rel="top" title="py-restclient v1.1 documentation" href="index.html" />
+    <link rel="next" title="HTTP Clients" href="transports.html" />
+    <link rel="prev" title="What&#8217;s New in python-restclient 1.1" href="whatsnew.html" /> 
   </head>
   <body>
     <div class="related">
@@ -33,14 +34,14 @@
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="httpclient.html" title="HTTP Clients"
+          <a href="transports.html" title="HTTP Clients"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.0"
+          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.1"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">py-restclient v1.0.2 documentation</a> &raquo;</li>
+        <li><a href="index.html">py-restclient v1.1 documentation</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
@@ -48,24 +49,25 @@
             
   
   <div class="section" id="module-restclient">
-<h1>Resource<a class="headerlink" href="#module-restclient" title="Permalink to this headline">¶</a></h1>
+<span id="resource-ref"></span><h1>Resource<a class="headerlink" href="#module-restclient" title="Permalink to this headline">¶</a></h1>
 <p>This module provide a common interface for all HTTP requests. This
 module make HTTP requests using <a class="reference external" href="http://pycurl.sourceforge.net/">Pycurl</a> by default if installed or
-<a class="reference external" href="http://docs.python.org/library/urllib2.html">Urllib2</a> if not. You could also use <a class="reference external" href="http://code.google.com/p/httplib2/">Httplib2</a>.</p>
+<a href="#id5"><span class="problematic" id="id6">`Urllib2`_</span></a> if not. You could also use <a class="reference external" href="http://code.google.com/p/httplib2/">Httplib2</a>.</p>
 <p>Example:</p>
-<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">Resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">Resource</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
 <span class="go">&#39;{&quot;snippet&quot;: &quot;hi!&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;5rOqE9XTz7lccLgZoQS4IP&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;386233396230&quot;}&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">http_code</span>
 <span class="go">200</span>
 </pre></div>
+</div>
 <div class="section" id="resource-class">
 <h2>Resource class<a class="headerlink" href="#resource-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="restclient.rest.Resource">
-<!--[restclient.rest.Resource]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">Resource</tt><big>(</big><em>uri</em>, <em>httpclient=None</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class that can be instantiated for access to a RESTful resource,
+<!--[restclient.rest.Resource]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">Resource</tt><big>(</big><em>uri</em>, <em>transport=None</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that can be instantiated for access to a RESTful resource, 
 including authentication.</p>
 <p>It can use pycurl, urllib2, httplib2 or any interface over
 <cite>restclient.http.HTTPClient</cite>.</p>
@@ -76,13 +78,12 @@ including authentication.</p>
 <dd>Str, full uri to the server.</dd></dl>
 
 <dl class="attribute">
-<dt id="restclient.Resource.httpclient">
-<!--[restclient.Resource.httpclient]--><tt class="descname">httpclient</tt><a class="headerlink" href="#restclient.Resource.httpclient" title="Permalink to this definition">¶</a></dt>
-<dd>Any http instance of object based on
-<cite>restclient.http.HTTPClient</cite>. By default it will use
+<dt id="restclient.Resource.transport">
+<!--[restclient.Resource.transport]--><tt class="descname">transport</tt><a class="headerlink" href="#restclient.Resource.transport" title="Permalink to this definition">¶</a></dt>
+<dd>Any instance of object based on
+<cite>restclient.transport.HTTPTransportBase</cite>. By default it will use
 a client based on <a class="reference external" href="http://pycurl.sourceforge.net/">pycurl</a> if
-installed or urllib2. You could also use
-<cite>restclient.http.HTTPLib2HTTPClient</cite>,a client based on
+installed or <cite>restclient.http.HTTPLib2Transport</cite>,a transport based on
 <a class="reference external" href="http://code.google.com/p/httplib2/">Httplib2</a> or make your
 own depending of the option you need to access to the serve
 (authentification, proxy, ....).</dd></dl>
@@ -92,16 +93,18 @@ own depending of the option you need to access to the serve
 <dt id="restclient.rest.Resource.clone">
 <!--[restclient.rest.Resource.clone]--><tt class="descname">clone</tt><big>(</big><big>)</big><a class="headerlink" href="#restclient.rest.Resource.clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>if you want to add a path to resource uri, you can do:</p>
-<div class="highlight"><pre><span class="n">resr2</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">resr2</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 </pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="restclient.rest.Resource.__call__">
 <!--[restclient.rest.Resource.__call__]--><tt class="descname">__call__</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>if you want to add a path to resource uri, you can do:</p>
-<div class="highlight"><pre><span class="n">Resource</span><span class="p">(</span><span class="s">&quot;/path&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Resource</span><span class="p">(</span><span class="s">&quot;/path&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 </pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -177,7 +180,7 @@ subclassing <cite>restclient.rest.Resource</cite>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>payload</em> &#8211; string passed to the body of the request</li>
+<li><em>payload</em> &#8211; string or File object passed to the body of the request</li>
 <li><em>path</em> &#8211; string  additionnal path to the uri</li>
 <li><em>headers</em> &#8211; dict, optionnal headers that will
 be added to HTTP request.</li>
@@ -199,29 +202,47 @@ be added to HTTP request.</li>
 </div>
 <div class="section" id="restclient-class">
 <h2>RestClient class<a class="headerlink" href="#restclient-class" title="Permalink to this headline">¶</a></h2>
-<p>RestClient represent a simple HTTP client.</p>
+<p>RestClient represent a simple HTTP client. <strong>New in 1.1</strong> By default all urls are utf8
+encoded. But you could change default charset, safe characters and
+decide that keys don&#8217;t need to be encoded.</p>
 <dl class="class">
 <dt id="restclient.rest.RestClient">
-<!--[restclient.rest.RestClient]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">RestClient</tt><big>(</big><em>httpclient=None</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient" title="Permalink to this definition">¶</a></dt>
+<!--[restclient.rest.RestClient]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">RestClient</tt><big>(</big><em>transport=None</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basic rest client</p>
-<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/about&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">json</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">json</span>
 <span class="go">&#39;{&quot;snippet&quot;: &quot;testing API.&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;3XDqQ8G83LlzVWgCeWdwru&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;363934613139&quot;}&#39;</span>
 </pre></div>
+</div>
 <p><strong>Properties</strong></p>
 <dl class="attribute">
-<dt id="restclient.RestClient.httpclient">
-<!--[restclient.RestClient.httpclient]--><tt class="descname">httpclient</tt><a class="headerlink" href="#restclient.RestClient.httpclient" title="Permalink to this definition">¶</a></dt>
+<dt id="restclient.RestClient.transport">
+<!--[restclient.RestClient.transport]--><tt class="descname">transport</tt><a class="headerlink" href="#restclient.RestClient.transport" title="Permalink to this definition">¶</a></dt>
 <dd>Any http instance of object based on
-<cite>restclient.http.HTTPClient</cite>. By default it will use
+<cite>restclient.http.HTTPTransportBase</cite>. By default it will use
 a client based on <a class="reference external" href="http://pycurl.sourceforge.net/">pycurl</a> if
-installed or urllib2. You could also use
-<cite>restclient.http.HTTPLib2HTTPClient</cite>,a client based on
+installed or <cite>restclient.http.HTTPLib2Transport</cite>,a transport based on
 <a class="reference external" href="http://code.google.com/p/httplib2/">Httplib2</a> or make your
 own depending of the option you need to access to the serve
 (authentification, proxy, ....).</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">charset</tt></dt>
+<dd>By default it&#8217;s &#8216;utf-8&#8217;, it define charset of urls.</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">encode_keys</tt></dt>
+<dd>By default True. Encode params keys</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">safe</tt></dt>
+<dd>By default is &#8220;:/&#8221;, define which charaters are safe in url and
+don&#8217;t need to be encoded.</dd></dl>
 
 <p><strong>Methods</strong></p>
 <dl class="method">
@@ -269,7 +290,7 @@ be added to HTTP request.</li>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><em>uri</em> &#8211; str, uri on which you make the request</li>
-<li><em>body</em> &#8211; string passed to the body of the request</li>
+<li><em>body</em> &#8211; string or File object passed to the body of the request</li>
 <li><em>path</em> &#8211; string  additionnal path to the uri</li>
 <li><em>headers</em> &#8211; dict, optionnal headers that will
 be added to HTTP request.</li>
@@ -289,19 +310,21 @@ be added to HTTP request.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="restclient.rest.RestClient.make_request">
-<!--[restclient.rest.RestClient.make_request]--><tt class="descname">make_request</tt><big>(</big><em>method</em>, <em>uri</em>, <em>path=None</em>, <em>body=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.make_request" title="Permalink to this definition">¶</a></dt>
+<dt id="restclient.rest.RestClient.request">
+<!--[restclient.rest.RestClient.request]--><tt class="descname">request</tt><big>(</big><em>method</em>, <em>uri</em>, <em>path=None</em>, <em>body=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient.request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform HTTP call support GET, HEAD, POST, PUT and DELETE.</p>
 <p>Usage example, get friendpaste page :</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
 <span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
 <p>Or get a paste in JSON :</p>
-<pre>from restclient import RestClient
+<div class="highlight-python"><pre>from restclient import RestClient
 client = RestClient()
-client.make_request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
+client.request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
     headers={'Accept': 'application/json'})</pre>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -310,8 +333,7 @@ client.make_request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
 <li><em>method</em> &#8211; str, the HTTP action to be performed: 
 &#8216;GET&#8217;, &#8216;HEAD&#8217;, &#8216;POST&#8217;, &#8216;PUT&#8217;, or &#8216;DELETE&#8217;</li>
 <li><em>path</em> &#8211; str or list, path to add to the uri</li>
-<li><em>data</em> &#8211; str or string or any object that could be
-converted to JSON.</li>
+<li><em>data</em> &#8211; tring or File object.</li>
 <li><em>headers</em> &#8211; dict, optionnal headers that will
 be added to HTTP request.</li>
 <li><em>params</em> &#8211; Optionnal parameterss added to the request.</li>
@@ -337,12 +359,13 @@ be added to HTTP request.</li>
 <p>you can get result like as string and  status code by result.http_code, 
 or see anything about the response via result.response. For example, the entire 
 result body is result.response.body.</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
 <span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">page</span>
 <span class="k">print</span> <span class="s">&quot;http code </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">page</span><span class="o">.</span><span class="n">http_code</span>
 </pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -372,6 +395,11 @@ response via e.response. For example, the entire result body (which is
 probably an HTML error page) is e.response.body.</p>
 </dd></dl>
 
+<dl class="exception">
+<dt id="restclient.rest.RequestError">
+<!--[restclient.rest.RequestError]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">RequestError</tt><a class="headerlink" href="#restclient.rest.RequestError" title="Permalink to this definition">¶</a></dt>
+<dd>Exception raised when a request is malformed</dd></dl>
+
 </div>
 </div>
 
@@ -381,7 +409,7 @@ probably an HTML error page) is e.response.body.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3>Table Of Contents</h3>
+            <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
 <li><a class="reference external" href="">Resource</a><ul>
 <li><a class="reference external" href="#resource-class">Resource class</a></li>
@@ -393,14 +421,14 @@ probably an HTML error page) is e.response.body.</p>
 </ul>
 
             <h4>Previous topic</h4>
-            <p class="topless"><a href="whatsnew.html" title="previous chapter">What&#8217;s New in python-restclient 1.0</a></p>
+            <p class="topless"><a href="whatsnew.html" title="previous chapter">What&#8217;s New in python-restclient 1.1</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="httpclient.html" title="next chapter">HTTP Clients</a></p>
+            <p class="topless"><a href="transports.html" title="next chapter">HTTP Clients</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/resource.txt">Show Source</a></li>
             </ul>
-            <h3>Quick search</h3>
+          <h3>Quick search</h3>
             <form class="search" action="search.html" method="get">
               <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
               <input type="hidden" name="check_keywords" value="yes" />
@@ -420,18 +448,17 @@ probably an HTML error page) is e.response.body.</p>
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="httpclient.html" title="HTTP Clients"
+          <a href="transports.html" title="HTTP Clients"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.0"
+          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.1"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">py-restclient v1.0.2 documentation</a> &raquo;</li>
+        <li><a href="index.html">py-restclient v1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2008, 2009 Benoit Chesneau <benoitc@e-engura.org>.
-      Last updated on Dec 31, 2008.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+      &copy; Copyright 2008, 2009 Benoit Chesneau &lt;benoitc@e-engura.org&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
     </div>
   </body>
 </html>
