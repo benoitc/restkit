@@ -24,14 +24,13 @@ import unittest
 import urlparse
 
 
-from restclient.http import Urllib2HTTPClient, CurlHTTPClient, \
-HTTPLib2HTTPClient
+from restclient.http import CurlHTTPClient, HTTPLib2HTTPClient
 from restclient.rest import Resource, RestClient, RequestFailed, \
 ResourceNotFound, Unauthorized
 from _server_test import HOST, PORT
 
 class HTTPClientTestCase(unittest.TestCase):
-    httpclient = Urllib2HTTPClient()
+    httpclient = HTTPLib2HTTPClient()
 
     def setUp(self):
         self.url = 'http://%s:%s' % (HOST, PORT)
@@ -118,6 +117,12 @@ class HTTPClientTestCase(unittest.TestCase):
         result = self.res.delete('/delete')
         self.assert_(result.http_code == 200)
 
+    
+
+
+class CurlHTTPClientTestCase(HTTPClientTestCase):
+    httpclient = CurlHTTPClient()
+
     def testAuth(self):
         httpclient = self.httpclient 
         httpclient.add_credentials("test", "test")
@@ -133,13 +138,6 @@ class HTTPClientTestCase(unittest.TestCase):
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
 
-
-class CurlHTTPClientTestCase(HTTPClientTestCase):
-    httpclient = CurlHTTPClient()
-
-
-class HTTPLib2HTTPClientTestCase(HTTPClientTestCase):
-    httpclient = HTTPLib2HTTPClient() 
 
  
 if __name__ == '__main__':

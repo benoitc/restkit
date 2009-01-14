@@ -18,7 +18,6 @@ import StringIO
 import httplib
 import re
 import sys
-import urllib2
 
 import restclient
 
@@ -71,7 +70,7 @@ def createHTTPClient():
     prefers Curl to urllib"""
 
     if pycurl is None:
-        http = Urllib2HTTPClient()
+        http = HTTPLib2HTTPClient()
     else:
         http = CurlHTTPClient()
 
@@ -126,9 +125,6 @@ class HTTPResponse(dict):
 class HTTPClient(object):
     """ Interface for HTTP clients """
 
-    def __init__(self):
-        self._credentials = {}
-
     def request(self, url, method='GET', body=None, headers=None):
         """Perform HTTP call and manage , support GET, HEAD, POST, PUT and
         DELETE
@@ -142,153 +138,7 @@ class HTTPClient(object):
         """
         raise NotImplementedError
 
-    def add_credentials(self, user, password):
-        self._credentials = {
-                "user": user,
-                "password": password
-        }
-
-    def _get_credentials(self):
-        return self._credentials
-
-class CustomRequest(urllib2.Request):
-    _method = None
-
-    def __init__(self, url, data=None, headers={},
-                 origin_req_host=None, unverifiable=False, method=None):
-        urllib2.Request.__init__(self, url, data=data, headers=headers,
-                 origin_req_host=origin_req_host, unverifiable=unverifiable)
-
-        if method is not None:
-            self._method = method
-
-    def get_method(self):
-        if self._method is not None:
-            return self._method
-
-        if self.has_data():
-            return "POST"
-        else:
-            return "GET"
-
-
-USE_WWW_AUTH_STRICT_PARSING = 0
-
-# In regex below:
-#    [^\0-\x1f\x7f-\xff()<>@,;:\\\"/[\]?={} \t]+             matches a "token" as defined by HTTP
-#    "(?:[^\0-\x08\x0A-\x1f\x7f-\xff\\\"]|\\[\0-\x7f])*?"    matches a "quoted-string" as defined by HTTP, when LWS have already been replaced by a single space
-# Actually, as an auth-param value can be either a token or a quoted-string, they are combined in a single pattern which matches both:
-#    \"?((?<=\")(?:[^\0-\x1f\x7f-\xff\\\"]|\\[\0-\x7f])*?(?=\")|(?<!\")[^\0-\x08\x0A-\x1f\x7f-\xff()<>@,;:\\\"/[\]?={} \t]+(?!\"))\"?
-WWW_AUTH_STRICT = re.compile(r"^(?:\s*(?:,\s*)?([^\0-\x1f\x7f-\xff()<>@,;:\\\"/[\]?={} \t]+)\s*=\s*\"?((?<=\")(?:[^\0-\x08\x0A-\x1f\x7f-\xff\\\"]|\\[\0-\x7f])*?(?=\")|(?<!\")[^\0-\x1f\x7f-\xff()<>@,;:\\\"/[\]?={} \t]+(?!\"))\"?)(.*)$")
-WWW_AUTH_RELAXED = re.compile(r"^(?:\s*(?:,\s*)?([^ \t\r\n=]+)\s*=\s*\"?((?<=\")(?:[^\\\"]|\\.)*?(?=\")|(?<!\")[^ \t\r\n,]+(?!\"))\"?)(.*)$")
-UNQUOTE_PAIRS = re.compile(r'\\(.)')
-def _parse_www_authenticate(headers):
-    """Returns a dictionary of dictionaries, one dict
-    per auth_scheme.
     
-    from httplib2
-    """
-    retval = {}
-    authenticate = headers['www-authenticate'].strip()
-    www_auth = USE_WWW_AUTH_STRICT_PARSING and WWW_AUTH_STRICT or WWW_AUTH_RELAXED
-    while authenticate:
-        (auth_scheme, the_rest) = authenticate.split(" ", 1)
-        # Now loop over all the key value pairs that come after the scheme, 
-        # being careful not to roll into the next scheme
-        match = www_auth.search(the_rest)
-        auth_params = {}
-        while match:
-            if match and len(match.groups()) == 3:
-                (key, value, the_rest) = match.groups()
-                auth_params[key.lower()] = UNQUOTE_PAIRS.sub(r'\1', value) # '\\'.join([x.replace('\\', '') for x in value.split('\\\\')])
-            match = www_auth.search(the_rest)
-        retval[auth_scheme.lower()] = auth_params
-        authenticate = the_rest.strip()
-    return retval
-
-class Urllib2HTTPClient(HTTPClient):
-    """ HTTP Client that use urllib2.
-    This module is included in python so i mean that you don't need any
-    dependancy to run this client and restclient.
-
-    urllib2 is very powerfull and you can use many handlers to manage
-    authentification and proxies.
-
-    .. seealso::
-        
-        `Urllib2 <http://docs.python.org/library/urllib2.html>`_
-    
-    """
-
-    def __init__(self):
-        """ Constructor for Urllib2HTTPClient """
-        HTTPClient.__init__(self)
-
-    def _request(self, url, method, body, headers):
-        req = CustomRequest(url=url, data=body, method=method)
-        
-        for key, value in headers.items():
-            req.add_header(key, value)
-        
-        try:
-            f = urllib2.urlopen(req)
-            try:
-                return self._make_response(f)
-            finally:
-                f.close()
-        except urllib2.HTTPError, e:
-            try:
-                return self._make_response(e)
-            finally:
-                e.close()
-
-        
-    def request(self, url, method='GET', body=None, headers=None):
-        headers = headers or {}
-        body = body or ''
-        
-        # reset auth
-        urllib2.install_opener(urllib2.build_opener())
-
-        headers.setdefault('User-Agent',
-            "%s Python-urllib/%s" % (USER_AGENT, urllib2.__version__,))
-
-        resp, content = self._request(url, method, body, headers)
-        if resp.status == 401:
-            auth = self._get_credentials()
-            user = auth.get('user', None)
-            password = auth.get('password', None)
-            if user is not None:
-                challenges =  _parse_www_authenticate(resp.headers)      
-                auth_handler = None
-                if challenges.has_key('basic'):
-                    auth_handler = urllib2.HTTPBasicAuthHandler()
-                    auth_handler.add_password(challenges['basic']['realm'], 
-                            url, user, password)
-                elif challenges.has_key('digest'):
-                    auth_handler = urllib2.HTTPDigestAuthHandler()
-                    auth_handler.add_password(challenge['digest']['realm'], 
-                            url, user, password)
-                   
-                if auth_handler is not None:
-                    opener = urllib2.build_opener(auth_handler)
-                    urllib2.install_opener(opener)
-                    resp, content = self._request(url, method, body, headers)
-        return resp, content
-
-
-    def _make_response(self, response):
-        resp = HTTPResponse()
-        resp.final_url = response.geturl()
-        resp.headers = dict(response.info().items())
-        resp.body = response.read()
-
-        if hasattr(response, 'code'):
-            resp.status = response.code
-        else:
-            resp.status = 200
-
-        return resp, resp.body
 
 class CurlHTTPClient(HTTPClient):
     """
@@ -314,6 +164,7 @@ class CurlHTTPClient(HTTPClient):
 
     def __init__(self, timeout=None):
         HTTPClient.__init__(self)
+        self._credentials = {}
         if pycurl is None:
             raise RuntimeError('Cannot find pycurl library')
 
@@ -419,6 +270,16 @@ class CurlHTTPClient(HTTPClient):
         finally:
             c.close()
 
+    def add_credentials(self, user, password):
+        self._credentials = {
+                "user": user,
+                "password": password
+        }
+
+    def _get_credentials(self):
+        return self._credentials
+
+
     def _make_response(self, final_url=None, status=None, headers=None,
             body=None):
         resp = HTTPResponse()
@@ -437,10 +298,8 @@ class HTTPLib2HTTPClient(HTTPClient):
         `Httplib2 <http://code.google.com/p/httplib2/>`_
     """
 
-    def __init__(self, cache=None):
-        """@param cache: An object suitable for use as an C{httplib2}
-            cache. If a string is passed, it is assumed to be a
-            directory name.
+    def __init__(self, http=None):
+        """@param http: An httplib2.HTTP instance.
         """
         if httplib2 is None:
             raise RuntimeError('Cannot find httplib2 library. '
@@ -448,7 +307,10 @@ class HTTPLib2HTTPClient(HTTPClient):
 
         super(HTTPLib2HTTPClient, self).__init__()
         
-        self.http = httplib2.Http(cache)
+        if http is None:
+            http = httplib2.Http()
+
+        self.http = http
         self.http.force_exception_to_status_code = False
 
     def request(self, url, method='GET', body=None, headers=None):
@@ -463,14 +325,6 @@ class HTTPLib2HTTPClient(HTTPClient):
 
         headers.setdefault('User-Agent', USER_AGENT)
         
-        self.http.clear_credentials()
-
-        auth = self._get_credentials()
-        user = auth.get('user', None)
-        password = auth.get('password', None)
-        if user is not None:
-            self.http.add_credentials(user, password)
-
         httplib2_response, content = self.http.request(url,
                 method=method, body=body, headers=headers)
 
