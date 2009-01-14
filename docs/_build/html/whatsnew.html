@@ -57,7 +57,7 @@
 </ul>
 <p>the same time all &#8220;clients&#8221; are now called &#8220;transports&#8221;.</p>
 <ul class="simple">
-<li>urllib2 ytransport have been removed, Now httplib2 is used when pycurl
+<li>urllib2 transport have been removed, Now httplib2 is used when pycurl
 isn&#8217;t installed. This change was needed to simplify the code. And
 there was no need to rewrite another httplib2 transport but based on
 urllib2.</li>
@@ -69,13 +69,12 @@ urllib2.</li>
 </div>
 <div class="section" id="support-of-file-objects-as-body">
 <h2>Support of File objects as body<a class="headerlink" href="#support-of-file-objects-as-body" title="Permalink to this headline">¶</a></h2>
-<p>Now a body could be file object. If you use httplib2 all the content
+<p>Now a body could be a File object. If you use httplib2 all the content
 will be read before sending. Pycurl will send it as it read.</p>
 </div>
 <div class="section" id="url-encoding">
 <h2>Url encoding<a class="headerlink" href="#url-encoding" title="Permalink to this headline">¶</a></h2>
-<p>By default all urls are utf8
-encoded. But you could change default charset, safe characters and
+<p>By default all urls are utf8 encoded. But you could change default charset, safe characters and
 decide that keys don&#8217;t need to be encoded.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>

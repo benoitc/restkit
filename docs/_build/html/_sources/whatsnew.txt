@@ -12,7 +12,7 @@ Transports changes
 * :mod:`restclient.http` have renamed to :mod:`restclient.transport`. In
 the same time all "clients" are now called "transports".
 
-* urllib2 ytransport have been removed, Now httplib2 is used when pycurl
+* urllib2 transport have been removed, Now httplib2 is used when pycurl
   isn't installed. This change was needed to simplify the code. And
   there was no need to rewrite another httplib2 transport but based on
   urllib2.
@@ -24,15 +24,14 @@ the same time all "clients" are now called "transports".
 Support of File objects as body
 -------------------------------
 
-Now a body could be file object. If you use httplib2 all the content
+Now a body could be a File object. If you use httplib2 all the content
 will be read before sending. Pycurl will send it as it read.
 
 
 Url encoding
 ------------
 
-By default all urls are utf8
-encoded. But you could change default charset, safe characters and
+By default all urls are utf8 encoded. But you could change default charset, safe characters and
 decide that keys don't need to be encoded.
 
 
