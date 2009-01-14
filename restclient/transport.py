@@ -112,11 +112,12 @@ class HTTPResponse(dict):
     headers = None
     status = 200
     final_url = None
-    
+    body = None
+
     def __init__(self, final_url=None, status=None, headers=None,
             body=None):
         self.final_url = final_url
-        self.status_code = status
+        self.status = status
         self.headers = headers
         self.body = body
 
