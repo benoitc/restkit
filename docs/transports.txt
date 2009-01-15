@@ -1,11 +1,11 @@
-.. _transports:
+.. _reftransports:
 
-HTTP Clients
-============
+HTTP Transports
+===============
 
 .. module:: restclient.transport
 
-HTTP Clients are object based on :mod:`restclient.transport.HTTPClient` that
+HTTP Transports are object based on :mod:`restclient.transport.HTTPTransportBase` that
 perform HTPP operations.
 
 You can choose the one you want as transports in Resource or RestClient:
