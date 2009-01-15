@@ -125,7 +125,7 @@ class Resource(object):
 
         self.client = RestClient(transport)
         self.uri = uri
-        self.transport = transport
+        self.transport = self.client.transport
 
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
@@ -138,7 +138,7 @@ class Resource(object):
             resr2 = res.clone()
         
         """
-        obj = self.__class__(self.uri, http=self.transport)
+        obj = self.__class__(self.uri, transport=self.transport)
         return obj
    
     def __call__(self, path):
@@ -149,7 +149,8 @@ class Resource(object):
             Resource("/path").get()
         """
 
-        return type(self)(make_uri(self.uri, path), http=self.transport)
+        return type(self)(self.client.make_uri(self.uri, path),
+                transport=self.transport)
 
     
     def get(self, path=None, headers=None, **params):
@@ -215,7 +216,7 @@ class Resource(object):
         """
         to set a new uri absolute path
         """
-        self.uri = make_uri(self.uri, path)
+        self.uri = self.client.transport.make_uri(self.uri, path)
 
 
 class RestClient(object):
