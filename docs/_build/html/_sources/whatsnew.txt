@@ -9,8 +9,7 @@ What's New in python-restclient 1.1
 Transports changes
 ------------------
 
-* :mod:`restclient.http` have renamed to :mod:`restclient.transport`. In
-the same time all "clients" are now called "transports".
+* :mod:`restclient.http` have been renamed to :mod:`restclient.transport`. In the same time all "clients" are now called "transports".
 
 * urllib2 transport have been removed, Now httplib2 is used when pycurl
   isn't installed. This change was needed to simplify the code. And

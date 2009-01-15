@@ -53,10 +53,7 @@
 <div class="section" id="transports-changes">
 <h2>Transports changes<a class="headerlink" href="#transports-changes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><tt class="xref docutils literal"><span class="pre">restclient.http</span></tt> have renamed to <a title="" class="reference external" href="transports.html#module-restclient.transport"><tt class="xref docutils literal"><span class="pre">restclient.transport</span></tt></a>. In</li>
-</ul>
-<p>the same time all &#8220;clients&#8221; are now called &#8220;transports&#8221;.</p>
-<ul class="simple">
+<li><tt class="xref docutils literal"><span class="pre">restclient.http</span></tt> have been renamed to <a title="" class="reference external" href="transports.html#module-restclient.transport"><tt class="xref docutils literal"><span class="pre">restclient.transport</span></tt></a>. In the same time all &#8220;clients&#8221; are now called &#8220;transports&#8221;.</li>
 <li>urllib2 transport have been removed, Now httplib2 is used when pycurl
 isn&#8217;t installed. This change was needed to simplify the code. And
 there was no need to rewrite another httplib2 transport but based on
