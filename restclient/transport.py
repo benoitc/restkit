@@ -223,12 +223,6 @@ class CurlTransport(HTTPTransportBase):
         if put:
             headers.setdefault('Expect', '100-continue')
         
-        if method in ['POST', 'PUT']:
-            body = body or ''
-            if not hasattr(body, 'read'):
-                headers.setdefault('Content-Length', str(len(body))) 
-
-
         c = pycurl.Curl()
         try:
             # set curl options
@@ -281,11 +275,13 @@ class CurlTransport(HTTPTransportBase):
 
             if method in ('POST','PUT'):
                 if hasattr(body, 'read'):
-                    content_length = int(headers.get('Content-Length',
+                    content_length = int(headers.pop('Content-Length',
                         0))
                     content = body
                 else:
                     content = StringIO.StringIO(body)
+                    if 'Content-Length' in headers:
+                        del headers['Content-Length']
                     content_length = len(body)
 
                 if put:
