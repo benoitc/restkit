@@ -17,7 +17,7 @@ restclient.rest.RestClient.get method resource.html
 restclient.rest.Resource.clone method resource.html
 restclient.Resource.transport attribute resource.html
 restclient.rest.RestClient.post method resource.html
-restclient.rest.RestClient class resource.html
+restclient.transport.CurlTransport.__init__ method transports.html
 restclient.rest.RestClient.delete method resource.html
 restclient.transport.HTTPTransportBase class transports.html
 restclient.rest.Unauthorized exception resource.html
@@ -32,7 +32,7 @@ restclient.transport.CurlTransport.add_credentials method transports.html
 restclient.transport.CurlTransport class transports.html
 restclient.Resource.uri attribute resource.html
 restclient.rest.RequestError exception resource.html
-restclient.transport.CurlTransport.__init__ method transports.html
+restclient.rest.RestClient class resource.html
 restclient.rest.RestClient.head method resource.html
 restclient.transport.HTTPTransportBase.request method transports.html
 restclient.rest.Resource.update_uri method resource.html
