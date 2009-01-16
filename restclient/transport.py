@@ -253,10 +253,6 @@ class CurlTransport(HTTPTransportBase):
                 if password is not None: # '' is a valid password
                     userpass += password
                 c.setopt(pycurl.USERPWD, userpass)
-            #.setopt(pycurl.VERBOSE, 1)
-
-            
-
 
             # set method
             if method == "GET":
