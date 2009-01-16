@@ -255,9 +255,7 @@ class CurlTransport(HTTPTransportBase):
                 c.setopt(pycurl.USERPWD, userpass)
             #.setopt(pycurl.VERBOSE, 1)
 
-            if headers:
-                c.setopt(pycurl.HTTPHEADER,
-                        ["%s: %s" % pair for pair in sorted(headers.iteritems())])
+            
 
 
             # set method
@@ -290,6 +288,10 @@ class CurlTransport(HTTPTransportBase):
                     c.setopt(pycurl.POSTFIELDSIZE, content_length)
                 c.setopt(pycurl.READFUNCTION, content.read)
             
+            if headers:
+                c.setopt(pycurl.HTTPHEADER,
+                        ["%s: %s" % pair for pair in sorted(headers.iteritems())])
+
             try:
                 c.perform()
             except pycurl.error, e:
