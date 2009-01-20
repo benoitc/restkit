@@ -222,7 +222,7 @@ class CurlTransport(HTTPTransportBase):
 
         if put:
             headers.setdefault('Expect', '100-continue')
-        
+
         c = pycurl.Curl()
         try:
             # set curl options

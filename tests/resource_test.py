@@ -63,6 +63,10 @@ class ResourceTestCase(unittest.TestCase):
         result = self.res.get('/query', test="testing")
         self.assert_(result.http_code == 200)
 
+    def testGetWithIntParam(self):
+        result = self.res.get('/qint', test=1)
+        self.assert_(result.http_code == 200)
+
 
     def testSimplePost(self):
         result = self.res.post(payload="test")
@@ -108,7 +112,7 @@ class ResourceTestCase(unittest.TestCase):
         result = self.res.put('/empty',headers={'Content-Type': 'application/json'})
         self.assert_(result.http_code == 200 )
 
-    def testPuWithQuery(self):
+    def testPutWithQuery(self):
         result = self.res.put('/query', test="testing")
         self.assert_(result.http_code == 200)
 

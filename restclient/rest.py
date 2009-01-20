@@ -388,7 +388,7 @@ class RestClient(object):
             elif v is not None:
                 params.append((k,v))
         if params:
-            retval.extend(['?', url_encode(params, self.charset, self.encode_keys)])
+            retval.extend(['?', url_encode(dict(params), self.charset, self.encode_keys)])
 
         return ''.join(retval)
 
@@ -405,6 +405,7 @@ def url_quote(s, charset='utf-8', safe='/:'):
 
 def url_encode(obj, charset="utf8", encode_keys=False):
     if isinstance(obj, dict):
+        items = []
         for k, v in obj.iteritems():
             if not isinstance(v, (tuple, list)):
                 v = [v]
@@ -413,11 +414,19 @@ def url_encode(obj, charset="utf8", encode_keys=False):
         items = obj or ()
 
     tmp = []
-    for key, value in items:
+    for key, values in items:
         if encode_keys and isinstance(key, unicode):
             key = key.encode(charset)
         else:
             key = str(key)
+
+        for value in values:
+            if value is None:
+                continue
+            elif isinstance(value, unicode):
+                value = value.encode(charset)
+            else:
+                value = str(value)
         tmp.append('%s=%s' % (urllib.quote(key),
             urllib.quote_plus(value)))
 

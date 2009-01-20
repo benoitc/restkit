@@ -59,6 +59,13 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self._respond(200, extra_headers, "ok")
             else:
                 self.error_Response()
+        elif path == "/qint":
+            test = self.query.get("test", False)
+            if test and test == "1":
+                extra_headers = [('Content-type', 'text/plain')]
+                self._respond(200, extra_headers, "ok")
+            else:
+                self.error_Response()
         elif path == "/auth":
             extra_headers = [('Content-type', 'text/plain')]
 
