@@ -186,7 +186,20 @@ class CurlTransport(HTTPTransportBase):
         `Pycurl <http://pycurl.sourceforge.net>`_
     """
 
-    def __init__(self, timeout=None):
+    def __init__(self, timeout=None, proxy_infos={}):
+        """ Curl transport constructor
+
+        :param timeout: int, timeout of request
+        :param proxy_infos: dict, infos to connect via proxy:
+
+            {
+                'proxy_user': 'XXXXXXX',
+                'proxy_password': 'XXXXXXX',
+                'proxy_host': 'proxy',
+                'proxy_port': 8080,
+            }
+        """
+        
         HTTPTransportBase.__init__(self)
         self._credentials = {}
 
@@ -197,6 +210,7 @@ class CurlTransport(HTTPTransportBase):
             raise RuntimeError('Cannot find pycurl library')
 
         self.timeout = timeout
+        self.proxy_infos = proxy_infos or {}
             
 
     def _parseHeaders(self, status_and_headers):
@@ -242,18 +256,31 @@ class CurlTransport(HTTPTransportBase):
             if self.cabundle:
                 c.setopt(pycurl.CAINFO, celf.cabundle)
 
+            #set proxy
+            if self.proxy_infos and self.proxy_infos.get('proxy_host', ''):
+                c.setopt(pycurl.PROXYAUTH, pycurl.HTTPAUTH_ANY)
+                c.setopt(pycurl.PROXY, self.proxy_infos.get('proxy_host'))
+                
+                proxy_port = self.proxy_infos.get('proxy_port', '')
+                if proxy_port:
+                    c.setopt(pycurl.PROXYPORT, str(proxy_port))
+
+                user = self.proxy_infos.get('proxy_user', '')
+                if user:
+                    userpass = "%s:%s" % (user, self.proxy_infos.get('proxy_password'))
+                    c.setopt(pycurl.PROXYUSERPWD, userpass)
+            
+            # authentification
             auth = self._get_credentials()
             user = auth.get('user', None)
             password = auth.get('password', None)
             if user is not None:
-                # accept any auth methode
                 c.setopt(pycurl.HTTPAUTH, pycurl.HTTPAUTH_ANY)
-                c.setopt(pycurl.PROXYAUTH, pycurl.HTTPAUTH_ANY)
                 userpass = user + ':'
                 if password is not None: # '' is a valid password
                     userpass += password
                 c.setopt(pycurl.USERPWD, userpass)
-
+    
             # set method
             if method == "GET":
                 c.setopt(pycurl.HTTPGET, 1)
