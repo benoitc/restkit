@@ -267,7 +267,7 @@ class CurlTransport(HTTPTransportBase):
 
                 user = self.proxy_infos.get('proxy_user', '')
                 if user:
-                    userpass = "%s:%s" % (user, self.proxy_infos.get('proxy_password'))
+                    userpass = "%s:%s" % (user, self.proxy_infos.get('proxy_password', ''))
                     c.setopt(pycurl.PROXYUSERPWD, userpass)
             
             # authentification
