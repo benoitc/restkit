@@ -103,6 +103,9 @@ def setDefaultHTTPTransport(httptransport):
 
 def useCurl():
     global _default_http
+    if _default_http is None:
+        setDefaultHTTPTransport(createHTTPTransport())
+
     return isinstance(_default_http, CurlTransport)
 
 class HTTPError(Exception):

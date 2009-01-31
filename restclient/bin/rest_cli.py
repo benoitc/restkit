@@ -128,6 +128,8 @@ def make_query(string, method='GET', fname=None,
         if uri.username:
             http.add_credentials(uri.username, uri.password)
         transport = HTTPLib2Transport(http=http)
+    
+    
     res = restclient.Resource(uri.uri, transport=transport)
 
     list_headers = list_headers or []
