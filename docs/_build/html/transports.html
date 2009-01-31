@@ -118,7 +118,7 @@ be added to HTTP request</li>
 
 <dl class="class">
 <dt id="restclient.transport.CurlTransport">
-<!--[restclient.transport.CurlTransport]-->class <tt class="descclassname">restclient.transport.</tt><tt class="descname">CurlTransport</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#restclient.transport.CurlTransport" title="Permalink to this definition">¶</a></dt>
+<!--[restclient.transport.CurlTransport]-->class <tt class="descclassname">restclient.transport.</tt><tt class="descname">CurlTransport</tt><big>(</big><em>timeout=None</em>, <em>proxy_infos={}</em><big>)</big><a class="headerlink" href="#restclient.transport.CurlTransport" title="Permalink to this definition">¶</a></dt>
 <dd><p>An HTTP transportthat uses pycurl.</p>
 <p>Pycurl is recommanded when you want fast access to http resources.
 We have added some basic management of authentification and proxies,
@@ -135,8 +135,30 @@ httplib2 http clients. Any patch is welcome though ;)</p>
 </div>
 <dl class="method">
 <dt id="restclient.transport.CurlTransport.__init__">
-<!--[restclient.transport.CurlTransport.__init__]--><tt class="descname">__init__</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#restclient.transport.CurlTransport.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<!--[restclient.transport.CurlTransport.__init__]--><tt class="descname">__init__</tt><big>(</big><em>timeout=None</em>, <em>proxy_infos={}</em><big>)</big><a class="headerlink" href="#restclient.transport.CurlTransport.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Curl transport constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>timeout</em> &#8211; int, timeout of request</li>
+<li><em>proxy_infos</em> &#8211; <p>dict, infos to connect via proxy:</p>
+<dl class="docutils">
+<dt>{</dt>
+<dd>&#8216;proxy_user&#8217;: &#8216;XXXXXXX&#8217;,
+&#8216;proxy_password&#8217;: &#8216;XXXXXXX&#8217;,
+&#8216;proxy_host&#8217;: &#8216;proxy&#8217;,
+&#8216;proxy_port&#8217;: 8080,</dd>
+</dl>
+<p>}</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="restclient.transport.CurlTransport.add_credentials">
