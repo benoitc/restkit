@@ -157,14 +157,15 @@ def _get_pycurl_errcode(symbol, default):
     """
     return pycurl.__dict__.get(symbol, default)
 
-CURLE_COULDNT_CONNECT = _get_pycurl_errcode('E_COULDNT_CONNECT', 7)
-CURLE_COULDNT_RESOLVE_HOST = _get_pycurl_errcode('E_COULDNT_RESOLVE_HOST', 6)
-CURLE_COULDNT_RESOLVE_PROXY = _get_pycurl_errcode('E_COULDNT_RESOLVE_PROXY', 5)
-CURLE_GOT_NOTHING = _get_pycurl_errcode('E_GOT_NOTHING', 52)
-CURLE_PARTIAL_FILE = _get_pycurl_errcode('E_PARTIAL_FILE', 18)
-CURLE_SEND_ERROR = _get_pycurl_errcode('E_SEND_ERROR', 55)
-CURLE_SSL_CACERT = _get_pycurl_errcode('E_SSL_CACERT', 60)
-CURLE_SSL_CACERT_BADFILE = _get_pycurl_errcode('E_SSL_CACERT_BADFILE', 77)    
+if pycurl is not None:
+    CURLE_COULDNT_CONNECT = _get_pycurl_errcode('E_COULDNT_CONNECT', 7)
+    CURLE_COULDNT_RESOLVE_HOST = _get_pycurl_errcode('E_COULDNT_RESOLVE_HOST', 6)
+    CURLE_COULDNT_RESOLVE_PROXY = _get_pycurl_errcode('E_COULDNT_RESOLVE_PROXY', 5)
+    CURLE_GOT_NOTHING = _get_pycurl_errcode('E_GOT_NOTHING', 52)
+    CURLE_PARTIAL_FILE = _get_pycurl_errcode('E_PARTIAL_FILE', 18)
+    CURLE_SEND_ERROR = _get_pycurl_errcode('E_SEND_ERROR', 55)
+    CURLE_SSL_CACERT = _get_pycurl_errcode('E_SSL_CACERT', 60)
+    CURLE_SSL_CACERT_BADFILE = _get_pycurl_errcode('E_SSL_CACERT_BADFILE', 77)    
 
 
 class CurlTransport(HTTPTransportBase):
@@ -377,15 +378,21 @@ class HTTPLib2Transport(HTTPTransportBase):
 
     def request(self, url, method='GET', body=None, headers=None):
         headers = headers or {}
-      
+        body = body or ''
+        
         content = ''
-        if method in ['POST', 'PUT']:
-            body = body or ''
-            if hasattr(body, 'read'): # httplib2 don't suppport file read
+        if method in ('POST','PUT'):
+            if hasattr(body, 'read'):
+                content_length = int(headers.pop('Content-Length',
+                    0))
                 content = body.read()
             else:
                 content = body
-                headers.setdefault('Content-Length', str(len(body))) 
+                if 'Content-Length' in headers:
+                    del headers['Content-Length']
+                content_length = len(body)
+
+            headers.setdefault('Content-Length', str(content_length))
 
         if not (url.startswith('http://') or url.startswith('https://')):
             raise ValueError('URL is not a HTTP URL: %r' % (url,))
