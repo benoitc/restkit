@@ -10,6 +10,8 @@ tests/*.err
 store/*
 *.DS_Store
 *.beam
+py_restclient.egg-info
+dist
 
 syntax: regexp
 .*\#.*\#$
