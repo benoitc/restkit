@@ -46,8 +46,10 @@ setup(
     packages = ['restclient'],
     setup_requires = [
         'setuptools>=0.6b1',
-        'httplib2'
+        
     ],
+
+    install_requires = ['httplib2'],
 
 )
 
