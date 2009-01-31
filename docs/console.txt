@@ -38,6 +38,9 @@ Get your twitter status time line :
 Usage :
 -------
 
+
+restcli [options] url [METHOD] [filename]
+
 Options:
   --version             show program's version number and exit
   -h, --help            show this help message and exit
