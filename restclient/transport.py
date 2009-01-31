@@ -103,7 +103,7 @@ def setDefaultHTTPTransport(httptransport):
 
 def useCurl():
     global _default_http
-    return isinstance(_default_http, CurlHTTPTransport)
+    return isinstance(_default_http, CurlTransport)
 
 class HTTPError(Exception):
     """ raised when there is an HTTP error """
@@ -186,7 +186,7 @@ class CurlTransport(HTTPTransportBase):
         `Pycurl <http://pycurl.sourceforge.net>`_
     """
 
-    def __init__(self, timeout=None, proxy_infos={}):
+    def __init__(self, timeout=None, proxy_infos=None):
         """ Curl transport constructor
 
         :param timeout: int, timeout of request

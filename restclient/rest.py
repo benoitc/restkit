@@ -336,7 +336,7 @@ class RestClient(object):
 
         if hasattr(body, 'read'):
             if not 'Content-Length' in headers:
-                raise RequestError("'Content-Lenght' should be specified when body is a File like instance") 
+                raise RequestError("'Content-Length' should be specified when body is a File like instance") 
 
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
@@ -384,7 +384,7 @@ class RestClient(object):
         params = []
         for k, v in query.items():
             if type(v) in (list, tuple):
-                params.extend([(name, i) for i in v if i is not None])
+                params.extend([(k, i) for i in v if i is not None])
             elif v is not None:
                 params.append((k,v))
         if params:

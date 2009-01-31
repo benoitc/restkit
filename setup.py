@@ -15,10 +15,11 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+import ez_setup
+ez_setup.use_setuptools()
+
+from setuptools import setup, find_packages
+
 import sys
 
 setup(
@@ -43,7 +44,14 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries',
     ],
-    packages = ['restclient'],
+    packages = find_packages(),
+
+    entry_points = {
+        'console_scripts': [
+            'restcli = restclient.bin.rest_cli:main',
+        ]
+    },
+
     setup_requires = [
         'setuptools>=0.6b1',
         
