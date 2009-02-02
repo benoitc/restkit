@@ -8,14 +8,14 @@ A console client is available with py-restclient. It allow you to perform any HT
 
 Examples :
 ----------
-create a paste in Friedpaste from command line:
+create a paste in Friendpaste from command line:
 
 .. code-block:: bash
 
-    benoitc@pollen:/tmp$ restcli -H "Accept:application/json" -H "Content-Type: application/json" -o result.json http://friendpaste.com POST - < test.json 
+    benoitc@pollen:/tmp$ restcli -H "Accept:application/json" -H "Content-Type: application/json" http://friendpaste.com POST - < test.json 
     {"url": "http://friendpaste.com/1Po5tOC012QeFYOS3b3RaA", "rev": "373163383163", "ok": true, "id": "1Po5tOC012QeFYOS3b3RaA"}
 
-This command send tes.json file to Friendpaste and you get back the full url of paste in json result.
+This command send test.json file to Friendpaste and you get back the full url of paste in json result.
 
 test.json file :
 
