@@ -75,7 +75,7 @@ class RequestError(Exception):
     """Exception raised when a request is malformed"""
 
 
-class ResourceResult(str):
+class ResourceResult(unicode):
     """ result returned by `restclient.rest.RestClient`.
     
     you can get result like as string and  status code by result.http_code, 
@@ -92,7 +92,7 @@ class ResourceResult(str):
 
     """
     def __new__(cls, s, http_code, response):
-        self = str.__new__(cls, s)
+        self = unicode.__new__(cls, s)
         self.http_code = http_code
         self.response = response
         return self
@@ -216,7 +216,7 @@ class Resource(object):
         """
         to set a new uri absolute path
         """
-        self.uri = self.client.transport.make_uri(self.uri, path)
+        self.uri = self.client.make_uri(self.uri, path)
 
 
 class RestClient(object):
