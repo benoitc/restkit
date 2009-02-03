@@ -16,11 +16,12 @@
 #
 import StringIO
 import httplib
-from httplib2.iri2uri import iri2uri
+
 import re
 import sys
 
 import restclient
+from restclient.iri2uri import iri2uri
 
 try:
     import httplib2
@@ -109,8 +110,20 @@ class HTTPResponse(dict):
 class HTTPTransportBase(object):
     """ Interface for HTTP clients """
 
-    def __init__(self):
+    def __init__(self, proxy_infos=None):
+        """ constructor for HTTP transport interface
+
+        :param proxy_infos: dict, infos to connect via proxy:
+
+            {
+                'proxy_user': 'XXXXXXX',
+                'proxy_password': 'XXXXXXX',
+                'proxy_host': 'proxy',
+                'proxy_port': 8080,
+            }
+        """
         self._credentials = {}
+        self.proxy_infos = proxy_infos or {}
 
     def request(self, url, method='GET', body=None, headers=None):
         """Perform HTTP call and manage , support GET, HEAD, POST, PUT and
@@ -194,7 +207,7 @@ class CurlTransport(HTTPTransportBase):
             }
         """
         
-        HTTPTransportBase.__init__(self)
+        HTTPTransportBase.__init__(self, proxy_infos=proxy_infos)
 
         # path to certificate file
         self.cabundle = None
@@ -203,7 +216,7 @@ class CurlTransport(HTTPTransportBase):
             raise RuntimeError('Cannot find pycurl library')
 
         self.timeout = timeout
-        self.proxy_infos = proxy_infos or {}
+        
             
 
     def _parseHeaders(self, header_file):
@@ -359,19 +372,51 @@ class HTTPLib2Transport(HTTPTransportBase):
         `Httplib2 <http://code.google.com/p/httplib2/>`_
     """
 
-    def __init__(self, http=None):
-        """@param http: An httplib2.HTTP instance.
+    def __init__(self, proxy_infos=None, http=None):
+        """
+        :param proxy_infos: dict, infos to connect via proxy:
+
+            {
+                'proxy_user': 'XXXXXXX',
+                'proxy_password': 'XXXXXXX',
+                'proxy_host': 'proxy',
+                'proxy_port': 8080,
+            }
+
+        :param http: An httplib2.HTTP instance.
+
+
         """
         if httplib2 is None:
             raise RuntimeError('Cannot find httplib2 library. '
                                'See http://bitworking.org/projects/httplib2/')
 
-        super(HTTPLib2Transport, self).__init__()
+        super(HTTPLib2Transport, self).__init__(proxy_infos=proxy_infos)
         
+        _proxy_infos = None
+        if proxy_infos and proxy_infos is not None:
+            try:
+                import socks
+            except:
+                print >>sys.stderr, "socks module isn't installed, you can't use --proxy"
+                socks = None
+
+            if socks is not None:
+                _proxy_infos = httplib2.ProxyInfo(
+                        socks.PROXY_TYPE_HTTP,
+                        proxy_infos.get('proxy_host'),
+                        proxy_infos.get('proxy_port'),
+                        proxy_infos.get('proxy_username'),
+                        proxy_infos.get('proxy_password')
+                )
+
         if http is None:
-            http = httplib2.Http()
+            http = httplib2.Http(proxy_info=_proxy_infos)
 
         self.http = http
+        if _proxy_infos is not None:
+            if not self.http.proxy_info and self.http.proxy_info is None:
+                self.http.proxy_info = _proxy_infos
         self.http.force_exception_to_status_code = False
 
     def request(self, url, method='GET', body=None, headers=None):
