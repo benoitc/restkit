@@ -52,11 +52,6 @@ setup(
         ]
     },
 
-    setup_requires = [
-        'setuptools>=0.6b1',
-        
-    ],
-
     install_requires = ['httplib2'],
 
 )
