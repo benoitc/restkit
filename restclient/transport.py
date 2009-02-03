@@ -90,7 +90,6 @@ def getDefaultHTTPTransport():
 
     :return: the default client
     """
-
     global _default_http
 
     if _default_http is None:
@@ -422,7 +421,7 @@ class HTTPLib2Transport(HTTPTransportBase):
             try:
                 import socks
             except:
-                print >>sys.stderr, "socks module isn't installed, you can't use --proxy"
+                print >>sys.stderr, "socks module isn't installed, you can't use proxy"
                 socks = None
 
             if socks is not None:

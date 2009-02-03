@@ -72,63 +72,34 @@ class Url(object):
 
 def make_query(string, method='GET', fname=None, 
         list_headers=None, output=None, proxy=None):
-
     try:
         uri = Url(string)
     except ValueError, e:
         print >>sys.stderr, e
         return 
 
-    transport = None
+    transport = None 
+    proxy_infos = None
+    if proxy and proxy is not None:
+        try:
+            proxy_url = Url(proxy)
+        except:
+            print >>sys.stderr, "proxy url is invalid"
+            return
+        proxy_infos = { "proxy_host": proxy_url.hostname }
+        if proxy_url.port is not None:
+            proxy_infos["proxy_port"] = proxy_url.port
+        if proxy_url.username and proxy_url.username is not None:
+            proxy_infos["proxy_username"] = proxy_url.username
+            proxy_infos["proxy_password"] = proxy_url.password or ''
+
     if useCurl():
-        proxy_infos = None
-        if proxy and proxy is not None:
-            try:
-                proxy_url = Url(proxy)
-            except:
-                print >>sys.stderr, "proxy url is invalid"
-                return
-            proxy_infos = { "proxy_host": proxy_url.hostname }
-
-            if proxy_url.port is not None:
-                proxy_infos["proxy_port"] = proxy_url.port
-
-            if proxy_url.username and proxy_url.username is not None:
-                proxy_infos["proxy_username"] = proxy_url.username
-                proxy_infos["proxy_password"] = proxy_url.password or ''
-
-        transport = CurlTransport()
-        if uri.username:
-            transport.add_credentials(uri.username, uri.password)
+        transport = CurlTransport(proxy_infos=proxy_infos)
     else:
-        import httplib2
-        proxy_info = None
-        if proxy and proxy is not None:
-            try:
-                import socks
-            except:
-                print >>sys.stderr, "socks module isn't installed, you can't use --proxy"
-                socks = None
-
-            if socks is not None:
-                try:
-                    proxy_url = Url(proxy)
-                except:
-                    print >>sys.stderr, "proxy url is invalid"
-                    return
-                proxy_info =  httplib2.ProxyInfo(
-                    socks.PROXY_TYPE_HTTP,
-                    proxy_url.hostname,
-                    proxy_url.port,
-                    proxy_user=proxy_url.username,
-                    proxy_pass=proxy_url.port
-                )
-            
-        http = httplib2.Http(proxy_info=proxy_info)
-        if uri.username:
-            http.add_credentials(uri.username, uri.password)
-        transport = HTTPLib2Transport(http=http)
+        transport = HTTPLib2Transport(proxy_infos=proxy_infos)
     
+    if uri.username:
+        transport.add_credentials(uri.username, uri.password) 
     
     res = restclient.Resource(uri.uri, transport=transport)
 
