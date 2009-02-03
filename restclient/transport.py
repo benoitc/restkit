@@ -16,6 +16,7 @@
 #
 import StringIO
 import httplib
+from httplib2.iri2uri import iri2uri
 import re
 import sys
 
@@ -40,33 +41,9 @@ class TransportError(Exception):
 USER_AGENT = "py-restclient/%s (%s)" % (restclient.__version__, sys.platform)
 DEFAULT_MAX_REDIRECT = 3
 
-def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):
-    """
-    Returns a bytestring version of 's', encoded as specified in 'encoding'.
-
-    If strings_only is True, don't convert (some) non-string-like objects.
-    """
-    if strings_only and isinstance(s, (types.NoneType, int)):
-        return s
-   
-    if not isinstance(s, basestring):
-        try:
-            return str(s)
-        except UnicodeEncodeError:
-            if isinstance(s, Exception):
-                # An Exception subclass containing non-ASCII data that doesn't
-                # know how to print itself properly. We shouldn't raise a
-                # further exception.
-                return ' '.join([smart_str(arg, encoding, strings_only,
-                        errors) for arg in s])
-            return unicode(s).encode(encoding, errors)
-    elif isinstance(s, unicode):
-        return s.encode(encoding, errors)
-    elif s and encoding != 'utf-8':
-        return s.decode('utf-8', errors).encode(encoding, errors)
-    else:
-        return s
-
+NORMALIZE_SPACE = re.compile(r'(?:\r\n)?[ \t]+')
+def _normalize_headers(headers):
+    return dict([ (key.lower(), NORMALIZE_SPACE.sub(value, ' ').strip())  for (key, value) in headers.iteritems()])
 
 def createHTTPTransport():
     """Create default HTTP client instance
@@ -217,30 +194,45 @@ class CurlTransport(HTTPTransportBase):
         self.proxy_infos = proxy_infos or {}
             
 
-    def _parseHeaders(self, status_and_headers):
-        status_and_headers.seek(0)
+    def _parseHeaders(self, header_file):
+        header_file.seek(0)
+       
+        # Remove the status line from the beginning of the input
+        unused_http_status_line = header_file.readline()
+        lines = [line.strip() for line in header_file]
+        
+        # and the blank line from the end
+        empty_line = lines.pop()
+        if empty_line:
+            raise TransportError("No blank line at end")
+       
+        headers = {}
+        for line in lines:
+            if ":" in line:
+                try:
+                    name, value = line.split(':', 1)
+                except ValueError:
+                    raise TransportError(
+                        "Malformed HTTP header line in response: %r" % (line,))
 
-        # Ignore status line
-        status_and_headers.readline()
-        msg = httplib.HTTPMessage(status_and_headers)
-        return dict(msg.items())
+                value = value.strip()
+
+                # HTTP headers are case-insensitive
+                name = name.lower()
+                headers[name] = value
+
+        return headers
+
 
     def request(self, url, method='GET', body=None, headers=None):
-        put = method in ('PUT')
         body = body or ""        
         headers = headers or {}
         headers.setdefault('User-Agent',
                            "%s %s" % (USER_AGENT, pycurl.version,))
 
-        # turn off default pragma provided by Curl
-        headers.update({
-            'Cache-control': 'max-age=0',
-            'Pragma': 'no-cache'
-        })
-
-        if put:
-            headers.setdefault('Expect', '100-continue')
-
+        # encode url
+        url = iri2uri(url)
+        
         c = pycurl.Curl()
         try:
             # set curl options
@@ -253,9 +245,10 @@ class CurlTransport(HTTPTransportBase):
             header = StringIO.StringIO()
             c.setopt(pycurl.WRITEFUNCTION, data.write)
             c.setopt(pycurl.HEADERFUNCTION, header.write)
-            c.setopt(pycurl.URL , smart_str(url))
+            c.setopt(pycurl.URL , url)
             c.setopt(pycurl.FOLLOWLOCATION, 1)
             c.setopt(pycurl.MAXREDIRS, 5)
+            c.setopt(pycurl.NOSIGNAL, 1)
 
             if self.cabundle:
                 c.setopt(pycurl.CAINFO, celf.cabundle)
@@ -309,22 +302,25 @@ class CurlTransport(HTTPTransportBase):
                         del headers['Content-Length']
                     content_length = len(body)
 
-                if put:
-                    c.setopt(pycurl.INFILESIZE, content_length)
                 if method in ('POST'):
                     c.setopt(pycurl.POSTFIELDSIZE, content_length)
+                else:
+                    c.setopt(pycurl.INFILESIZE, content_length)
                 c.setopt(pycurl.READFUNCTION, content.read)
             
             if headers:
+                _normalize_headers(headers)
+
                 c.setopt(pycurl.HTTPHEADER,
                         ["%s: %s" % pair for pair in sorted(headers.iteritems())])
 
+                
             try:
                 c.perform()
             except pycurl.error, e:
                 if e[0] != CURLE_SEND_ERROR:
                     raise TransportError(e)
-
+ 
             response_headers = self._parseHeaders(header)
             code = c.getinfo(pycurl.RESPONSE_CODE)
             
