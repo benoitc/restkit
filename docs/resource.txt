@@ -7,7 +7,7 @@ Resource
 
 This module provide a common interface for all HTTP requests. This
 module make HTTP requests using `Pycurl`_ by default if installed or
-`Urllib2`_ if not. You could also use `Httplib2`_.
+`Httplib2`_.
 
 Example: 
 

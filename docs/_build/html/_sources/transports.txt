@@ -27,7 +27,9 @@ Clients:
 --------
 .. autoclass:: restclient.transport.HTTPTransportBase
 
+    .. automethod:: restclient.transport.HTTPTransportBase.__init__
     .. automethod:: restclient.transport.HTTPTransportBase.request
+    .. automethod:: restclient.transport.HTTPTransportBase.add_credentials
 
 
 .. autoclass:: restclient.transport.CurlTransport
@@ -36,4 +38,7 @@ Clients:
     .. automethod:: restclient.transport.CurlTransport.add_credentials
 
 .. autoclass:: restclient.transport.HTTPLib2Transport
+
+    .. automethod:: restclient.transport.HTTPLib2Transport.__init__
+    .. automethod:: restclient.transport.HTTPLib2Transport.add_credentials
 

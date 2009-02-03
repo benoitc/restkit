@@ -88,8 +88,33 @@ if no client has been set, it will create a default client.</p>
 <h2>Clients:<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="restclient.transport.HTTPTransportBase">
-<!--[restclient.transport.HTTPTransportBase]-->class <tt class="descclassname">restclient.transport.</tt><tt class="descname">HTTPTransportBase</tt><a class="headerlink" href="#restclient.transport.HTTPTransportBase" title="Permalink to this definition">¶</a></dt>
+<!--[restclient.transport.HTTPTransportBase]-->class <tt class="descclassname">restclient.transport.</tt><tt class="descname">HTTPTransportBase</tt><big>(</big><em>proxy_infos=None</em><big>)</big><a class="headerlink" href="#restclient.transport.HTTPTransportBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interface for HTTP clients</p>
+<dl class="method">
+<dt id="restclient.transport.HTTPTransportBase.__init__">
+<!--[restclient.transport.HTTPTransportBase.__init__]--><tt class="descname">__init__</tt><big>(</big><em>proxy_infos=None</em><big>)</big><a class="headerlink" href="#restclient.transport.HTTPTransportBase.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>constructor for HTTP transport interface</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>proxy_infos</em> &#8211; dict, infos to connect via proxy:</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&#39;proxy_user&#39;</span><span class="p">:</span> <span class="s">&#39;XXXXXXX&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_password&#39;</span><span class="p">:</span> <span class="s">&#39;XXXXXXX&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_host&#39;</span><span class="p">:</span> <span class="s">&#39;proxy&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_port&#39;</span><span class="p">:</span> <span class="mf">8080</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="method">
 <dt id="restclient.transport.HTTPTransportBase.request">
 <!--[restclient.transport.HTTPTransportBase.request]--><tt class="descname">request</tt><big>(</big><em>url</em>, <em>method='GET'</em>, <em>body=None</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restclient.transport.HTTPTransportBase.request" title="Permalink to this definition">¶</a></dt>
@@ -113,6 +138,11 @@ be added to HTTP request</li>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="restclient.transport.HTTPTransportBase.add_credentials">
+<!--[restclient.transport.HTTPTransportBase.add_credentials]--><tt class="descname">add_credentials</tt><big>(</big><em>user</em>, <em>password</em><big>)</big><a class="headerlink" href="#restclient.transport.HTTPTransportBase.add_credentials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -143,21 +173,20 @@ httplib2 http clients. Any patch is welcome though ;)</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><em>timeout</em> &#8211; int, timeout of request</li>
-<li><em>proxy_infos</em> &#8211; <p>dict, infos to connect via proxy:</p>
-<dl class="docutils">
-<dt>{</dt>
-<dd>&#8216;proxy_user&#8217;: &#8216;XXXXXXX&#8217;,
-&#8216;proxy_password&#8217;: &#8216;XXXXXXX&#8217;,
-&#8216;proxy_host&#8217;: &#8216;proxy&#8217;,
-&#8216;proxy_port&#8217;: 8080,</dd>
-</dl>
-<p>}</p>
-</li>
+<li><em>proxy_infos</em> &#8211; dict, infos to connect via proxy:</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&#39;proxy_user&#39;</span><span class="p">:</span> <span class="s">&#39;XXXXXXX&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_password&#39;</span><span class="p">:</span> <span class="s">&#39;XXXXXXX&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_host&#39;</span><span class="p">:</span> <span class="s">&#39;proxy&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_port&#39;</span><span class="p">:</span> <span class="mf">8080</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -169,13 +198,53 @@ httplib2 http clients. Any patch is welcome though ;)</p>
 
 <dl class="class">
 <dt id="restclient.transport.HTTPLib2Transport">
-<!--[restclient.transport.HTTPLib2Transport]-->class <tt class="descclassname">restclient.transport.</tt><tt class="descname">HTTPLib2Transport</tt><big>(</big><em>http=None</em><big>)</big><a class="headerlink" href="#restclient.transport.HTTPLib2Transport" title="Permalink to this definition">¶</a></dt>
+<!--[restclient.transport.HTTPLib2Transport]-->class <tt class="descclassname">restclient.transport.</tt><tt class="descname">HTTPLib2Transport</tt><big>(</big><em>proxy_infos=None</em>, <em>http=None</em><big>)</big><a class="headerlink" href="#restclient.transport.HTTPLib2Transport" title="Permalink to this definition">¶</a></dt>
 <dd><p>An http client that uses httplib2 for performing HTTP
 requests. This implementation supports HTTP caching.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference external" href="http://code.google.com/p/httplib2/">Httplib2</a></p>
 </div>
+<dl class="method">
+<dt id="restclient.transport.HTTPLib2Transport.__init__">
+<!--[restclient.transport.HTTPLib2Transport.__init__]--><tt class="descname">__init__</tt><big>(</big><em>proxy_infos=None</em>, <em>http=None</em><big>)</big><a class="headerlink" href="#restclient.transport.HTTPLib2Transport.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>proxy_infos</em> &#8211; dict, infos to connect via proxy:</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&#39;proxy_user&#39;</span><span class="p">:</span> <span class="s">&#39;XXXXXXX&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_password&#39;</span><span class="p">:</span> <span class="s">&#39;XXXXXXX&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_host&#39;</span><span class="p">:</span> <span class="s">&#39;proxy&#39;</span><span class="p">,</span>
+    <span class="s">&#39;proxy_port&#39;</span><span class="p">:</span> <span class="mf">8080</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>http</em> &#8211; An httplib2.HTTP instance.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restclient.transport.HTTPLib2Transport.add_credentials">
+<!--[restclient.transport.HTTPLib2Transport.add_credentials]--><tt class="descname">add_credentials</tt><big>(</big><em>user</em>, <em>password</em><big>)</big><a class="headerlink" href="#restclient.transport.HTTPLib2Transport.add_credentials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>

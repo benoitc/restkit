@@ -141,6 +141,8 @@ class HTTPTransportBase(object):
 
         :param proxy_infos: dict, infos to connect via proxy:
 
+        .. code-block:: python
+
             {
                 'proxy_user': 'XXXXXXX',
                 'proxy_password': 'XXXXXXX',
@@ -224,6 +226,8 @@ class CurlTransport(HTTPTransportBase):
 
         :param timeout: int, timeout of request
         :param proxy_infos: dict, infos to connect via proxy:
+
+        .. code-block:: python
 
             {
                 'proxy_user': 'XXXXXXX',
@@ -399,6 +403,8 @@ class HTTPLib2Transport(HTTPTransportBase):
         """
         :param proxy_infos: dict, infos to connect via proxy:
 
+        .. code-block:: python
+    
             {
                 'proxy_user': 'XXXXXXX',
                 'proxy_password': 'XXXXXXX',
