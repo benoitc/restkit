@@ -376,7 +376,7 @@ class RestClient(object):
         # build the path
         path = "/".join([''] +
                         [url_quote(s.strip('/'), self.charset, self.safe) for s in path
-                         if s is not None])
+                         if s is not None and isinstance(s, basestring)])
 
         if path:
             retval.append(path)

@@ -29,11 +29,12 @@ from restclient.rest import Resource, RestClient, RequestFailed, \
 ResourceNotFound, Unauthorized, RequestError
 
 
-from _server_test import HOST, PORT
+from _server_test import HOST, PORT, run_server_test
 
 class ResourceTestCase(unittest.TestCase):
 
     def setUp(self):
+        run_server_test()
         transport = HTTPLib2Transport()
         self.url = 'http://%s:%s' % (HOST, PORT)
         self.res = Resource(self.url, transport)

@@ -54,5 +54,7 @@ setup(
 
     install_requires = ['httplib2'],
 
+    test_suite = 'nose.collector',
+
 )
 

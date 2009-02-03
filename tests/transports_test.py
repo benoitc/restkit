@@ -27,12 +27,13 @@ import urlparse
 from restclient.transport import CurlTransport
 from restclient.rest import Resource, RestClient, RequestFailed, \
 ResourceNotFound, Unauthorized
-from _server_test import HOST, PORT
+from _server_test import HOST, PORT, run_server_test
 
 class HTTPClientTestCase(unittest.TestCase):
     httptransport = CurlTransport()
 
     def setUp(self):
+        run_server_test()
         self.url = 'http://%s:%s' % (HOST, PORT)
         self.res = Resource(self.url, self.httptransport)
 

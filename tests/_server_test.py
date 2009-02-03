@@ -171,7 +171,11 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         self.wfile.close()
         self.rfile.close()
 
+
+server_thread = None
 def run_server_test():
+    global server_thread
+
     try:
         server = HTTPServer((HOST, PORT), HTTPTestHandler)
 
@@ -181,3 +185,5 @@ def run_server_test():
     except:
         pass
 
+if __name__ == '__main__':
+    pass
