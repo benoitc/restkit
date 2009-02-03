@@ -46,6 +46,33 @@ NORMALIZE_SPACE = re.compile(r'(?:\r\n)?[ \t]+')
 def _normalize_headers(headers):
     return dict([ (key.lower(), NORMALIZE_SPACE.sub(value, ' ').strip())  for (key, value) in headers.iteritems()])
 
+def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):
+    """
+    Returns a bytestring version of 's', encoded as specified in 'encoding'.
+
+    If strings_only is True, don't convert (some) non-string-like objects.
+    """
+    if strings_only and isinstance(s, (types.NoneType, int)):
+        return s
+   
+    if not isinstance(s, basestring):
+        try:
+            return str(s)
+        except UnicodeEncodeError:
+            if isinstance(s, Exception):
+                # An Exception subclass containing non-ASCII data that doesn't
+                # know how to print itself properly. We shouldn't raise a
+                # further exception.
+                return ' '.join([smart_str(arg, encoding, strings_only,
+                        errors) for arg in s])
+            return unicode(s).encode(encoding, errors)
+    elif isinstance(s, unicode):
+        return s.encode(encoding, errors)
+    elif s and encoding != 'utf-8':
+        return s.decode('utf-8', errors).encode(encoding, errors)
+    else:
+        return s
+
 def createHTTPTransport():
     """Create default HTTP client instance
     prefers Curl to urllib"""
@@ -206,7 +233,6 @@ class CurlTransport(HTTPTransportBase):
                 'proxy_port': 8080,
             }
         """
-        
         HTTPTransportBase.__init__(self, proxy_infos=proxy_infos)
 
         # path to certificate file
@@ -217,8 +243,6 @@ class CurlTransport(HTTPTransportBase):
 
         self.timeout = timeout
         
-            
-
     def _parseHeaders(self, header_file):
         header_file.seek(0)
        
@@ -270,7 +294,7 @@ class CurlTransport(HTTPTransportBase):
             header = StringIO.StringIO()
             c.setopt(pycurl.WRITEFUNCTION, data.write)
             c.setopt(pycurl.HEADERFUNCTION, header.write)
-            c.setopt(pycurl.URL , url)
+            c.setopt(pycurl.URL, smart_str(url))
             c.setopt(pycurl.FOLLOWLOCATION, 1)
             c.setopt(pycurl.MAXREDIRS, 5)
             c.setopt(pycurl.NOSIGNAL, 1)
@@ -412,11 +436,13 @@ class HTTPLib2Transport(HTTPTransportBase):
 
         if http is None:
             http = httplib2.Http(proxy_info=_proxy_infos)
-
+        else:
+            if _proxy_infos is not None and \
+                    not http.proxy_info and \
+                    self.http.proxy_info is None:
+                proxy_info = _proxy_infos
         self.http = http
-        if _proxy_infos is not None:
-            if not self.http.proxy_info and self.http.proxy_info is None:
-                self.http.proxy_info = _proxy_infos
+        
         self.http.force_exception_to_status_code = False
 
     def request(self, url, method='GET', body=None, headers=None):
@@ -444,7 +470,6 @@ class HTTPLib2Transport(HTTPTransportBase):
         
         httplib2_response, content = self.http.request(url,
                 method=method, body=content, headers=headers)
-
 
         try:
             final_url = httplib2_response['content-location']
