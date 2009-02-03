@@ -148,10 +148,8 @@ class ResourceTestCase(unittest.TestCase):
         self.assertRaises(RequestError, bad_post)
 
     def testAuth(self):
-        import httplib2
-        h = httplib2.Http()
-        h.add_credentials("test", "test")
-        transport = HTTPLib2Transport(h)
+        transport = HTTPLib2Transport()
+        transport.add_credentials("test", "test")
 
         res = Resource(self.url, transport)
         result = res.get('/auth')

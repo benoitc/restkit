@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -
-# Copyright (c) 2008 (c) Benoit Chesneau <benoitc@e-engura.com> 
+# Copyright (c) 2008, 2009  Benoit Chesneau <benoitc@e-engura.com> 
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above

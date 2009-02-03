@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# Copyright (c) 2008 (c) Benoit Chesneau <benoitc@e-engura.com> 
+# Copyright (c) 2008, 2009 Benoit Chesneau <benoitc@e-engura.com> 
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -109,6 +109,9 @@ class HTTPResponse(dict):
 class HTTPTransportBase(object):
     """ Interface for HTTP clients """
 
+    def __init__(self):
+        self._credentials = {}
+
     def request(self, url, method='GET', body=None, headers=None):
         """Perform HTTP call and manage , support GET, HEAD, POST, PUT and
         DELETE
@@ -121,6 +124,16 @@ class HTTPTransportBase(object):
         :return: object representing HTTP Response
         """
         raise NotImplementedError
+
+    def add_credentials(self, user, password):
+        self._credentials = {
+                "user": user,
+                "password": password
+        }
+
+    def _get_credentials(self):
+        return self._credentials
+
 
 def _get_pycurl_errcode(symbol, default):
     """
@@ -182,7 +195,6 @@ class CurlTransport(HTTPTransportBase):
         """
         
         HTTPTransportBase.__init__(self)
-        self._credentials = {}
 
         # path to certificate file
         self.cabundle = None
@@ -329,16 +341,6 @@ class CurlTransport(HTTPTransportBase):
         finally:
             c.close()
 
-    def add_credentials(self, user, password):
-        self._credentials = {
-                "user": user,
-                "password": password
-        }
-
-    def _get_credentials(self):
-        return self._credentials
-
-
     def _make_response(self, final_url=None, status=None, headers=None,
             body=None):
         resp = HTTPResponse()
@@ -411,3 +413,8 @@ class HTTPLib2Transport(HTTPTransportBase):
         resp.body = content
 
         return resp, content
+
+    def add_credentials(self, user, password):
+        super(HTTPLib2Transport, self).add_credentials(user, password)
+        self.http.add_credentials(user, password)
+
