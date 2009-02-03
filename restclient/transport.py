@@ -438,7 +438,7 @@ class HTTPLib2Transport(HTTPTransportBase):
         else:
             if _proxy_infos is not None and \
                     not http.proxy_info and \
-                    self.http.proxy_info is None:
+                    http.proxy_info is None:
                 proxy_info = _proxy_infos
         self.http = http
         
