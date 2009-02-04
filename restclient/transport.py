@@ -110,6 +110,37 @@ class HTTPResponse(dict):
                                           self.status,
                                           self.final_url)
 
+class HTTPResponse(dict):
+    """An object more like email.Message than httplib.HTTPResponse."""
+
+    final_url = None
+    
+    "Status code returned by server. "
+    status = 200
+
+    """Reason phrase returned by server."""
+    reason = "Ok"
+
+    def __init__(self, info):
+        for key, value in info.iteritems(): 
+            self[key] = value 
+        self.status = int(self.get('status', self.status))
+        self.final_url = self.get('final_url', self.final_url)
+
+    def __getattr__(self, name):
+        if name == 'dict':
+            return self 
+        else:  
+            raise AttributeError, name
+
+    def __repr__(self):
+        return "<%s status %s for %s>" % (self.__class__.__name__,
+                                          self.status,
+                                          self.final_url)
+
+
+
+
 class HTTPTransportBase(object):
     """ Interface for HTTP clients """
 
@@ -362,11 +393,12 @@ class CurlTransport(HTTPTransportBase):
 
     def _make_response(self, final_url=None, status=None, headers=None,
             body=None):
-        resp = HTTPResponse()
-        resp.headers = headers or {}
-        resp.status = status
-        resp.final_url = final_url
-        resp.body = body
+        infos = headers or {}
+        infos.update({
+            'status': status,
+            'final_url': final_url
+        })
+        resp = HTTPResponse(infos)
         return resp, body 
     
 class HTTPLib2Transport(HTTPTransportBase):
@@ -460,12 +492,8 @@ class HTTPLib2Transport(HTTPTransportBase):
         except KeyError:
             final_url = url
 
-        resp = HTTPResponse()
-        resp.headers = dict(httplib2_response.items())
-        resp.status = int(httplib2_response.status)
-        resp.final_url = final_url
-        resp.body = content
-
+        
+        resp = HTTPResponse(httplib2_response)
         return resp, content
 
     def add_credentials(self, user, password):

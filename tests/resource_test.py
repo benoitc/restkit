@@ -45,7 +45,7 @@ class ResourceTestCase(unittest.TestCase):
     def testGet(self):
         result = self.res.get()
         self.assert_(result == "welcome")
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testUnicode(self):
         result = self.res.get('/unicode')
@@ -54,19 +54,19 @@ class ResourceTestCase(unittest.TestCase):
     def testUrlWithAccents(self):
         result = self.res.get('/éàù')
         self.assert_(result == "ok")
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testUrlUnicode(self):
         result = self.res.get(u'/test')
         self.assert_(result == "ok")
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
         result = self.res.get(u'/éàù')
         self.assert_(result == "ok")
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testGetWithContentType(self):
         result = self.res.get('/json', headers={'Content-Type': 'application/json'})
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
         def bad_get():
             result = self.res.get('/json', headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_get) 
@@ -79,11 +79,11 @@ class ResourceTestCase(unittest.TestCase):
 
     def testGetWithQuery(self):
         result = self.res.get('/query', test="testing")
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testGetWithIntParam(self):
         result = self.res.get('/qint', test=1)
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testSimplePost(self):
         result = self.res.post(payload="test")
@@ -91,7 +91,7 @@ class ResourceTestCase(unittest.TestCase):
 
     def testPostByteString(self):
         result = self.res.post('/bytestring', payload="éàù@")
-        self.assert_(result == "éàù@")
+        self.assert_(result == u"éàù@")
 
     def testPostUnicode(self):
         result = self.res.post('/unicode', payload=u"éàù@")
@@ -100,7 +100,7 @@ class ResourceTestCase(unittest.TestCase):
     def testPostWithContentType(self):
         result = self.res.post('/json', payload="test",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(result.http_code == 200 )
+        self.assert_(self.res.response.status == 200 )
         def bad_post():
             result = self.res.post('/json', payload="test",
                     headers={'Content-Type': 'text/plain'})
@@ -109,13 +109,13 @@ class ResourceTestCase(unittest.TestCase):
     def testEmptyPost(self):
         result = self.res.post('/empty', payload="",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(result.http_code == 200 )
+        self.assert_(self.res.response.status == 200 )
         result = self.res.post('/empty',headers={'Content-Type': 'application/json'})
-        self.assert_(result.http_code == 200 )
+        self.assert_(self.res.response.status == 200 )
 
     def testPostWithQuery(self):
         result = self.res.post('/query', test="testing")
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testSimplePut(self):
         result = self.res.put(payload="test")
@@ -124,7 +124,7 @@ class ResourceTestCase(unittest.TestCase):
     def testPutWithContentType(self):
         result = self.res.put('/json', payload="test",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(result.http_code == 200 )
+        self.assert_(self.res.response.status == 200 )
         def bad_put():
             result = self.res.put('/json', payload="test",
                     headers={'Content-Type': 'text/plain'})
@@ -133,21 +133,21 @@ class ResourceTestCase(unittest.TestCase):
     def testEmptyPut(self):
         result = self.res.put('/empty', payload="",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(result.http_code == 200 )
+        self.assert_(self.res.response.status == 200 )
         result = self.res.put('/empty',headers={'Content-Type': 'application/json'})
-        self.assert_(result.http_code == 200 )
+        self.assert_(self.res.response.status == 200 )
 
     def testPutWithQuery(self):
         result = self.res.put('/query', test="testing")
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testHead(self):
         result = self.res.head('/ok')
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testDelete(self):
         result = self.res.delete('/delete')
-        self.assert_(result.http_code == 200)
+        self.assert_(self.res.response.status == 200)
 
     def testFileSend(self):
         content_length = len("test")
@@ -159,7 +159,7 @@ class ResourceTestCase(unittest.TestCase):
                     'Content-Length': str(content_length)
                 })
 
-        self.assert_(result.http_code == 200 )
+        self.assert_(self.res.response.status == 200 )
 
     def testFileSend2(self):
         import StringIO
@@ -177,7 +177,7 @@ class ResourceTestCase(unittest.TestCase):
 
         res = Resource(self.url, transport)
         result = res.get('/auth')
-        self.assert_(result.http_code == 200)
+        self.assert_(res.response.status == 200)
 
         transport = HTTPLib2Transport()
         def niettest():

@@ -41,7 +41,6 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         for k, v in cgi.parse_qsl(self.parsed_uri[4]):
             self.query[k] = v.decode('utf-8')
         path = self.parsed_uri[2]
-        print path 
 
         if path == "/":
             extra_headers = [('Content-type', 'text/plain')]
