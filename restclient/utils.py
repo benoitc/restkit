@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# code taken from httplib2 under the following license:
+# iri2uri code taken from httplib2 under the following license:
 # MIT/X Consortium License
 #
 # 2006 Joe Gregorio <joe@bitworking.org>
@@ -23,6 +23,37 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 #
+# smart_str and force_unicode code taken from django project under the following
+# license :
+# BSD License
+#
+# Copyright (c) 2009 Django Software Foundation and individual contributors.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without modification,
+# are permitted provided that the following conditions are met:
+#
+#    1. Redistributions of source code must retain the above copyright notice, 
+#       this list of conditions and the following disclaimer.
+#    
+#    2. Redistributions in binary form must reproduce the above copyright 
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#
+#    3. Neither the name of Django nor the names of its contributors may be used
+#       to endorse or promote products derived from this software without
+#       specific prior written permission.
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+# ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
 iri2uri
@@ -32,6 +63,69 @@ Converts an IRI to a URI.
 
 import urlparse
 
+
+def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):
+    """
+    Returns a bytestring version of 's', encoded as specified in 'encoding'.
+
+    If strings_only is True, don't convert (some) non-string-like objects.
+    """
+    if strings_only and isinstance(s, (types.NoneType, int)):
+        return s
+   
+    if not isinstance(s, basestring):
+        try:
+            return str(s)
+        except UnicodeEncodeError:
+            if isinstance(s, Exception):
+                # An Exception subclass containing non-ASCII data that doesn't
+                # know how to print itself properly. We shouldn't raise a
+                # further exception.
+                return ' '.join([smart_str(arg, encoding, strings_only,
+                        errors) for arg in s])
+            return unicode(s).encode(encoding, errors)
+    elif isinstance(s, unicode):
+        return s.encode(encoding, errors)
+    elif s and encoding != 'utf-8':
+        return s.decode('utf-8', errors).encode(encoding, errors)
+    else:
+        return s
+
+def force_unicode(s, encoding='utf-8', strings_only=False, errors='strict'):
+    """
+    Similar to smart_unicode, except that lazy instances are resolved to
+    strings, rather than kept as lazy objects.
+
+    If strings_only is True, don't convert (some) non-string-like objects.
+    """
+    if strings_only and isinstance(s, (types.NoneType, int, long, datetime.datetime, datetime.date, datetime.time, float)):
+        return s
+    try:
+        if not isinstance(s, basestring,):
+            if hasattr(s, '__unicode__'):
+                s = unicode(s)
+            else:
+                try:
+                    s = unicode(str(s), encoding, errors)
+                except UnicodeEncodeError:
+                    if not isinstance(s, Exception):
+                        raise
+                    # If we get to here, the caller has passed in an Exception
+                    # subclass populated with non-ASCII data without special
+                    # handling to display as a string. We need to handle this
+                    # without raising a further exception. We do an
+                    # approximation to what the Exception's standard str()
+                    # output should be.
+                    s = ' '.join([force_unicode(arg, encoding, strings_only,
+                            errors) for arg in s])
+        elif not isinstance(s, unicode):
+            # Note: We use .decode() here, instead of unicode(s, encoding,
+            # errors), so that if s is a SafeString, it ends up being a
+            # SafeUnicode at the end.
+            s = s.decode(encoding, errors)
+    except UnicodeDecodeError, e:
+        raise CouchitUnicodeDecodeError(s, *e.args)
+    return s
 
 # Convert an IRI to a URI following the rules in RFC 3987
 # 

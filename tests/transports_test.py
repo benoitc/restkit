@@ -156,8 +156,6 @@ class HTTPClientTestCase(unittest.TestCase):
             res = Resource(self.url, httptransport)
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
-
-
  
 if __name__ == '__main__':
     from _server_test import run_server_test
