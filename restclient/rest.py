@@ -37,8 +37,8 @@ from restclient.utils import to_bytestring
 __all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
         'Unauthorized', 'RequestFailed', 'ResourceError',
         'RequestError']
-__docformat__ = 'restructuredtext en'
 
+__docformat__ = 'restructuredtext en'
 
 class ResourceError(Exception):
     def __init__(self, message=None, http_code=None, response=None):
@@ -372,7 +372,7 @@ class RestClient(object):
 
         if path:
             retval.append(path)
-    
+
         params = []
         for k, v in query.items():
             if type(v) in (list, tuple):
