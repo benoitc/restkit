@@ -93,7 +93,21 @@ class HTTPError(Exception):
     """ raised when there is an HTTP error """
 
 class HTTPResponse(dict):
-    """An object more like email.Message than httplib.HTTPResponse."""
+    """An object more like email.Message than httplib.HTTPResponse.
+    
+        >>> from restclient import Resource
+        >>> res = Resource('http://e-engura.org')
+        >>> from restclient import Resource
+        >>> res = Resource('http://e-engura.org')
+        >>> page = res.get()
+        >>> res.status
+        200
+        >>> res.response['content-type']
+        'text/html'
+        >>> logo = res.get('/images/logo.gif')
+        >>> res.response['content-type']
+        'image/gif'
+    """
 
     final_url = None
     
