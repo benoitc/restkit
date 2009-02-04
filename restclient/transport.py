@@ -93,24 +93,6 @@ class HTTPError(Exception):
     """ raised when there is an HTTP error """
 
 class HTTPResponse(dict):
-    headers = None
-    status = 200
-    final_url = None
-    body = None
-
-    def __init__(self, final_url=None, status=None, headers=None,
-            body=None):
-        self.final_url = final_url
-        self.status = status
-        self.headers = headers
-        self.body = body
-
-    def __repr__(self):
-        return "<%s status %s for %s>" % (self.__class__.__name__,
-                                          self.status,
-                                          self.final_url)
-
-class HTTPResponse(dict):
     """An object more like email.Message than httplib.HTTPResponse."""
 
     final_url = None
