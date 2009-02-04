@@ -385,7 +385,10 @@ class RestClient(object):
 
         if not is_unicode:
             return StrResourceResult(data, status_code, resp)
-        return UnicodeResourceResult(data, status_code, resp)
+        try:
+            return UnicodeResourceResult(data, status_code, resp)
+        except UnicodeDecodeError:
+            return StrResourceResult(data, status_code, resp)
 
     def make_uri(self, base, *path, **query):
         """Assemble a uri based on a base, any number of path segments, and query

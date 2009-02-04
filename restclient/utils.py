@@ -124,7 +124,7 @@ def force_unicode(s, encoding='utf-8', strings_only=False, errors='strict'):
             # SafeUnicode at the end.
             s = s.decode(encoding, errors)
     except UnicodeDecodeError, e:
-        raise CouchitUnicodeDecodeError(s, *e.args)
+        raise e
     return s
 
 # Convert an IRI to a URI following the rules in RFC 3987
