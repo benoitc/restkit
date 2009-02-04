@@ -23,7 +23,12 @@ Functions
 .. autofunction:: restclient.transport.getDefaultHTTPTransport
 .. autofunction:: restclient.transport.setDefaultHTTPTransport
 
-Clients:
+Response
+--------
+
+.. autoclass:: restclient.transport.HTTPResponse
+
+Transports:
 --------
 .. autoclass:: restclient.transport.HTTPTransportBase
 

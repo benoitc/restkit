@@ -110,11 +110,6 @@ decide that keys don't need to be encoded.
     .. automethod:: restclient.rest.RestClient.put
 
     .. automethod:: restclient.rest.RestClient.request
-
-ResourceResult class
---------------------
-
-.. autoclass:: restclient.rest.ResourceResult
  
 Exceptions
 ----------

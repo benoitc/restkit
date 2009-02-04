@@ -2,36 +2,48 @@
 
 
 ***************************************
-What's New in python-restclient 1.1
+What's New in python-restclient 1.2
 ***************************************
 
 
-Transports changes
-------------------
+Encoding:
+---------
 
-* :mod:`restclient.http` have been renamed to :mod:`restclient.transport`. In the same time all "clients" are now called "transports".
+- unicode urls are now managed
+- data get from response is now in unicode if it's not a binary
 
-* urllib2 transport have been removed, Now httplib2 is used when pycurl
-  isn't installed. This change was needed to simplify the code. And
-  there was no need to rewrite another httplib2 transport but based on
-  urllib2.
+Fixes:
+------
 
-.. seealso::
-        
-          :ref:`reftransports`
+- curl client have been fixed
+- new response object that act now as a real dict. You could get all
+  headers of the response like this :
+ 
+.. code-block:: python   
 
-Support of File objects as body
--------------------------------
-
-Now a body could be a File object. If you use httplib2 all the content
-will be read before sending. Pycurl will send it as it read.
-
-
-Url encoding
-------------
-
-By default all urls are utf8 encoded. But you could change default charset, safe characters and
-decide that keys don't need to be encoded.
+    >>> from restclient import Resource
+    >>> res = Resource('http://e-engura.org')
+    >>> from restclient import Resource
+    >>> res = Resource('http://e-engura.org')
+    >>> page = res.get()
+    >>> res.status
+    200
+    >>> res.response
+    <HTTPResponse status 200 for http://e-engura.org>
+    >>> res.response.__dict__
+    {'status': 200, 'final_url': 'http://e-engura.org'}
+    >>> for i in res.response.items():
+    ...     print i
+    ... 
+    ('status', 200)
+    ('content-length', '5448')
+    ('final_url', 'http://e-engura.org')
+    ('accept-ranges', 'bytes')
+    ('server', 'nginx/0.6.31')
+    ('last-modified', 'Sun, 28 Dec 2008 23:15:27 GMT')
+    ('connection', 'keep-alive')
+    ('date', 'Wed, 04 Feb 2009 21:52:14 GMT')
+    ('content-type', 'text/html')
 
 
 .. seealso::

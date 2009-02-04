@@ -21,7 +21,7 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="py-restclient v1.1 documentation" href="index.html" />
     <link rel="next" title="HTTP Transports" href="transports.html" />
-    <link rel="prev" title="What&#8217;s New in python-restclient 1.1" href="whatsnew.html" /> 
+    <link rel="prev" title="What&#8217;s New in python-restclient 1.2" href="whatsnew.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
           <a href="transports.html" title="HTTP Transports"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.1"
+          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.2"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">py-restclient v1.1 documentation</a> &raquo;</li> 
       </ul>
@@ -213,7 +213,7 @@ decide that keys don&#8217;t need to be encoded.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/about&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">json</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">json</span>
-<span class="go">&#39;{&quot;snippet&quot;: &quot;testing API.&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;3XDqQ8G83LlzVWgCeWdwru&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;363934613139&quot;}&#39;</span>
+<span class="go">u&#39;{&quot;snippet&quot;: &quot;testing API.&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;3XDqQ8G83LlzVWgCeWdwru&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;363934613139&quot;}&#39;</span>
 </pre></div>
 </div>
 <p><strong>Properties</strong></p>
@@ -350,25 +350,6 @@ be added to HTTP request.</li>
 </dd></dl>
 
 </div>
-<div class="section" id="resourceresult-class">
-<h2>ResourceResult class<a class="headerlink" href="#resourceresult-class" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="restclient.rest.ResourceResult">
-<!--[restclient.rest.ResourceResult]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">ResourceResult</tt><a class="headerlink" href="#restclient.rest.ResourceResult" title="Permalink to this definition">¶</a></dt>
-<dd><p>result returned by <cite>restclient.rest.RestClient</cite>.</p>
-<p>you can get result like as string and  status code by result.http_code, 
-or see anything about the response via result.response. For example, the entire 
-result body is result.response.body.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restclient</span> <span class="kn">import</span> <span class="n">RestClient</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
-<span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">page</span>
-<span class="k">print</span> <span class="s">&quot;http code </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">page</span><span class="o">.</span><span class="n">http_code</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</div>
 <div class="section" id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
@@ -414,14 +395,13 @@ probably an HTML error page) is e.response.body.</p>
 <li><a class="reference external" href="">Resource</a><ul>
 <li><a class="reference external" href="#resource-class">Resource class</a></li>
 <li><a class="reference external" href="#restclient-class">RestClient class</a></li>
-<li><a class="reference external" href="#resourceresult-class">ResourceResult class</a></li>
 <li><a class="reference external" href="#exceptions">Exceptions</a></li>
 </ul>
 </li>
 </ul>
 
             <h4>Previous topic</h4>
-            <p class="topless"><a href="whatsnew.html" title="previous chapter">What&#8217;s New in python-restclient 1.1</a></p>
+            <p class="topless"><a href="whatsnew.html" title="previous chapter">What&#8217;s New in python-restclient 1.2</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="transports.html" title="next chapter">HTTP Transports</a></p>
             <h3>This Page</h3>
@@ -451,7 +431,7 @@ probably an HTML error page) is e.response.body.</p>
           <a href="transports.html" title="HTTP Transports"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.1"
+          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.2"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">py-restclient v1.1 documentation</a> &raquo;</li> 
       </ul>
