@@ -30,12 +30,13 @@ This module provide a common interface for all HTTP equest.
 """
 import urllib
 
-from restclient.transport import getDefaultHTTPTransport, HTTPTransportBase, TransportError 
+from restclient.transport import getDefaultHTTPTransport, \
+HTTPTransportBase, TransportError, smart_str
 
 
 __all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
         'Unauthorized', 'RequestFailed', 'ResourceError',
-        'ResourceResult', 'RequestError']
+        'StrResourceResult', 'UnicodeResourceResult', 'RequestError']
 __docformat__ = 'restructuredtext en'
 
 
@@ -75,7 +76,29 @@ class RequestError(Exception):
     """Exception raised when a request is malformed"""
 
 
-class ResourceResult(unicode):
+class StrResourceResult(str):
+    """ result returned by `restclient.rest.RestClient`.
+    
+    you can get result like as string and  status code by result.http_code, 
+    or see anything about the response via result.response. For example, the entire 
+    result body is result.response.body.
+
+    .. code-block:: python
+
+            from restclient import RestClient
+            client = RestClient()
+            page = resource.request('GET', 'http://friendpaste.com')
+            print page
+            print "http code %s" % page.http_code
+
+    """
+    def __new__(cls, s, http_code, response):
+        self = str.__new__(cls, s)
+        self.http_code = http_code
+        self.response = response
+        return self
+
+class UnicodeResourceResult(unicode):
     """ result returned by `restclient.rest.RestClient`.
     
     you can get result like as string and  status code by result.http_code, 
@@ -96,7 +119,6 @@ class ResourceResult(unicode):
         self.http_code = http_code
         self.response = response
         return self
-
 
 def force_unicode(s, encoding='utf-8', strings_only=False, errors='strict'):
     """
@@ -367,10 +389,14 @@ class RestClient(object):
         :return: str.
         """
         headers = headers or {}
-
+        is_unicode = True
         if hasattr(body, 'read'):
             if not 'Content-Length' in headers:
                 raise RequestError("'Content-Length' should be specified when body is a File like instance") 
+        elif body is not None:
+            if not isinstance(body, unicode):            
+                is_unicode = False
+            body = smart_str(body)
 
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
@@ -395,8 +421,9 @@ class RestClient(object):
                 raise RequestFailed(error, http_code=status_code,
                     response=resp)
 
-        return ResourceResult(data, status_code, resp)
-
+        if not is_unicode:
+            return StrResourceResult(data, status_code, resp)
+        return UnicodeResourceResult(data, status_code, resp)
 
     def make_uri(self, base, *path, **query):
         """Assemble a uri based on a base, any number of path segments, and query

@@ -45,7 +45,7 @@ class HTTPClientTestCase(unittest.TestCase):
         self.assert_(result == "welcome")
 
     def testUnicode(self):
-        result = self.res.post('/unicode')
+        result = self.res.get('/unicode')
         self.assert_(result == u"éàù@")
 
     def testPostByteString(self):

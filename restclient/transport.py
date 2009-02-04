@@ -349,6 +349,8 @@ class CurlTransport(HTTPTransportBase):
                         0))
                     content = body
                 else:
+                    if isinstance(body, unicode):
+                        body = smart_str(body)
                     content = StringIO.StringIO(body)
                     if 'Content-Length' in headers:
                         del headers['Content-Length']
