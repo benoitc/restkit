@@ -331,7 +331,6 @@ class RestClient(object):
         
         :return: str.
         """
-        
         headers = headers or {}
 
         if hasattr(body, 'read'):
