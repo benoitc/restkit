@@ -51,6 +51,19 @@ class ResourceTestCase(unittest.TestCase):
         result = self.res.get('/unicode')
         self.assert_(result == u"éàù@")
 
+    def testUrlWithAccents(self):
+        result = self.res.get('/éàù')
+        self.assert_(result == "ok")
+        self.assert_(result.http_code == 200)
+
+    def testUrlUnicode(self):
+        result = self.res.get(u'/test')
+        self.assert_(result == "ok")
+        self.assert_(result.http_code == 200)
+        result = self.res.get(u'/éàù')
+        self.assert_(result == "ok")
+        self.assert_(result.http_code == 200)
+
     def testGetWithContentType(self):
         result = self.res.get('/json', headers={'Content-Type': 'application/json'})
         self.assert_(result.http_code == 200)

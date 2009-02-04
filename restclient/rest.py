@@ -32,7 +32,7 @@ import urllib
 
 from restclient.transport import getDefaultHTTPTransport, \
 HTTPTransportBase, TransportError
-from restclient.utils import force_unicode, smart_str
+from restclient.utils import to_bytestring
 
 __all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
         'Unauthorized', 'RequestFailed', 'ResourceError',
@@ -113,7 +113,9 @@ class UnicodeResourceResult(unicode):
 
     """
     def __new__(cls, s, http_code, response):
-        self = unicode.__new__(cls, force_unicode(s))
+        if not isinstance(s, unicode):
+            s = s.decode('utf-8')
+        self = unicode.__new__(cls, s)
         self.http_code = http_code
         self.response = response
         return self
@@ -358,7 +360,7 @@ class RestClient(object):
         elif body is not None:
             if not isinstance(body, unicode):            
                 is_unicode = False
-            body = smart_str(body)
+            body = to_bytestring(body)
 
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 

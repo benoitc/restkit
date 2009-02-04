@@ -14,6 +14,8 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
+
+import codecs
 import StringIO
 import httplib
 
@@ -21,7 +23,7 @@ import re
 import sys
 
 import restclient
-from restclient.utils import smart_str, iri2uri
+from restclient.utils import to_bytestring, iri2uri
 
 try:
     import httplib2
@@ -272,7 +274,7 @@ class CurlTransport(HTTPTransportBase):
             header = StringIO.StringIO()
             c.setopt(pycurl.WRITEFUNCTION, data.write)
             c.setopt(pycurl.HEADERFUNCTION, header.write)
-            c.setopt(pycurl.URL, smart_str(url))
+            c.setopt(pycurl.URL, to_bytestring(url))
             c.setopt(pycurl.FOLLOWLOCATION, 1)
             c.setopt(pycurl.MAXREDIRS, 5)
             c.setopt(pycurl.NOSIGNAL, 1)
@@ -324,18 +326,18 @@ class CurlTransport(HTTPTransportBase):
                         0))
                     content = body
                 else:
-                    if isinstance(body, unicode):
-                        body = smart_str(body)
                     content = StringIO.StringIO(body)
                     if 'Content-Length' in headers:
                         del headers['Content-Length']
                     content_length = len(body)
 
+                reader = codecs.getreader('string_escape')(content)
+
                 if method in ('POST'):
                     c.setopt(pycurl.POSTFIELDSIZE, content_length)
                 else:
                     c.setopt(pycurl.INFILESIZE, content_length)
-                c.setopt(pycurl.READFUNCTION, content.read)
+                c.setopt(pycurl.READFUNCTION, reader.read)
             
             if headers:
                 _normalize_headers(headers)

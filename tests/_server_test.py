@@ -23,8 +23,8 @@ import socket
 import threading
 import unittest
 import urlparse
-
-from restclient.transport import smart_str
+import urllib
+from restclient.utils import to_bytestring
 
 HOST = socket.getfqdn('127.0.0.1')
 PORT = (os.getpid() % 31000) + 1024
@@ -36,12 +36,12 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
         
     def do_GET(self):
-        self.parsed_uri = urlparse.urlparse(self.path)
+        self.parsed_uri = urlparse.urlparse(urllib.unquote(self.path))
         self.query = {}
         for k, v in cgi.parse_qsl(self.parsed_uri[4]):
             self.query[k] = v.decode('utf-8')
         path = self.parsed_uri[2]
-        
+        print path 
 
         if path == "/":
             extra_headers = [('Content-type', 'text/plain')]
@@ -58,7 +58,15 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             else:
                 extra_headers = [('Content-type', 'text/plain')]
                 self._respond(200, extra_headers, "ok")
-                
+
+        elif path == "/éàù":
+            extra_headers = [('Content-type', 'text/plain')]
+            self._respond(200, extra_headers, "ok")
+
+        elif path == "/test":
+            extra_headers = [('Content-type', 'text/plain')]
+            self._respond(200, extra_headers, "ok")
+
         elif path == "/query":
             test = self.query.get("test", False)
             if test and test == "testing":
@@ -184,7 +192,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         for k, v in extra_headers:
             self.send_header(k, v)
         self.end_headers()
-        self.wfile.write(smart_str(body))
+        self.wfile.write(to_bytestring(body))
         self.wfile.close()
 
     def finish(self):
