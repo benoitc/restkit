@@ -76,8 +76,12 @@ class ResourceTestCase(unittest.TestCase):
         result = self.res.post(payload="test")
         self.assert_(result=="test")
 
+    def testPostByteString(self):
+        result = self.res.post('/bytestring', payload="éàù@")
+        self.assert_(result == "éàù@")
+
     def testPostUnicode(self):
-        result = self.res.get('/unicode', payload=u"éàù@")
+        result = self.res.post('/unicode', payload=u"éàù@")
         self.assert_(result == u"éàù@")
 
     def testPostWithContentType(self):

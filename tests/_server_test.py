@@ -106,6 +106,13 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length)
             self._respond(200, extra_headers, body)
 
+        elif path == "/bytestring":
+            content_type = self.headers.get('content-type', 'text/plain')
+            extra_headers.append(('Content-type', content_type))
+            content_length = int(self.headers.get('Content-length', '-1'))
+            body = self.rfile.read(content_length)
+            self._respond(200, extra_headers, body)
+
         elif path == "/unicode":
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))

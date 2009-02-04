@@ -45,8 +45,12 @@ class HTTPClientTestCase(unittest.TestCase):
         self.assert_(result == "welcome")
 
     def testUnicode(self):
-        result = self.res.get('/unicode')
+        result = self.res.post('/unicode')
         self.assert_(result == u"éàù@")
+
+    def testPostByteString(self):
+        result = self.res.post('/bytestring', payload="éàù@")
+        self.assert_(result == "éàù@")
 
     def testGetWithContentType(self):
         result = self.res.get('/json', headers={'Content-Type': 'application/json'})
