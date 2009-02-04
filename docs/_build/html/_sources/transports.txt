@@ -29,7 +29,8 @@ Response
 .. autoclass:: restclient.transport.HTTPResponse
 
 Transports:
---------
+-----------
+
 .. autoclass:: restclient.transport.HTTPTransportBase
 
     .. automethod:: restclient.transport.HTTPTransportBase.__init__
