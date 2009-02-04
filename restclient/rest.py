@@ -24,7 +24,7 @@ This module provide a common interface for all HTTP equest.
     >>> from restclient import Resource
     >>> res = Resource('http://friendpaste.com')
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
-    '{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
+    u'{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).http_code
     200
 """
@@ -75,7 +75,7 @@ class RequestError(Exception):
     """Exception raised when a request is malformed"""
 
 
-class ResourceResult(str):
+class ResourceResult(unicode):
     """ result returned by `restclient.rest.RestClient`.
     
     you can get result like as string and  status code by result.http_code, 
@@ -92,12 +92,47 @@ class ResourceResult(str):
 
     """
     def __new__(cls, s, http_code, response):
-        self = str.__new__(cls, s)
+        self = unicode.__new__(cls, force_unicode(s))
         self.http_code = http_code
         self.response = response
         return self
 
 
+def force_unicode(s, encoding='utf-8', strings_only=False, errors='strict'):
+    """
+    Similar to smart_unicode, except that lazy instances are resolved to
+    strings, rather than kept as lazy objects.
+
+    If strings_only is True, don't convert (some) non-string-like objects.
+    """
+    if strings_only and isinstance(s, (types.NoneType, int, long, datetime.datetime, datetime.date, datetime.time, float)):
+        return s
+    try:
+        if not isinstance(s, basestring,):
+            if hasattr(s, '__unicode__'):
+                s = unicode(s)
+            else:
+                try:
+                    s = unicode(str(s), encoding, errors)
+                except UnicodeEncodeError:
+                    if not isinstance(s, Exception):
+                        raise
+                    # If we get to here, the caller has passed in an Exception
+                    # subclass populated with non-ASCII data without special
+                    # handling to display as a string. We need to handle this
+                    # without raising a further exception. We do an
+                    # approximation to what the Exception's standard str()
+                    # output should be.
+                    s = ' '.join([force_unicode(arg, encoding, strings_only,
+                            errors) for arg in s])
+        elif not isinstance(s, unicode):
+            # Note: We use .decode() here, instead of unicode(s, encoding,
+            # errors), so that if s is a SafeString, it ends up being a
+            # SafeUnicode at the end.
+            s = s.decode(encoding, errors)
+    except UnicodeDecodeError, e:
+        raise CouchitUnicodeDecodeError(s, *e.args)
+    return s
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
@@ -226,7 +261,7 @@ class RestClient(object):
         >>> xml = res.get('http://pypaste.com/about')
         >>> json = res.get('http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru', headers={'accept': 'application/json'})
         >>> json
-        '{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
+        u'{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
     """
 
     charset = 'utf-8'

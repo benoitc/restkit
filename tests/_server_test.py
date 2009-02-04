@@ -24,6 +24,8 @@ import threading
 import unittest
 import urlparse
 
+from restclient.transport import smart_str
+
 HOST = socket.getfqdn('127.0.0.1')
 PORT = (os.getpid() % 31000) + 1024
 
@@ -44,6 +46,11 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         if path == "/":
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "welcome")
+
+        elif path == "/unicode":
+            extra_headers = [('Content-type', 'text/plain')]
+            self._respond(200, extra_headers, u"éàù@")
+
         elif path == "/json":
             content_type = self.headers.get('content-type', 'text/plain')
             if content_type != "application/json":
@@ -98,6 +105,14 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             content_length = int(self.headers.get('Content-length', '-1'))
             body = self.rfile.read(content_length)
             self._respond(200, extra_headers, body)
+
+        elif path == "/unicode":
+            content_type = self.headers.get('content-type', 'text/plain')
+            extra_headers.append(('Content-type', content_type))
+            content_length = int(self.headers.get('Content-length', '-1'))
+            body = self.rfile.read(content_length)
+            self._respond(200, extra_headers, body)
+
         elif path == "/json":
             content_type = self.headers.get('content-type', 'text/plain')
             if content_type != "application/json":
@@ -162,7 +177,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         for k, v in extra_headers:
             self.send_header(k, v)
         self.end_headers()
-        self.wfile.write(body)
+        self.wfile.write(smart_str(body))
         self.wfile.close()
 
     def finish(self):
