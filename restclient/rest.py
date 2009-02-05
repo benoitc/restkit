@@ -199,7 +199,8 @@ class Resource(object):
         """
         to set a new uri absolute path
         """
-        self.uri = self.client.make_uri(self.uri, path)
+        self.uri = self.client.make_uri(self.uri, 
+                path)
 
 
 class RestClient(object):

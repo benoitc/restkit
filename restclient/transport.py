@@ -286,8 +286,15 @@ class CurlTransport(HTTPTransportBase):
         headers.setdefault('User-Agent',
                            "%s %s" % (USER_AGENT, pycurl.version,))
 
+        # by default turn off default pragma
+        headers.setdefault('Cache-control', 'max-age=0')
+        headers.setdefault('Pragma', 'no-cache')
+
+        if method in 'PUT':
+            headers.setdefault('Expect', '100-continue')
+
         # encode url
-        url = iri2uri(url)
+        url = iri2uri(to_bytestring(url))
         
         c = pycurl.Curl()
         try:
@@ -301,7 +308,7 @@ class CurlTransport(HTTPTransportBase):
             header = StringIO.StringIO()
             c.setopt(pycurl.WRITEFUNCTION, data.write)
             c.setopt(pycurl.HEADERFUNCTION, header.write)
-            c.setopt(pycurl.URL, to_bytestring(url))
+            c.setopt(pycurl.URL, url)
             c.setopt(pycurl.FOLLOWLOCATION, 1)
             c.setopt(pycurl.MAXREDIRS, 5)
             c.setopt(pycurl.NOSIGNAL, 1)
