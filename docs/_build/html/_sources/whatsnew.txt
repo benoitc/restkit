@@ -5,7 +5,6 @@
 What's New in python-restclient 1.2
 ***************************************
 
-
 Encoding:
 ---------
 
