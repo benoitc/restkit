@@ -360,18 +360,17 @@ class CurlTransport(HTTPTransportBase):
                         0))
                     content = body
                 else:
+                    body = to_bytestring(body)
                     content = StringIO.StringIO(body)
                     if 'Content-Length' in headers:
                         del headers['Content-Length']
                     content_length = len(body)
 
-                reader = codecs.getreader('string_escape')(content)
-
                 if method in ('POST'):
                     c.setopt(pycurl.POSTFIELDSIZE, content_length)
                 else:
                     c.setopt(pycurl.INFILESIZE, content_length)
-                c.setopt(pycurl.READFUNCTION, reader.read)
+                c.setopt(pycurl.READFUNCTION, content.read)
             
             if headers:
                 _normalize_headers(headers)
