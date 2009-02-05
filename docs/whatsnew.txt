@@ -22,8 +22,6 @@ Fixes:
 
     >>> from restclient import Resource
     >>> res = Resource('http://e-engura.org')
-    >>> from restclient import Resource
-    >>> res = Resource('http://e-engura.org')
     >>> page = res.get()
     >>> res.status
     200
