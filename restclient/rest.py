@@ -82,7 +82,7 @@ class Resource(object):
     `restclient.http.HTTPClient`.
 
     """
-    def __init__(self, uri, transport=None):
+    def __init__(self, uri, transport=None, headers=None):
         """Constructor for a `Resource` object.
 
         Resource represent an HTTP resource.
@@ -96,11 +96,14 @@ class Resource(object):
                 `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
                 own depending of the option you need to access to the serve
                 (authentification, proxy, ....).
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
         """
 
-        self.client = RestClient(transport)
+        self.client = RestClient(transport, headers=headers)
         self.uri = uri
-        self.transport = self.client.transport
+        self.transport = self.client.transport 
+        self._headers = headers
 
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
@@ -183,9 +186,10 @@ class Resource(object):
             be added to HTTP request.
         :param params: Optionnal parameterss added to the request
         """
-
+        _headers = self._headers or {}
+        _headers.update(headers or {})
         return self.client.request(method, self.uri, path=path,
-                body=payload, headers=headers, **params)
+                body=payload, headers=_headers, **params)
 
     def get_response(self):
         return self.client.get_response()
@@ -217,7 +221,7 @@ class RestClient(object):
     encode_keys = True
     safe = "/:"
 
-    def __init__(self, transport=None):
+    def __init__(self, transport=None, headers=None):
         """Constructor for a `RestClient` object.
 
         RestClient represent an HTTP client.
@@ -229,6 +233,8 @@ class RestClient(object):
                 `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
                 own depending of the option you need to access to the serve
                 (authentification, proxy, ....).
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
         """ 
 
         if transport is None:
@@ -238,6 +244,8 @@ class RestClient(object):
 
         self.status = None
         self.response = None
+        self._headers = headers
+
 
     def get(self, uri, path=None, headers=None, **params):
         """ HTTP GET         
@@ -315,7 +323,11 @@ class RestClient(object):
         
         :return: str.
         """
-        headers = headers or {}
+
+        # init headers
+        _headers = self._headers or {}
+        _headers.update(headers or {})
+        
         is_unicode = True
         if hasattr(body, 'read'):
             if not 'Content-Length' in headers:
@@ -325,7 +337,7 @@ class RestClient(object):
 
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
-                method=method, body=body, headers=headers)
+                method=method, body=body, headers=_headers)
         except TransportError, e:
             raise RequestError(e)
 

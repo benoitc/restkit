@@ -35,7 +35,7 @@ class ResourceTestCase(unittest.TestCase):
 
     def setUp(self):
         run_server_test()
-        transport = HTTPLib2Transport()
+        self.transport = transport = HTTPLib2Transport()
         self.url = 'http://%s:%s' % (HOST, PORT)
         self.res = Resource(self.url, transport)
 
@@ -70,6 +70,13 @@ class ResourceTestCase(unittest.TestCase):
         def bad_get():
             result = self.res.get('/json', headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_get) 
+
+    def testGetWithContentType2(self):
+        res = Resource(self.url, self.transport, 
+                headers={'Content-Type': 'application/json'})
+        result = res.get('/json')
+        self.assert_(res.response.status == 200)
+        
 
     def testNotFound(self):
         def bad_get():

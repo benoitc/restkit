@@ -69,6 +69,12 @@ class HTTPClientTestCase(unittest.TestCase):
             result = self.res.get('/json', headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_get) 
 
+    def testGetWithContentType2(self):
+        res = Resource(self.url, self.httptransport, 
+                headers={'Content-Type': 'application/json'})
+        result = res.get('/json')
+        self.assert_(res.response.status == 200)
+
     def testNotFound(self):
         def bad_get():
             result = self.res.get("/unknown")

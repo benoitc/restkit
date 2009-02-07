@@ -501,4 +501,3 @@ class HTTPLib2Transport(HTTPTransportBase):
     def add_credentials(self, user, password):
         super(HTTPLib2Transport, self).add_credentials(user, password)
         self.http.add_credentials(user, password)
-
