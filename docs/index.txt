@@ -7,7 +7,8 @@ Welcome to python-restclient's documentation!
 
 .. rubric:: Everything you need to know about py-restclient.
 
-**Py-restclient** is simple **REST client for Python**, inspired bythe microframework (Camping, Sinatra) style of specifying actions: get,headput, post, delete. 
+**Py-restclient** is simple **REST client for Python**, inspired bythe
+microframework (Camping, Sinatra) style of specifying actions: get, head, put, post, delete. 
 
 Made by `Enki Multimedia <http://www.e-engura.org>`_ for one of our project and we decided to make it public.
 
