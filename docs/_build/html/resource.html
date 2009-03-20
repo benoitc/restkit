@@ -66,7 +66,7 @@ module make HTTP requests using <a class="reference external" href="http://pycur
 <h2>Resource class<a class="headerlink" href="#resource-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="restclient.rest.Resource">
-<!--[restclient.rest.Resource]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">Resource</tt><big>(</big><em>uri</em>, <em>transport=None</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource" title="Permalink to this definition">¶</a></dt>
+<!--[restclient.rest.Resource]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">Resource</tt><big>(</big><em>uri</em>, <em>transport=None</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restclient.rest.Resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class that can be instantiated for access to a RESTful resource, 
 including authentication.</p>
 <p>It can use pycurl, urllib2, httplib2 or any interface over
@@ -207,7 +207,7 @@ encoded. But you could change default charset, safe characters and
 decide that keys don&#8217;t need to be encoded.</p>
 <dl class="class">
 <dt id="restclient.rest.RestClient">
-<!--[restclient.rest.RestClient]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">RestClient</tt><big>(</big><em>transport=None</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient" title="Permalink to this definition">¶</a></dt>
+<!--[restclient.rest.RestClient]-->class <tt class="descclassname">restclient.rest.</tt><tt class="descname">RestClient</tt><big>(</big><em>transport=None</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restclient.rest.RestClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basic rest client</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/about&#39;</span><span class="p">)</span>
