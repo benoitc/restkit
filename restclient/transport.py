@@ -493,8 +493,8 @@ class HTTPLib2Transport(HTTPTransportBase):
             final_url = httplib2_response['content-location']
         except KeyError:
             final_url = url
-
-        
+            
+        httplib2_response['final_url'] = final_url
         resp = HTTPResponse(httplib2_response)
         return resp, content
 
