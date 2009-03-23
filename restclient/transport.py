@@ -378,7 +378,6 @@ class CurlTransport(HTTPTransportBase):
                 c.setopt(pycurl.HTTPHEADER,
                         ["%s: %s" % pair for pair in sorted(headers.iteritems())])
 
-                
             try:
                 c.perform()
             except pycurl.error, e:
@@ -395,7 +394,8 @@ class CurlTransport(HTTPTransportBase):
 
     def _make_response(self, final_url=None, status=None, headers=None,
             body=None):
-        infos = headers or {}
+        infos = headers or {}    
+        final_url = infos.get('location', final_url)
         infos.update({
             'status': status,
             'final_url': final_url
