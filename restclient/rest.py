@@ -36,16 +36,31 @@ from restclient.utils import to_bytestring
 
 __all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
         'Unauthorized', 'RequestFailed', 'ResourceError',
-        'RequestError']
+        'RequestError', 'url_quote', 'url_encode']
 
 __docformat__ = 'restructuredtext en'
 
 class ResourceError(Exception):
+    
+    _message = None
+    
     def __init__(self, message=None, http_code=None, response=None):
         self.message = message
         self.status_code = http_code
         self.response = response
+        
 
+    @apply
+    def message():
+
+        def get(self):
+            return self._message
+
+        def set(self, value):
+            self._message = value
+
+        return property(get, set)
+        
 class ResourceNotFound(ResourceError):
     """Exception raised when no resource was found at the given url. 
     """

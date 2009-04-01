@@ -115,7 +115,7 @@ class HTTPClientTestCase(unittest.TestCase):
                 headers={'Content-Type': 'application/json'})
         self.assert_(self.res.response.status == 200 )
         def bad_post():
-            result = self.res.post('/json', payload="test",
+            result = self.res.post('/json', payload="test", 
                     headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_post)
 
