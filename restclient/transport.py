@@ -374,7 +374,6 @@ class CurlTransport(HTTPTransportBase):
             
             if headers:
                 _normalize_headers(headers)
-
                 c.setopt(pycurl.HTTPHEADER,
                         ["%s: %s" % pair for pair in sorted(headers.iteritems())])
 

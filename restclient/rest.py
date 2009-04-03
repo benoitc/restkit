@@ -61,6 +61,9 @@ class ResourceError(Exception):
 
         return property(get, set)
         
+    def __str__(self):
+        return self.message
+        
 class ResourceNotFound(ResourceError):
     """Exception raised when no resource was found at the given url. 
     """
