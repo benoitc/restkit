@@ -41,28 +41,20 @@ __all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
 __docformat__ = 'restructuredtext en'
 
 class ResourceError(Exception):
-    
-    _message = None
-    
-    def __init__(self, message=None, http_code=None, response=None):
-        self.message = message
+
+    def __init__(self, msg=None, http_code=None, response=None):
+        self.msg = msg
         self.status_code = http_code
         self.response = response
-        
 
-    @apply
-    def message():
-
-        def get(self):
-            return self._message
-
-        def set(self, value):
-            self._message = value
-
-        return property(get, set)
-        
     def __str__(self):
-        return self.message
+        if self.msg:
+            return self.msg
+        try:
+            return self._fmt % self.__dict__
+        except (NameError, ValueError, KeyError), e:
+            return 'Unprintable exception %s: %s' \
+                % (self.__class__.__name__, str(e))
         
 class ResourceNotFound(ResourceError):
     """Exception raised when no resource was found at the given url. 
@@ -357,27 +349,21 @@ class RestClient(object):
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
                 method=method, body=body, headers=_headers)
         except TransportError, e:
-            raise RequestError(e)
+            raise RequestError(str(e))
 
         self.status  = status_code = resp.status
         self.response = resp
         
         if status_code >= 400:
-            if type(data) is dict:
-                error = (data.get('error'), data.get('reason'))
-            else:
-                error = data
-
             if status_code == 404:
-                raise ResourceNotFound(error, http_code=404, response=resp)
+                raise ResourceNotFound(data, http_code=404, response=resp)
             elif status_code == 401 or status_code == 403:
-                raise Unauthorized(error, http_code=status_code,
+                raise Unauthorized(data, http_code=status_code,
                         response=resp)
             else:
-                raise RequestFailed(error, http_code=status_code,
+                raise RequestFailed(data, http_code=status_code,
                     response=resp)
 
-        
         try:
             return data.decode('utf-8')
         except UnicodeDecodeError:
