@@ -290,7 +290,7 @@ class CurlTransport(HTTPTransportBase):
         headers.setdefault('Cache-control', 'max-age=0')
         headers.setdefault('Pragma', 'no-cache')
 
-        if method in 'PUT':
+        if method == 'PUT':
             headers.setdefault('Expect', '100-continue')
 
         # encode url
@@ -366,7 +366,7 @@ class CurlTransport(HTTPTransportBase):
                         del headers['Content-Length']
                     content_length = len(body)
 
-                if method in ('POST'):
+                if method == 'POST':
                     c.setopt(pycurl.POSTFIELDSIZE, content_length)
                 else:
                     c.setopt(pycurl.INFILESIZE, content_length)
