@@ -16,8 +16,9 @@
 #
 
 import codecs
-import StringIO
 import httplib
+import logging
+import StringIO
 
 import re
 import sys
@@ -36,6 +37,8 @@ try:
 except ImportError:
     pycurl=None
 
+
+
 _default_http = None
 
 class TransportError(Exception):
@@ -43,6 +46,9 @@ class TransportError(Exception):
 
 USER_AGENT = "py-restclient/%s (%s)" % (restclient.__version__, sys.platform)
 DEFAULT_MAX_REDIRECT = 3
+
+# set to a non-zero value to get debug output
+debuglevel = 0
 
 NORMALIZE_SPACE = re.compile(r'(?:\r\n)?[ \t]+')
 def _normalize_headers(headers):
@@ -88,6 +94,11 @@ def useCurl():
         setDefaultHTTPTransport(createHTTPTransport())
 
     return isinstance(_default_http, CurlTransport)
+    
+
+
+    
+
 
 class HTTPError(Exception):
     """ raised when there is an HTTP error """
@@ -202,7 +213,6 @@ if pycurl is not None:
     CURLE_SSL_CACERT = _get_pycurl_errcode('E_SSL_CACERT', 60)
     CURLE_SSL_CACERT_BADFILE = _get_pycurl_errcode('E_SSL_CACERT_BADFILE', 77)    
 
-
 class CurlTransport(HTTPTransportBase):
     """
     An HTTP transportthat uses pycurl.
@@ -295,7 +305,7 @@ class CurlTransport(HTTPTransportBase):
 
         # encode url
         url = iri2uri(to_bytestring(url))
-        
+
         c = pycurl.Curl()
         try:
             # set curl options
@@ -312,6 +322,8 @@ class CurlTransport(HTTPTransportBase):
             c.setopt(pycurl.FOLLOWLOCATION, 1)
             c.setopt(pycurl.MAXREDIRS, 5)
             c.setopt(pycurl.NOSIGNAL, 1)
+            if debuglevel > 0:
+                 c.setopt(pycurl.VERBOSE, 1)
 
             if self.cabundle:
                 c.setopt(pycurl.CAINFO, celf.cabundle)
@@ -381,11 +393,12 @@ class CurlTransport(HTTPTransportBase):
                 c.perform()
             except pycurl.error, e:
                 if e[0] != CURLE_SEND_ERROR:
+                    if debuglevel > 0:
+                        print >>sys.stderr, str(e)
                     raise TransportError(e)
  
             response_headers = self._parseHeaders(header)
             code = c.getinfo(pycurl.RESPONSE_CODE)
-            
             return self._make_response(final_url=url, status=code,
                     headers=response_headers, body=data.getvalue())
         finally:
@@ -434,6 +447,9 @@ class HTTPLib2Transport(HTTPTransportBase):
 
         super(HTTPLib2Transport, self).__init__(proxy_infos=proxy_infos)
         
+        # set debug level
+        httplib2.debuglevel = debuglevel
+        
         _proxy_infos = None
         if proxy_infos and proxy_infos is not None:
             try:
@@ -481,7 +497,10 @@ class HTTPLib2Transport(HTTPTransportBase):
             headers.setdefault('Content-Length', str(content_length))
 
         if not (url.startswith('http://') or url.startswith('https://')):
-            raise ValueError('URL is not a HTTP URL: %r' % (url,))
+            error = 'URL is not a HTTP URL: %r' % (url,)
+            if DEBUG:
+                print >>sys.stderr, str(error)
+            raise ValueError(error)
 
         headers.setdefault('User-Agent', USER_AGENT)
         

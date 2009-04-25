@@ -43,7 +43,7 @@ __docformat__ = 'restructuredtext en'
 class ResourceError(Exception):
 
     def __init__(self, msg=None, http_code=None, response=None):
-        self.msg = msg
+        self.msg = msg or ''
         self.status_code = http_code
         self.response = response
 

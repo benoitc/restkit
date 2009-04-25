@@ -19,7 +19,7 @@ try:
 except:
     __version__ = '?'
 
-
+from restclient.transport import CurlTransport, HTTPLib2Transport
 from restclient.rest import * 
 
 

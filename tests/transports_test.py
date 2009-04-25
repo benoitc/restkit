@@ -23,7 +23,6 @@ import threading
 import unittest
 import urlparse
 
-
 from restclient.transport import CurlTransport
 from restclient.rest import Resource, RestClient, RequestFailed, \
 ResourceNotFound, Unauthorized
@@ -115,7 +114,7 @@ class HTTPClientTestCase(unittest.TestCase):
                 headers={'Content-Type': 'application/json'})
         self.assert_(self.res.response.status == 200 )
         def bad_post():
-            result = self.res.post('/json', payload="test", 
+            return self.res.post('/json', payload="test", 
                     headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_post)
 
@@ -139,7 +138,7 @@ class HTTPClientTestCase(unittest.TestCase):
                 headers={'Content-Type': 'application/json'})
         self.assert_(self.res.response.status == 200 )
         def bad_put():
-            result = self.res.put('/json', payload="test",
+            return self.res.put('/json', payload="test",
                     headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_put)
 
