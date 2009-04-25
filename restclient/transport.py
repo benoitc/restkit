@@ -17,10 +17,8 @@
 
 import codecs
 import httplib
-import logging
-import StringIO
-
 import re
+import StringIO
 import sys
 
 import restclient
@@ -37,8 +35,6 @@ try:
 except ImportError:
     pycurl=None
 
-
-
 _default_http = None
 
 class TransportError(Exception):
@@ -53,8 +49,6 @@ debuglevel = 0
 NORMALIZE_SPACE = re.compile(r'(?:\r\n)?[ \t]+')
 def _normalize_headers(headers):
     return dict([ (key.lower(), NORMALIZE_SPACE.sub(value, ' ').strip())  for (key, value) in headers.iteritems()])
-
-
 
 def createHTTPTransport():
     """Create default HTTP client instance
@@ -94,11 +88,6 @@ def useCurl():
         setDefaultHTTPTransport(createHTTPTransport())
 
     return isinstance(_default_http, CurlTransport)
-    
-
-
-    
-
 
 class HTTPError(Exception):
     """ raised when there is an HTTP error """
