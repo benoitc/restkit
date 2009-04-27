@@ -30,16 +30,13 @@ This module provide a common interface for all HTTP equest.
 """
 import urllib
 
-from restclient.transport import getDefaultHTTPTransport, \
-HTTPTransportBase, TransportError
+from restclient.errors import *
+from restclient.transport import getDefaultHTTPTransport, HTTPTransportBase
 from restclient.utils import to_bytestring
 
 __all__ = ['Resource', 'RestClient', 'url_quote', 'url_encode']
 
 __docformat__ = 'restructuredtext en'
-
-from restclient.errors import *
-
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 

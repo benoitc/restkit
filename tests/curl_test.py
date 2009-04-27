@@ -22,23 +22,19 @@ import socket
 import threading
 import unittest
 import urlparse
-import urllib2
 
-from restclient.transport import HTTPLib2Transport
+from restclient.transport import CurlTransport
 from restclient.rest import Resource, RestClient
-from restclient.errors import RequestFailed, ResourceNotFound, \
-Unauthorized, RequestError
-
-
+from restclient.errors import RequestFailed, ResourceNotFound, Unauthorized
 from _server_test import HOST, PORT, run_server_test
 
-class ResourceTestCase(unittest.TestCase):
+class HTTPClientTestCase(unittest.TestCase):
+    httptransport = CurlTransport()
 
     def setUp(self):
         run_server_test()
-        self.transport = transport = HTTPLib2Transport()
         self.url = 'http://%s:%s' % (HOST, PORT)
-        self.res = Resource(self.url, transport)
+        self.res = Resource(self.url, self.httptransport)
 
     def tearDown(self):
         self.res = None
@@ -46,7 +42,6 @@ class ResourceTestCase(unittest.TestCase):
     def testGet(self):
         result = self.res.get()
         self.assert_(result == "welcome")
-        self.assert_(self.res.response.status == 200)
 
     def testUnicode(self):
         result = self.res.get('/unicode')
@@ -61,6 +56,7 @@ class ResourceTestCase(unittest.TestCase):
         result = self.res.get(u'/test')
         self.assert_(result == "ok")
         self.assert_(self.res.response.status == 200)
+
         result = self.res.get(u'/éàù')
         self.assert_(result == "ok")
         self.assert_(self.res.response.status == 200)
@@ -73,11 +69,10 @@ class ResourceTestCase(unittest.TestCase):
         self.assertRaises(RequestFailed, bad_get) 
 
     def testGetWithContentType2(self):
-        res = Resource(self.url, self.transport, 
+        res = Resource(self.url, self.httptransport, 
                 headers={'Content-Type': 'application/json'})
         result = res.get('/json')
         self.assert_(res.response.status == 200)
-        
 
     def testNotFound(self):
         def bad_get():
@@ -89,9 +84,18 @@ class ResourceTestCase(unittest.TestCase):
         result = self.res.get('/query', test="testing")
         self.assert_(self.res.response.status == 200)
 
-    def testGetWithIntParam(self):
-        result = self.res.get('/qint', test=1)
-        self.assert_(self.res.response.status == 200)
+    def testGetBinary(self):
+        import imghdr
+        import tempfile
+        res = Resource('http://e-engura.org', self.httptransport)
+        result = res.get('/images/logo.gif')
+        self.assert_(res.response.status == 200)
+        fd, fname = tempfile.mkstemp(suffix='.gif')
+        f = os.fdopen(fd, "wb")
+        f.write(result)
+        f.close()
+        self.assert_(imghdr.what(fname) == 'gif')
+
 
     def testSimplePost(self):
         result = self.res.post(payload="test")
@@ -110,7 +114,7 @@ class ResourceTestCase(unittest.TestCase):
                 headers={'Content-Type': 'application/json'})
         self.assert_(self.res.response.status == 200 )
         def bad_post():
-            result = self.res.post('/json', payload="test",
+            return self.res.post('/json', payload="test", 
                     headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_post)
 
@@ -134,7 +138,7 @@ class ResourceTestCase(unittest.TestCase):
                 headers={'Content-Type': 'application/json'})
         self.assert_(self.res.response.status == 200 )
         def bad_put():
-            result = self.res.put('/json', payload="test",
+            return self.res.put('/json', payload="test",
                     headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_put)
 
@@ -145,7 +149,7 @@ class ResourceTestCase(unittest.TestCase):
         result = self.res.put('/empty',headers={'Content-Type': 'application/json'})
         self.assert_(self.res.response.status == 200 )
 
-    def testPutWithQuery(self):
+    def testPuWithQuery(self):
         result = self.res.put('/query', test="testing")
         self.assert_(self.res.response.status == 200)
 
@@ -169,33 +173,22 @@ class ResourceTestCase(unittest.TestCase):
 
         self.assert_(self.res.response.status == 200 )
 
-    def testFileSend2(self):
-        import StringIO
-        content = StringIO.StringIO("test")
-
-        def bad_post():
-            result = self.res.post('/json', payload=content,
-                headers={'Content-Type': 'application/json'})
-
-        self.assertRaises(RequestError, bad_post)
-
     def testAuth(self):
-        transport = HTTPLib2Transport()
-        transport.add_credentials("test", "test")
-
-        res = Resource(self.url, transport)
+        httptransport = self.httptransport 
+        httptransport.add_credentials("test", "test")
+        
+        res = Resource(self.url, httptransport)
         result = res.get('/auth')
         self.assert_(res.response.status == 200)
 
-        transport = HTTPLib2Transport()
+        httptransport.add_credentials("test", "test2")
+        
         def niettest():
-            res = Resource(self.url, transport)
+            res = Resource(self.url, httptransport)
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
-
  
-    
 if __name__ == '__main__':
     from _server_test import run_server_test
-    run_server_test() 
+    run_server_test()
     unittest.main()

@@ -15,169 +15,28 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-import codecs
-import httplib
+"""
+curl transport
+"""
+
 import re
 import StringIO
 import sys
 
+
 import restclient
 from restclient.errors import TransportError
+from restclient.transport.base import *
 from restclient.utils import to_bytestring, iri2uri
 
 try:
-    import httplib2
-except ImportError:
-    httplib2 = None
-
-# try to import pycurl, which will let use of CurlHttpClient
-try:
     import pycurl
 except ImportError:
-    pycurl=None
-
-_default_http = None
-
-
-
-USER_AGENT = "py-restclient/%s (%s)" % (restclient.__version__, sys.platform)
-DEFAULT_MAX_REDIRECT = 3
-
-# set to a non-zero value to get debug output
-debuglevel = 0
-
+    pycurl = None
+    
 NORMALIZE_SPACE = re.compile(r'(?:\r\n)?[ \t]+')
 def _normalize_headers(headers):
     return dict([ (key.lower(), NORMALIZE_SPACE.sub(value, ' ').strip())  for (key, value) in headers.iteritems()])
-
-def createHTTPTransport():
-    """Create default HTTP client instance
-    prefers Curl to urllib"""
-
-    if pycurl is None:
-        http = HTTPLib2Transport()
-    else:
-        http = CurlTransport()
-
-    return http
-
-def getDefaultHTTPTransport():
-    """ Return the default http transport instance instance
-    if no client has been set, it will create a default client.
-
-    :return: the default client
-    """
-    global _default_http
-
-    if _default_http is None:
-        setDefaultHTTPTransport(createHTTPTransport())
-
-    return _default_http
-
-def setDefaultHTTPTransport(httptransport):
-    """ set default http transport 
-    :param http: RestClient
-    """
-    global _default_http
-
-    _default_http = httptransport
-
-def useCurl():
-    global _default_http
-    if _default_http is None:
-        setDefaultHTTPTransport(createHTTPTransport())
-
-    return isinstance(_default_http, CurlTransport)
-
-class HTTPError(Exception):
-    """ raised when there is an HTTP error """
-
-class HTTPResponse(dict):
-    """An object more like email.Message than httplib.HTTPResponse.
-    
-        >>> from restclient import Resource
-        >>> res = Resource('http://e-engura.org')
-        >>> from restclient import Resource
-        >>> res = Resource('http://e-engura.org')
-        >>> page = res.get()
-        >>> res.status
-        200
-        >>> res.response['content-type']
-        'text/html'
-        >>> logo = res.get('/images/logo.gif')
-        >>> res.response['content-type']
-        'image/gif'
-    """
-
-    final_url = None
-    
-    "Status code returned by server. "
-    status = 200
-
-    """Reason phrase returned by server."""
-    reason = "Ok"
-
-    def __init__(self, info):
-        for key, value in info.iteritems(): 
-            self[key] = value 
-        self.status = int(self.get('status', self.status))
-        self.final_url = self.get('final_url', self.final_url)
-
-    def __getattr__(self, name):
-        if name == 'dict':
-            return self 
-        else:  
-            raise AttributeError, name
-
-    def __repr__(self):
-        return "<%s status %s for %s>" % (self.__class__.__name__,
-                                          self.status,
-                                          self.final_url)
-
-
-
-
-class HTTPTransportBase(object):
-    """ Interface for HTTP clients """
-
-    def __init__(self, proxy_infos=None):
-        """ constructor for HTTP transport interface
-
-        :param proxy_infos: dict, infos to connect via proxy:
-
-        .. code-block:: python
-
-            {
-                'proxy_user': 'XXXXXXX',
-                'proxy_password': 'XXXXXXX',
-                'proxy_host': 'proxy',
-                'proxy_port': 8080,
-            }
-        """
-        self._credentials = {}
-        self.proxy_infos = proxy_infos or {}
-
-    def request(self, url, method='GET', body=None, headers=None):
-        """Perform HTTP call and manage , support GET, HEAD, POST, PUT and
-        DELETE
-
-        :param url: url on which to perform the actuib
-        :param body: str
-        :param headers: dict, optionnal headers that will
-            be added to HTTP request
-
-        :return: object representing HTTP Response
-        """
-        raise NotImplementedError
-
-    def add_credentials(self, user, password):
-        self._credentials = {
-                "user": user,
-                "password": password
-        }
-
-    def _get_credentials(self):
-        return self._credentials
 
 
 def _get_pycurl_errcode(symbol, default):
@@ -213,14 +72,14 @@ class CurlTransport(HTTPTransportBase):
 
 
     Here is an example to use authentification with curl httpclient :
-    
+
     .. code-block:: python
 
         httpclient = CurlTransport()
         httpclient.add_credentials("test", "test")        
 
     .. seealso::
-        
+
         `Pycurl <http://pycurl.sourceforge.net>`_
     """
 
@@ -238,6 +97,7 @@ class CurlTransport(HTTPTransportBase):
                 'proxy_host': 'proxy',
                 'proxy_port': 8080,
             }
+            
         """
         HTTPTransportBase.__init__(self, proxy_infos=proxy_infos)
 
@@ -248,19 +108,19 @@ class CurlTransport(HTTPTransportBase):
             raise RuntimeError('Cannot find pycurl library')
 
         self.timeout = timeout
-        
+
     def _parseHeaders(self, header_file):
         header_file.seek(0)
-       
+
         # Remove the status line from the beginning of the input
         unused_http_status_line = header_file.readline()
         lines = [line.strip() for line in header_file]
-        
+
         # and the blank line from the end
         empty_line = lines.pop()
         if empty_line:
             raise TransportError("No blank line at end")
-       
+
         headers = {}
         for line in lines:
             if ":" in line:
@@ -311,7 +171,7 @@ class CurlTransport(HTTPTransportBase):
             c.setopt(pycurl.FOLLOWLOCATION, 1)
             c.setopt(pycurl.MAXREDIRS, 5)
             c.setopt(pycurl.NOSIGNAL, 1)
-            if debuglevel > 0:
+            if restclient.debuglevel > 0:
                  c.setopt(pycurl.VERBOSE, 1)
 
             if self.cabundle:
@@ -321,7 +181,7 @@ class CurlTransport(HTTPTransportBase):
             if self.proxy_infos and self.proxy_infos.get('proxy_host', ''):
                 c.setopt(pycurl.PROXYAUTH, pycurl.HTTPAUTH_ANY)
                 c.setopt(pycurl.PROXY, self.proxy_infos.get('proxy_host'))
-                
+
                 proxy_port = self.proxy_infos.get('proxy_port', '')
                 if proxy_port:
                     c.setopt(pycurl.PROXYPORT, str(proxy_port))
@@ -330,7 +190,7 @@ class CurlTransport(HTTPTransportBase):
                 if user:
                     userpass = "%s:%s" % (user, self.proxy_infos.get('proxy_password', ''))
                     c.setopt(pycurl.PROXYUSERPWD, userpass)
-            
+
             # authentification
             auth = self._get_credentials()
             user = auth.get('user', None)
@@ -341,7 +201,7 @@ class CurlTransport(HTTPTransportBase):
                 if password is not None: # '' is a valid password
                     userpass += password
                 c.setopt(pycurl.USERPWD, userpass)
-    
+
             # set method
             if method == "GET":
                 c.setopt(pycurl.HTTPGET, 1)
@@ -372,7 +232,7 @@ class CurlTransport(HTTPTransportBase):
                 else:
                     c.setopt(pycurl.INFILESIZE, content_length)
                 c.setopt(pycurl.READFUNCTION, content.read)
-            
+
             if headers:
                 _normalize_headers(headers)
                 c.setopt(pycurl.HTTPHEADER,
@@ -382,10 +242,10 @@ class CurlTransport(HTTPTransportBase):
                 c.perform()
             except pycurl.error, e:
                 if e[0] != CURLE_SEND_ERROR:
-                    if debuglevel > 0:
+                    if restclient.debuglevel > 0:
                         print >>sys.stderr, str(e)
                     raise TransportError(e)
- 
+
             response_headers = self._parseHeaders(header)
             code = c.getinfo(pycurl.RESPONSE_CODE)
             return self._make_response(final_url=url, status=code,
@@ -402,111 +262,4 @@ class CurlTransport(HTTPTransportBase):
             'final_url': final_url
         })
         resp = HTTPResponse(infos)
-        return resp, body 
-    
-class HTTPLib2Transport(HTTPTransportBase):
-    """An http client that uses httplib2 for performing HTTP
-    requests. This implementation supports HTTP caching.
-
-    .. seealso::
-        
-        `Httplib2 <http://code.google.com/p/httplib2/>`_
-    """
-
-    def __init__(self, proxy_infos=None, http=None):
-        """
-        :param proxy_infos: dict, infos to connect via proxy:
-
-        .. code-block:: python
-    
-            {
-                'proxy_user': 'XXXXXXX',
-                'proxy_password': 'XXXXXXX',
-                'proxy_host': 'proxy',
-                'proxy_port': 8080,
-            }
-
-        :param http: An httplib2.HTTP instance.
-
-
-        """
-        if httplib2 is None:
-            raise RuntimeError('Cannot find httplib2 library. '
-                               'See http://bitworking.org/projects/httplib2/')
-
-        super(HTTPLib2Transport, self).__init__(proxy_infos=proxy_infos)
-        
-        # set debug level
-        httplib2.debuglevel = debuglevel
-        
-        _proxy_infos = None
-        if proxy_infos and proxy_infos is not None:
-            try:
-                import socks
-            except:
-                print >>sys.stderr, "socks module isn't installed, you can't use proxy"
-                socks = None
-
-            if socks is not None:
-                _proxy_infos = httplib2.ProxyInfo(
-                        socks.PROXY_TYPE_HTTP,
-                        proxy_infos.get('proxy_host'),
-                        proxy_infos.get('proxy_port'),
-                        proxy_infos.get('proxy_username'),
-                        proxy_infos.get('proxy_password')
-                )
-
-        if http is None:
-            http = httplib2.Http(proxy_info=_proxy_infos)
-        else:
-            if _proxy_infos is not None and \
-                    not http.proxy_info and \
-                    http.proxy_info is None:
-                proxy_info = _proxy_infos
-        self.http = http
-        
-        self.http.force_exception_to_status_code = False
-
-    def request(self, url, method='GET', body=None, headers=None):
-        headers = headers or {}
-        body = body or ''
-        
-        content = ''
-        if method in ('POST','PUT'):
-            if hasattr(body, 'read'):
-                content_length = int(headers.pop('Content-Length',
-                    0))
-                content = body.read()
-            else:
-                content = body
-                if 'Content-Length' in headers:
-                    del headers['Content-Length']
-                content_length = len(body)
-
-            headers.setdefault('Content-Length', str(content_length))
-
-        if not (url.startswith('http://') or url.startswith('https://')):
-            error = 'URL is not a HTTP URL: %r' % (url,)
-            if DEBUG:
-                print >>sys.stderr, str(error)
-            raise ValueError(error)
-
-        headers.setdefault('User-Agent', USER_AGENT)
-        
-        httplib2_response, content = self.http.request(url,
-                method=method, body=content, headers=headers)
-
-        try:
-            final_url = httplib2_response['content-location']
-        except KeyError:
-            final_url = url
-            
-        httplib2_response['final_url'] = final_url
-        resp = HTTPResponse(httplib2_response)
-        return resp, content
-
-    def add_credentials(self, user, password):
-        super(HTTPLib2Transport, self).add_credentials(user, password)
-        self.http.add_credentials(user, password)
-
-        
+        return resp, body
