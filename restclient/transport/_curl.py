@@ -160,8 +160,8 @@ class CurlTransport(HTTPTransportBase):
             # set curl options
             if self.timeout is not None:
                 c.setopt(pycurl.TIMEOUT, self.timeout)
-            else:
-                c.setopt(pycurl.TIMEOUT, 20)
+            else: # no timeout by default
+                c.setopt(pycurl.TIMEOUT, 0)
 
             data = StringIO.StringIO()
             header = StringIO.StringIO()
