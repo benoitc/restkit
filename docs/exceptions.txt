@@ -5,9 +5,9 @@ Exceptions
 
 .. module:: restclient.errors
 
-.. autoexception:: restclient.rest.ResourceNotFound
-.. autoexception:: restclient.rest.Unauthorized
-.. autoexception:: restclient.rest.RequestFailed
-.. autoexception:: restclient.rest.RequestError
-.. autoexception:: restclient.rest.TransportError
-.. autoexception:: restclient.rest.InvalidUrl
+.. autoexception:: restclient.errors.ResourceNotFound
+.. autoexception:: restclient.errors.Unauthorized
+.. autoexception:: restclient.errors.RequestFailed
+.. autoexception:: restclient.errors.RequestError
+.. autoexception:: restclient.errors.TransportError
+.. autoexception:: restclient.errors.InvalidUrl
