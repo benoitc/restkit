@@ -305,7 +305,7 @@ class RestClient(object):
                     body.flush()
                 except IOError:
                     pass
-                size = int(os.fstat(data.fileno())[6])
+                size = int(os.fstat(body.fileno())[6])
             elif isinstance(body, types.StringTypes):
                 size = len(body)
                 body = to_bytestring(body)
@@ -318,7 +318,7 @@ class RestClient(object):
             if 'Content-Type' not in headers:
                 type = None
                 if hasattr(body, 'name'):
-                    type = mimetypes.guess_type(data.name)[0]
+                    type = mimetypes.guess_type(body.name)[0]
                 headers['Content-Type'] = type and type or 'application/octet-stream'
                 
         try:
