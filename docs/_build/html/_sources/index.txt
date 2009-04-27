@@ -31,6 +31,7 @@ Reference
 
    resource
    transports
+   exceptions
 
 * Follow development on `Bitbucket <http://bitbucket.org/benoitc/py-restclient/>`_.
 * Report bugs, report features and browse the source through `Tracker <http://bitbucket.org/benoitc/py-restclient/issues/>`_.

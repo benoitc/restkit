@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; py-restclient v1.2 documentation</title>
+    <title>Index &mdash; py-restclient v1.3.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.2',
+        VERSION:     '1.3.0',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="py-restclient v1.2 documentation" href="index.html" /> 
+    <link rel="top" title="py-restclient v1.3.0 documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">py-restclient v1.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">py-restclient v1.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
     <div class="document">
@@ -42,7 +42,7 @@
 
    <h1 id="index">Index</h1>
 
-   <a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> 
+   <a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> 
 
    <hr />
 
@@ -113,6 +113,13 @@
 <dt><a href="transports.html#restclient.transport.HTTPTransportBase">HTTPTransportBase (class in restclient.transport)</a></dt>
 </dl></td></tr></table>
 
+<h2 id="I">I</h2>
+<table width="100%" class="indextable"><tr><td width="33%" valign="top">
+<dl>
+
+<dt><a href="exceptions.html#restclient.errors.InvalidUrl">InvalidUrl</a></dt></dl></td><td width="33%" valign="top"><dl>
+</dl></td></tr></table>
+
 <h2 id="P">P</h2>
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
@@ -136,12 +143,13 @@
     <dt><a href="resource.html#restclient.rest.RestClient.request">(restclient.rest.RestClient method)</a></dt>
     <dt><a href="transports.html#restclient.transport.HTTPTransportBase.request">(restclient.transport.HTTPTransportBase method)</a></dt>
   </dl></dd>
-<dt><a href="resource.html#restclient.rest.RequestError">RequestError</a></dt>
-<dt><a href="resource.html#restclient.rest.RequestFailed">RequestFailed</a></dt>
+<dt><a href="exceptions.html#restclient.errors.RequestError">RequestError</a></dt>
+<dt><a href="exceptions.html#restclient.errors.RequestFailed">RequestFailed</a></dt>
 <dt><a href="resource.html#restclient.rest.Resource">Resource (class in restclient.rest)</a></dt></dl></td><td width="33%" valign="top"><dl>
-<dt><a href="resource.html#restclient.rest.ResourceNotFound">ResourceNotFound</a></dt>
+<dt><a href="exceptions.html#restclient.errors.ResourceNotFound">ResourceNotFound</a></dt>
 <dt><a href="resource.html#restclient.rest.RestClient">RestClient (class in restclient.rest)</a></dt>
 <dt><a href="resource.html#module-restclient">restclient (module)</a></dt>
+<dt><a href="exceptions.html#module-restclient.errors">restclient.errors (module)</a></dt>
 <dt><a href="transports.html#module-restclient.transport">restclient.transport (module)</a></dt>
 </dl></td></tr></table>
 
@@ -160,13 +168,14 @@
   <dd><dl>
     <dt><a href="resource.html#restclient.RestClient.transport">(restclient.RestClient attribute)</a></dt>
   </dl></dd></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="exceptions.html#restclient.errors.TransportError">TransportError</a></dt>
 </dl></td></tr></table>
 
 <h2 id="U">U</h2>
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
-<dt><a href="resource.html#restclient.rest.Unauthorized">Unauthorized</a></dt>
+<dt><a href="exceptions.html#restclient.errors.Unauthorized">Unauthorized</a></dt>
 <dt><a href="resource.html#restclient.rest.Resource.update_uri">update_uri() (restclient.rest.Resource method)</a></dt></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="resource.html#restclient.Resource.uri">uri (restclient.Resource attribute)</a></dt>
 </dl></td></tr></table>
@@ -200,7 +209,7 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">py-restclient v1.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">py-restclient v1.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

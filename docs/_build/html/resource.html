@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Resource &mdash; py-restclient v1.2 documentation</title>
+    <title>Resource &mdash; py-restclient v1.3.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.2',
+        VERSION:     '1.3.0',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,9 +19,9 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="py-restclient v1.2 documentation" href="index.html" />
+    <link rel="top" title="py-restclient v1.3.0 documentation" href="index.html" />
     <link rel="next" title="HTTP Transports" href="transports.html" />
-    <link rel="prev" title="What&#8217;s New in python-restclient 1.2" href="whatsnew.html" /> 
+    <link rel="prev" title="Changes" href="whatsnew.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,9 @@
           <a href="transports.html" title="HTTP Transports"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.2"
+          <a href="whatsnew.html" title="Changes"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">py-restclient v1.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">py-restclient v1.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
     <div class="document">
@@ -350,38 +350,6 @@ be added to HTTP request.</li>
 </dd></dl>
 
 </div>
-<div class="section" id="exceptions">
-<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
-<dl class="exception">
-<dt id="restclient.rest.ResourceNotFound">
-<!--[restclient.rest.ResourceNotFound]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">ResourceNotFound</tt><a class="headerlink" href="#restclient.rest.ResourceNotFound" title="Permalink to this definition">¶</a></dt>
-<dd>Exception raised when no resource was found at the given url.</dd></dl>
-
-<dl class="exception">
-<dt id="restclient.rest.Unauthorized">
-<!--[restclient.rest.Unauthorized]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">Unauthorized</tt><a class="headerlink" href="#restclient.rest.Unauthorized" title="Permalink to this definition">¶</a></dt>
-<dd>Exception raised when an authorization is required to access to
-the resource specified.</dd></dl>
-
-<dl class="exception">
-<dt id="restclient.rest.RequestFailed">
-<!--[restclient.rest.RequestFailed]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">RequestFailed</tt><a class="headerlink" href="#restclient.rest.RequestFailed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exception raised when an unexpected HTTP error is received in response
-to a request.</p>
-<p>The request failed, meaning the remote HTTP server returned a code 
-other than success, unauthorized, or NotFound.</p>
-<p>The exception message attempts to extract the error</p>
-<p>You can get the status code by e.http_code, or see anything about the 
-response via e.response. For example, the entire result body (which is 
-probably an HTML error page) is e.response.body.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="restclient.rest.RequestError">
-<!--[restclient.rest.RequestError]-->exception <tt class="descclassname">restclient.rest.</tt><tt class="descname">RequestError</tt><a class="headerlink" href="#restclient.rest.RequestError" title="Permalink to this definition">¶</a></dt>
-<dd>Exception raised when a request is malformed</dd></dl>
-
-</div>
 </div>
 
 
@@ -395,13 +363,12 @@ probably an HTML error page) is e.response.body.</p>
 <li><a class="reference external" href="">Resource</a><ul>
 <li><a class="reference external" href="#resource-class">Resource class</a></li>
 <li><a class="reference external" href="#restclient-class">RestClient class</a></li>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
 </ul>
 </li>
 </ul>
 
             <h4>Previous topic</h4>
-            <p class="topless"><a href="whatsnew.html" title="previous chapter">What&#8217;s New in python-restclient 1.2</a></p>
+            <p class="topless"><a href="whatsnew.html" title="previous chapter">Changes</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="transports.html" title="next chapter">HTTP Transports</a></p>
             <h3>This Page</h3>
@@ -431,9 +398,9 @@ probably an HTML error page) is e.response.body.</p>
           <a href="transports.html" title="HTTP Transports"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="whatsnew.html" title="What&#8217;s New in python-restclient 1.2"
+          <a href="whatsnew.html" title="Changes"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">py-restclient v1.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">py-restclient v1.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
