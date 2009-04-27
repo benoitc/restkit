@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -
 #
+# Copyright (c) 2008, 2009 Benoit Chesneau <benoitc@e-engura.com> 
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#
 # iri2uri code taken from httplib2 under the following license:
 # MIT/X Consortium License
 #
@@ -28,7 +42,7 @@ iri2uri
 
 Converts an IRI to a URI.
 """
-
+import re
 import urlparse
 
 
@@ -39,6 +53,35 @@ def to_bytestring(s):
     if isinstance(s, unicode):
         return s.encode('utf-8')
     return s
+    
+    
+def parse_url(url):
+    """
+    Given a URL, returns a 4-tuple containing the hostname, port,
+    a path relative to root (if any), and a boolean representing 
+    whether the connection should use SSL or not.
+    """
+    (scheme, netloc, path, params, query, frag) = urlparse(url)
+
+    # We only support web services
+    if not scheme in ('http', 'https'):
+        raise InvalidUrl('Scheme must be one of http or https')
+
+    is_ssl = scheme == 'https' and True or False
+
+    # Verify hostnames are valid and parse a port spec (if any)
+    match = re.match('([a-zA-Z0-9\-\.]+):?([0-9]{2,5})?', netloc)
+
+    if match:
+        (host, port) = match.groups()
+        if not port:
+            port = is_ssl and '443' or '80'
+    else:
+        raise InvalidUrl('Invalid host and/or port: %s' % netloc)
+
+    return (host, int(port), path.strip('/'), is_ssl)
+    
+
 
 # Convert an IRI to a URI following the rules in RFC 3987
 # 
@@ -100,34 +143,3 @@ def iri2uri(uri):
         uri = urlparse.urlunsplit((scheme, authority, path, query, fragment))
         uri = "".join([encode(c) for c in uri])
     return uri
-        
-if __name__ == "__main__":
-    import unittest
-
-    class Test(unittest.TestCase):
-
-        def test_uris(self):
-            """Test that URIs are invariant under the transformation."""
-            invariant = [ 
-                u"ftp://ftp.is.co.za/rfc/rfc1808.txt",
-                u"http://www.ietf.org/rfc/rfc2396.txt",
-                u"ldap://[2001:db8::7]/c=GB?objectClass?one",
-                u"mailto:John.Doe@example.com",
-                u"news:comp.infosystems.www.servers.unix",
-                u"tel:+1-816-555-1212",
-                u"telnet://192.0.2.16:80/",
-                u"urn:oasis:names:specification:docbook:dtd:xml:4.1.2" ]
-            for uri in invariant:
-                self.assertEqual(uri, iri2uri(uri))
-            
-        def test_iri(self):
-            """ Test that the right type of escaping is done for each part of the URI."""
-            self.assertEqual("http://xn--o3h.com/%E2%98%84", iri2uri(u"http://\N{COMET}.com/\N{COMET}"))
-            self.assertEqual("http://bitworking.org/?fred=%E2%98%84", iri2uri(u"http://bitworking.org/?fred=\N{COMET}"))
-            self.assertEqual("http://bitworking.org/#%E2%98%84", iri2uri(u"http://bitworking.org/#\N{COMET}"))
-            self.assertEqual("#%E2%98%84", iri2uri(u"#\N{COMET}"))
-            self.assertEqual("/fred?bar=%E2%98%9A#%E2%98%84", iri2uri(u"/fred?bar=\N{BLACK LEFT POINTING INDEX}#\N{COMET}"))
-            self.assertEqual("/fred?bar=%E2%98%9A#%E2%98%84", iri2uri(iri2uri(u"/fred?bar=\N{BLACK LEFT POINTING INDEX}#\N{COMET}")))
-            self.assertNotEqual("/fred?bar=%E2%98%9A#%E2%98%84", iri2uri(u"/fred?bar=\N{BLACK LEFT POINTING INDEX}#\N{COMET}".encode('utf-8')))
-
-    unittest.main()

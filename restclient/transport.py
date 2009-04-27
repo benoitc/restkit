@@ -22,6 +22,7 @@ import StringIO
 import sys
 
 import restclient
+from restclient.errors import TransportError
 from restclient.utils import to_bytestring, iri2uri
 
 try:
@@ -37,8 +38,7 @@ except ImportError:
 
 _default_http = None
 
-class TransportError(Exception):
-    """Error raised by a transport """
+
 
 USER_AGENT = "py-restclient/%s (%s)" % (restclient.__version__, sys.platform)
 DEFAULT_MAX_REDIRECT = 3
@@ -508,3 +508,5 @@ class HTTPLib2Transport(HTTPTransportBase):
     def add_credentials(self, user, password):
         super(HTTPLib2Transport, self).add_credentials(user, password)
         self.http.add_credentials(user, password)
+
+        

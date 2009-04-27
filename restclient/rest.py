@@ -34,54 +34,11 @@ from restclient.transport import getDefaultHTTPTransport, \
 HTTPTransportBase, TransportError
 from restclient.utils import to_bytestring
 
-__all__ = ['Resource', 'RestClient', 'ResourceNotFound', \
-        'Unauthorized', 'RequestFailed', 'ResourceError',
-        'RequestError', 'url_quote', 'url_encode']
+__all__ = ['Resource', 'RestClient', 'url_quote', 'url_encode']
 
 __docformat__ = 'restructuredtext en'
 
-class ResourceError(Exception):
-
-    def __init__(self, msg=None, http_code=None, response=None):
-        self.msg = msg or ''
-        self.status_code = http_code
-        self.response = response
-
-    def __str__(self):
-        if self.msg:
-            return self.msg
-        try:
-            return self._fmt % self.__dict__
-        except (NameError, ValueError, KeyError), e:
-            return 'Unprintable exception %s: %s' \
-                % (self.__class__.__name__, str(e))
-        
-class ResourceNotFound(ResourceError):
-    """Exception raised when no resource was found at the given url. 
-    """
-
-class Unauthorized(ResourceError):
-    """Exception raised when an authorization is required to access to
-    the resource specified.
-    """
-
-class RequestFailed(ResourceError):
-    """Exception raised when an unexpected HTTP error is received in response
-    to a request.
-    
-
-    The request failed, meaning the remote HTTP server returned a code 
-    other than success, unauthorized, or NotFound.
-
-    The exception message attempts to extract the error
-
-    You can get the status code by e.http_code, or see anything about the 
-    response via e.response. For example, the entire result body (which is 
-    probably an HTML error page) is e.response.body.
-    """
-
-class RequestError(Exception):
-    """Exception raised when a request is malformed"""
+from restclient.errors import *
 
 
 class Resource(object):
