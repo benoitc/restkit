@@ -110,15 +110,6 @@ decide that keys don't need to be encoded.
     .. automethod:: restclient.rest.RestClient.put
 
     .. automethod:: restclient.rest.RestClient.request
- 
-Exceptions
-----------
-
-.. autoexception:: restclient.rest.ResourceNotFound
-.. autoexception:: restclient.rest.Unauthorized
-.. autoexception:: restclient.rest.RequestFailed
-.. autoexception:: restclient.rest.RequestError
-
 
 .. _Pycurl: http://pycurl.sourceforge.net/
 .. _Httplib2: http://code.google.com/p/httplib2/

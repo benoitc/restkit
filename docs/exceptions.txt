@@ -1,0 +1,13 @@
+.. _exceptions_ref:
+
+Exceptions
+==========
+
+.. module:: restclient.errors
+
+.. autoexception:: restclient.rest.ResourceNotFound
+.. autoexception:: restclient.rest.Unauthorized
+.. autoexception:: restclient.rest.RequestFailed
+.. autoexception:: restclient.rest.RequestError
+.. autoexception:: restclient.rest.TransportError
+.. autoexception:: restclient.rest.InvalidUrl
