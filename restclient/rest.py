@@ -313,13 +313,13 @@ class RestClient(object):
                 raise RequestError('Unable to calculate '
                     'the length of the data parameter. Specify a value for '
                     'Content-Length')
-                    
-            headers['Content-Length'] = size
+            _headers['Content-Length'] = size
+            
             if 'Content-Type' not in headers:
                 type = None
                 if hasattr(body, 'name'):
                     type = mimetypes.guess_type(body.name)[0]
-                headers['Content-Type'] = type and type or 'application/octet-stream'
+                _headers['Content-Type'] = type and type or 'application/octet-stream'
                 
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
