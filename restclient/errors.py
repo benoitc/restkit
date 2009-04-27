@@ -70,9 +70,3 @@ class InvalidUrl(Exception):
     
 class TransportError(Exception):
     """Error raised by a transport """
-    
-class HTTPError(Exception):
-    """ raised when there is an HTTP error """
-    
-class DependancyError(Exception):
-    """ raised when it can't load a dependancy """

@@ -40,7 +40,7 @@ def createHTTPTransport():
     elif httplib2 is not None:
         http = HTTPLib2Transport()
     else:
-        raise DependancyError("httplib2 or curl are missing")
+        raise RuntimeError("httplib2 or curl are missing")
     return http
 
 def getDefaultHTTPTransport():
