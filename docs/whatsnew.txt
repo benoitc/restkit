@@ -1,9 +1,19 @@
 .. _whatsnew:
 
 
-***************************************
-What's New in python-restclient 1.2
-***************************************
+Changes
+=======
+
+1.3
+---
+
+- Detection of file size & type if body object is a file object. Also fix Content-Length for strings
+- Code have been refactored. All exceptions are now in :mod:`restclient.errors`. All transports have been splitted in :mod:`restclient.transport`
+- curl transport default timeout is now 0.
+- some fixes
+
+1.2
+---
 
 Encoding:
 ---------
