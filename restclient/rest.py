@@ -28,6 +28,11 @@ This module provide a common interface for all HTTP equest.
     >>> res.status
     200
 """
+
+import mimetypes
+import os
+import StringIO
+import types
 import urllib
 
 from restclient.errors import *
@@ -293,11 +298,29 @@ class RestClient(object):
         _headers.update(headers or {})
         
         is_unicode = True
-        if hasattr(body, 'read'):
-            if not 'Content-Length' in headers:
-                raise RequestError("'Content-Length' should be specified when body is a File like instance") 
-        elif body is not None:
-            body = to_bytestring(body)
+        
+        if body and body is not None and 'Content-Length' not in headers:
+            headers.setdefault("Transfer-Encoding", "chunked")
+            if isinstance(body, file):
+                try:
+                    body.flush()
+                except IOError:
+                    pass
+                size = int(os.fstat(data.fileno())[6])
+            elif isinstance(body, types.StringTypes):
+                size = len(body)
+                body = to_bytestring(body)
+            else:
+                raise RequestError('Unable to calculate '
+                    'the length of the data parameter. Specify a value for '
+                    'Content-Length')
+                    
+            if 'Content-Type' not in headers:
+                type = None
+                if hasattr(body, 'name'):
+                    type = mimetypes.guess_type(data.name)[0]
+                headers['Content-Type'] = type and type or 'application/octet-stream'
+
 
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
