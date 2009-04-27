@@ -61,7 +61,7 @@ def parse_url(url):
     a path relative to root (if any), and a boolean representing 
     whether the connection should use SSL or not.
     """
-    (scheme, netloc, path, params, query, frag) = urlparse(url)
+    (scheme, netloc, path, params, query, frag) = urlparse.urlparse(url)
 
     # We only support web services
     if not scheme in ('http', 'https'):
