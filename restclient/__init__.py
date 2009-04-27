@@ -21,7 +21,8 @@ except:
 
 debuglevel = 0
 
+from restclient.errors import *
 from restclient.transport import CurlTransport, HTTPLib2Transport
-from restclient.rest import * 
+from restclient.rest import *
 
 
