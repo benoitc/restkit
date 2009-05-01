@@ -107,7 +107,7 @@ class HTTPLib2Transport(HTTPTransportBase):
 
         if not (url.startswith('http://') or url.startswith('https://')):
             error = 'URL is not a HTTP URL: %r' % (url,)
-            if DEBUG:
+            if restclient.debuglevel > 0:
                 print >>sys.stderr, str(error)
             raise InvalidUrl(error)
 

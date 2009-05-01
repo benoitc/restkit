@@ -27,7 +27,7 @@ import sys
 
 setup(
     name = 'py-restclient',
-    version = '1.3',
+    version = '1.3.1',
     description = 'Python REST client',
     long_description = \
 """A simple REST client for Python, inspired by the microframework (Camping, Sinatra) style of specifying actions: get, put, post, delete.""",
@@ -55,7 +55,9 @@ setup(
         ]
     },
 
-    install_requires = ['httplib2'],
+    install_requires = [
+        'httplib2'
+    ],
 
     test_suite = 'nose.collector',
 
