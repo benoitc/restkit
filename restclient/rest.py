@@ -354,7 +354,9 @@ class RestClient(object):
         string parameters.
 
         """
+        trailing_slash = False
         if base and base.endswith("/"):
+            trailing_slash = True
             base = base[:-1]
         retval = [base]
 
@@ -362,7 +364,10 @@ class RestClient(object):
         path = "/".join([''] +
                         [url_quote(s.strip('/'), self.charset, self.safe) for s in path
                          if s is not None and isinstance(s, basestring)])
-
+                         
+        if trailing_slash and not path:
+            path = path + "/"
+            
         if path:
             retval.append(path)
 
