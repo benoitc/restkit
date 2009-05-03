@@ -339,6 +339,9 @@ class RestClient(object):
             elif isinstance(body, types.StringTypes):
                 size = len(body)
                 body = to_bytestring(body)
+            elif isinstance(body, dict):
+                body = form_encode(body)
+                size = len(body)
             else:
                 raise RequestError('Unable to calculate '
                     'the length of the data parameter. Specify a value for '
@@ -495,6 +498,13 @@ def url_encode(obj, charset="utf8", encode_keys=False):
             urllib.quote_plus(value)))
 
     return '&'.join(tmp)
+    
+def form_encode(obj, charser="utf8"):
+    tmp = []
+    for key, value in obj.items():
+        tmp.append("%s=%s" % (url_quote(key), 
+                url_quote(value)))
+    return to_bytestring(";".join(tmp))
 
 import cgi
 

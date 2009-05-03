@@ -14,9 +14,11 @@ Example:
     >>> from restclient import Resource
     >>> res = Resource('http://friendpaste.com')
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
-    '{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
+    u'{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).http_code
     200
+    
+Data returned are unicode or binaries.
 
 Resource class
 --------------

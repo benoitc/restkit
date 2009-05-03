@@ -124,6 +124,10 @@ class ResourceTestCase(unittest.TestCase):
     def testPostWithQuery(self):
         result = self.res.post('/query', test="testing")
         self.assert_(self.res.response.status == 200)
+    
+    def testPostForm(self):
+        result = self.res.post('/form', payload={ "a": "a", "b": "b" })
+        self.assert_(self.res.response.status == 200)
 
     def testSimplePut(self):
         result = self.res.put(payload="test")
@@ -192,6 +196,8 @@ class ResourceTestCase(unittest.TestCase):
             res = Resource(self.url, transport)
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
+        
+    
 
  
     

@@ -153,8 +153,19 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self._respond(200, extra_headers, "ok")
             else:
                 self.error_Response()
+        elif path == "/form":
+            content_type = self.headers.get('content-type', 'text/plain')
+            extra_headers.append(('Content-type', content_type))
+            content_length = int(self.headers.get('Content-length', 0))
+            body = self.rfile.read(content_length)
+            form = urlparse.parse_qs(body)
+            if form['a'] == ["a"] and form["b"] == ["b"]:
+                self._respond(200, extra_headers, "ok")
+            else:
+                self.error_Response()
         else:
             self.error_Response('Bad path')
+            
     do_PUT = do_POST
 
     def do_DELETE(self):
