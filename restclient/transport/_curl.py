@@ -173,6 +173,9 @@ class CurlTransport(HTTPTransportBase):
             c.setopt(pycurl.NOSIGNAL, 1)
             if restclient.debuglevel > 0:
                  c.setopt(pycurl.VERBOSE, 1)
+                 
+            # automatic decompression
+            c.setopt(pycurl.ENCODING, 'gzip,deflate')
 
             if self.cabundle:
                 c.setopt(pycurl.CAINFO, celf.cabundle)

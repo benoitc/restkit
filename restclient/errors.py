@@ -22,14 +22,14 @@ exception classes.
 class ResourceError(Exception):
 
     def __init__(self, msg=None, http_code=None, response=None):
-        self.msg = msg or ''
+        self.message = msg or ''
         self.status_code = http_code
         self.response = response
         Exception.__init__(self)
 
     def __str__(self):
-        if self.msg:
-            return self.msg
+        if self.message:
+            return self.message
         try:
             return self._fmt % self.__dict__
         except (NameError, ValueError, KeyError), e:
