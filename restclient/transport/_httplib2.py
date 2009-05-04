@@ -122,6 +122,7 @@ class HTTPLib2Transport(HTTPTransportBase):
             final_url = url
             
         httplib2_response['final_url'] = final_url
+        httplib2_response['origin_url'] = url
         resp = HTTPResponse(httplib2_response)
         return resp, content
 

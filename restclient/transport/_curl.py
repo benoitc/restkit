@@ -153,7 +153,8 @@ class CurlTransport(HTTPTransportBase):
             headers.setdefault('Expect', '100-continue')
 
         # encode url
-        url = iri2uri(to_bytestring(url))
+        origin_url = to_bytestring(url)
+        url = iri2uri(origin_url)
 
         c = pycurl.Curl()
         try:
@@ -251,18 +252,19 @@ class CurlTransport(HTTPTransportBase):
 
             response_headers = self._parseHeaders(header)
             code = c.getinfo(pycurl.RESPONSE_CODE)
-            return self._make_response(final_url=url, status=code,
-                    headers=response_headers, body=data.getvalue())
+            return self._make_response(final_url=url, origin_url=origin_url,
+                    status=code, headers=response_headers, body=data.getvalue())
         finally:
             c.close()
 
-    def _make_response(self, final_url=None, status=None, headers=None,
-            body=None):
+    def _make_response(self, final_url=None, origin_url=None, status=None, 
+            headers=None, body=None):
         infos = headers or {}    
         final_url = infos.get('location', final_url)
         infos.update({
             'status': status,
-            'final_url': final_url
+            'final_url': final_url,
+            'origin_url': origin_url
         })
         resp = HTTPResponse(infos)
         return resp, body
