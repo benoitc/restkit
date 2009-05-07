@@ -54,6 +54,7 @@ This module provide a common interface for all HTTP equest.
     200
 """
 
+import cgi
 import mimetypes
 import os
 import StringIO
@@ -431,22 +432,33 @@ class RestClient(object):
         string parameters.
 
         """
-        trailing_slash = False
+        base_trailing_slash = False
         if base and base.endswith("/"):
-            trailing_slash = True
+            base_trailing_slash = True
             base = base[:-1]
         retval = [base]
 
         # build the path
-        path = "/".join([''] +
-                        [url_quote(s.strip('/'), self.charset, self.safe) for s in path
-                         if s is not None and isinstance(s, basestring)])
-                         
-        if trailing_slash and not path:
-            path = path + "/"
+        _path = []
+        trailing_slash = False       
+        for s in path:
+            if s is not None and isinstance(s, basestring):
+                if len(s) > 1 and s.endswith('/'):
+                    trailing_slash = True
+                else:
+                    trailing_slash = False
+                _path.append(url_quote(s.strip('/'), self.charset, self.safe))
+                       
+        path_str =""
+        if _path:
+            path_str = "/".join([''] + _path)
+            if trailing_slash:
+                path_str = path_str + "/" 
+        elif base_trailing_slash:
+            path_str = path_str + "/" 
             
-        if path:
-            retval.append(path)
+        if path_str:
+            retval.append(path_str)
 
         params = []
         for k, v in query.items():
@@ -506,7 +518,7 @@ def form_encode(obj, charser="utf8"):
                 url_quote(value)))
     return to_bytestring(";".join(tmp))
 
-import cgi
+
 
 def _getCharacterEncoding(http_headers, xml_data):
     '''Get the character encoding of the XML document

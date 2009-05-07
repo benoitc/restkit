@@ -32,6 +32,22 @@ Unauthorized, RequestError
 
 from _server_test import HOST, PORT, run_server_test
 
+
+class RestClientTestCase(unittest.TestCase):
+    
+    def setUp(self):
+        self.transport = transport = HTTPLib2Transport()
+        self.client = RestClient(transport)
+        
+    def testMakeUri(self):
+        self.assert_(self.client.make_uri("http://localhost", "/") == "http://localhost/")
+        self.assert_(self.client.make_uri("http://localhost/") == "http://localhost/")
+        self.assert_(self.client.make_uri("http://localhost/", "/test/echo") == "http://localhost/test/echo")
+        self.assert_(self.client.make_uri("http://localhost/", "/test/echo/") == "http://localhost/test/echo/")
+        self.assert_(self.client.make_uri("http://localhost", "/test/echo/") == "http://localhost/test/echo/")
+        self.assert_(self.client.make_uri("http://localhost", "test/echo") == "http://localhost/test/echo")
+        self.assert_(self.client.make_uri("http://localhost", "test/echo/") == "http://localhost/test/echo/")
+        
 class ResourceTestCase(unittest.TestCase):
 
     def setUp(self):
