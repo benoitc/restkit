@@ -11,6 +11,7 @@ store/*
 *.DS_Store
 *.beam
 *.log
+py_restclient.egg-info
 
 syntax: regexp
 .*\#.*\#$

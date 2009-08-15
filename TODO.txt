@@ -1,0 +1,2 @@
+- remove httplib2 dependancy and replace it by a tiny http client allowing streaming & such (also less bugged)
+- add support for different auth schema (oauth, basic auth come to my mind first)
