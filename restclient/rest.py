@@ -341,6 +341,7 @@ class RestClient(object):
                 size = len(body)
                 body = to_bytestring(body)
             elif isinstance(body, dict):
+                _headers.setdefault('Content-Type', "application/x-www-form-urlencoded; charset=utf-8")
                 body = form_encode(body)
                 size = len(body)
             else:
