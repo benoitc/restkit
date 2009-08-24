@@ -343,7 +343,6 @@ class RestClient(object):
             elif isinstance(body, dict):
                 _headers.setdefault('Content-Type', "application/x-www-form-urlencoded; charset=utf-8")
                 body = form_encode(body)
-                print body
                 size = len(body)
             else:
                 raise RequestError('Unable to calculate '
