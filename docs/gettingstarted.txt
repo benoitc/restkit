@@ -47,3 +47,15 @@ Or get a paste in JSON :
         'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
     headers={'Accept': 'application/json'})
 
+
+Basic Authentification :
+------------------------
+
+.. code-block:: python
+
+    from restkit import RestClient
+    from restkit import httpc
+    transport = httpc.HttpClient()
+    transport.add_authorization(httpc.BasicAuth((username, password)))
+    client = RestClient(transport=transport)
+    user_timeline = client.request('GET', "http://twitter.com/statuses/user_timeline.json")

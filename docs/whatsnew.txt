@@ -4,59 +4,25 @@
 Changes
 =======
 
-1.3.1
------
-
-- Better detection of content encoding
-- Make sure we keep the trailing slash
-
-1.3
+0.9
 ---
 
-- Detection of file size & type if body object is a file object. Also fix Content-Length for strings
-- Code have been refactored. All exceptions are now in :mod:`restclient.errors`. All transports have been splitted in :mod:`restclient.transport`
-- curl transport default timeout is now 0.
-- some fixes
+First release of restkit replacing py-restclient. Compared to restclient, there are no more dependancy on httplib2 or pycurl.
+Another change is about Authentification.
 
-1.2
----
+To use basic authentification :
 
-Encoding:
----------
+.. code-block:: python
 
-- unicode urls are now managed
-- data get from response is now in unicode if it's not a binary
+    from restkit import RestClient
+    from restkit.httpc import HttpClient
+    
+    transport = httpc.HttpClient()
+    transport.add_authorization(httpc.BasicAuth((username, password)))
+    
+    client = RestClient(transport=trasnport)
+    user_timeline.request('GET', "http://twitter.com/statuses/user_timeline.json")
 
-Fixes:
-------
-
-- curl client have been fixed
-- new response object that act now as a real dict. You could get all
-  headers of the response like this :
- 
-.. code-block:: python   
-
-    >>> from restclient import Resource
-    >>> res = Resource('http://e-engura.org')
-    >>> page = res.get()
-    >>> res.status
-    200
-    >>> res.response
-    <HTTPResponse status 200 for http://e-engura.org>
-    >>> res.response.__dict__
-    {'status': 200, 'final_url': 'http://e-engura.org'}
-    >>> for i in res.response.items():
-    ...     print i
-    ... 
-    ('status', 200)
-    ('content-length', '5448')
-    ('final_url', 'http://e-engura.org')
-    ('accept-ranges', 'bytes')
-    ('server', 'nginx/0.6.31')
-    ('last-modified', 'Sun, 28 Dec 2008 23:15:27 GMT')
-    ('connection', 'keep-alive')
-    ('date', 'Wed, 04 Feb 2009 21:52:14 GMT')
-    ('content-type', 'text/html')
 
 
 .. seealso::
