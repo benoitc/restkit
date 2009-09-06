@@ -629,9 +629,7 @@ class MultipartForm(object):
                 else:
                     filetype = None
                 if not isinstance(value, file) and self.content_length is None:
-                    raise RequestError('Unable to calculate '
-                        'the length of %s parameter. Specify a value for '
-                        'Content-Length' % name)
+                    value = value.read()
                     
                 boundary = BoundaryItem(name, value, fname, filetype)
             else:
