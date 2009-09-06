@@ -78,30 +78,12 @@ def make_query(string, method='GET', fname=None,
         print >>sys.stderr, e
         return 
 
-    transport = None 
-    proxy_infos = None
-    if proxy and proxy is not None:
-        try:
-            proxy_url = Url(proxy)
-        except:
-            print >>sys.stderr, "proxy url is invalid"
-            return
-        proxy_infos = { "proxy_host": proxy_url.hostname }
-        if proxy_url.port is not None:
-            proxy_infos["proxy_port"] = proxy_url.port
-        if proxy_url.username and proxy_url.username is not None:
-            proxy_infos["proxy_username"] = proxy_url.username
-            proxy_infos["proxy_password"] = proxy_url.password or ''
-
-    if useCurl():
-        transport = CurlTransport(proxy_infos=proxy_infos)
-    else:
-        transport = HTTPLib2Transport(proxy_infos=proxy_infos)
-    
     if uri.username:
-        transport.add_credentials(uri.username, uri.password) 
-    
-    res = restclient.Resource(uri.uri, transport=transport)
+        transport = ProxiedHttpClient()
+        transport.add_authorization(httpc.BasicAuth((uri.username, uri.password)))
+        res = restkit.Resource(uri.uri, transport=transport)
+    else:
+        res = restkit.Resource(uri.uri)
 
     list_headers = list_headers or []
     headers = {}
@@ -137,7 +119,7 @@ def make_query(string, method='GET', fname=None,
 
 
 def main():
-    parser = OptionParser(usage='%prog [options] url [METHOD] [filename]', version="%prog " + restclient.__version__)
+    parser = OptionParser(usage='%prog [options] url [METHOD] [filename]', version="%prog " + restkit.__version__)
     parser.add_option('-H', '--header', action='append', dest='headers',
             help='http string header in the form of Key:Value. '+
             'For example: "Accept: application/json" ')
