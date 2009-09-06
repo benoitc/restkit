@@ -159,9 +159,14 @@ class HttpClient(object):
                         connection.send("")
                     elif isinstance(body, types.StringTypes) or hasattr(body, 'read'):
                         _send_body_part(body, connection)
+                    elif hasattr(body, "__iter__"):
+                        for body_part in body:
+                            _send_body_part(body_part, connection)
+                    elif isinstance(body, list):
+                        for body_part in body:
+                            _send_body_part(body_part, connection)
                     else:
-                        for part in body_parts:
-                            _send_body_part(part, connection)
+                        _send_body_part(body, connection)
                     
             except socket.gaierror:
                 connection.close()
@@ -230,8 +235,7 @@ class HttpClient(object):
         if method in ["POST", "PUT"] and body is None:
             body = ""
             headers.setdefault("Content-Length", str(len(body)))
-            
-        print headers
+
         response = self._request(uri, method, body, headers)
         resp = HTTPResponse(response)
         resp.final_url = self.final_url
@@ -321,8 +325,8 @@ def _decompress_content(resp, response, stream=False, stream_size=16384):
                 return ResponseStream(response, stream_size)
             else:
                 return response.read()
-    except:
-        raise errors.ResponseError("Decompression failed")
+    except Exception, e:
+        raise errors.ResponseError("Decompression failed %s" % str(e))
         
         
 def _send_body_part(data, connection):

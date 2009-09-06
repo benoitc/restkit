@@ -6,33 +6,27 @@ Installation
 The most recent release is always available in the `cheeseshop`_ and can be
 installed using `easy_install`_::
 
-    easy_install py-restclient
+    easy_install restkit
 
 Alternatly, you can also install the development version from 
 our `Mercurial`_ repository::
 
-    hg clone https://dev.e-engura.org/hg/py-restclient
-    cd python-restclient
+    hg clone https://benoitc@bitbucket.org/benoitc/restkit/
+    cd restkit
     sudo python setup.py install
 
-Last command will install pthon-restclient as a package via setuptools. This
+Last command will install restkit as a package via setuptools. This
 will make it available in your python path. Alternately you can copy or symlink
 the simplecouchdb subdirectory into your site-packages directory or
 anywhere in your PYTHONPATH.
 
-You could also get source from  `Bitbucket`_ ::
-
-    hg clone https://benoitc@bitbucket.org/benoitc/py-restclient/
-
 Requirements
 ============
 
-To use py-restclient you will need **Python 2.5** or later and
-`Httplib2`_ :: . 
+To use py-restclient you will need **Python 2.5**, **Python 2.6x* recommanded
 
 .. _cheeseshop: http://wiki.python.org/moin/CheeseShopTutorial
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
 .. _Mercurial: http://www.selenic.com/mercurial/
 .. _Bitbucket: http://www.bitbucket.org/benoitc/py-restclient
-.. _Httplib2: http://code.google.com/p/httplib2
 

@@ -7,17 +7,17 @@ This tutoriall exposes key features of this library through mainly code
 examples. For in-depth description of the modules, you'll want to read 
 the :ref:`API <api>` documentation.
 
-If you have not installed python-restclient yet, the :ref:`installation docs <installation>`
+If you have not installed restkit yet, the :ref:`installation docs <installation>`
 will get you started. 
 
-Perform HTTP call support  with `restclient.rest.Resource`.
+Perform HTTP call support  with `restkit.rest.Resource`.
 -----------------------------------------------------------
 Usage example, get friendpaste page :
 
 
 .. code-block:: python
 
-    from restclient import Resource
+    from restkit import Resource
     res = Resource('http://friendpaste.com')
     page = res.get()
     print page
@@ -25,7 +25,7 @@ Usage example, get friendpaste page :
     
 
 
-Perform HTTP call support  with `restclient.rest.RestClient`.
+Perform HTTP call support  with `restkit.rest.RestClient`.
 -------------------------------------------------------------
 
 Usage example, get friendpaste page :
@@ -33,7 +33,7 @@ Usage example, get friendpaste page :
 
 .. code-block:: python
 
-    from restclient import RestClient
+    from restkit import RestClient
     client = RestClient()
     page = resource.request('GET', 'http://friendpaste.com')
 
@@ -41,7 +41,7 @@ Or get a paste in JSON :
 
 .. code-block:: python
 
-    from restclient import RestClient
+    from restkit import RestClient
     client = RestClient()
     client.make_request('GET', 
         'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),

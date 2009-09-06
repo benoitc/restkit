@@ -13,6 +13,8 @@ store/*
 *.log
 restkit.egg-info
 
+doc/_build/
+
 syntax: regexp
 .*\#.*\#$
 

@@ -170,6 +170,17 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self._respond(200, extra_headers, "ok")
             else:
                 self.error_Response()
+        elif path == "/multipart":
+            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
+            content_length = int(self.headers.get('Content-length', 0))
+            if ctype == 'multipart/form-data':
+                req = cgi.parse_multipart(self.rfile, pdict)
+                body = req['t'][0]
+                extra_headers = [('Content-type', 'text/plain')]
+                self._respond(200, extra_headers, body)
+            else:
+                self.error_Response()
+            
         else:
             self.error_Response('Bad path')
             

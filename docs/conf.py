@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# python-restclient documentation build configuration file, created by
+# python-restkit documentation build configuration file, created by
 # sphinx-quickstart on Wed Dec 24 16:29:48 2008.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -41,7 +41,7 @@ source_suffix = '.txt'
 master_doc = 'index'
 
 # General information about the project.
-project = u'py-restclient'
+project = u'restkit'
 copyright = u'2008, 2009 Benoit Chesneau <benoitc@e-engura.org>'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -153,7 +153,7 @@ html_static_path = ['_static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'python-restclientdoc'
+htmlhelp_basename = 'restkitdoc'
 
 
 # Options for LaTeX output
@@ -168,7 +168,7 @@ htmlhelp_basename = 'python-restclientdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'python-restclient.tex', ur'python-restclient Documentation',
+  ('index', 'restkit.tex', ur'restkit Documentation',
    ur'Benoit Chesneau <benoitc@e-engura.org>', 'manual'),
 ]
 

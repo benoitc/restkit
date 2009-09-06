@@ -3,7 +3,7 @@
 Console client
 ==============
 
-A console client is available with py-restclient. It allow you to perform any HTTP
+A console client is available with py-restkit. It allow you to perform any HTTP
  request you need in console.
 
 Examples :

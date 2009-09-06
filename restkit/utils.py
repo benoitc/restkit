@@ -53,8 +53,7 @@ def to_bytestring(s):
     if isinstance(s, unicode):
         return s.encode('utf-8')
     return s
-    
-    
+
 def parse_url(url):
     """
     Given a URL, returns a 4-tuple containing the hostname, port,

@@ -34,7 +34,7 @@ setup(
     author = 'Benoit Chesneau',
     author_email = 'benoitc@e-engura.org',
     license = 'BSD',
-    url = 'http://code.e-engura.org/restkit',
+    url = 'http://bitbucket.org/benoitc/restkit/',
     zip_safe = True,
 
     classifiers = [

@@ -3,7 +3,7 @@
 Resource
 ========
 
-.. module:: restclient
+.. module:: restkit
 
 This module provide a common interface for all HTTP requests. This
 module make HTTP requests using `Pycurl`_ by default if installed or
@@ -11,7 +11,7 @@ module make HTTP requests using `Pycurl`_ by default if installed or
 
 Example: 
 
-    >>> from restclient import Resource
+    >>> from restkit import Resource
     >>> res = Resource('http://friendpaste.com')
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
     u'{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
@@ -23,7 +23,7 @@ Data returned are unicode or binaries.
 Resource class
 --------------
 
-.. autoclass:: restclient.rest.Resource
+.. autoclass:: restkit.rest.Resource
 
     **Properties**
 
@@ -34,9 +34,9 @@ Resource class
     .. attribute:: transport
 
         Any instance of object based on 
-        `restclient.transport.HTTPTransportBase`. By default it will use 
+        `restkit.transport.HTTPTransportBase`. By default it will use 
         a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-        installed or `restclient.http.HTTPLib2Transport`,a transport based on 
+        installed or `restkit.http.HTTPLib2Transport`,a transport based on 
         `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
         own depending of the option you need to access to the serve
         (authentification, proxy, ....).
@@ -44,23 +44,23 @@ Resource class
 
     **Methods**
 
-    .. automethod:: restclient.rest.Resource.clone
+    .. automethod:: restkit.rest.Resource.clone
 
-    .. automethod:: restclient.rest.Resource.__call__
+    .. automethod:: restkit.rest.Resource.__call__
 
-    .. automethod:: restclient.rest.Resource.get
+    .. automethod:: restkit.rest.Resource.get
 
-    .. automethod:: restclient.rest.Resource.head
+    .. automethod:: restkit.rest.Resource.head
 
-    .. automethod:: restclient.rest.Resource.delete
+    .. automethod:: restkit.rest.Resource.delete
 
-    .. automethod:: restclient.rest.Resource.post
+    .. automethod:: restkit.rest.Resource.post
 
-    .. automethod:: restclient.rest.Resource.put
+    .. automethod:: restkit.rest.Resource.put
     
-    .. automethod:: restclient.rest.Resource.request
+    .. automethod:: restkit.rest.Resource.request
 
-    .. automethod:: restclient.rest.Resource.update_uri
+    .. automethod:: restkit.rest.Resource.update_uri
 
 RestClient class
 ----------------
@@ -69,7 +69,7 @@ RestClient represent a simple HTTP client. **New in 1.1** By default all urls ar
 encoded. But you could change default charset, safe characters and
 decide that keys don't need to be encoded.
 
-.. autoclass:: restclient.rest.RestClient
+.. autoclass:: restkit.rest.RestClient
 
     
 
@@ -78,12 +78,8 @@ decide that keys don't need to be encoded.
     .. attribute:: transport
 
         Any http instance of object based on 
-        `restclient.http.HTTPTransportBase`. By default it will use 
-        a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-        installed or `restclient.http.HTTPLib2Transport`,a transport based on 
-        `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
-        own depending of the option you need to access to the serve
-        (authentification, proxy, ....).
+        `restkit.httpc.HttpClient`. By default it will use 
+        `restkit.httpc.ProxiedHttpClient that support simple proxy auth.
 
     .. describe:: charset
         
@@ -101,17 +97,17 @@ decide that keys don't need to be encoded.
 
     **Methods**
 
-    .. automethod:: restclient.rest.RestClient.get
+    .. automethod:: restkit.rest.RestClient.get
 
-    .. automethod:: restclient.rest.RestClient.head
+    .. automethod:: restkit.rest.RestClient.head
 
-    .. automethod:: restclient.rest.RestClient.delete
+    .. automethod:: restkit.rest.RestClient.delete
 
-    .. automethod:: restclient.rest.RestClient.post
+    .. automethod:: restkit.rest.RestClient.post
 
-    .. automethod:: restclient.rest.RestClient.put
+    .. automethod:: restkit.rest.RestClient.put
 
-    .. automethod:: restclient.rest.RestClient.request
+    .. automethod:: restkit.rest.RestClient.request
 
 .. _Pycurl: http://pycurl.sourceforge.net/
 .. _Httplib2: http://code.google.com/p/httplib2/

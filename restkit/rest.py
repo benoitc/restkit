@@ -56,7 +56,9 @@ This module provide a common interface for all HTTP equest.
 
 import cgi
 import mimetypes
+import uuid
 import os
+import re
 import StringIO
 import types
 import urllib
@@ -70,7 +72,11 @@ from restkit.errors import *
 from restkit.httpc import ProxiedHttpClient, ResponseStream
 from restkit.utils import to_bytestring
 
-__all__ = ['Resource', 'RestClient', 'url_quote', 'url_encode']
+MIME_BOUNDARY = 'END_OF_PART'
+
+
+__all__ = ['Resource', 'RestClient', 'url_quote', 'url_encode', 
+'MultipartForm', 'multipart_form_encode', 'form_encode']
 
 __docformat__ = 'restructuredtext en'
 
@@ -245,6 +251,7 @@ class RestClient(object):
         self.status = None
         self.response = None
         self._headers = headers
+        self._body_parts = []
 
 
     def get(self, uri, path=None, headers=None, **params):
@@ -329,8 +336,9 @@ class RestClient(object):
         _headers.update(headers or {})
         
         is_unicode = True
-        
-        if body is not None and 'Content-Length' not in headers:
+        self._body_parts = []
+        size = None
+        if body is not None:
             if isinstance(body, file):
                 try:
                     body.flush()
@@ -340,22 +348,32 @@ class RestClient(object):
             elif isinstance(body, types.StringTypes):
                 body = to_bytestring(body)
                 size = len(body)
-                
             elif isinstance(body, dict):
-                _headers.setdefault('Content-Type', "application/x-www-form-urlencoded; charset=utf-8")
-                body = form_encode(body)
-                size = len(body)
-            else:
+                content_type = headers.get('Content-Type')
+                if content_type is not None and content_type.startswith("multipart/form-data"):
+                    type_, opts = cgi.parse_header(content_type)
+                    boundary = opts.get('boundary', uuid.uuid4().hex)
+                    body, _headers = multipart_form_encode(body, _headers, boundary)
+                else:
+                    _headers['Content-Type'] = "application/x-www-form-urlencoded; charset=utf-8"
+                    body = form_encode(body)
+                    size = len(body)
+            elif isinstance(body, MultipartForm):
+                headers['Content-Type'] = "multipart/form-data; boundary=%s" % body.boundary
+                headers['Content-Length'] = str(body.get_size())
+                
+            if 'Content-Length' not in _headers and size is not None:
+                _headers['Content-Length'] = size
+            elif 'Content-Length' not in _headers:
                 raise RequestError('Unable to calculate '
                     'the length of the data parameter. Specify a value for '
                     'Content-Length')
-            _headers['Content-Length'] = size
             
             if 'Content-Type' not in headers:
-                type = None
+                type_ = None
                 if hasattr(body, 'name'):
-                    type = mimetypes.guess_type(body.name)[0]
-                _headers['Content-Type'] = type and type or 'application/octet-stream'
+                    type_ = mimetypes.guess_type(body.name)[0]
+                _headers['Content-Type'] = type_ and type_ or 'application/octet-stream'
                 
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
@@ -379,6 +397,7 @@ class RestClient(object):
 
         if isinstance(data, ResponseStream):
             return data
+            
         # determine character encoding
         true_encoding, http_encoding, xml_encoding, sniffed_xml_encoding, \
         acceptable_content_type = _getCharacterEncoding(resp, data)
@@ -521,6 +540,126 @@ def form_encode(obj, charser="utf8"):
         tmp.append("%s=%s" % (url_quote(key), 
                 url_quote(value)))
     return to_bytestring("&".join(tmp))
+
+
+class BoundaryItem(object):
+    def __init__(self, name, value, fname=None, filetype=None, filesize=None):
+        self.name = url_quote(name)
+        if value is not None and not hasattr(value, 'read'):
+            value = url_quote(value)
+            self.size = len(value)
+        self.value = value
+        if fname is not None:
+            if isinstance(fname, unicode):
+                fname = fname.encode("utf-8").encode("string_escape").replace('"', '\\"')
+            else:
+                fname = fname.encode("string_escape").replace('"', '\\"')
+        self.fname = fname
+        if filetype is not None:
+            filetype = to_bytestring(filetype)
+        self.filetype = filetype
+        
+        if isinstance(value, file) and filesize is None:
+            try:
+                value.flush()
+            except IOError:
+                pass
+            self.size = int(os.fstat(value.fileno())[6])
+            
+    def encode_hdr(self, boundary):
+        """Returns the header of the encoding of this parameter"""
+        boundary = url_quote(boundary)
+        headers = ["--%s" % boundary]
+        if self.fname:
+            disposition = 'form-data; name="%s"; filename="%s"' % (self.name,
+                    self.fname)
+        else:
+            disposition = 'form-data; name="%s"' % self.name
+        headers.append("Content-Disposition: %s" % disposition)
+        if self.filetype:
+            filetype = self.filetype
+        else:
+            filetype = "text/plain; charset=utf-8"
+        headers.append("Content-Type: %s" % filetype)
+        headers.append("Content-Length: %i" % self.size)
+        headers.append("")
+        headers.append("")
+        return "\r\n".join(headers)
+
+    def encode(self, boundary):
+        """Returns the string encoding of this parameter"""
+        value = self.value
+        if re.search("^--%s$" % re.escape(boundary), value, re.M):
+            raise ValueError("boundary found in encoded string")
+
+        return "%s%s\r\n" % (self.encode_hdr(boundary), value)
+        
+    def iter_encode(self, boundary, blocksize=16384):
+        if not hasattr(self.value, "read"):
+            yield self.encode(boundary)
+        else:
+            yield self.encode_hdr(boundary)
+            yield self.encode(boundary)
+            while True:
+                block = self.value.read(blocksize)
+                if not block:
+                    yield "\r\n"
+                    break
+                yield block
+                
+                
+class MultipartForm(object):
+    
+    def __init__(self, params, boundary, headers):
+        self.boundary = boundary
+        self.boundaries = []
+        self.size = 0
+        
+        self.content_length = headers.get('Content-Length')
+        
+        if hasattr(params, 'items'):
+            params = params.items()
+            
+        for param in params:
+            name, value = param
+            if hasattr(value, "read"):
+                fname = getattr(value, 'name')
+                if fname is not None:
+                    filetype = ';'.join(filter(None, guess_type(fname)))
+                else:
+                    filetype = None
+                if not isinstance(value, file) and self.content_length is None:
+                    raise RequestError('Unable to calculate '
+                        'the length of %s parameter. Specify a value for '
+                        'Content-Length' % name)
+                    
+                boundary = BoundaryItem(name, value, fname, filetype)
+            else:
+                 boundary = BoundaryItem(name, value)
+            self.boundaries.append(boundary)
+
+    def get_size(self):
+        if self.content_length is not None:
+            return int(self.content_length)
+        size = 0
+        for boundary in self.boundaries:
+            size = size + boundary.size
+        return size
+        
+    def __iter__(self):
+        for boundary in self.boundaries:
+            for block in boundary.iter_encode(self.boundary):
+                yield block
+        yield "--%s--\r\n" % self.boundary
+                    
+
+def multipart_form_encode(params, headers, boundary):
+    headers = headers or {}
+    boundary = urllib.quote_plus(boundary)
+    body = MultipartForm(params, boundary, headers)
+    headers['Content-Type'] = "multipart/form-data; boundary=%s" % boundary
+    headers['Content-Length'] = str(body.get_size())
+    return body, headers
 
 
 

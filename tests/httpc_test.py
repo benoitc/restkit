@@ -135,6 +135,12 @@ class HTTPClientTestCase(unittest.TestCase):
     def testPostWithQuery(self):
         result = self.res.post('/query', test="testing")
         self.assert_(self.res.response.status == 200)
+        
+    def testMultipartForm(self):
+        result = self.res.post('/multipart', payload={"t": "test"},
+            headers={'Content-Type': 'multipart/form-data'})
+        self.assert_(self.res.response.status == 200)
+        self.assert_(result == "test")
 
     def testSimplePut(self):
         result = self.res.put(payload="test")
