@@ -82,6 +82,8 @@ class HTTPClientTestCase(unittest.TestCase):
     def testGetWithQuery(self):
         result = self.res.get('/query', test="testing")
         self.assert_(self.res.response.status == 200)
+        self.assert_(result == "ok")
+        self.assert_(self.res.response.status == 200)
 
     def testGetBinary(self):
         import imghdr
@@ -95,7 +97,13 @@ class HTTPClientTestCase(unittest.TestCase):
         f.close()
         self.assert_(imghdr.what(fname) == 'gif')
 
-
+    def testGetRedirect(self):
+        result = self.res.get('/redirect')
+        complete_url = "%s/complete_redirect" % self.url
+        self.assert_(self.res.response.status == 200)
+        self.assert_(self.res.response.final_url == complete_url)
+        self.assert_(result == "ok")
+        
     def testSimplePost(self):
         result = self.res.post(payload="test")
         self.assert_(result=="test")

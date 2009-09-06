@@ -94,6 +94,13 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                     self._respond(200, extra_headers, "ok")
                 else:
                     self._respond(403, extra_headers, "niet!")
+        elif path == "/redirect":
+            extra_headers = [('Content-type', 'text/plain'), 
+                ('Location', '/complete_redirect')]
+            self._respond(301, extra_headers, "")
+        elif path == "/complete_redirect":
+            extra_headers = [('Content-type', 'text/plain')]
+            self._respond(200, extra_headers, "ok")
         else:
             self._respond(404, 
                 [('Content-type', 'text/plain')], "Not Found" )

@@ -19,6 +19,7 @@ import base64
 import copy
 import httplib
 import re
+import socket
 import StringIO
 import types
 import urllib
@@ -107,77 +108,116 @@ class HttpClient(object):
         connection = self._get_connection(uri, headers)
         connection.debuglevel = restkit.debuglevel
         
-        if connection.host != uri.hostname:
-            connection.putrequest(method, uri.geturl())
-        else:
-            connection.putrequest(method, _relative_uri(uri))
-        
-        # bug in Python 2.4 and 2.5
-        # httplib.HTTPConnection.putrequest adding 
-        # HTTP request header 'Host: domain.tld:443' instead of
-        # 'Host: domain.tld'
-        if (uri.scheme == 'https' and (uri.port or 443) == 443 and
-                hasattr(connection, '_buffer') and
-                isinstance(connection._buffer, list)):
-            header_line = 'Host: %s:443' % uri.hostname
-            replacement_header_line = 'Host: %s' % uri.hostname
+        for i in range(2):
             try:
-                connection._buffer[connection._buffer.index(header_line)] = (
-                    replacement_header_line)
-            except ValueError:  # header_line missing from connection._buffer
-                pass
+                if connection.host != uri.hostname:
+                    connection.putrequest(method, uri.geturl())
+                else:
+                    connection.putrequest(method, _relative_uri(uri))
         
-        # Send the HTTP headers.
-        for header_name, value in headers.iteritems():
-          connection.putheader(header_name, value)
-        connection.endheaders()
+                # bug in Python 2.4 and 2.5
+                # httplib.HTTPConnection.putrequest adding 
+                # HTTP request header 'Host: domain.tld:443' instead of
+                # 'Host: domain.tld'
+                if (uri.scheme == 'https' and (uri.port or 443) == 443 and
+                        hasattr(connection, '_buffer') and
+                        isinstance(connection._buffer, list)):
+                    header_line = 'Host: %s:443' % uri.hostname
+                    replacement_header_line = 'Host: %s' % uri.hostname
+                    try:
+                        connection._buffer[connection._buffer.index(header_line)] = (
+                            replacement_header_line)
+                    except ValueError:  # header_line missing from connection._buffer
+                        pass
         
-        if body:
-            if isinstance(body, types.StringTypes) or hasattr(body, 'read'):
-                _send_body_part(body, connection)
-            else:
-                for part in body_parts:
-                    _send_body_part(part, connection)
+                # Send the HTTP headers.
+                for header_name, value in headers.iteritems():
+                    connection.putheader(header_name, value)
+                connection.endheaders()
+        
+                if body is not None:
+                    if i > 0 and hasattr(body, 'seek'):
+                        body.seek(0)
+                        
+                    if isinstance(body, types.StringTypes) and len(body) == 0:
+                        connection.send("")
+                    elif isinstance(body, types.StringTypes) or hasattr(body, 'read'):
+                        _send_body_part(body, connection)
+                    else:
+                        for part in body_parts:
+                            _send_body_part(part, connection)
+                    
+            except socket.gaierror:
+                connection.close()
+                raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
+            except (socket.error, httplib.HTTPException):
+                if i == 0:
+                    connection.close()
+                    continue
+                else:
+                    raise
+            break
                     
         # Return the HTTP Response from the server.
         return connection.getresponse()
         
-    def request(self, url, method='GET', body=None, headers=None, stream=False, stream_size=16384,
-            nb_redirections=0):  
-        headers = headers or {}
-        uri = url_parser(url)
-        
-        headers.setdefault('User-Agent', restkit.USER_AGENT)
+    def _request(self, uri, method, body, headers, nb_redirections=0):
         auths = [(auth.depth(uri), auth) for auth in self.authorizations if auth.inscope(uri.hostname, uri)]
         auth = auths and sorted(auths)[0][1] or None
         if auth:
-            auth.request(url, method, body, headers)
+            auth.request(uri, method, body, headers)
             
         headers = _normalize_headers(headers)
         old_response = None
         
         response = self._make_request(uri, method, body, headers)
-        
-        if auth and auth.response(response, body):
-            auth.request(method, request_uri, headers, body)
-            response = self._make_request(conn, request_uri, method, body, headers)
             
+        if auth and auth.response(response, body):
+            auth.request(method, uri, headers, body)
+            response = self._make_request(conn, uri, method, body, headers)
             
         if self.follow_redirect:
             if nb_redirections < self.MAX_REDIRECTIONS: 
                 if response.status in [301, 302, 307]:
                     if method in ["GET", "HEAD"] or self.force_follow_redirect:
-                        old_response = copy.deepcopy(response)
-                        new_url = response['location']
-                        response = self.request(new_url, method, body, headers, 
-                            nb_redirections + 1)
-                elif response.status == 303:
-                    new_url = response['location']
-                    response = self.request(new_url, 'GET', headers)
+                        if method not in ["GET", "HEAD"] and hasattr(body, 'seek'):
+                            body.seek(0)
+                        
+                        new_url = response.getheader('location')
+                        new_uri = url_parser(new_url)
+                        if not new_uri.netloc: # we got a relative url
+                            absolute_uri = "%s://%s" % (uri.scheme, uri.netloc)
+                            new_url = urlparse.urljoin(absolute_uri, new_url)
+                        response = self._request(url_parser(new_url), method, body, 
+                            headers, nb_redirections + 1)
+                        self.final_url = new_url
+                elif response.status == 303: # only get request on this status
+                    new_url = response.getheader('location')
+                    if not new_uri.netloc: # we got a relative url
+                        absolute_uri = "%s://%s" % (uri.scheme, uri.netloc)
+                        new_uri = url_parser(new_url)
+                        new_url = urlparse.urljoin(absolute_uri, new_url)
+                    response = self._request(url_parser(new_url), 'GET', headers, nb_redirections + 1)
+                    self.final_url = new_url
             else:
                 raise errors.RedirectLimit("Redirection limit is reached")
+        return response
         
+    def request(self, url, method='GET', body=None, headers=None, stream=False, stream_size=16384):  
+        headers = headers or {}
+        uri = url_parser(url)
+        self.final_url = url
+        
+        headers.setdefault('User-Agent', restkit.USER_AGENT)
+        if method in ["POST", "PUT"] and body is None:
+            body = ""
+            headers.setdefault("Content-Length", str(len(body)))
+            
+        print headers
+        response = self._request(uri, method, body, headers)
         resp = HTTPResponse(response)
+        resp.final_url = self.final_url
+        
         if method == "HEAD":
             return resp, ""
         else:

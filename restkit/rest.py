@@ -330,7 +330,7 @@ class RestClient(object):
         
         is_unicode = True
         
-        if body and body is not None and 'Content-Length' not in headers:
+        if body is not None and 'Content-Length' not in headers:
             if isinstance(body, file):
                 try:
                     body.flush()
