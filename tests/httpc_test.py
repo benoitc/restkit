@@ -180,7 +180,7 @@ class HTTPClientTestCase(unittest.TestCase):
 
         self.assert_(self.res.response.status == 200 )
 
-    def testAuth(self):
+    def testBasicAuth(self):
         httptransport = httpc.HttpClient()
         httptransport.add_authorization(httpc.BasicAuth(("test", "test")))
         

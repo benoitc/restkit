@@ -67,7 +67,7 @@ except ImportError:
     chardet = False
 
 from restkit.errors import *
-from restkit.httpc import HttpClient, ResponseStream
+from restkit.httpc import ProxiedHttpClient, ResponseStream
 from restkit.utils import to_bytestring
 
 __all__ = ['Resource', 'RestClient', 'url_quote', 'url_encode']
@@ -238,7 +238,7 @@ class RestClient(object):
         """ 
 
         if transport is None:
-            transport = HttpClient()
+            transport = ProxiedHttpClient()
 
         self.transport = transport
 

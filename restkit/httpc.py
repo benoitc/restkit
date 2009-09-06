@@ -14,10 +14,24 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
+# 
+# ProxiedHttpClient code from Google GData Python client under Apache License 2
+# Copyright (C) 2006-2009 Google Inc.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#   http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import base64
 import copy
 import httplib
+import os
 import re
 import socket
 import StringIO
@@ -44,11 +58,11 @@ def _relative_uri(uri):
         return path + "?" + uri.query
     return path
 
+
 class Auth(object):
     """ Interface for Auth classes """
-    def __init__(self, credentials, headers=None, **kwargs):
+    def __init__(self, credentials, **kwargs):
         self.credentials = credentials
-        self.headers = headers or {}
         
     def depth(self, uri):
         return uri.path.count("/")
@@ -58,7 +72,7 @@ class Auth(object):
         http client depending on hostname or uri"""
         return True
         
-    def request(self, url, method, body, headers):
+    def request(self, uri, method, body, headers):
         pass
         
     def response(self, response, content):
@@ -70,13 +84,15 @@ class Auth(object):
 
 class BasicAuth(Auth):
     """ basic authentification """
-    def request(self, url, method, body, headers):
+    def request(self, uri, method, body, headers):
         headers['authorization'] = 'Basic ' + base64.b64encode("%s:%s" % self.credentials).strip()
         
     def add_credentials(self, username, password=None):
         password = password or ""
         self.credentials = (username, password)
+        
 
+#TODO : manage authentification detection
 class HttpClient(object):
     MAX_REDIRECTIONS = 5
     
@@ -173,9 +189,9 @@ class HttpClient(object):
         response = self._make_request(uri, method, body, headers)
             
         if auth and auth.response(response, body):
-            auth.request(method, uri, headers, body)
-            response = self._make_request(conn, uri, method, body, headers)
-            
+            auth.request(uri, method, headers, body)
+            response = self._make_request(uri, method, body, headers)
+
         if self.follow_redirect:
             if nb_redirections < self.MAX_REDIRECTIONS: 
                 if response.status in [301, 302, 307]:
@@ -191,7 +207,9 @@ class HttpClient(object):
                         response = self._request(url_parser(new_url), method, body, 
                             headers, nb_redirections + 1)
                         self.final_url = new_url
-                elif response.status == 303: # only get request on this status
+                elif response.status == 303: 
+                    # only 'GET' is possible with this status
+                    # according the rfc
                     new_url = response.getheader('location')
                     if not new_uri.netloc: # we got a relative url
                         absolute_uri = "%s://%s" % (uri.scheme, uri.netloc)
@@ -226,7 +244,60 @@ class HttpClient(object):
                 return resp, ResponseStream(response, stream_size)
             return resp, response.read()
         
-        
+class ProxiedHttpClient(HttpClient):
+    """ HTTP Client with simple proxy management """
+
+    def _get_connection(self, uri, headers=None):
+        headers = headers or {}
+        proxy = None
+        if uri.scheme == 'https':
+            proxy = os.environ.get('https_proxy')
+        elif uri.scheme == 'http':
+            proxy = os.environ.get('http_proxy')
+
+        if not proxy:
+            return HttpClient._get_connection(self, uri, headers=headers)
+
+        proxy_auth = _get_proxy_auth()
+        if uri.scheme == 'https':
+            if proxy_auth:
+                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
+            port = uri.port
+            if not port:
+                port = 443
+            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (uri.hostname, port)
+            user_agent = 'User-Agent: %s\r\n' % (headers.get('User-Agent', restkit.USER_AGENT))
+            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
+            proxy_uri = url_parser(proxy)
+            if not proxy_uri.port:
+                proxy_uri.port = '80'
+            # Connect to the proxy server, very simple recv and error checking
+            p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
+            p_sock.sendall(proxy_pieces)
+            response = ''
+            # Wait for the full response.
+            while response.find("\r\n\r\n") == -1:
+                response += p_sock.recv(8192)
+            p_status = response.split()[1]
+            if p_status != str(200):
+                raise ProxyError('Error status=%s' % str(p_status))
+            # Trivial setup for ssl socket.
+            ssl = socket.ssl(p_sock, None, None)
+            fake_sock = httplib.FakeSocket(p_sock, ssl)
+            # Initalize httplib and replace with the proxy socket.
+            connection = httplib.HTTPConnection(proxy_uri.host)
+            connection.sock=fake_sock
+            return connection
+        else:
+            proxy_uri = url_parser(proxy)
+            if not proxy_uri.port:
+                proxy_uri.port = '80'
+            if proxy_auth:
+                headers['Proxy-Authorization'] = proxy_auth.strip()
+            return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
+        return None
+            
 def _decompress_content(resp, response, stream=False, stream_size=16384):
     try:
         encoding = resp.get('content-encoding', None)
@@ -265,6 +336,21 @@ def _send_body_part(data, connection):
         binarydata = data.read(100000)
         if binarydata == '': break
         connection.send(binarydata)
+        
+def _get_proxy_auth():
+  import base64
+  proxy_username = os.environ.get('proxy-username')
+  if not proxy_username:
+    proxy_username = os.environ.get('proxy_username')
+  proxy_password = os.environ.get('proxy-password')
+  if not proxy_password:
+    proxy_password = os.environ.get('proxy_password')
+  if proxy_username:
+    user_auth = base64.b64encode('%s:%s' % (proxy_username,
+                                            proxy_password))
+    return 'Basic %s\r\n' % (user_auth.strip())
+  else:
+    return ''
         
 class ResponseStream(object):
     

@@ -197,7 +197,7 @@ class ResourceTestCase(unittest.TestCase):
 
         self.assertRaises(RequestError, bad_post)
 
-    def testAuth(self):
+    def testBasicAuth(self):
         transport = httpc.HttpClient()
         transport.add_authorization(httpc.BasicAuth(("test", "test")))
 
