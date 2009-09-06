@@ -23,18 +23,17 @@ import threading
 import unittest
 import urlparse
 
-from restclient.transport import CurlTransport
-from restclient.rest import Resource, RestClient, RequestFailed, \
-ResourceNotFound, Unauthorized
+from restkit import httpc
+from restkit.rest import Resource, RestClient
+from restkit.errors import RequestFailed, ResourceNotFound, Unauthorized
 from _server_test import HOST, PORT, run_server_test
 
 class HTTPClientTestCase(unittest.TestCase):
-    httptransport = CurlTransport()
 
     def setUp(self):
         run_server_test()
         self.url = 'http://%s:%s' % (HOST, PORT)
-        self.res = Resource(self.url, self.httptransport)
+        self.res = Resource(self.url)
 
     def tearDown(self):
         self.res = None
@@ -69,8 +68,8 @@ class HTTPClientTestCase(unittest.TestCase):
         self.assertRaises(RequestFailed, bad_get) 
 
     def testGetWithContentType2(self):
-        res = Resource(self.url, self.httptransport, 
-                headers={'Content-Type': 'application/json'})
+        res = Resource(self.url,
+            headers={'Content-Type': 'application/json'})
         result = res.get('/json')
         self.assert_(res.response.status == 200)
 
@@ -87,7 +86,7 @@ class HTTPClientTestCase(unittest.TestCase):
     def testGetBinary(self):
         import imghdr
         import tempfile
-        res = Resource('http://e-engura.org', self.httptransport)
+        res = Resource('http://e-engura.org')
         result = res.get('/images/logo.gif')
         self.assert_(res.response.status == 200)
         fd, fname = tempfile.mkstemp(suffix='.gif')
@@ -174,14 +173,15 @@ class HTTPClientTestCase(unittest.TestCase):
         self.assert_(self.res.response.status == 200 )
 
     def testAuth(self):
-        httptransport = self.httptransport 
-        httptransport.add_credentials("test", "test")
+        httptransport = httpc.HttpClient()
+        httptransport.add_authorization(httpc.BasicAuth(("test", "test")))
         
         res = Resource(self.url, httptransport)
         result = res.get('/auth')
         self.assert_(res.response.status == 200)
 
-        httptransport.add_credentials("test", "test2")
+        httptransport = httpc.HttpClient()
+        httptransport.add_authorization(httpc.BasicAuth(("test", "test2")))
         
         def niettest():
             res = Resource(self.url, httptransport)

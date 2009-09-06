@@ -26,15 +26,15 @@ except ImportError:
 import sys
 
 setup(
-    name = 'py-restclient',
-    version = '1.3.3',
-    description = 'Python REST client',
+    name = 'restkit',
+    version = '1.0',
+    description = 'Python REST kit',
     long_description = \
-"""A simple REST client for Python, inspired by the microframework (Camping, Sinatra) style of specifying actions: get, put, post, delete.""",
+"""An HTTP resource kit for Python""",
     author = 'Benoit Chesneau',
     author_email = 'benoitc@e-engura.org',
     license = 'BSD',
-    url = 'http://py-restclient.e-engura.org',
+    url = 'http://code.e-engura.org/restkit',
     zip_safe = True,
 
     classifiers = [
@@ -54,10 +54,6 @@ setup(
             'restcli = restclient.bin.rest_cli:main',
         ]
     },
-
-    install_requires = [
-        'httplib2'
-    ],
 
     test_suite = 'nose.collector',
 

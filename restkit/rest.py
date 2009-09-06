@@ -41,12 +41,12 @@
 
 
 """
-restclient.rest
+restkit.rest
 ~~~~~~~~~~~~~~~
 
 This module provide a common interface for all HTTP equest. 
 
-    >>> from restclient import Resource
+    >>> from restkit import Resource
     >>> res = Resource('http://friendpaste.com')
     >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
     u'{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
@@ -66,9 +66,9 @@ try:
 except ImportError:
     chardet = False
 
-from restclient.errors import *
-from restclient.transport import getDefaultHTTPTransport, HTTPTransportBase
-from restclient.utils import to_bytestring
+from restkit.errors import *
+from restkit.httpc import HttpClient, ResponseStream
+from restkit.utils import to_bytestring
 
 __all__ = ['Resource', 'RestClient', 'url_quote', 'url_encode']
 
@@ -79,7 +79,7 @@ class Resource(object):
     including authentication. 
 
     It can use pycurl, urllib2, httplib2 or any interface over
-    `restclient.http.HTTPClient`.
+    `restkit.http.HTTPClient`.
 
     """
     def __init__(self, uri, transport=None, headers=None):
@@ -89,10 +89,10 @@ class Resource(object):
 
         :param uri: str, full uri to the server.
         :param transport: any http instance of object based on 
-                `restclient.http.HTTPClient`. By default it will use 
+                `restkit.http.HTTPClient`. By default it will use 
                 a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
                 installed or urllib2. You could also use 
-                `restclient.http.HTTPLib2HTTPClient`,a client based on 
+                `restkit.http.HTTPLib2HTTPClient`,a client based on 
                 `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
                 own depending of the option you need to access to the serve
                 (authentification, proxy, ....).
@@ -178,7 +178,7 @@ class Resource(object):
         """ HTTP request
 
         This method may be the only one you want to override when
-        subclassing `restclient.rest.Resource`.
+        subclassing `restkit.rest.Resource`.
         
         :param payload: string or File object passed to the body of the request
         :param path: string  additionnal path to the uri
@@ -227,9 +227,9 @@ class RestClient(object):
         RestClient represent an HTTP client.
 
         :param transport: any http instance of object based on 
-                `restclient.transport.HTTPTransportBase`. By default it will use 
+                `restkit.transport.HTTPTransportBase`. By default it will use 
                 a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-                installed or `restclient.transport.HTTPLib2Transport`,a client based on 
+                installed or `restkit.transport.HTTPLib2Transport`,a client based on 
                 `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
                 own depending of the option you need to access to the serve
                 (authentification, proxy, ....).
@@ -238,7 +238,7 @@ class RestClient(object):
         """ 
 
         if transport is None:
-            transport = getDefaultHTTPTransport()
+            transport = HttpClient()
 
         self.transport = transport
 
@@ -300,7 +300,7 @@ class RestClient(object):
 
         .. code-block:: python
 
-            from restclient import RestClient
+            from restkit import RestClient
             client = RestClient()
             page = resource.request('GET', 'http://friendpaste.com')
 
@@ -308,7 +308,7 @@ class RestClient(object):
 
         .. code-block:: python
 
-            from restclient import RestClient
+            from restkit import RestClient
             client = RestClient()
             client.request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
                 headers={'Accept': 'application/json'})
@@ -338,8 +338,9 @@ class RestClient(object):
                     pass
                 size = int(os.fstat(body.fileno())[6])
             elif isinstance(body, types.StringTypes):
-                size = len(body)
                 body = to_bytestring(body)
+                size = len(body)
+                
             elif isinstance(body, dict):
                 _headers.setdefault('Content-Type', "application/x-www-form-urlencoded; charset=utf-8")
                 body = form_encode(body)
@@ -376,6 +377,8 @@ class RestClient(object):
                 raise RequestFailed(data, http_code=status_code,
                     response=resp)
 
+        if isinstance(data, ResponseStream):
+            return data
         # determine character encoding
         true_encoding, http_encoding, xml_encoding, sniffed_xml_encoding, \
         acceptable_content_type = _getCharacterEncoding(resp, data)

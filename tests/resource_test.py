@@ -24,9 +24,9 @@ import unittest
 import urlparse
 import urllib2
 
-from restclient.transport import HTTPLib2Transport
-from restclient.rest import Resource, RestClient
-from restclient.errors import RequestFailed, ResourceNotFound, \
+from restkit import httpc
+from restkit.rest import Resource, RestClient
+from restkit.errors import RequestFailed, ResourceNotFound, \
 Unauthorized, RequestError
 
 
@@ -36,8 +36,7 @@ from _server_test import HOST, PORT, run_server_test
 class RestClientTestCase(unittest.TestCase):
     
     def setUp(self):
-        self.transport = transport = HTTPLib2Transport()
-        self.client = RestClient(transport)
+        self.client = RestClient()
         
     def testMakeUri(self):
         self.assert_(self.client.make_uri("http://localhost", "/") == "http://localhost/")
@@ -52,9 +51,8 @@ class ResourceTestCase(unittest.TestCase):
 
     def setUp(self):
         run_server_test()
-        self.transport = transport = HTTPLib2Transport()
         self.url = 'http://%s:%s' % (HOST, PORT)
-        self.res = Resource(self.url, transport)
+        self.res = Resource(self.url)
 
     def tearDown(self):
         self.res = None
@@ -89,8 +87,8 @@ class ResourceTestCase(unittest.TestCase):
         self.assertRaises(RequestFailed, bad_get) 
 
     def testGetWithContentType2(self):
-        res = Resource(self.url, self.transport, 
-                headers={'Content-Type': 'application/json'})
+        res = Resource(self.url,
+            headers={'Content-Type': 'application/json'})
         result = res.get('/json')
         self.assert_(res.response.status == 200)
         
@@ -200,14 +198,14 @@ class ResourceTestCase(unittest.TestCase):
         self.assertRaises(RequestError, bad_post)
 
     def testAuth(self):
-        transport = HTTPLib2Transport()
-        transport.add_credentials("test", "test")
+        transport = httpc.HttpClient()
+        transport.add_authorization(httpc.BasicAuth(("test", "test")))
 
         res = Resource(self.url, transport)
         result = res.get('/auth')
         self.assert_(res.response.status == 200)
 
-        transport = HTTPLib2Transport()
+        transport = httpc.HttpClient()
         def niettest():
             res = Resource(self.url, transport)
             result = res.get('/auth')

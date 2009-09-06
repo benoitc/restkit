@@ -65,6 +65,9 @@ class RequestFailed(ResourceError):
     response via e.response. For example, the entire result body (which is 
     probably an HTML error page) is e.response.body.
     """
+    
+class RedirectLimit(Exception):
+    """Exception raised when the redirection limit is reached."""
 
 class RequestError(Exception):
     """Exception raised when a request is malformed"""
@@ -76,3 +79,7 @@ class InvalidUrl(Exception):
     
 class TransportError(Exception):
     """Error raised by a transport """
+    
+class ResponseError(Exception):
+    """ Error raised while getting response or decompressing response stream"""
+    

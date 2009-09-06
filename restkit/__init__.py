@@ -15,14 +15,17 @@
 
 
 try:
-    __version__ = __import__('pkg_resources').get_distribution('py-restclient').version
+    __version__ = __import__('pkg_resources').get_distribution('py-restkit').version
 except:
     __version__ = '?'
 
+USER_AGENT = "restkit/%s" % __version__
+
 debuglevel = 0
 
-from restclient.errors import *
-from restclient.transport import CurlTransport, HTTPLib2Transport
-from restclient.rest import *
+from restkit.errors import *
+from restkit.httpc import HttpClient
+from restkit.rest import *
+
 
 

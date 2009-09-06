@@ -17,7 +17,7 @@
 
 import unittest
 
-from restclient.utils import parse_url, iri2uri
+from restkit.utils import parse_url, iri2uri
 
 class UtilTestCase(unittest.TestCase):
     

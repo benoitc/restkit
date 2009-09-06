@@ -26,8 +26,8 @@ try:
 except ImportError:
     from cgi import parse_qs as _parse_qs
 
-import restclient
-from restclient.transport import useCurl, CurlTransport, HTTPLib2Transport
+import restkit
+from restkit import httpc
 
 class Url(object):
     def __init__(self, string):

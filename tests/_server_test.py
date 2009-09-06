@@ -24,7 +24,7 @@ import threading
 import unittest
 import urlparse
 import urllib
-from restclient.utils import to_bytestring
+from restkit.utils import to_bytestring
 
 HOST = socket.getfqdn('127.0.0.1')
 PORT = (os.getpid() % 31000) + 1024
