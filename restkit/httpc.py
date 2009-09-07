@@ -180,7 +180,7 @@ class HttpClient(object):
             break
                     
         # Return the HTTP Response from the server.
-        return connection.getresponse()
+        return connection
         
     def _request(self, uri, method, body, headers, nb_redirections=0):
         auths = [(auth.depth(uri), auth) for auth in self.authorizations if auth.inscope(uri.hostname, uri)]
@@ -191,11 +191,13 @@ class HttpClient(object):
         headers = _normalize_headers(headers)
         old_response = None
         
-        response = self._make_request(uri, method, body, headers)
-            
+        connection = self._make_request(uri, method, body, headers)
+        response = connection.getresponse()
+        
         if auth and auth.response(response, body):
             auth.request(uri, method, headers, body)
-            response = self._make_request(uri, method, body, headers)
+            connection = self._make_request(uri, method, body, headers)
+            response = connection.getresponse()
 
         if self.follow_redirect:
             if nb_redirections < self.MAX_REDIRECTIONS: 
@@ -209,7 +211,7 @@ class HttpClient(object):
                         if not new_uri.netloc: # we got a relative url
                             absolute_uri = "%s://%s" % (uri.scheme, uri.netloc)
                             new_url = urlparse.urljoin(absolute_uri, new_url)
-                        response = self._request(url_parser(new_url), method, body, 
+                        response, connection = self._request(url_parser(new_url), method, body, 
                             headers, nb_redirections + 1)
                         self.final_url = new_url
                 elif response.status == 303: 
@@ -220,11 +222,11 @@ class HttpClient(object):
                         absolute_uri = "%s://%s" % (uri.scheme, uri.netloc)
                         new_uri = url_parser(new_url)
                         new_url = urlparse.urljoin(absolute_uri, new_url)
-                    response = self._request(url_parser(new_url), 'GET', headers, nb_redirections + 1)
+                    response, connection = self._request(url_parser(new_url), 'GET', headers, nb_redirections + 1)
                     self.final_url = new_url
             else:
                 raise errors.RedirectLimit("Redirection limit is reached")
-        return response
+        return response, connection
         
     def request(self, url, method='GET', body=None, headers=None, stream=False, 
             stream_size=16384):  
@@ -237,17 +239,14 @@ class HttpClient(object):
             body = ""
             headers.setdefault("Content-Length", str(len(body)))
 
-        response = self._request(uri, method, body, headers)
+        response, connection = self._request(uri, method, body, headers)
         resp = HTTPResponse(response)
         resp.final_url = self.final_url
         
         if method == "HEAD":
             return resp, ""
         else:
-            return resp, _decompress_content(resp, response, stream, stream_size)
-            if stream:
-                return resp, ResponseStream(response, stream_size)
-            return resp, response.read()
+            return resp, _decompress_content(resp, response, connection, stream, stream_size)
         
 class ProxiedHttpClient(HttpClient):
     """ HTTP Client with simple proxy management """
@@ -303,13 +302,14 @@ class ProxiedHttpClient(HttpClient):
             return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
         return None
             
-def _decompress_content(resp, response, stream=False, stream_size=16384):
+def _decompress_content(resp, response, connection, stream=False, stream_size=16384):
     try:
         encoding = resp.get('content-encoding', None)
         if encoding in ['gzip', 'deflate']:
             
             if encoding == 'gzip':
                 compressedstream = StringIO.StringIO(response.read())
+                connection.close()
                 data = gzip.GzipFile(fileobj=compressedstream)
                 if stream:
                     return ResponseStream(data, stream_size)
@@ -317,15 +317,18 @@ def _decompress_content(resp, response, stream=False, stream_size=16384):
                     return data.read()
             else:
                 data =  zlib.decompress(response.read())
+                connection.close()
                 if stream:
                     return ResponseStream(StringIO.StringIO(data), stream_size)
                 else:
                     return data
         else:
             if stream:
-                return ResponseStream(response, stream_size)
+                return ResponseStream(response, stream_size, connection)
             else:
-                return response.read()
+                data = response.read()
+                connection.close()
+                return data
     except Exception, e:
         raise errors.ResponseError("Decompression failed %s" % str(e))
         
@@ -359,15 +362,13 @@ def _get_proxy_auth():
         
 class ResponseStream(object):
     
-    def __init__(self, response, amnt=16384):
+    def __init__(self, response, amnt=16384, connection=None):
         self.response = response
         self.amnt = amnt
+        self.connection = connection
         
     def next(self):
-        try:
-            self.response.read(amnt)
-        except:
-            raise errors.ResponseError("Error while getting response")
+        return self.response.read(self.amnt)
             
     def __iter__(self):
         while 1:
@@ -376,6 +377,8 @@ class ResponseStream(object):
                 yield data
             else:
                 break
+        if hasattr(self.connection, 'close'):
+            self.connection.close()
         
 class HTTPResponse(dict):
     """An object more like email.Message than httplib.HTTPResponse.

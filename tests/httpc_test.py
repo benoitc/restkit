@@ -96,6 +96,19 @@ class HTTPClientTestCase(unittest.TestCase):
         f.write(result)
         f.close()
         self.assert_(imghdr.what(fname) == 'gif')
+        
+    def testGetBinaryStreamed(self):
+        import imghdr
+        import tempfile
+        res = Resource('http://e-engura.org')
+        result = res.get('/images/logo.gif', _stream=True)
+        self.assert_(res.response.status == 200)
+        fd, fname = tempfile.mkstemp(suffix='.gif')
+        f = os.fdopen(fd, "wb")
+        for block in iter(result):
+            f.write(block)
+        f.close()
+        self.assert_(imghdr.what(fname) == 'gif')
 
     def testGetRedirect(self):
         result = self.res.get('/redirect')
