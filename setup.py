@@ -51,7 +51,7 @@ setup(
 
     entry_points = {
         'console_scripts': [
-            'restcli = restclient.bin.rest_cli:main',
+            'restcli = restkit.bin.rest_cli:main',
         ]
     },
 
