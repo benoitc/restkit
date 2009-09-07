@@ -180,7 +180,8 @@ class Resource(object):
         """
         return self.request("PUT", path=path, payload=payload, headers=headers, **params)
 
-    def request(self, method, path=None, payload=None, headers=None, **params):
+    def request(self, method, path=None, payload=None, headers=None, stream=False, 
+            stream_size=16384, **params):
         """ HTTP request
 
         This method may be the only one you want to override when
@@ -190,12 +191,15 @@ class Resource(object):
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
+        :param stream: boolean, response return a ResponseStream object
+        :param stream_size: int, size in bytes of response stream block
         :param params: Optionnal parameterss added to the request
         """
         _headers = self._headers or {}
         _headers.update(headers or {})
         return self.client.request(method, self.uri, path=path,
-                body=payload, headers=_headers, **params)
+                body=payload, headers=_headers, stream=stream, 
+                stream_size=stream_size, **params)
 
     def get_response(self):
         return self.client.get_response()
@@ -300,7 +304,8 @@ class RestClient(object):
 
         return self.request('PUT', uri, path=path, body=body, headers=headers, **params)
 
-    def request(self, method, uri, path=None, body=None, headers=None, **params):
+    def request(self, method, uri, path=None, body=None, headers=None, stream=False, 
+        stream_size=16384, **params):
         """ Perform HTTP call support GET, HEAD, POST, PUT and DELETE.
         
         Usage example, get friendpaste page :
@@ -326,6 +331,8 @@ class RestClient(object):
         :param data: tring or File object.
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
+        :param stream: boolean, response return a ResponseStream object
+        :param stream_size: int, size in bytes of response stream block
         :param params: Optionnal parameterss added to the request.
         
         :return: str.
@@ -377,7 +384,8 @@ class RestClient(object):
                 
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
-                method=method, body=body, headers=_headers)
+                method=method, body=body, headers=_headers, 
+                stream=stream, stream_size=stream_size)
         except TransportError, e:
             raise RequestError(str(e))
 
