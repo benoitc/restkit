@@ -226,7 +226,8 @@ class HttpClient(object):
                 raise errors.RedirectLimit("Redirection limit is reached")
         return response
         
-    def request(self, url, method='GET', body=None, headers=None, stream=False, stream_size=16384):  
+    def request(self, url, method='GET', body=None, headers=None, stream=False, 
+            stream_size=16384):  
         headers = headers or {}
         uri = url_parser(url)
         self.final_url = url

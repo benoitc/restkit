@@ -113,6 +113,9 @@ class Resource(object):
 
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
+        
+    def add_authorization(self, obj_auth):
+        self.client.transport.add_authorization(obj_auth)
 
     def clone(self):
         """if you want to add a path to resource uri, you can do:
@@ -137,7 +140,8 @@ class Resource(object):
                 transport=self.transport)
 
     
-    def get(self, path=None, headers=None, **params):
+    def get(self, path=None, headers=None, _stream=False, _stream_size=16384,
+            **params):
         """ HTTP GET         
         
         :param path: string  additionnal path to the uri
@@ -145,7 +149,8 @@ class Resource(object):
             be added to HTTP request.
         :param params: Optionnal parameterss added to the request.
         """
-        return self.request("GET", path=path, headers=headers, **params)
+        return self.request("GET", path=path, headers=headers, 
+            _stream=_stream, _stream_size=_stream_size, **params)
 
     def delete(self, path=None, headers=None, **params):
         """ HTTP DELETE
@@ -161,7 +166,8 @@ class Resource(object):
         """
         return self.request("HEAD", path=path, headers=headers, **params)
 
-    def post(self, path=None, payload=None, headers=None, **params):
+    def post(self, path=None, payload=None, headers=None, _stream=False, 
+            _stream_size=16384,**params):
         """ HTTP POST
 
         :param payload: string passed to the body of the request
@@ -171,17 +177,20 @@ class Resource(object):
         :param params: Optionnal parameterss added to the request
         """
 
-        return self.request("POST", path=path, payload=payload, headers=headers, **params)
+        return self.request("POST", path=path, payload=payload, headers=headers,
+            _stream=_stream, _stream_size=_stream_size, **params)
 
-    def put(self, path=None, payload=None, headers=None, **params):
+    def put(self, path=None, payload=None, headers=None, _stream=False, 
+            _stream_size=16384, **params):
         """ HTTP PUT
 
         see POST for params description.
         """
-        return self.request("PUT", path=path, payload=payload, headers=headers, **params)
+        return self.request("PUT", path=path, payload=payload, headers=headers, 
+            _stream=_stream, _stream_size=_stream_size, **params)
 
-    def request(self, method, path=None, payload=None, headers=None, stream=False, 
-            stream_size=16384, **params):
+    def request(self, method, path=None, payload=None, headers=None, 
+            _stream=False, _stream_size=16384, **params):
         """ HTTP request
 
         This method may be the only one you want to override when
@@ -191,15 +200,15 @@ class Resource(object):
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
-        :param stream: boolean, response return a ResponseStream object
-        :param stream_size: int, size in bytes of response stream block
+        :param _stream: boolean, response return a ResponseStream object
+        :param _stream_size: int, size in bytes of response stream block
         :param params: Optionnal parameterss added to the request
         """
         _headers = self._headers or {}
         _headers.update(headers or {})
         return self.client.request(method, self.uri, path=path,
-                body=payload, headers=_headers, stream=stream, 
-                stream_size=stream_size, **params)
+                body=payload, headers=_headers, _stream=_stream, 
+                _stream_size=_stream_size, **params)
 
     def get_response(self):
         return self.client.get_response()
@@ -256,19 +265,26 @@ class RestClient(object):
         self.response = None
         self._headers = headers
         self._body_parts = []
-
-
-    def get(self, uri, path=None, headers=None, **params):
+        
+        
+    def add_authorization(self, obj_auth):
+        self.transport.add_authorization(obj_auth)
+        
+    def get(self, uri, path=None, headers=None, _stream=False,
+            _stream_size=16384, **params):
         """ HTTP GET         
         
         :param uri: str, uri on which you make the request
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
+        :param _stream: boolean, response return a ResponseStream object
+        :param _stream_size: int, size in bytes of response stream block
         :param params: Optionnal parameterss added to the request.
         """
 
-        return self.request('GET', uri, path=path, headers=headers, **params)
+        return self.request('GET', uri, path=path, headers=headers, 
+            _stream=_stream, _stream_size=_stream_size, **params)
 
     def head(self, uri, path=None, headers=None, **params):
         """ HTTP HEAD
@@ -284,7 +300,8 @@ class RestClient(object):
         """
         return self.request('DELETE', uri, path=path, headers=headers, **params)
 
-    def post(self, uri, path=None, body=None, headers=None, **params):
+    def post(self, uri, path=None, body=None, headers=None, _stream=False,
+            _stream_size=16384, **params):
         """ HTTP POST
 
         :param uri: str, uri on which you make the request
@@ -292,20 +309,25 @@ class RestClient(object):
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
+        :param _stream: boolean, response return a ResponseStream object
+        :param _stream_size: int, size in bytes of response stream block
         :param params: Optionnal parameterss added to the request
         """
-        return self.request("POST", uri, path=path, body=body, headers=headers, **params)
+        return self.request("POST", uri, path=path, body=body, headers=headers, 
+            _stream=_stream, _stream_size=_stream_size, **params)
 
-    def put(self, uri, path=None, body=None, headers=None, **params):
+    def put(self, uri, path=None, body=None, headers=None, _stream=False, 
+            _stream_size=16384, **params):
         """ HTTP PUT
 
         see POST for params description.
         """
 
-        return self.request('PUT', uri, path=path, body=body, headers=headers, **params)
+        return self.request('PUT', uri, path=path, body=body, headers=headers, 
+            _stream=_stream, _stream_size=_stream_size, **params)
 
-    def request(self, method, uri, path=None, body=None, headers=None, stream=False, 
-        stream_size=16384, **params):
+    def request(self, method, uri, path=None, body=None, headers=None, _stream=False, 
+        _stream_size=16384, **params):
         """ Perform HTTP call support GET, HEAD, POST, PUT and DELETE.
         
         Usage example, get friendpaste page :
@@ -331,8 +353,8 @@ class RestClient(object):
         :param data: tring or File object.
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
-        :param stream: boolean, response return a ResponseStream object
-        :param stream_size: int, size in bytes of response stream block
+        :param _stream: boolean, response return a ResponseStream object
+        :param _stream_size: int, size in bytes of response stream block
         :param params: Optionnal parameterss added to the request.
         
         :return: str.
@@ -385,7 +407,7 @@ class RestClient(object):
         try:
             resp, data = self.transport.request(self.make_uri(uri, path, **params), 
                 method=method, body=body, headers=_headers, 
-                stream=stream, stream_size=stream_size)
+                stream=_stream, stream_size=_stream_size)
         except TransportError, e:
             raise RequestError(str(e))
 
