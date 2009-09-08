@@ -364,7 +364,6 @@ class RestClient(object):
         _headers = self._headers or {}
         _headers.update(headers or {})
         
-        is_unicode = True
         self._body_parts = []
         size = None
         if body is not None:
