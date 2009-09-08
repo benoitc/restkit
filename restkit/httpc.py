@@ -244,6 +244,7 @@ class HttpClient(object):
         resp.final_url = self.final_url
         
         if method == "HEAD":
+            connection.close()
             return resp, ""
         else:
             return resp, _decompress_content(resp, response, connection, stream, stream_size)
