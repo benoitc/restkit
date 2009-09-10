@@ -83,7 +83,3 @@ class TransportError(Exception):
 class ResponseError(Exception):
     """ Error raised while getting response or decompressing response stream"""
     
-    
-class TimeoutError(Exception):
-    """ Error raised when retrieving a connection take too much time"""
-    

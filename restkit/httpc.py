@@ -39,22 +39,11 @@ import types
 import urllib
 import urlparse
 
-
-"""try:
-    from multiprocessing import Lock, Queue
-    from Queue import Empty, Full
-except ImportError:
-    from threading import Lock 
-    from Queue import Queue, Empty, Full"""
-  
-
-from threading import Lock 
-from Queue import Queue, Empty, Full 
-
 import restkit
 from restkit import errors
 from restkit.pool import ConnectionPool
 from restkit.utils import to_bytestring
+
 
 url_parser = urlparse.urlparse
 
@@ -103,37 +92,24 @@ class BasicAuth(Auth):
     def add_credentials(self, username, password=None):
         password = password or ""
         self.credentials = (username, password)
-        
-        
-    
-
-def make_connection(uri, use_proxy=True):
-    if uri.scheme == 'https':
-        if not uri.port:
-            connection = httplib.HTTPSConnection(uri.hostname)
-        else:
-            connection = httplib.HTTPSConnection(uri.hostname, uri.port)
-    else:
-        if not uri.port:
-            connection = httplib.HTTPConnection(uri.hostname)
-        else:
-            connection = httplib.HTTPConnection(uri.hostname, uri.port)
-    return connection
-    
-    
 
 #TODO : manage authentification detection
 class HttpClient(object):
     MAX_REDIRECTIONS = 5
     
     def __init__(self, follow_redirect=True, force_follow_redirect=False,
-            use_proxy=False):
+            use_proxy=False, min_size=0, max_size=4, pool_class=None):
         self.authorizations = []
         self.use_proxy = use_proxy
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
+        self.min_size = min_size
+        self.max_size = max_size
         self.connections = {}
-        self.lock = Lock()
+        if pool_class is None:
+            self.pool_class = ConnectionPool
+        else:
+            self.pool_class = pool_class
         
     def add_authorization(self, obj_auth):
         self.authorizations.append(obj_auth)
@@ -141,41 +117,39 @@ class HttpClient(object):
     def _get_connection(self, uri, headers=None):
         connection = None
         conn_key = (uri.scheme, uri.netloc, self.use_proxy)
-        self.lock.acquire()
-        try:
-            if conn_key in self.connections:
-                pool = self.connections[conn_key]
-            else:
-                pool = self.connections[conn_key] = ConnectionPool(lambda: make_connection(uri, 
-                                                        self.use_proxy))
-            connection = pool.get()
-        finally:
-            self.lock.release()
+
+        if conn_key in self.connections:
+            pool = self.connections[conn_key]
+        else:
+            pool = self.connections[conn_key] = self.pool_class(uri, self.use_proxy)
+        connection = pool.get()
+        
+        if connection.sock is False:
+            connection.connect()
+            
         return connection
         
     def _release_connection(self, uri, connection):
         conn_key = (uri.scheme, uri.netloc, self.use_proxy)
-        self.lock.acquire()
-        try:
-            if conn_key in self.connections:
-                pool = self.connections[conn_key]
-            else:
-                pool = self.connections[conn_key] = ConnectionPool(make_connexion(uri, 
-                                                        self.use_proxy))
-            pool.put(connection)
-        finally:
-            self.lock.release()
-        
+
+        if conn_key in self.connections:
+            pool = self.connections[conn_key]
+        else:
+            pool = self.connections[conn_key] = ConnectionPool(make_connexion(uri, 
+                                                    self.use_proxy), )
+        pool.put(connection)
+
+            
     def _make_request(self, uri, method, body, headers): 
         for i in range(2):
             connection = self._get_connection(uri, headers)
-            con = connection.get_connection()
-            con.debuglevel = restkit.debuglevel
+            
+            connection.debuglevel = restkit.debuglevel
             try:
-                if con.host != uri.hostname:
-                    con.putrequest(method, uri.geturl())
+                if connection.host != uri.hostname:
+                    connection.putrequest(method, uri.geturl())
                 else:
-                    con.putrequest(method, _relative_uri(uri))
+                    connection.putrequest(method, _relative_uri(uri))
         
                 # bug in Python 2.4 and 2.5
                 # httplib.HTTPConnection.putrequest adding 
@@ -187,36 +161,36 @@ class HttpClient(object):
                     header_line = 'Host: %s:443' % uri.hostname
                     replacement_header_line = 'Host: %s' % uri.hostname
                     try:
-                        con._buffer[connection._buffer.index(header_line)] = (
+                        connection._buffer[connection._buffer.index(header_line)] = (
                             replacement_header_line)
                     except ValueError:  # header_line missing from connection._buffer
                         pass
         
                 # Send the HTTP headers.
                 for header_name, value in headers.iteritems():
-                    con.putheader(header_name, value)
-                con.endheaders()
+                    connection.putheader(header_name, value)
+                connection.endheaders()
         
                 if body is not None:
                     if i > 0 and hasattr(body, 'seek'):
                         body.seek(0)
                         
                     if isinstance(body, types.StringTypes) and len(body) == 0:
-                        con.send("")
+                        connection.send("")
                     elif isinstance(body, types.StringTypes) or hasattr(body, 'read'):
-                        _send_body_part(body, con)
+                        _send_body_part(body, connection)
                     elif hasattr(body, "__iter__"):
                         for body_part in body:
-                            _send_body_part(body_part, con)
+                            _send_body_part(body_part, connection)
                     elif isinstance(body, list):
                         for body_part in body:
-                            _send_body_part(body_part, con)
+                            _send_body_part(body_part, connection)
                     else:
-                        _send_body_part(body, con)
+                        _send_body_part(body, connection)
                     
             except socket.gaierror:
                 connection.close()
-                raise errors.ResourceNotFound("Unable to find the server at %s" % con.host, 404)
+                raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
             except (socket.error, httplib.HTTPException):
                 if i == 0:
                     connection.close()
@@ -238,12 +212,12 @@ class HttpClient(object):
         old_response = None
         
         connection = self._make_request(uri, method, body, headers)
-        response = connection.connection.getresponse()
+        response = connection.getresponse()
         
         if auth and auth.response(response, body):
             auth.request(uri, method, headers, body)
             connection = self._make_request(uri, method, body, headers)
-            response = connection.connection.getresponse()
+            response = connection.getresponse()
             
         if self.follow_redirect:
             if nb_redirections < self.MAX_REDIRECTIONS: 
@@ -286,6 +260,12 @@ class HttpClient(object):
         if method in ["POST", "PUT"] and body is None:
             body = ""
             headers.setdefault("Content-Length", str(len(body)))
+            
+        if self.use_proxy and uri.scheme != "https":
+            proxy_auth = _get_proxy_auth()
+            if proxy_auth:
+                headers['Proxy-Authorization'] = proxy_auth.strip()
+            
 
         response, connection = self._request(uri, method, body, headers)
         resp = HTTPResponse(response)
@@ -298,61 +278,7 @@ class HttpClient(object):
             return resp, _decompress_content(resp, response, 
                 lambda: self._release_connection(uri, connection), 
                 stream, stream_size)
-        
-class ProxiedHttpClient(HttpClient):
-    """ HTTP Client with simple proxy management """
-
-    def _get_connection(self, uri, headers=None):
-        headers = headers or {}
-        proxy = None
-        if uri.scheme == 'https':
-            proxy = os.environ.get('https_proxy')
-        elif uri.scheme == 'http':
-            proxy = os.environ.get('http_proxy')
-
-        if not proxy:
-            return HttpClient._get_connection(self, uri, headers=headers)
-
-        proxy_auth = _get_proxy_auth()
-        if uri.scheme == 'https':
-            if proxy_auth:
-                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-            port = uri.port
-            if not port:
-                port = 443
-            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (uri.hostname, port)
-            user_agent = 'User-Agent: %s\r\n' % (headers.get('User-Agent', restkit.USER_AGENT))
-            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
-            proxy_uri = url_parser(proxy)
-            if not proxy_uri.port:
-                proxy_uri.port = '80'
-            # Connect to the proxy server, very simple recv and error checking
-            p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-            p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
-            p_sock.sendall(proxy_pieces)
-            response = ''
-            # Wait for the full response.
-            while response.find("\r\n\r\n") == -1:
-                response += p_sock.recv(8192)
-            p_status = response.split()[1]
-            if p_status != str(200):
-                raise ProxyError('Error status=%s' % str(p_status))
-            # Trivial setup for ssl socket.
-            ssl = socket.ssl(p_sock, None, None)
-            fake_sock = httplib.FakeSocket(p_sock, ssl)
-            # Initalize httplib and replace with the proxy socket.
-            connection = httplib.HTTPConnection(proxy_uri.host)
-            connection.sock=fake_sock
-            return connection
-        else:
-            proxy_uri = url_parser(proxy)
-            if not proxy_uri.port:
-                proxy_uri.port = '80'
-            if proxy_auth:
-                headers['Proxy-Authorization'] = proxy_auth.strip()
-            return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
-        return None
-            
+                
 def _decompress_content(resp, response, release_callback, stream=False, stream_size=16384):
     try:
         encoding = resp.get('content-encoding', None)
