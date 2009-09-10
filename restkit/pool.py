@@ -23,7 +23,7 @@ Threadsafe Pool class based on eventlet.pools.Pool but using Queue.Queue
 
 import collections
 import httplib
-from Queue import Queue, Full, Empty
+import Queue
 import threading
 
 from restkit import errors
@@ -99,7 +99,7 @@ class Pool(object):
         self.max_size = max_size
         self.order_as_stack = order_as_stack
         self.current_size = 0
-        self.channel = Queue(0)
+        self.channel = Queue.Queue(0)
         self.free_items = collections.deque()
         for x in xrange(min_size):
             self.current_size += 1
@@ -110,7 +110,7 @@ class Pool(object):
     def do_get(self):
         """
         Return an item from the pool, when one is available
-        """
+        """ 
         self.lock.acquire()
         try:
             if self.free_items:
@@ -119,10 +119,14 @@ class Pool(object):
                 created = self.create()
                 self.current_size += 1
                 return created
+                
             try:
                 return self.channel.get(False)
-            except Empty:
-                return self.create()
+            except Queue.Empty:
+                created = self.create()
+                self.current_size += 1
+                return created
+                
         finally:
             self.lock.release()
 

@@ -145,7 +145,8 @@ class Resource(object):
         """
         obj = self.__class__(self.uri, transport=self.transport, headers=self._headers,
                 follow_redirect=self.follow_redirect, force_follow_redirect=self.force_follow_redirect, 
-                use_proxy=self.use_proxy, min_size=self.min_size, max_size=self.max_size)
+                use_proxy=self.use_proxy, min_size=self.min_size, max_size=self.max_size, 
+                pool_class=self.pool_class)
         return obj
    
     def __call__(self, path):
@@ -441,19 +442,10 @@ class RestClient(object):
                 _headers['Content-Type'] = type_ and type_ or 'application/octet-stream'
                 
                 
-        def _try_request(retry=1):
-            try:
-                return self.transport.request(self.make_uri(uri, path, **params), 
-                            method=method, body=body, headers=_headers, 
-                            stream=_stream, stream_size=_stream_size)
-            except (socket.error, httplib.BadStatusLine), e:
-                if retry > 0:
-                    time.sleep(0.4)
-                return _try_request(retry-1)
-            except Exception, e:
-                RequestError(str(e))
         
-        resp, data = _try_request()
+        resp, data = self.transport.request(self.make_uri(uri, path, **params), 
+                        method=method, body=body, headers=_headers, 
+                        stream=_stream, stream_size=_stream_size)
         self.status  = status_code = resp.status
         self.response = resp
         

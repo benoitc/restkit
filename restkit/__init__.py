@@ -15,7 +15,7 @@
 
 
 try:
-    __version__ = __import__('pkg_resources').get_distribution('py-restkit').version
+    __version__ = __import__('pkg_resources').get_distribution('restkit').version
 except:
     __version__ = '?'
 
