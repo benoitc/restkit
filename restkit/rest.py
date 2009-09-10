@@ -55,11 +55,14 @@ This module provide a common interface for all HTTP equest.
 """
 
 import cgi
+import httplib
 import mimetypes
 import uuid
 import os
 import re
+import socket
 import StringIO
+import time
 import types
 import urllib
 
@@ -437,13 +440,20 @@ class RestClient(object):
                     type_ = mimetypes.guess_type(body.name)[0]
                 _headers['Content-Type'] = type_ and type_ or 'application/octet-stream'
                 
-        try:
-            resp, data = self.transport.request(self.make_uri(uri, path, **params), 
-                method=method, body=body, headers=_headers, 
-                stream=_stream, stream_size=_stream_size)
-        except TransportError, e:
-            raise RequestError(str(e))
-
+                
+        def _try_request(retry=1):
+            try:
+                return self.transport.request(self.make_uri(uri, path, **params), 
+                            method=method, body=body, headers=_headers, 
+                            stream=_stream, stream_size=_stream_size)
+            except (socket.error, httplib.BadStatusLine), e:
+                if retry > 0:
+                    time.sleep(0.4)
+                return _try_request(retry-1)
+            except Exception, e:
+                RequestError(str(e))
+        
+        resp, data = _try_request()
         self.status  = status_code = resp.status
         self.response = resp
         

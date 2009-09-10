@@ -266,7 +266,6 @@ class HttpClient(object):
             if proxy_auth:
                 headers['Proxy-Authorization'] = proxy_auth.strip()
             
-
         response, connection = self._request(uri, method, body, headers)
         resp = HTTPResponse(response)
         resp.final_url = self.final_url
