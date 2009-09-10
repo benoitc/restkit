@@ -383,7 +383,7 @@ class HTTPResponse(dict):
     reason = "Ok"
 
     def __init__(self, info):
-        if isinstance(info, httplib.HTTPResponse):
+        if hasattr(info, "getheaders"):
             for key, value in info.getheaders():
                 self[key.lower()] = value
             self.status = info.status
@@ -391,6 +391,7 @@ class HTTPResponse(dict):
             self.reason = info.reason
             self.version = info.version
         else:
+            print info
             for key, value in info.iteritems(): 
                 self[key.lower()] = value 
             self.status = int(self.get('status', self.status))

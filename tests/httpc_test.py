@@ -24,6 +24,7 @@ import unittest
 import urlparse
 
 from restkit import httpc
+from restkit.ext.eventlet_pool import ConnectionPool
 from restkit.rest import Resource, RestClient
 from restkit.errors import RequestFailed, ResourceNotFound, Unauthorized
 from _server_test import HOST, PORT, run_server_test
@@ -214,6 +215,14 @@ class HTTPClientTestCase(unittest.TestCase):
             res = Resource(self.url, httptransport)
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
+        
+ 
+class EventletTestCase(HTTPClientTestCase):
+    def setUp(self):
+        run_server_test()
+        self.url = 'http://%s:%s' % (HOST, PORT)
+        self.res = Resource(self.url, pool_class=ConnectionPool)
+ 
  
 if __name__ == '__main__':
     from _server_test import run_server_test
