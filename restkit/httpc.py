@@ -53,6 +53,7 @@ from Queue import Queue, Empty, Full
 
 import restkit
 from restkit import errors
+from restkit.pool import ConnectionPool
 from restkit.utils import to_bytestring
 
 url_parser = urlparse.urlparse
@@ -103,21 +104,35 @@ class BasicAuth(Auth):
         password = password or ""
         self.credentials = (username, password)
         
+        
+    
+
+def make_connection(uri, use_proxy=True):
+    if uri.scheme == 'https':
+        if not uri.port:
+            connection = httplib.HTTPSConnection(uri.hostname)
+        else:
+            connection = httplib.HTTPSConnection(uri.hostname, uri.port)
+    else:
+        if not uri.port:
+            connection = httplib.HTTPConnection(uri.hostname)
+        else:
+            connection = httplib.HTTPConnection(uri.hostname, uri.port)
+    return connection
+    
+    
 
 #TODO : manage authentification detection
 class HttpClient(object):
     MAX_REDIRECTIONS = 5
     
-    def __init__(self, follow_redirect=True, force_follow_redirect=False, 
-            max_connections=100, block=False, timeout=None):
+    def __init__(self, follow_redirect=True, force_follow_redirect=False,
+            use_proxy=False):
         self.authorizations = []
-        self.use_proxy = False
+        self.use_proxy = use_proxy
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
         self.connections = {}
-        self.max_connections = max_connections
-        self.block = block
-        self.timeout = None
         self.lock = Lock()
         
     def add_authorization(self, obj_auth):
@@ -125,47 +140,42 @@ class HttpClient(object):
         
     def _get_connection(self, uri, headers=None):
         connection = None
-        conn_key = (uri.scheme, uri.netloc)
+        conn_key = (uri.scheme, uri.netloc, self.use_proxy)
         self.lock.acquire()
         try:
-            pool = self.connections.setdefault(conn_key, Queue(self.max_connections))
-            try:
-                connection = pool.get(block=self.block)
-                if connection.sock is False:
-                    connection.connect()
-            except Empty:
-                if uri.scheme == 'https':
-                    if not uri.port:
-                        connection = httplib.HTTPSConnection(uri.hostname)
-                    else:
-                        connection = httplib.HTTPSConnection(uri.hostname, uri.port)
-                else:
-                    if not uri.port:
-                        connection = httplib.HTTPConnection(uri.hostname)
-                    else:
-                        connection = httplib.HTTPConnection(uri.hostname, uri.port)
+            if conn_key in self.connections:
+                pool = self.connections[conn_key]
+            else:
+                pool = self.connections[conn_key] = ConnectionPool(lambda: make_connection(uri, 
+                                                        self.use_proxy))
+            connection = pool.get()
         finally:
             self.lock.release()
         return connection
         
     def _release_connection(self, uri, connection):
-        conn_key = (uri.scheme, uri.netloc)
+        conn_key = (uri.scheme, uri.netloc, self.use_proxy)
         self.lock.acquire()
         try:
-            pool = self.connections.setdefault(conn_key, Queue(self.max_connections))
-            pool.put(connection, block=self.block)
+            if conn_key in self.connections:
+                pool = self.connections[conn_key]
+            else:
+                pool = self.connections[conn_key] = ConnectionPool(make_connexion(uri, 
+                                                        self.use_proxy))
+            pool.put(connection)
         finally:
             self.lock.release()
         
     def _make_request(self, uri, method, body, headers): 
         for i in range(2):
             connection = self._get_connection(uri, headers)
-            connection.debuglevel = restkit.debuglevel
+            con = connection.get_connection()
+            con.debuglevel = restkit.debuglevel
             try:
-                if connection.host != uri.hostname:
-                    connection.putrequest(method, uri.geturl())
+                if con.host != uri.hostname:
+                    con.putrequest(method, uri.geturl())
                 else:
-                    connection.putrequest(method, _relative_uri(uri))
+                    con.putrequest(method, _relative_uri(uri))
         
                 # bug in Python 2.4 and 2.5
                 # httplib.HTTPConnection.putrequest adding 
@@ -177,36 +187,36 @@ class HttpClient(object):
                     header_line = 'Host: %s:443' % uri.hostname
                     replacement_header_line = 'Host: %s' % uri.hostname
                     try:
-                        connection._buffer[connection._buffer.index(header_line)] = (
+                        con._buffer[connection._buffer.index(header_line)] = (
                             replacement_header_line)
                     except ValueError:  # header_line missing from connection._buffer
                         pass
         
                 # Send the HTTP headers.
                 for header_name, value in headers.iteritems():
-                    connection.putheader(header_name, value)
-                connection.endheaders()
+                    con.putheader(header_name, value)
+                con.endheaders()
         
                 if body is not None:
                     if i > 0 and hasattr(body, 'seek'):
                         body.seek(0)
                         
                     if isinstance(body, types.StringTypes) and len(body) == 0:
-                        connection.send("")
+                        con.send("")
                     elif isinstance(body, types.StringTypes) or hasattr(body, 'read'):
-                        _send_body_part(body, connection)
+                        _send_body_part(body, con)
                     elif hasattr(body, "__iter__"):
                         for body_part in body:
-                            _send_body_part(body_part, connection)
+                            _send_body_part(body_part, con)
                     elif isinstance(body, list):
                         for body_part in body:
-                            _send_body_part(body_part, connection)
+                            _send_body_part(body_part, con)
                     else:
-                        _send_body_part(body, connection)
+                        _send_body_part(body, con)
                     
             except socket.gaierror:
                 connection.close()
-                raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
+                raise errors.ResourceNotFound("Unable to find the server at %s" % con.host, 404)
             except (socket.error, httplib.HTTPException):
                 if i == 0:
                     connection.close()
@@ -228,13 +238,13 @@ class HttpClient(object):
         old_response = None
         
         connection = self._make_request(uri, method, body, headers)
-        response = connection.getresponse()
+        response = connection.connection.getresponse()
         
         if auth and auth.response(response, body):
             auth.request(uri, method, headers, body)
             connection = self._make_request(uri, method, body, headers)
-            response = connection.getresponse()
-
+            response = connection.connection.getresponse()
+            
         if self.follow_redirect:
             if nb_redirections < self.MAX_REDIRECTIONS: 
                 if response.status in [301, 302, 307]:
