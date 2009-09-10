@@ -12,7 +12,7 @@ store/*
 *.beam
 *.log
 restkit.egg-info
-
+dist/
 doc/_build/
 
 syntax: regexp

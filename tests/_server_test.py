@@ -20,6 +20,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
 import os
 import socket
+import tempfile
 import threading
 import unittest
 import urlparse
@@ -33,7 +34,9 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
 
     def __init__(self, request, client_address, server):
         self.auth = 'Basic ' + base64.encodestring('test:test')[:-1]
+        self.count = 0
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
+        
         
     def do_GET(self):
         self.parsed_uri = urlparse.urlparse(urllib.unquote(self.path))
@@ -98,7 +101,11 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             extra_headers = [('Content-type', 'text/plain'), 
                 ('Location', '/complete_redirect')]
             self._respond(301, extra_headers, "")
+            
         elif path == "/complete_redirect":
+            extra_headers = [('Content-type', 'text/plain')]
+            self._respond(200, extra_headers, "ok")
+        elif path == "/pool":
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "ok")
         else:

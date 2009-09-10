@@ -55,11 +55,14 @@ This module provide a common interface for all HTTP equest.
 """
 
 import cgi
+import httplib
 import mimetypes
 import uuid
 import os
 import re
+import socket
 import StringIO
+import time
 import types
 import urllib
 
@@ -69,7 +72,7 @@ except ImportError:
     chardet = False
 
 from restkit.errors import *
-from restkit.httpc import ProxiedHttpClient, ResponseStream
+from restkit.httpc import HttpClient, ResponseStream
 from restkit.utils import to_bytestring
 
 MIME_BOUNDARY = 'END_OF_PART'
@@ -88,7 +91,8 @@ class Resource(object):
     `restkit.http.HTTPClient`.
 
     """
-    def __init__(self, uri, transport=None, headers=None):
+    def __init__(self, uri, transport=None, headers=None, follow_redirect=True, 
+        force_follow_redirect=False, use_proxy=False, min_size=0, max_size=4, pool_class=None):
         """Constructor for a `Resource` object.
 
         Resource represent an HTTP resource.
@@ -104,11 +108,25 @@ class Resource(object):
                 (authentification, proxy, ....).
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
+        :param follow_redirect: boolean, default is True, allow the client to follow redirection
+        :param force_follow_redirect: boolean, default is False, force redirection on POST/PUT
+        :param use_proxy: boolean, default is False, if you want to use a proxy
+        :param min_size: minimum number of connections in the pool
+        :param max_size: maximum number of connection in the pool
+        :param pool_class: custom pool class
         """
 
-        self.client = RestClient(transport, headers=headers)
+        self.client = RestClient(transport, headers=headers, follow_redirect=follow_redirect,
+            force_follow_redirect=force_follow_redirect, use_proxy=use_proxy,
+            min_size=min_size, max_size=max_size, pool_class=pool_class)
         self.uri = uri
         self.transport = self.client.transport 
+        self.follow_redirect = follow_redirect
+        self.force_follow_redirect = force_follow_redirect
+        self.use_proxy = use_proxy
+        self.min_size = min_size
+        self.max_size = max_size
+        self.pool_class = pool_class
         self._headers = headers
 
     def __repr__(self):
@@ -125,7 +143,9 @@ class Resource(object):
             resr2 = res.clone()
         
         """
-        obj = self.__class__(self.uri, transport=self.transport)
+        obj = self.__class__(self.uri, transport=self.transport, headers=self._headers,
+                follow_redirect=self.follow_redirect, force_follow_redirect=self.force_follow_redirect, 
+                use_proxy=self.use_proxy, min_size=self.min_size, max_size=self.max_size)
         return obj
    
     def __call__(self, path):
@@ -137,7 +157,9 @@ class Resource(object):
         """
 
         return type(self)(self.client.make_uri(self.uri, path),
-                transport=self.transport)
+                transport=self.transport, headers=self._headers,
+                follow_redirect=self.follow_redirect, force_follow_redirect=self.force_follow_redirect, 
+                use_proxy=self.use_proxy, min_size=self.min_size, max_size=self.max_size)
 
     
     def get(self, path=None, headers=None, _stream=False, _stream_size=16384,
@@ -240,7 +262,9 @@ class RestClient(object):
     encode_keys = True
     safe = "/:"
 
-    def __init__(self, transport=None, headers=None):
+    def __init__(self, transport=None, headers=None, follow_redirect=True, 
+            force_follow_redirect=False, use_proxy=False, min_size=0, max_size=4, 
+            pool_class=None):
         """Constructor for a `RestClient` object.
 
         RestClient represent an HTTP client.
@@ -254,12 +278,25 @@ class RestClient(object):
                 (authentification, proxy, ....).
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
+        :param follow_redirect: boolean, default is True, allow the client to follow redirection
+        :param force_follow_redirect: boolean, default is False, force redirection on POST/PUT
+        :param use_proxy: boolean, False, if you want to use a proxy
+        :param min_size: minimum number of connections in the pool
+        :param max_size: maximum number of connection in the pool
+        :param pool_class: custom Pool class
         """ 
 
         if transport is None:
-            transport = ProxiedHttpClient()
+            transport = HttpClient(follow_redirect=follow_redirect, force_follow_redirect=force_follow_redirect, 
+                            use_proxy=use_proxy, min_size=min_size, max_size=max_size, pool_class=pool_class)
 
         self.transport = transport
+        self.follow_redirect=follow_redirect
+        self.force_follow_redirect = force_follow_redirect
+        self.use_proxy = use_proxy
+        self.min_size = min_size
+        self.max_size = max_size
+        self.pool_class = pool_class
 
         self.status = None
         self.response = None
@@ -403,13 +440,20 @@ class RestClient(object):
                     type_ = mimetypes.guess_type(body.name)[0]
                 _headers['Content-Type'] = type_ and type_ or 'application/octet-stream'
                 
-        try:
-            resp, data = self.transport.request(self.make_uri(uri, path, **params), 
-                method=method, body=body, headers=_headers, 
-                stream=_stream, stream_size=_stream_size)
-        except TransportError, e:
-            raise RequestError(str(e))
-
+                
+        def _try_request(retry=1):
+            try:
+                return self.transport.request(self.make_uri(uri, path, **params), 
+                            method=method, body=body, headers=_headers, 
+                            stream=_stream, stream_size=_stream_size)
+            except (socket.error, httplib.BadStatusLine), e:
+                if retry > 0:
+                    time.sleep(0.4)
+                return _try_request(retry-1)
+            except Exception, e:
+                RequestError(str(e))
+        
+        resp, data = _try_request()
         self.status  = status_code = resp.status
         self.response = resp
         

@@ -41,7 +41,9 @@ import urlparse
 
 import restkit
 from restkit import errors
+from restkit.pool import ConnectionPool
 from restkit.utils import to_bytestring
+
 
 url_parser = urlparse.urlparse
 
@@ -90,41 +92,59 @@ class BasicAuth(Auth):
     def add_credentials(self, username, password=None):
         password = password or ""
         self.credentials = (username, password)
-        
 
 #TODO : manage authentification detection
 class HttpClient(object):
     MAX_REDIRECTIONS = 5
     
-    def __init__(self, follow_redirect=True, force_follow_redirect=False):
+    def __init__(self, follow_redirect=True, force_follow_redirect=False,
+            use_proxy=False, min_size=0, max_size=4, pool_class=None):
         self.authorizations = []
-        self.use_proxy = False
+        self.use_proxy = use_proxy
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
+        self.min_size = min_size
+        self.max_size = max_size
+        self.connections = {}
+        if pool_class is None:
+            self.pool_class = ConnectionPool
+        else:
+            self.pool_class = pool_class
         
     def add_authorization(self, obj_auth):
         self.authorizations.append(obj_auth)
         
     def _get_connection(self, uri, headers=None):
         connection = None
-        if uri.scheme == 'https':
-            if not uri.port:
-                connection = httplib.HTTPSConnection(uri.hostname)
-            else:
-                connection = httplib.HTTPSConnection(uri.hostname, uri.port)
+        conn_key = (uri.scheme, uri.netloc, self.use_proxy)
+
+        if conn_key in self.connections:
+            pool = self.connections[conn_key]
         else:
-            if not uri.port:
-                connection = httplib.HTTPConnection(uri.hostname)
-            else:
-                connection = httplib.HTTPConnection(uri.hostname, uri.port)
+            pool = self.connections[conn_key] = self.pool_class(uri, self.use_proxy)
+        connection = pool.get()
+        
+        if connection.sock is False:
+            connection.connect()
+            
         return connection
         
-        
-    def _make_request(self, uri, method, body, headers):
-        connection = self._get_connection(uri, headers)
-        connection.debuglevel = restkit.debuglevel
-        
+    def _release_connection(self, uri, connection):
+        conn_key = (uri.scheme, uri.netloc, self.use_proxy)
+
+        if conn_key in self.connections:
+            pool = self.connections[conn_key]
+        else:
+            pool = self.connections[conn_key] = ConnectionPool(make_connexion(uri, 
+                                                    self.use_proxy), )
+        pool.put(connection)
+
+            
+    def _make_request(self, uri, method, body, headers): 
         for i in range(2):
+            connection = self._get_connection(uri, headers)
+            
+            connection.debuglevel = restkit.debuglevel
             try:
                 if connection.host != uri.hostname:
                     connection.putrequest(method, uri.geturl())
@@ -198,7 +218,7 @@ class HttpClient(object):
             auth.request(uri, method, headers, body)
             connection = self._make_request(uri, method, body, headers)
             response = connection.getresponse()
-
+            
         if self.follow_redirect:
             if nb_redirections < self.MAX_REDIRECTIONS: 
                 if response.status in [301, 302, 307]:
@@ -211,6 +231,7 @@ class HttpClient(object):
                         if not new_uri.netloc: # we got a relative url
                             absolute_uri = "%s://%s" % (uri.scheme, uri.netloc)
                             new_url = urlparse.urljoin(absolute_uri, new_url)
+                        self._release_connection(uri, connection)
                         response, connection = self._request(url_parser(new_url), method, body, 
                             headers, nb_redirections + 1)
                         self.final_url = new_url
@@ -222,6 +243,7 @@ class HttpClient(object):
                         absolute_uri = "%s://%s" % (uri.scheme, uri.netloc)
                         new_uri = url_parser(new_url)
                         new_url = urlparse.urljoin(absolute_uri, new_url)
+                    self._release_connection(uri, connection)
                     response, connection = self._request(url_parser(new_url), 'GET', headers, nb_redirections + 1)
                     self.final_url = new_url
             else:
@@ -238,7 +260,12 @@ class HttpClient(object):
         if method in ["POST", "PUT"] and body is None:
             body = ""
             headers.setdefault("Content-Length", str(len(body)))
-
+            
+        if self.use_proxy and uri.scheme != "https":
+            proxy_auth = _get_proxy_auth()
+            if proxy_auth:
+                headers['Proxy-Authorization'] = proxy_auth.strip()
+            
         response, connection = self._request(uri, method, body, headers)
         resp = HTTPResponse(response)
         resp.final_url = self.final_url
@@ -247,70 +274,18 @@ class HttpClient(object):
             connection.close()
             return resp, ""
         else:
-            return resp, _decompress_content(resp, response, connection, stream, stream_size)
-        
-class ProxiedHttpClient(HttpClient):
-    """ HTTP Client with simple proxy management """
-
-    def _get_connection(self, uri, headers=None):
-        headers = headers or {}
-        proxy = None
-        if uri.scheme == 'https':
-            proxy = os.environ.get('https_proxy')
-        elif uri.scheme == 'http':
-            proxy = os.environ.get('http_proxy')
-
-        if not proxy:
-            return HttpClient._get_connection(self, uri, headers=headers)
-
-        proxy_auth = _get_proxy_auth()
-        if uri.scheme == 'https':
-            if proxy_auth:
-                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-            port = uri.port
-            if not port:
-                port = 443
-            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (uri.hostname, port)
-            user_agent = 'User-Agent: %s\r\n' % (headers.get('User-Agent', restkit.USER_AGENT))
-            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
-            proxy_uri = url_parser(proxy)
-            if not proxy_uri.port:
-                proxy_uri.port = '80'
-            # Connect to the proxy server, very simple recv and error checking
-            p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-            p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
-            p_sock.sendall(proxy_pieces)
-            response = ''
-            # Wait for the full response.
-            while response.find("\r\n\r\n") == -1:
-                response += p_sock.recv(8192)
-            p_status = response.split()[1]
-            if p_status != str(200):
-                raise ProxyError('Error status=%s' % str(p_status))
-            # Trivial setup for ssl socket.
-            ssl = socket.ssl(p_sock, None, None)
-            fake_sock = httplib.FakeSocket(p_sock, ssl)
-            # Initalize httplib and replace with the proxy socket.
-            connection = httplib.HTTPConnection(proxy_uri.host)
-            connection.sock=fake_sock
-            return connection
-        else:
-            proxy_uri = url_parser(proxy)
-            if not proxy_uri.port:
-                proxy_uri.port = '80'
-            if proxy_auth:
-                headers['Proxy-Authorization'] = proxy_auth.strip()
-            return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
-        return None
-            
-def _decompress_content(resp, response, connection, stream=False, stream_size=16384):
+            return resp, _decompress_content(resp, response, 
+                lambda: self._release_connection(uri, connection), 
+                stream, stream_size)
+                
+def _decompress_content(resp, response, release_callback, stream=False, stream_size=16384):
     try:
         encoding = resp.get('content-encoding', None)
         if encoding in ['gzip', 'deflate']:
             
             if encoding == 'gzip':
                 compressedstream = StringIO.StringIO(response.read())
-                connection.close()
+                release_callback()
                 data = gzip.GzipFile(fileobj=compressedstream)
                 if stream:
                     return ResponseStream(data, stream_size)
@@ -318,17 +293,17 @@ def _decompress_content(resp, response, connection, stream=False, stream_size=16
                     return data.read()
             else:
                 data =  zlib.decompress(response.read())
-                connection.close()
+                release_callback()
                 if stream:
                     return ResponseStream(StringIO.StringIO(data), stream_size)
                 else:
                     return data
         else:
             if stream:
-                return ResponseStream(response, stream_size, connection)
+                return ResponseStream(response, stream_size, release_callback)
             else:
                 data = response.read()
-                connection.close()
+                release_callback()
                 return data
     except Exception, e:
         raise errors.ResponseError("Decompression failed %s" % str(e))
@@ -363,10 +338,10 @@ def _get_proxy_auth():
         
 class ResponseStream(object):
     
-    def __init__(self, response, amnt=16384, connection=None):
+    def __init__(self, response, amnt=16384, release_callback=None):
         self.response = response
         self.amnt = amnt
-        self.connection = connection
+        self.callback = release_callback
         
     def next(self):
         return self.response.read(self.amnt)
@@ -378,8 +353,8 @@ class ResponseStream(object):
                 yield data
             else:
                 break
-        if hasattr(self.connection, 'close'):
-            self.connection.close()
+        if self.callback is not None:
+            self.callback()
         
 class HTTPResponse(dict):
     """An object more like email.Message than httplib.HTTPResponse.
@@ -407,7 +382,7 @@ class HTTPResponse(dict):
     reason = "Ok"
 
     def __init__(self, info):
-        if isinstance(info, httplib.HTTPResponse):
+        if hasattr(info, "getheaders"):
             for key, value in info.getheaders():
                 self[key.lower()] = value
             self.status = info.status
@@ -415,6 +390,7 @@ class HTTPResponse(dict):
             self.reason = info.reason
             self.version = info.version
         else:
+            print info
             for key, value in info.iteritems(): 
                 self[key.lower()] = value 
             self.status = int(self.get('status', self.status))
