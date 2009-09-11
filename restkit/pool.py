@@ -197,10 +197,16 @@ class ConnectionPool(Pool):
     
     def create(self):
         return make_connection(self.uri, self.use_proxy)
-           
+    
     def put(self, connection):
-        try:
+        # close the connection if needed
+        if connection.sock is not None:
             connection.close()
-        except:
-            pass
-        Pool.put(self, make_connection(self.uri, self.use_proxy))
+
+        if self.current_size > self.max_size:
+            self.lock.acquire()
+            self.current_size -= 1
+            self.lock.release()
+            return
+
+        Pool.put(self, self.create())

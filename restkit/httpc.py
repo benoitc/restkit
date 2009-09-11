@@ -135,15 +135,13 @@ class HttpClient(object):
         if conn_key in self.connections:
             pool = self.connections[conn_key]
         else:
-            pool = self.connections[conn_key] = ConnectionPool(make_connexion(uri, 
-                                                    self.use_proxy), )
+            pool = self.connections[conn_key] =self.pool_class(uri, self.use_proxy)
         pool.put(connection)
 
             
     def _make_request(self, uri, method, body, headers): 
         for i in range(2):
             connection = self._get_connection(uri, headers)
-            
             connection.debuglevel = restkit.debuglevel
             try:
                 if connection.host != uri.hostname:
@@ -192,8 +190,8 @@ class HttpClient(object):
                 connection.close()
                 raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
             except (socket.error, httplib.HTTPException):
+                connection.close()
                 if i == 0:
-                    connection.close()
                     continue
                 else:
                     raise
