@@ -201,7 +201,7 @@ class ConnectionPool(Pool):
     
     def create(self):
         return make_connection(self.uri, self.use_proxy)
-    
+
     def put(self, connection):
         # close the connection if needed
         if connection.sock is not None:
