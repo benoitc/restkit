@@ -41,7 +41,7 @@ import urlparse
 
 import restkit
 from restkit import errors
-from restkit.pool import ConnectionPool
+from restkit.pool import ConnectionPool, get_proxy_auth
 from restkit.utils import to_bytestring
 
 
@@ -262,7 +262,7 @@ class HttpClient(object):
             headers.setdefault("Content-Length", str(len(body)))
             
         if self.use_proxy and uri.scheme != "https":
-            proxy_auth = _get_proxy_auth()
+            proxy_auth = get_proxy_auth()
             if proxy_auth:
                 headers['Proxy-Authorization'] = proxy_auth.strip()
             
@@ -321,20 +321,6 @@ def _send_body_part(data, connection):
         if binarydata == '': break
         connection.send(binarydata)
         
-def _get_proxy_auth():
-  import base64
-  proxy_username = os.environ.get('proxy-username')
-  if not proxy_username:
-    proxy_username = os.environ.get('proxy_username')
-  proxy_password = os.environ.get('proxy-password')
-  if not proxy_password:
-    proxy_password = os.environ.get('proxy_password')
-  if proxy_username:
-    user_auth = base64.b64encode('%s:%s' % (proxy_username,
-                                            proxy_password))
-    return 'Basic %s\r\n' % (user_auth.strip())
-  else:
-    return ''
         
 class ResponseStream(object):
     

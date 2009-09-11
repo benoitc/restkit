@@ -28,6 +28,21 @@ import threading
 
 from restkit import errors
 
+def get_proxy_auth():
+  import base64
+  proxy_username = os.environ.get('proxy-username')
+  if not proxy_username:
+    proxy_username = os.environ.get('proxy_username')
+  proxy_password = os.environ.get('proxy-password')
+  if not proxy_password:
+    proxy_password = os.environ.get('proxy_password')
+  if proxy_username:
+    user_auth = base64.b64encode('%s:%s' % (proxy_username,
+                                            proxy_password))
+    return 'Basic %s\r\n' % (user_auth.strip())
+  else:
+    return ''
+
 def make_proxy_connection(uri):
     headers = headers or {}
     proxy = None
@@ -40,7 +55,7 @@ def make_proxy_connection(uri):
         return make_connection(uri, use_proxy=False)
   
     if uri.scheme == 'https':
-        proxy_auth = _get_proxy_auth()
+        proxy_auth = get_proxy_auth()
         if proxy_auth:
             proxy_auth = 'Proxy-authorization: %s' % proxy_auth
         port = uri.port

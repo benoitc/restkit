@@ -92,7 +92,8 @@ class Resource(object):
 
     """
     def __init__(self, uri, transport=None, headers=None, follow_redirect=True, 
-        force_follow_redirect=False, use_proxy=False, min_size=0, max_size=4, pool_class=None):
+            force_follow_redirect=False, use_proxy=False, min_size=0, 
+            max_size=4, pool_class=None):
         """Constructor for a `Resource` object.
 
         Resource represent an HTTP resource.
