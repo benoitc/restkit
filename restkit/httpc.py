@@ -123,10 +123,6 @@ class HttpClient(object):
         else:
             pool = self.connections[conn_key] = self.pool_class(uri, self.use_proxy)
         connection = pool.get()
-        
-        if connection.sock is False:
-            connection.connect()
-            
         return connection
         
     def _release_connection(self, uri, connection):

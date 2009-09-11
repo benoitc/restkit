@@ -98,8 +98,4 @@ class ConnectionPool(Pool):
         return make_connection(self.uri, self.use_proxy)
            
     def put(self, connection):
-        try:
-            connection.close()
-        except:
-            pass
-        Pool.put(self, make_connection(self.uri, self.use_proxy))
+        Pool.put(self, self.create())

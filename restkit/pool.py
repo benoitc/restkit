@@ -17,9 +17,14 @@
 
 """
 Threadsafe Pool class based on eventlet.pools.Pool but using Queue.Queue
+
+TODO:
+- add our own way to share socket across connections. We shouldn't need to rely
+  on eventlet for that
+- log errors
 """
 
-# TODO: log error
+
 
 import collections
 import httplib
@@ -181,14 +186,13 @@ class Pool(object):
     def waiting(self):
         """Return the number of routines waiting for a pool item.
         """
-        return max(0, self.max_size - self.channel.qsize())
+        return self.channel.qsize() <= self.max_size
     
     def create(self):
         """Generate a new pool item
         """
         raise NotImplementedError("Implement in subclass")
-        
-        
+                
 class ConnectionPool(Pool):
     def __init__(self, uri, use_proxy=False, min_size=0, max_size=4):
         self.uri = uri
@@ -208,5 +212,5 @@ class ConnectionPool(Pool):
             self.current_size -= 1
             self.lock.release()
             return
-
+        
         Pool.put(self, self.create())
