@@ -186,7 +186,7 @@ class Pool(object):
     def waiting(self):
         """Return the number of routines waiting for a pool item.
         """
-        return self.channel.qsize() <= self.max_size
+        return self.max_size - self.channel.qsize()
     
     def create(self):
         """Generate a new pool item
