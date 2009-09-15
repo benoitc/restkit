@@ -20,6 +20,7 @@ from eventlet.green import socket
 from eventlet.green import httplib
 from eventlet.pools import Pool
 from eventlet.util import wrap_socket_with_coroutine_socket
+
 wrap_socket_with_coroutine_socket()
 
 def make_proxy_connection(uri):

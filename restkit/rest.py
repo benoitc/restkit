@@ -400,7 +400,11 @@ class RestClient(object):
         """
 
         # init headers
-        _headers = self._headers or {}
+        if self._headers is not None:
+            _headers = self._headers.copy()
+        else:
+            _headers = {}
+
         _headers.update(headers or {})
         
         self._body_parts = []
