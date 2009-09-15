@@ -228,10 +228,9 @@ class Resource(object):
         :param _stream_size: int, size in bytes of response stream block
         :param params: Optionnal parameterss added to the request
         """
-        _headers = self._headers or {}
-        _headers.update(headers or {})
+        
         return self.client.request(method, self.uri, path=path,
-                body=payload, headers=_headers, _stream=_stream, 
+                body=payload, headers=headers, _stream=_stream, 
                 _stream_size=_stream_size, **params)
 
     def get_response(self):
@@ -400,6 +399,7 @@ class RestClient(object):
         """
 
         # init headers
+        
         if self._headers is not None:
             _headers = self._headers.copy()
         else:
@@ -420,7 +420,7 @@ class RestClient(object):
                 body = to_bytestring(body)
                 size = len(body)
             elif isinstance(body, dict):
-                content_type = headers.get('Content-Type')
+                content_type = _headers.get('Content-Type')
                 if content_type is not None and content_type.startswith("multipart/form-data"):
                     type_, opts = cgi.parse_header(content_type)
                     boundary = opts.get('boundary', uuid.uuid4().hex)
@@ -430,8 +430,8 @@ class RestClient(object):
                     body = form_encode(body)
                     size = len(body)
             elif isinstance(body, MultipartForm):
-                headers['Content-Type'] = "multipart/form-data; boundary=%s" % body.boundary
-                headers['Content-Length'] = str(body.get_size())
+                _headers['Content-Type'] = "multipart/form-data; boundary=%s" % body.boundary
+                _headers['Content-Length'] = str(body.get_size())
                 
             if 'Content-Length' not in _headers and size is not None:
                 _headers['Content-Length'] = size
@@ -440,7 +440,7 @@ class RestClient(object):
                     'the length of the data parameter. Specify a value for '
                     'Content-Length')
             
-            if 'Content-Type' not in headers:
+            if 'Content-Type' not in _headers:
                 type_ = None
                 if hasattr(body, 'name'):
                     type_ = mimetypes.guess_type(body.name)[0]
