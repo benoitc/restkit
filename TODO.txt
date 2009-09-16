@@ -1,1 +1,2 @@
-- add support for different auth schema (oauth, digest come to my mind first)
+- add support for oauth
+- add proper support for keepalive connections.
