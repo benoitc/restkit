@@ -121,7 +121,9 @@ class HttpClient(object):
         if conn_key in self.connections:
             pool = self.connections[conn_key]
         else:
-            pool = self.connections[conn_key] = self.pool_class(uri, self.use_proxy)
+            pool = self.connections[conn_key] = self.pool_class(uri, 
+                use_proxy=self.use_proxy, min_size=self.min_size,
+                max_size=self.max_size)
         connection = pool.get()
         return connection
         
@@ -131,7 +133,9 @@ class HttpClient(object):
         if conn_key in self.connections:
             pool = self.connections[conn_key]
         else:
-            pool = self.connections[conn_key] =self.pool_class(uri, self.use_proxy)
+            pool = self.connections[conn_key] =self.pool_class(uri,  
+                use_proxy=self.use_proxy, min_size=self.min_size,
+                max_size=self.max_size)
         pool.put(connection)
 
             
@@ -184,9 +188,11 @@ class HttpClient(object):
                     
             except socket.gaierror:
                 connection.close()
+                self._release_connection(uri, connection)
                 raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
             except (socket.error, httplib.HTTPException):
                 connection.close()
+                self._release_connection(uri, connection)
                 if i == 0:
                     continue
                 else:
@@ -265,7 +271,8 @@ class HttpClient(object):
         resp.final_url = self.final_url
         
         if method == "HEAD":
-            connection.close()
+            response.close()
+            self._release_connection(uri, connection)
             return resp, ""
         else:
             return resp, _decompress_content(resp, response, 
@@ -300,6 +307,7 @@ def _decompress_content(resp, response, release_callback, stream=False, stream_s
                 release_callback()
                 return data
     except Exception, e:
+        release_callback()
         raise errors.ResponseError("Decompression failed %s" % str(e))
         
         
