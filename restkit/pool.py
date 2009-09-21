@@ -135,10 +135,6 @@ class Pool(object):
         try:
             if self.free_items:
                 return self.free_items.popleft()
-            if self.current_size < self.max_size:
-                created = self.create()
-                self.current_size += 1
-                return created
                 
             try:
                 return self.channel.get(False)
@@ -146,7 +142,7 @@ class Pool(object):
                 created = self.create()
                 self.current_size += 1
                 return created
-                
+  
         finally:
             self.lock.release()
 
@@ -186,7 +182,7 @@ class Pool(object):
     def waiting(self):
         """Return the number of routines waiting for a pool item.
         """
-        return self.max_size - self.channel.qsize()
+        return (self.channel.qsize() < self.max_size)
     
     def create(self):
         """Generate a new pool item
@@ -203,14 +199,22 @@ class ConnectionPool(Pool):
         return make_connection(self.uri, self.use_proxy)
 
     def put(self, connection):
-        # close the connection if needed
-        if connection.sock is not None:
-            connection.close()
-
         if self.current_size > self.max_size:
             self.lock.acquire()
             self.current_size -= 1
+            # close the connection if needed
+            if connection.sock is not None:
+                connection.close()
             self.lock.release()
             return
         
-        Pool.put(self, self.create())
+        try:
+            response = connection.getresponse()
+            response.read()
+        except httplib.ResponseNotReady:
+            pass
+            
+        if connection.sock is None:
+            connection = self.create()
+            
+        Pool.put(self, connection)
