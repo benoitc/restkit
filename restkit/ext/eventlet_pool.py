@@ -111,6 +111,8 @@ class ConnectionPool(Pool):
             response.read()
         except httplib.ResponseNotReady:
             pass
+        except:
+            connection.close()
             
         if connection.sock is None:
             connection = self.create()
