@@ -197,10 +197,19 @@ class HttpClient(object):
                     continue
                 else:
                     raise
+            try:
+                response = connection.getresponse()
+            except httplib.HTTPException:
+                connection.close()
+                self._release_connection(uri, connection)
+                if i == 0:
+                    continue
+                else:
+                    raise
             break
                     
         # Return the HTTP Response from the server.
-        return connection
+        return response, connection
         
     def _request(self, uri, method, body, headers, nb_redirections=0):
         auths = [(auth.depth(uri), auth) for auth in self.authorizations if auth.inscope(uri.hostname, uri)]
@@ -211,13 +220,11 @@ class HttpClient(object):
         headers = _normalize_headers(headers)
         old_response = None
         
-        connection = self._make_request(uri, method, body, headers)
-        response = connection.getresponse()
+        response, connection = self._make_request(uri, method, body, headers)
         
         if auth and auth.response(response, body):
             auth.request(uri, method, headers, body)
-            connection = self._make_request(uri, method, body, headers)
-            response = connection.getresponse()
+            response, connection = self._make_request(uri, method, body, headers)
             
         if self.follow_redirect:
             if nb_redirections < self.MAX_REDIRECTIONS: 
@@ -340,6 +347,8 @@ class ResponseStream(object):
             if data:
                 yield data
             else:
+                if not self.response.isclosed():
+                    self.response.close()
                 break
         if self.callback is not None:
             self.callback()

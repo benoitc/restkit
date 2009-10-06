@@ -90,7 +90,7 @@ class HTTPClientTestCase(unittest.TestCase):
     def testGetBinary(self):
         import imghdr
         import tempfile
-        res = Resource('http://e-engura.org')
+        res = Resource('http://e-engura.com')
         result = res.get('/images/logo.gif')
         self.assert_(res.response.status == 200)
         fd, fname = tempfile.mkstemp(suffix='.gif')
@@ -102,7 +102,7 @@ class HTTPClientTestCase(unittest.TestCase):
     def testGetBinaryStreamed(self):
         import imghdr
         import tempfile
-        res = Resource('http://e-engura.org')
+        res = Resource('http://e-engura.com')
         result = res.get('/images/logo.gif', _stream=True)
         self.assert_(res.response.status == 200)
         fd, fname = tempfile.mkstemp(suffix='.gif')

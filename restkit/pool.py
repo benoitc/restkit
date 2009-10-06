@@ -207,15 +207,15 @@ class ConnectionPool(Pool):
                 connection.close()
             self.lock.release()
             return
-        
+           
         try:
             response = connection.getresponse()
-            response.read()
+            response.close()
         except httplib.ResponseNotReady:
             pass
         except:
             connection.close()
-            
+            connection = self.create()
             
         if connection.sock is None:
             connection = self.create()
