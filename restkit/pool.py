@@ -207,7 +207,7 @@ class ConnectionPool(Pool):
                 connection.close()
             self.lock.release()
             return
-           
+          
         try:
             response = connection.getresponse()
             response.close()
