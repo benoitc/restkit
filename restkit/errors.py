@@ -18,9 +18,16 @@
 """
 exception classes.
 """
+import restkit
 
-class ResourceError(Exception):
-
+try:
+    import webob
+except ImportError:
+    webob = False
+    
+    
+class SimpleResourceError(Exception):
+    """ default error class """
     def __init__(self, msg=None, http_code=None, response=None):
         self.msg = msg or ''
         self.status_code = http_code
@@ -37,11 +44,53 @@ class ResourceError(Exception):
         if self.msg:
             return self.msg
         try:
-            return self._fmt % self.__dict__
+            return str(self.__dict__)
         except (NameError, ValueError, KeyError), e:
             return 'Unprintable exception %s: %s' \
                 % (self.__class__.__name__, str(e))
-        
+                
+
+ResourceError = None
+if webob:
+    import webob.exc
+    class WSGIResourceError(webob.exc.WSGIHTTPException):
+
+        def __init__(self, msg=None, http_code=None, response=None):
+            webob.exc.WSGIHTTPException.__init__(self)
+            
+            http_code = http_code or 500
+            klass = webob.exc.status_map[http_code]
+            self.code = http_code
+            self.title = klass.title
+            self.status = '%s %s' % (self.code, self.title)
+            self.explanation = msg
+            self.response = response
+            
+            # default params
+            self.status_code = http_code
+            self.msg = msg
+
+        def _get_message(self):
+            return self.explanation
+        def _set_message(self, msg):
+            self.explanation = msg or ''
+        message = property(_get_message, _set_message)
+    ResourceError = WSGIResourceError
+else:
+    WSGIResourceError = None
+    ResourceError = SimpleResourceError
+                
+def use_simple_exception():
+    global ResourceError, SimpleResourceError
+    ResourceError = SimpleResourceError
+    
+def use_wsgi_exception():
+    global ResourceError, WSGIResourceError
+    if webob:
+        ResourceError = WSGIResourceError
+    else:
+        raise ImportError("webob cannot be imported.")
+
 class ResourceNotFound(ResourceError):
     """Exception raised when no resource was found at the given url. 
     """

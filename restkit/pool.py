@@ -202,9 +202,8 @@ class ConnectionPool(Pool):
         if self.current_size > self.max_size:
             self.lock.acquire()
             self.current_size -= 1
-            # close the connection if needed
-            if connection.sock is not None:
-                connection.close()
+            # close when needed
+            connection.close()
             self.lock.release()
             return
           
