@@ -98,13 +98,16 @@ class HttpClient(object):
     MAX_REDIRECTIONS = 5
     
     def __init__(self, follow_redirect=True, force_follow_redirect=False,
-            use_proxy=False, min_size=0, max_size=4, pool_class=None):
+            use_proxy=False, key_file=None, cert_file=None, min_size=0, 
+            max_size=4, pool_class=None):
         self.authorizations = []
         self.use_proxy = use_proxy
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
         self.min_size = min_size
         self.max_size = max_size
+        self.key_file = key_file
+        self.cert_file = cert_file
         self.connections = {}
         if pool_class is None:
             self.pool_class = ConnectionPool
@@ -122,7 +125,8 @@ class HttpClient(object):
             pool = self.connections[conn_key]
         else:
             pool = self.connections[conn_key] = self.pool_class(uri, 
-                use_proxy=self.use_proxy, min_size=self.min_size,
+                use_proxy=self.use_proxy, key_file=self.key_file,
+                cert_file=self.cert_file, min_size=self.min_size,
                 max_size=self.max_size)
         connection = pool.get()
         return connection
@@ -134,7 +138,8 @@ class HttpClient(object):
             pool = self.connections[conn_key]
         else:
             pool = self.connections[conn_key] =self.pool_class(uri,  
-                use_proxy=self.use_proxy, min_size=self.min_size,
+                use_proxy=self.use_proxy, key_file=self.key_file,
+                cert_file=self.cert_file, min_size=self.min_size,
                 max_size=self.max_size)
         pool.put(connection)
 

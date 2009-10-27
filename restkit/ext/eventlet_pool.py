@@ -72,15 +72,17 @@ def make_proxy_connection(uri):
         return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
     return None
     
-def make_connection(uri, use_proxy=True):
+def make_connection(uri, use_proxy=True, key_file=None, cert_file=None):
     if use_proxy:
         return make_proxy_connection(uri)
     
     if uri.scheme == 'https':
         if not uri.port:
-            connection = httplib.HTTPSConnection(uri.hostname)
+            connection = httplib.HTTPSConnection(uri.hostname, 
+                            key_file=key_file, cert_file=cert_file)
         else:
-            connection = httplib.HTTPSConnection(uri.hostname, uri.port)
+            connection = httplib.HTTPSConnection(uri.hostname, port=uri.port, 
+                    key_file=key_file, cert_file=cert_file)
     else:
         if not uri.port:
             connection = httplib.HTTPConnection(uri.hostname)
@@ -90,13 +92,17 @@ def make_connection(uri, use_proxy=True):
 
 
 class ConnectionPool(Pool):
-    def __init__(self, uri, use_proxy=False, min_size=0, max_size=4):
+    def __init__(self, uri, use_proxy=False, key_file=None,
+            cert_file=None, min_size=0, max_size=4):
         self.uri = uri
         self.use_proxy = use_proxy
+        self.key_file = key_file
+        self.cert_file = cert_file
         Pool.__init__(self, min_size, max_size)
     
     def create(self):
-        return make_connection(self.uri, self.use_proxy)
+        return make_connection(self.uri, use_proxy=self.use_proxy, 
+                key_file=self.key_file, cert_file=self.cert_file)
            
     def put(self, connection):
         if self.current_size > self.max_size:

@@ -92,8 +92,8 @@ class Resource(object):
 
     """
     def __init__(self, uri, transport=None, headers=None, follow_redirect=True, 
-            force_follow_redirect=False, use_proxy=False, min_size=0, 
-            max_size=4, pool_class=None):
+            force_follow_redirect=False, use_proxy=False, key_file=None,
+            cert_file=None, min_size=0, max_size=4, pool_class=None):
         """Constructor for a `Resource` object.
 
         Resource represent an HTTP resource.
@@ -112,6 +112,8 @@ class Resource(object):
         :param follow_redirect: boolean, default is True, allow the client to follow redirection
         :param force_follow_redirect: boolean, default is False, force redirection on POST/PUT
         :param use_proxy: boolean, default is False, if you want to use a proxy
+        :param key_file: When you do an ssl connection, a PEM formatted file that contains your private key.
+        :param cert_file: When you do an ssl connection, a PEM formatted certificate chain file.
         :param min_size: minimum number of connections in the pool
         :param max_size: maximum number of connection in the pool
         :param pool_class: custom pool class
@@ -119,12 +121,16 @@ class Resource(object):
 
         self.client = RestClient(transport, headers=headers, follow_redirect=follow_redirect,
             force_follow_redirect=force_follow_redirect, use_proxy=use_proxy,
-            min_size=min_size, max_size=max_size, pool_class=pool_class)
+            key_file=key_file, cert_file=cert_file, min_size=min_size,
+             max_size=max_size, pool_class=pool_class)
         self.uri = uri
         self.transport = self.client.transport 
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
         self.use_proxy = use_proxy
+        
+        self.key_file = key_file
+        self.cert_file = cert_file
         self.min_size = min_size
         self.max_size = max_size
         self.pool_class = pool_class
@@ -146,8 +152,8 @@ class Resource(object):
         """
         obj = self.__class__(self.uri, transport=self.transport, headers=self._headers,
                 follow_redirect=self.follow_redirect, force_follow_redirect=self.force_follow_redirect, 
-                use_proxy=self.use_proxy, min_size=self.min_size, max_size=self.max_size, 
-                pool_class=self.pool_class)
+                use_proxy=self.use_proxy, key_file=self.key_file, cert_file=self.cert_file, 
+                min_size=self.min_size, max_size=self.max_size, pool_class=self.pool_class)
         return obj
    
     def __call__(self, path):
@@ -161,7 +167,8 @@ class Resource(object):
         return type(self)(self.client.make_uri(self.uri, path),
                 transport=self.transport, headers=self._headers,
                 follow_redirect=self.follow_redirect, force_follow_redirect=self.force_follow_redirect, 
-                use_proxy=self.use_proxy, min_size=self.min_size, max_size=self.max_size)
+                use_proxy=self.use_proxy, key_file=self.key_file, cert_file=self.cert_file, 
+                min_size=self.min_size, max_size=self.max_size)
 
     
     def get(self, path=None, headers=None, _stream=False, _stream_size=16384,
@@ -264,8 +271,8 @@ class RestClient(object):
     safe = "/:"
 
     def __init__(self, transport=None, headers=None, follow_redirect=True, 
-            force_follow_redirect=False, use_proxy=False, min_size=0, max_size=4, 
-            pool_class=None):
+            force_follow_redirect=False, use_proxy=False, key_file=None, cert_file=None,
+            min_size=0, max_size=4, pool_class=None):
         """Constructor for a `RestClient` object.
 
         RestClient represent an HTTP client.
@@ -282,6 +289,8 @@ class RestClient(object):
         :param follow_redirect: boolean, default is True, allow the client to follow redirection
         :param force_follow_redirect: boolean, default is False, force redirection on POST/PUT
         :param use_proxy: boolean, False, if you want to use a proxy
+        :param key_file: When you do an ssl connection, a PEM formatted file that contains your private key.
+        :param cert_file: When you do an ssl connection, a PEM formatted certificate chain file.
         :param min_size: minimum number of connections in the pool
         :param max_size: maximum number of connection in the pool
         :param pool_class: custom Pool class
@@ -289,7 +298,8 @@ class RestClient(object):
 
         if transport is None:
             transport = HttpClient(follow_redirect=follow_redirect, force_follow_redirect=force_follow_redirect, 
-                            use_proxy=use_proxy, min_size=min_size, max_size=max_size, pool_class=pool_class)
+                            use_proxy=use_proxy, key_file=key_file, cert_file=cert_file,
+                            min_size=min_size, max_size=max_size, pool_class=pool_class)
 
         self.transport = transport
         self.follow_redirect=follow_redirect
@@ -297,6 +307,8 @@ class RestClient(object):
         self.use_proxy = use_proxy
         self.min_size = min_size
         self.max_size = max_size
+        self.key_file = key_file
+        self.cert_file = cert_file
         self.pool_class = pool_class
 
         self.status = None
