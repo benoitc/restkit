@@ -41,6 +41,7 @@ import urlparse
 
 import restkit
 from restkit import errors
+
 from restkit.pool import ConnectionPool, get_proxy_auth
 from restkit.utils import to_bytestring
 

@@ -43,7 +43,6 @@ class HTTPConnection(httplib.HTTPConnection):
                 self.connect()
             else:
                 raise NotConnected()
-
         if self.debuglevel > 0:
             print "send:", repr(str)
 

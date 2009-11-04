@@ -72,7 +72,7 @@ except ImportError:
     chardet = False
 
 from restkit.errors import *
-from restkit.httpc import HttpClient, ResponseStream
+from restkit.httpc import HttpClient, ResponseStream, HTTPResponse
 from restkit.utils import to_bytestring
 
 MIME_BOUNDARY = 'END_OF_PART'
@@ -459,10 +459,19 @@ class RestClient(object):
                 _headers['Content-Type'] = type_ and type_ or 'application/octet-stream'
                 
                 
-        
-        resp, data = self.transport.request(self.make_uri(uri, path, **params), 
-                        method=method, body=body, headers=_headers, 
-                        stream=_stream, stream_size=_stream_size)
+        try:
+            resp, data = self.transport.request(self.make_uri(uri, path, **params), 
+                            method=method, body=body, headers=_headers, 
+                            stream=_stream, stream_size=_stream_size)
+        except (socket.error, httplib.BadStatusLine), e:
+            raise restkit.errors.RequestFailed(str(e), http_code=0,
+                            response=HTTPResponse({}))
+        except restkit.errors.RequestError, e:
+             raise restkit.errors.RequestFailed(str(e), http_code=0,
+                             response=HTTPResponse({}))
+        except:
+            raise
+            
         self.status  = status_code = resp.status
         self.response = resp
         
