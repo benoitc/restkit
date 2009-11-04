@@ -33,7 +33,6 @@ import threading
 
 from restkit import errors
 
-
 class HTTPConnection(httplib.HTTPConnection):
     
     def send(self, str):

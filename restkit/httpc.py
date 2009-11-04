@@ -393,7 +393,6 @@ class HTTPResponse(dict):
             self.reason = info.reason
             self.version = info.version
         else:
-            print info
             for key, value in info.iteritems(): 
                 self[key.lower()] = value 
             self.status = int(self.get('status', self.status))
