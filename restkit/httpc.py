@@ -87,7 +87,7 @@ class Auth(object):
 class BasicAuth(Auth):
     """ basic authentification """
     def request(self, uri, method, body, headers):
-        headers['authorization'] = 'Basic ' + base64.b64encode("%s:%s" % self.credentials).strip()
+        headers['authorization'] = 'Basic ' + base64.encodestring("%s:%s" % self.credentials)[:-1]
         
     def add_credentials(self, username, password=None):
         password = password or ""
@@ -331,7 +331,7 @@ def _send_body_part(data, connection):
     
     # we always stream
     while 1:
-        binarydata = data.read(100000)
+        binarydata = data.read(16384)
         if binarydata == '': break
         connection.send(binarydata)
         
