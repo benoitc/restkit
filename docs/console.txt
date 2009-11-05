@@ -3,19 +3,20 @@
 Console client
 ==============
 
-A console client is available with py-restkit. It allow you to perform any HTTP
+A console client is available with restkit. It allow you to perform any HTTP
  request you need in console.
 
 Examples :
 ----------
+
 create a paste in Friendpaste from command line:
 
 .. code-block:: bash
 
-    benoitc@pollen:/tmp$ restcli -H "Accept:application/json" -H "Content-Type: application/json" http://friendpaste.com POST - < test.json 
+    $ restcli -H "Accept:application/json" -H "Content-Type: application/json" http://friendpaste.com POST - < test.json 
     {"url": "http://friendpaste.com/1Po5tOC012QeFYOS3b3RaA", "rev": "373163383163", "ok": true, "id": "1Po5tOC012QeFYOS3b3RaA"}
 
-This command send test.json file to Friendpaste and you get back the full url of paste in json result.
+This command send test.json file to Friendpaste and you get back the full url of paste in the json result.
 
 test.json file :
 
@@ -32,7 +33,7 @@ Get your twitter status time line :
 
 .. code-block:: bash
 
-    benoitc@pollen:/tmp$ restcli http://XXXXXXX:XXXXXXX@twitter.com/statuses/user_timeline.json
+    $ restcli http://XXXXXXX:XXXXXXX@twitter.com/statuses/user_timeline.json
 
 
 Usage :
@@ -50,7 +51,7 @@ Options:
   -i FILE, --input=FILE
                         the name of the file to read from
   -o OUTPUT, --output=OUTPUT
-                        the name of the file to read from
+                        the name of the file to write to
   --proxy=PROXY         Full uri of proxy, ex:
                         http://username:password@proxy:port/
 

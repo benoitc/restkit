@@ -20,7 +20,6 @@ Fisrt steps
    installation
    gettingstarted
    console
-   whatsnew
 
 .. _api:
 
@@ -32,8 +31,8 @@ Reference
    resource
    exceptions
 
-* Follow development on `Bitbucket <http://bitbucket.org/benoitc/py-restclient/>`_.
-* Report bugs, report features and browse the source through `Tracker <http://bitbucket.org/benoitc/restkit/issues/>`_.
+* Follow development on `Bitbucket <http://bitbucket.org/benoitc/restkit/>`_.
+* Report bugs, request features and browse the source through `Tracker <http://bitbucket.org/benoitc/restkit/issues/>`_.
 
 
 Indices and tables

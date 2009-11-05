@@ -126,7 +126,7 @@ def main():
     parser.add_option('-i', '--input', action='store', dest='input', metavar='FILE',
                       help='the name of the file to read from')
     parser.add_option('-o', '--output', action='store', dest='output',
-                      help='the name of the file to read from')
+                      help='the name of the file to write to')
 
     parser.add_option('--proxy', action='store', dest='proxy',
             help='Full uri of proxy, ex:\n'+

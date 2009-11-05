@@ -3,7 +3,7 @@
 Getting Started
 ===============
 
-This tutoriall exposes key features of this library through mainly code
+This tutoriall exposes key features of this library mainly through code
 examples. For in-depth description of the modules, you'll want to read 
 the :ref:`API <api>` documentation.
 
@@ -22,13 +22,11 @@ Usage example, get friendpaste page :
     page = res.get()
     print page
     print page.http_code
-    
-
 
 Perform HTTP call support  with `restkit.rest.RestClient`.
 -------------------------------------------------------------
 
-Usage example, get friendpaste page :
+Usage example, get friendpaste page:
 
 
 .. code-block:: python
@@ -48,7 +46,7 @@ Or get a paste in JSON :
     headers={'Accept': 'application/json'})
 
 
-Basic Authentification :
+Basic Authentification:
 ------------------------
 
 .. code-block:: python
