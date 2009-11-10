@@ -25,7 +25,7 @@ TODO:
 """
 
 
-
+import time
 import collections
 import httplib
 import Queue
@@ -193,16 +193,32 @@ class Pool(object):
                 
 class ConnectionPool(Pool):
     def __init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
-            min_size=0, max_size=4):
+            timeout=300, min_size=0, max_size=4):
         self.uri = uri
         self.use_proxy = use_proxy
         self.key_file = key_file
         self.cert_file = cert_file
+        self.timeout = timeout
         Pool.__init__(self, min_size, max_size)
     
     def create(self):
-        return make_connection(self.uri, use_proxy=self.use_proxy,
+        connection = make_connection(self.uri, use_proxy=self.use_proxy,
                         key_file=self.key_file, cert_file=self.cert_file)
+        setattr(connection, "started", time.time())
+        return connection
+        
+    def get(self):
+        while True:
+            connection = self.do_get()
+            since = time.time() - connection.started
+            if since < self.timeout:
+                return connection
+            else:
+                connection.close()
+                self.lock.acquire()
+                if self.current_size > self.max_size:
+                    self.current_size -= 1
+                self.lock.release()
 
     def put(self, connection):
         if self.current_size > self.max_size:

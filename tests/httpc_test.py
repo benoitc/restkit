@@ -23,6 +23,8 @@ import threading
 import Queue
 import unittest
 import urlparse
+import sys
+import time
 
 from restkit import httpc
 
@@ -216,6 +218,33 @@ class HTTPClientTestCase(unittest.TestCase):
             res = Resource(self.url, httptransport)
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
+        
+    def testTimeout(self):
+        res = Resource(self.url, timeout=10, max_size=1)
+        uri =  urlparse.urlparse("%s/" % self.url)
+        
+        def get_res():
+            result = res.get()
+            conn_key1 = (uri.scheme, uri.netloc, False)
+            pool1 = res.transport.connections[conn_key]
+            self.assert_(result == "welcome")
+            self.assert_(pool1.channel.qsize() == 1)
+        
+        result = res.get()
+        # do twice so we make sure we have smth in queue
+        result = res.get()
+        conn_key = (uri.scheme, uri.netloc, False)
+        pool = res.transport.connections[conn_key]
+        self.assert_(result == "welcome")
+        self.assert_(pool.channel.qsize() == 1)
+        
+        print >>sys.stderr, "waiting timeout (10s)..."
+        time.sleep(10)
+        result = res.get()
+        conn_key1 = (uri.scheme, uri.netloc, False)
+        pool1 = res.transport.connections[conn_key]
+        self.assert_(result == "welcome")
+
         
 
 if __name__ == '__main__':

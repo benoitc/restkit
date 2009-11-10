@@ -93,7 +93,7 @@ def make_connection(uri, use_proxy=True, key_file=None, cert_file=None):
 
 class ConnectionPool(Pool):
     def __init__(self, uri, use_proxy=False, key_file=None,
-            cert_file=None, min_size=0, max_size=4):
+            cert_file=None, min_size=0, max_size=4, **kwargs):
         self.uri = uri
         self.use_proxy = use_proxy
         self.key_file = key_file

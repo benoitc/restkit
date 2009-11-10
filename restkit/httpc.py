@@ -99,14 +99,15 @@ class HttpClient(object):
     MAX_REDIRECTIONS = 5
     
     def __init__(self, follow_redirect=True, force_follow_redirect=False,
-            use_proxy=False, key_file=None, cert_file=None, min_size=0, 
-            max_size=4, pool_class=None):
+            use_proxy=False, key_file=None, cert_file=None, timeout=300,
+            min_size=0, max_size=4, pool_class=None):
         self.authorizations = []
         self.use_proxy = use_proxy
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
         self.min_size = min_size
         self.max_size = max_size
+        self.timeout = timeout
         self.key_file = key_file
         self.cert_file = cert_file
         self.connections = {}
@@ -118,30 +119,21 @@ class HttpClient(object):
     def add_authorization(self, obj_auth):
         self.authorizations.append(obj_auth)
         
-    def _get_connection(self, uri, headers=None):
-        connection = None
+    def _get_pool(self, uri):
         conn_key = (uri.scheme, uri.netloc, self.use_proxy)
+        if not conn_key in self.connections:
+            self.connections[conn_key] = self.pool_class(uri, use_proxy=self.use_proxy, 
+                timeout=self.timeout, key_file=self.key_file, cert_file=self.cert_file, 
+                min_size=self.min_size, max_size=self.max_size)
+        return self.connections[conn_key]
 
-        if conn_key in self.connections:
-            pool = self.connections[conn_key]
-        else:
-            pool = self.connections[conn_key] = self.pool_class(uri, 
-                use_proxy=self.use_proxy, key_file=self.key_file,
-                cert_file=self.cert_file, min_size=self.min_size,
-                max_size=self.max_size)
+    def _get_connection(self, uri, headers=None):
+        pool = self._get_pool(uri)
         connection = pool.get()
         return connection
         
     def _release_connection(self, uri, connection):
-        conn_key = (uri.scheme, uri.netloc, self.use_proxy)
-
-        if conn_key in self.connections:
-            pool = self.connections[conn_key]
-        else:
-            pool = self.connections[conn_key] =self.pool_class(uri,  
-                use_proxy=self.use_proxy, key_file=self.key_file,
-                cert_file=self.cert_file, min_size=self.min_size,
-                max_size=self.max_size)
+        pool = self._get_pool(uri)
         pool.put(connection)
 
             
