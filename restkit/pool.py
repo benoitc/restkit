@@ -33,52 +33,6 @@ import threading
 
 from restkit import errors
 
-class HTTPConnection(httplib.HTTPConnection):
-    
-    def send(self, str):
-        """Send `str' to the server."""
-        if self.sock is None:
-            if self.auto_open:
-                self.connect()
-            else:
-                raise NotConnected()
-        if self.debuglevel > 0:
-            print "send:", repr(str)
-
-        blocksize=8192
-        if hasattr(str,'read') :
-            if self.debuglevel > 0: print "sendIng a read()able"
-            data=str.read(blocksize)
-            while data:
-                self.sock.sendall(data)
-                data=str.read(blocksize)
-        else:
-            self.sock.sendall(str)
-            
-class HTTPSConnection(httplib.HTTPSConnection):
-    
-    def send(self, str):
-        """Send `str' to the server."""
-        if self.sock is None:
-            if self.auto_open:
-                self.connect()
-            else:
-                raise NotConnected()
-
-        if self.debuglevel > 0:
-            print "send:", repr(str)
-
-        blocksize=8192
-        if hasattr(str,'read') :
-            if self.debuglevel > 0: print "sendIng a read()able"
-            data=str.read(blocksize)
-            while data:
-                self.sock.sendall(data)
-                data=str.read(blocksize)
-        else:
-            self.sock.sendall(str)               
-
-
 def get_proxy_auth():
   import base64
   proxy_username = os.environ.get('proxy-username')
@@ -149,16 +103,16 @@ def make_connection(uri, use_proxy=True, key_file=None, cert_file=None):
     
     if uri.scheme == 'https':
         if not uri.port:
-            connection = HTTPSConnection(uri.hostname, 
+            connection = httplib.HTTPSConnection(uri.hostname, 
                                 key_file=key_file, cert_file=cert_file)
         else:
-            connection = HTTPSConnection(uri.hostname, port=uri.port, 
+            connection = httplib.HTTPSConnection(uri.hostname, port=uri.port, 
                                 key_file=key_file, cert_file=cert_file)
     else:
         if not uri.port:
-            connection = HTTPConnection(uri.hostname)
+            connection = httplib.HTTPConnection(uri.hostname)
         else:
-            connection = HTTPConnection(uri.hostname, uri.port)
+            connection = httplib.HTTPConnection(uri.hostname, uri.port)
     return connection
 
 class Pool(object):
