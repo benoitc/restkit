@@ -16,13 +16,9 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    import ez_setup
-    ez_setup.use_setuptools()
-    from setuptools import setup, find_packages
-
+from distribute_setup import use_setuptools
+use_setuptools()
+from setuptools import setup, find_packages
 import sys
 
 setup(
@@ -48,7 +44,7 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     packages = find_packages(),
-
+    install_requires = ['distribute'],
     entry_points = {
         'console_scripts': [
             'restcli = restkit.bin.rest_cli:main',
