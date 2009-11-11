@@ -29,9 +29,12 @@ import time
 import collections
 import httplib
 import Queue
+import socket
 import threading
 
 from restkit import errors
+
+has_timeout = hasattr(socket, '_GLOBAL_DEFAULT_TIMEOUT')
 
 def get_proxy_auth():
   import base64
@@ -97,22 +100,24 @@ def make_proxy_connection(uri):
         return HTTPConnection(proxy_uri.hostname, proxy_uri.port)
     return None
     
-def make_connection(uri, use_proxy=True, key_file=None, cert_file=None):
+def make_connection(uri, use_proxy=True, key_file=None, cert_file=None, timeout=300):
     if use_proxy:
         return make_proxy_connection(uri)
     
     if uri.scheme == 'https':
-        if not uri.port:
-            connection = httplib.HTTPSConnection(uri.hostname, 
-                                key_file=key_file, cert_file=cert_file)
-        else:
-            connection = httplib.HTTPSConnection(uri.hostname, port=uri.port, 
-                                key_file=key_file, cert_file=cert_file)
+        kwargs = dict(key_file=key_file, cert_file=cert_file)
+        if has_timeout:
+            kwargs.update({"timeout": timeout})
+        if uri.port:
+            kwargs.update({"port": uri.port})
+        connection = httplib.HTTPSConnection(uri.hostname, **kwargs)
     else:
-        if not uri.port:
-            connection = httplib.HTTPConnection(uri.hostname)
-        else:
-            connection = httplib.HTTPConnection(uri.hostname, uri.port)
+        kwargs = {}
+        if has_timeout:
+            kwargs.update({"timeout": timeout})
+        if uri.port:
+            kwargs.update({"port": uri.port})
+        connection = httplib.HTTPConnection(uri.hostname, **kwargs)
     return connection
 
 class Pool(object):
