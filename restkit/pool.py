@@ -208,7 +208,8 @@ class ConnectionPool(Pool):
     
     def create(self):
         connection = make_connection(self.uri, use_proxy=self.use_proxy,
-                        key_file=self.key_file, cert_file=self.cert_file)
+                        key_file=self.key_file, cert_file=self.cert_file,
+                        timeout=self.timeout)
         setattr(connection, "started", time.time())
         return connection
         
