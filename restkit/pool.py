@@ -218,6 +218,7 @@ class ConnectionPool(Pool):
             connection = self.do_get()
             since = time.time() - connection.started
             if since < self.timeout:
+                
                 return connection
             else:
                 connection.close()
@@ -235,14 +236,9 @@ class ConnectionPool(Pool):
             self.lock.release()
             return
           
-        try:
-            response = connection.getresponse()
-            response.close()
-        except httplib.ResponseNotReady:
-            pass
-        except:
-            connection.close()
-            connection = self.create()
+          
+        if connection._HTTPConnection__response:
+            connection._HTTPConnection__response.read()
             
         if connection.sock is None:
             connection = self.create()
