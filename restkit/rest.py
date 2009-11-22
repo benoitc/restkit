@@ -720,7 +720,7 @@ class MultipartForm(object):
             if hasattr(value, "read"):
                 fname = getattr(value, 'name')
                 if fname is not None:
-                    filetype = ';'.join(filter(None, guess_type(fname)))
+                    filetype = ';'.join(filter(None, mimetypes.guess_type(fname)))
                 else:
                     filetype = None
                 if not isinstance(value, file) and self.content_length is None:
