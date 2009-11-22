@@ -694,7 +694,6 @@ class BoundaryItem(object):
             yield self.encode(boundary)
         else:
             yield self.encode_hdr(boundary)
-            yield self.encode(boundary)
             while True:
                 block = self.value.read(blocksize)
                 if not block:
