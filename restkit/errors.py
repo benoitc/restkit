@@ -19,6 +19,7 @@
 exception classes.
 """
 import restkit
+import warnings
 
 try:
     import webob
