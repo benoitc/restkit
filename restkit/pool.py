@@ -195,6 +195,10 @@ class Pool(object):
         """Generate a new pool item
         """
         raise NotImplementedError("Implement in subclass")
+        
+    def clean(self):
+        """ clean the pool """
+        raise NotImplementedError("Implement in subclass")
                 
 class ConnectionPool(Pool):
     def __init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
@@ -205,6 +209,17 @@ class ConnectionPool(Pool):
         self.cert_file = cert_file
         self.timeout = timeout
         Pool.__init__(self, min_size, max_size)
+        
+    def clean(self):
+        while True:
+            if self.free_items:
+                self.free_items.popleft()
+            else:
+                try:
+                    connection = self.channel.get(False)
+                    connection.close()
+                except Queue.Empty:
+                    break        
     
     def create(self):
         connection = make_connection(self.uri, use_proxy=self.use_proxy,
@@ -218,9 +233,11 @@ class ConnectionPool(Pool):
             connection = self.do_get()
             since = time.time() - connection.started
             if since < self.timeout:
-                
+                if connection._HTTPConnection__response:
+                    connection._HTTPConnection__response.read()
                 return connection
             else:
+               
                 connection.close()
                 self.lock.acquire()
                 if self.current_size > self.max_size:
@@ -235,11 +252,7 @@ class ConnectionPool(Pool):
             connection.close()
             self.lock.release()
             return
-          
-          
-        if connection._HTTPConnection__response:
-            connection._HTTPConnection__response.read()
-            
+
         if connection.sock is None:
             connection = self.create()
             

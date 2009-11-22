@@ -103,6 +103,9 @@ class ConnectionPool(Pool):
     def create(self):
         return make_connection(self.uri, use_proxy=self.use_proxy, 
                 key_file=self.key_file, cert_file=self.cert_file)
+                
+    def clean(self):
+        return True
            
     def put(self, connection):
         if self.current_size > self.max_size:

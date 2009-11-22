@@ -38,6 +38,7 @@ import StringIO
 import types
 import urllib
 import urlparse
+import sys
 
 import restkit
 from restkit import errors
@@ -135,8 +136,11 @@ class HttpClient(object):
     def _release_connection(self, uri, connection):
         pool = self._get_pool(uri)
         pool.put(connection)
-
-            
+        
+    def _clean_pool(self, uri):
+        pool = self._get_pool(uri)
+        pool.clean()
+        
     def _make_request(self, uri, method, body, headers): 
         for i in range(2):
             connection = self._get_connection(uri, headers)
@@ -183,23 +187,12 @@ class HttpClient(object):
                             _send_body_part(body_part, connection)
                     else:
                         _send_body_part(body, connection)
-                    
-            except socket.gaierror:
-                connection.close()
-                self._release_connection(uri, connection)
-                raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
-            except (socket.error, httplib.HTTPException):
-                connection.close()
-                self._release_connection(uri, connection)
-                if i == 0:
-                    continue
-                else:
-                    raise
-            try:
                 response = connection.getresponse()
-            except httplib.HTTPException:
-                connection.close()
-                self._release_connection(uri, connection)
+            except socket.gaierror, e:
+                self._clean_pool(uri)
+                raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
+            except (socket.error, httplib.BadStatusLine), e:
+                self._clean_pool(uri)
                 if i == 0:
                     continue
                 else:
