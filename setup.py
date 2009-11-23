@@ -23,7 +23,7 @@ import sys
 
 setup(
     name = 'restkit',
-    version = '0.8.8',
+    version = '0.8.9',
     description = 'Python REST kit',
     long_description = \
 """An HTTP resource kit for Python""",

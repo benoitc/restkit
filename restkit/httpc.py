@@ -30,6 +30,7 @@
 
 import base64
 import copy
+import gzip
 import httplib
 import os
 import re
@@ -39,6 +40,7 @@ import types
 import urllib
 import urlparse
 import sys
+import zlib
 
 import restkit
 from restkit import errors

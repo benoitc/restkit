@@ -65,9 +65,9 @@ class UtilTestCase(unittest.TestCase):
             },
         }
         for url in urls:
-            yield check_url, url, urls[url]
+            yield self.check_url(url, urls[url])
 
-    def check_url(test, urlspec):
+    def check_url(self, test, urlspec):
         (host, port, path, ssl) = parse_url(urlspec['url'])
         self.assert_(host == urlspec['host'], "%s failed on host assertion" % test)
         self.assert_(port == urlspec['port'], "%s failed on port assertion" % test)

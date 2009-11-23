@@ -196,3 +196,6 @@ class TransportError(Exception):
 class ResponseError(Exception):
     """ Error raised while getting response or decompressing response stream"""
     
+
+class ProxyError(Exception):
+    """ raised when proxy error happend"""

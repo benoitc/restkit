@@ -79,9 +79,8 @@ def make_query(string, method='GET', fname=None,
         return 
 
     if uri.username:
-        transport = ProxiedHttpClient()
-        transport.add_authorization(httpc.BasicAuth((uri.username, uri.password)))
-        res = restkit.Resource(uri.uri, transport=transport)
+        res = restkit.Resource(uri.uri)
+        res.add_authorization(httpc.BasicAuth((uri.username, uri.password)))
     else:
         res = restkit.Resource(uri.uri)
 

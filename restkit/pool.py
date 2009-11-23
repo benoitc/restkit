@@ -24,17 +24,20 @@ TODO:
 - log errors
 """
 
-
+import os
 import time
 import collections
 import httplib
 import Queue
 import socket
 import threading
+import urlparse
 
+import restkit
 from restkit import errors
 
 has_timeout = hasattr(socket, '_GLOBAL_DEFAULT_TIMEOUT')
+url_parser = urlparse.urlparse
 
 def get_proxy_auth():
   import base64
@@ -52,7 +55,6 @@ def get_proxy_auth():
     return ''
 
 def make_proxy_connection(uri):
-    headers = headers or {}
     proxy = None
     if uri.scheme == 'https':
         proxy = os.environ.get('https_proxy')
@@ -90,14 +92,14 @@ def make_proxy_connection(uri):
         ssl = socket.ssl(p_sock, None, None)
         fake_sock = httplib.FakeSocket(p_sock, ssl)
         # Initalize httplib and replace with the proxy socket.
-        connection = HTTPConnection(proxy_uri.host)
+        connection = httplib.HTTPConnection(proxy_uri.host)
         connection.sock=fake_sock
         return connection
     else:
         proxy_uri = url_parser(proxy)
         if not proxy_uri.port:
             proxy_uri.port = '80'
-        return HTTPConnection(proxy_uri.hostname, proxy_uri.port)
+        return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
     return None
     
 def make_connection(uri, use_proxy=True, key_file=None, cert_file=None, timeout=300):

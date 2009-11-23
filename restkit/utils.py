@@ -45,6 +45,8 @@ Converts an IRI to a URI.
 import re
 import urlparse
 
+from restkit.errors import InvalidUrl
+
 
 def to_bytestring(s):
     if not isinstance(s, basestring):

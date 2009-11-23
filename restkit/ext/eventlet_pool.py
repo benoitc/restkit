@@ -15,16 +15,23 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import os
+import urlparse
 
 from eventlet.green import socket
 from eventlet.green import httplib
 from eventlet.pools import Pool
 from eventlet.util import wrap_socket_with_coroutine_socket
 
+import restkit
+from restkit.errors import ProxyError
+from restkit.pool import get_proxy_auth
+
+url_parser = urlparse.urlparse
+
+
 wrap_socket_with_coroutine_socket()
 
 def make_proxy_connection(uri):
-    headers = headers or {}
     proxy = None
     if uri.scheme == 'https':
         proxy = os.environ.get('https_proxy')
@@ -35,7 +42,7 @@ def make_proxy_connection(uri):
         return make_connection(uri, use_proxy=False)
   
     if uri.scheme == 'https':
-        proxy_auth = _get_proxy_auth()
+        proxy_auth = get_proxy_auth()
         if proxy_auth:
             proxy_auth = 'Proxy-authorization: %s' % proxy_auth
         port = uri.port
