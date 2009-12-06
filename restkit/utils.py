@@ -46,6 +46,47 @@ import re
 import urlparse
 
 from restkit.errors import InvalidUrl
+import urllib
+
+
+# code borrowed to Wekzeug with minor changes
+
+def url_quote(s, charset='utf-8', safe='/:'):
+    """URL encode a single string with a given encoding."""
+    if isinstance(s, unicode):
+        s = s.encode(charset)
+    elif not isinstance(s, str):
+        s = str(s)
+    return urllib.quote(s, safe=safe)
+
+def url_encode(obj, charset="utf8", encode_keys=False):
+    if isinstance(obj, dict):
+        items = []
+        for k, v in obj.iteritems():
+            if not isinstance(v, (tuple, list)):
+                v = [v]
+            items.append((k, v))
+    else:
+        items = obj or ()
+
+    tmp = []
+    for key, values in items:
+        if encode_keys and isinstance(key, unicode):
+            key = key.encode(charset)
+        else:
+            key = str(key)
+
+        for value in values:
+            if value is None:
+                continue
+            elif isinstance(value, unicode):
+                value = value.encode(charset)
+            else:
+                value = str(value)
+        tmp.append('%s=%s' % (urllib.quote(key),
+            urllib.quote_plus(value)))
+
+    return '&'.join(tmp)
 
 
 def to_bytestring(s):

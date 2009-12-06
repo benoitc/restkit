@@ -25,6 +25,7 @@ debuglevel = 0
 
 from restkit.errors import *
 from restkit.httpc import HttpClient
+from restkit.forms import *
 from restkit.rest import *
 
 
