@@ -16,11 +16,9 @@
 
 
 """
-Threadsafe Pool class based on eventlet.pools.Pool but using Queue.Queue
+Threadsafe Pool class 
 
 TODO:
-- add our own way to share socket across connections. We shouldn't need to rely
-  on eventlet for that
 - log errors
 """
 
