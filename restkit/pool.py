@@ -54,155 +54,11 @@ def get_proxy_auth():
   else:
     return ''
 
-def make_proxy_connection(uri):
-    proxy = None
-    if uri.scheme == 'https':
-        proxy = os.environ.get('https_proxy')
-    elif uri.scheme == 'http':
-        proxy = os.environ.get('http_proxy')
-
-    if not proxy:
-        return make_connection(uri, use_proxy=False)
-  
-    if uri.scheme == 'https':
-        proxy_auth = get_proxy_auth()
-        if proxy_auth:
-            proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-        port = uri.port
-        if not port:
-            port = 443
-        proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (uri.hostname, port)
-        user_agent = 'User-Agent: %s\r\n' % restkit.USER_AGENT
-        proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
-        proxy_uri = url_parser(proxy)
-        if not proxy_uri.port:
-            proxy_uri.port = '80'
-        # Connect to the proxy server, very simple recv and error checking
-        p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
-        p_sock.sendall(proxy_pieces)
-        response = ''
-        # Wait for the full response.
-        while response.find("\r\n\r\n") == -1:
-            response += p_sock.recv(8192)
-        p_status = response.split()[1]
-        if p_status != str(200):
-            raise errors.ProxyError('Error status=%s' % str(p_status))
-        # Trivial setup for ssl socket.
-        ssl = socket.ssl(p_sock, None, None)
-        fake_sock = httplib.FakeSocket(p_sock, ssl)
-        # Initalize httplib and replace with the proxy socket.
-        connection = httplib.HTTPConnection(proxy_uri.host)
-        connection.sock=fake_sock
-        return connection
-    else:
-        proxy_uri = url_parser(proxy)
-        if not proxy_uri.port:
-            proxy_uri.port = '80'
-        return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
-    return None
+class PoolInterface(object):
+    """ abstract class from which all connection 
+    pool should inherit.
+    """
     
-def make_connection(uri, use_proxy=True, key_file=None, cert_file=None, timeout=300):
-    if use_proxy:
-        return make_proxy_connection(uri)
-    
-    if uri.scheme == 'https':
-        kwargs = dict(key_file=key_file, cert_file=cert_file)
-        if has_timeout:
-            kwargs.update({"timeout": timeout})
-        if uri.port:
-            kwargs.update({"port": uri.port})
-        connection = httplib.HTTPSConnection(uri.hostname, **kwargs)
-    else:
-        kwargs = {}
-        if has_timeout:
-            kwargs.update({"timeout": timeout})
-        if uri.port:
-            kwargs.update({"port": uri.port})
-        connection = httplib.HTTPConnection(uri.hostname, **kwargs)
-    return connection
-
-class Pool(object):
-    def __init__(self, min_size=0, max_size=4, order_as_stack=False):
-        self.min_size = min_size
-        self.max_size = max_size
-        self.order_as_stack = order_as_stack
-        self.current_size = 0
-        self.channel = Queue.Queue(0)
-        self.free_items = collections.deque()
-        for x in xrange(min_size):
-            self.current_size += 1
-            self.free_items.append(self.create())
-            
-        self.lock = threading.Lock()
-            
-    def do_get(self):
-        """
-        Return an item from the pool, when one is available
-        """ 
-        self.lock.acquire()
-        try:
-            if self.free_items:
-                return self.free_items.popleft()
-                
-            try:
-                return self.channel.get(False)
-            except Queue.Empty:
-                created = self.create()
-                self.current_size += 1
-                return created
-  
-        finally:
-            self.lock.release()
-
-    def get(self):
-        connection =  self.do_get()
-        return connection
-        
-    def put(self, item):
-        """Put an item back into the pool, when done
-        """
-        self.lock.acquire()
-        try:
-            if self.current_size > self.max_size:
-                self.current_size -= 1
-                return
-            
-            if self.waiting():
-                self.channel.put(item, False)
-            else:
-                if self.order_as_stack:
-                    self.free_items.appendleft(item)
-                else:
-                    self.free_items.append(item)
-        finally:
-            self.lock.release()
-            
-    def resize(self, new_size):
-        """Resize the pool
-        """
-        self.max_size = new_size
-    
-    def free(self):
-        """Return the number of free items in the pool.
-        """
-        return len(self.free_items) + self.max_size - self.current_size
-    
-    def waiting(self):
-        """Return the number of routines waiting for a pool item.
-        """
-        return (self.channel.qsize() < self.max_size)
-    
-    def create(self):
-        """Generate a new pool item
-        """
-        raise NotImplementedError("Implement in subclass")
-        
-    def clean(self):
-        """ clean the pool """
-        raise NotImplementedError("Implement in subclass")
-                
-class ConnectionPool(Pool):
     def __init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
             timeout=300, min_size=0, max_size=4):
         self.uri = uri
@@ -210,26 +66,111 @@ class ConnectionPool(Pool):
         self.key_file = key_file
         self.cert_file = cert_file
         self.timeout = timeout
-        Pool.__init__(self, min_size, max_size)
+        self.min_size = min_size
+        self.max_size = max_size
+
+    def get(self):
+        """ method used to return a connection from the pool"""
+        raise NotImplementedError
         
-    def clean(self):
-        while True:
-            if self.free_items:
-                self.free_items.popleft()
-            else:
-                try:
-                    connection = self.channel.get(False)
-                    connection.close()
-                except Queue.Empty:
-                    break        
+    def put(self):
+        """ Put an item back into the pool, when done """
+        raise NotImplementedError
+        
+    def clear(self):
+        """ method used to release all connections """
+        raise NotImplementedError
     
-    def create(self):
-        connection = make_connection(self.uri, use_proxy=self.use_proxy,
-                        key_file=self.key_file, cert_file=self.cert_file,
-                        timeout=self.timeout)
+
+
+class ConnectionPool(PoolInterface):
+    def __init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
+            timeout=300, min_size=0, max_size=4):
+        
+        PoolInterface.__init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
+                    timeout=300, min_size=0, max_size=4)
+                    
+        self.connections = collections.deque()
+        for x in xrange(min_size):
+            self.current_size += 1
+            self.connections.append(self.make_connection())
+            
+    def _make_proxy_connection(self, proxy):
+        if self.uri.scheme == 'https':
+            proxy_auth = get_proxy_auth()
+            if proxy_auth:
+                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
+            port = self.uri.port
+            if not port:
+                port = 443
+            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (self.uri.hostname, port)
+            user_agent = 'User-Agent: %s\r\n' % restkit.USER_AGENT
+            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
+            proxy_uri = url_parser(proxy)
+            if not proxy_uri.port:
+                proxy_uri.port = '80'
+            # Connect to the proxy server, very simple recv and error checking
+            p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
+            p_sock.sendall(proxy_pieces)
+            response = ''
+            # Wait for the full response.
+            while response.find("\r\n\r\n") == -1:
+                response += p_sock.recv(8192)
+            p_status = response.split()[1]
+            if p_status != str(200):
+                raise errors.ProxyError('Error status=%s' % str(p_status))
+            # Trivial setup for ssl socket.
+            ssl = socket.ssl(p_sock, None, None)
+            fake_sock = httplib.FakeSocket(p_sock, ssl)
+            # Initalize httplib and replace with the proxy socket.
+            connection = httplib.HTTPConnection(proxy_uri.host)
+            connection.sock=fake_sock
+            return connection
+        else:
+            proxy_uri = url_parser(proxy)
+            if not proxy_uri.port:
+                proxy_uri.port = '80'
+            return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
+        return None
+
+    def make_connection(self):
+        if self.use_proxy:
+            proxy = ''
+            if self.uri.scheme == 'https':
+                proxy = os.environ.get('https_proxy')
+            elif self.uri.scheme == 'http':
+                proxy = os.environ.get('http_proxy')
+                
+            if proxy:
+                return self._make_proxy_connection(proxy)
+            
+        kwargs = {}
+        if hasattr(httplib.HTTPConnection, 'timeout'):
+            kwargs['timeout'] = self.timeout
+        
+        if self.uri.port:
+            kwargs['port'] = self.uri.port
+
+        if self.uri.scheme == "https":
+            kwargs.update(dict(key_file=self.key_file, cert_file=self.cert_file))
+            connection = httplib.HTTPSConnection(self.uri.hostname, **kwargs)
+        else:
+            connection = httplib.HTTPConnection(self.uri.hostname, **kwargs)
+            
         setattr(connection, "started", time.time())
         return connection
-        
+            
+    def do_get(self):
+        """
+        Return an item from the pool, when one is available
+        """ 
+        if self.connections:
+            connection = self.connections.popleft()
+            return connection
+        else:
+            return self.make_connection()
+
     def get(self):
         while True:
             connection = self.do_get()
@@ -239,23 +180,17 @@ class ConnectionPool(Pool):
                     connection._HTTPConnection__response.read()
                 return connection
             else:
-               
                 connection.close()
-                self.lock.acquire()
-                if self.current_size > self.max_size:
-                    self.current_size -= 1
-                self.lock.release()
-
+        
     def put(self, connection):
-        if self.current_size > self.max_size:
-            self.lock.acquire()
-            self.current_size -= 1
-            # close when needed
+        if len(self.connections) >= self.max_size:
             connection.close()
-            self.lock.release()
             return
-
         if connection.sock is None:
-            connection = self.create()
+            connection = self.make_connection()
+        self.connections.append(connection)
             
-        Pool.put(self, connection)
+    def clear(self):
+        while self.connections:
+            connection = self.connections.pop()
+            connection.close()

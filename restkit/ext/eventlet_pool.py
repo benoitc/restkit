@@ -24,81 +24,15 @@ from eventlet.util import wrap_socket_with_coroutine_socket
 
 import restkit
 from restkit.errors import ProxyError
-from restkit.pool import get_proxy_auth
+from restkit.pool import get_proxy_auth, PoolInterface
 
 url_parser = urlparse.urlparse
 
 
 wrap_socket_with_coroutine_socket()
 
-def make_proxy_connection(uri):
-    proxy = None
-    if uri.scheme == 'https':
-        proxy = os.environ.get('https_proxy')
-    elif uri.scheme == 'http':
-        proxy = os.environ.get('http_proxy')
 
-    if not proxy:
-        return make_connection(uri, use_proxy=False)
-  
-    if uri.scheme == 'https':
-        proxy_auth = get_proxy_auth()
-        if proxy_auth:
-            proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-        port = uri.port
-        if not port:
-            port = 443
-        proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (uri.hostname, port)
-        user_agent = 'User-Agent: %s\r\n' % restkit.USER_AGENT
-        proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
-        proxy_uri = url_parser(proxy)
-        if not proxy_uri.port:
-            proxy_uri.port = '80'
-        # Connect to the proxy server, very simple recv and error checking
-        p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
-        p_sock.sendall(proxy_pieces)
-        response = ''
-        # Wait for the full response.
-        while response.find("\r\n\r\n") == -1:
-            response += p_sock.recv(8192)
-        p_status = response.split()[1]
-        if p_status != str(200):
-            raise ProxyError('Error status=%s' % str(p_status))
-        # Trivial setup for ssl socket.
-        ssl = socket.ssl(p_sock, None, None)
-        fake_sock = httplib.FakeSocket(p_sock, ssl)
-        # Initalize httplib and replace with the proxy socket.
-        connection = httplib.HTTPConnection(proxy_uri.host)
-        connection.sock=fake_sock
-        return connection
-    else:
-        proxy_uri = url_parser(proxy)
-        if not proxy_uri.port:
-            proxy_uri.port = '80'
-        return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
-    return None
-    
-def make_connection(uri, use_proxy=True, key_file=None, cert_file=None):
-    if use_proxy:
-        return make_proxy_connection(uri)
-    
-    if uri.scheme == 'https':
-        if not uri.port:
-            connection = httplib.HTTPSConnection(uri.hostname, 
-                            key_file=key_file, cert_file=cert_file)
-        else:
-            connection = httplib.HTTPSConnection(uri.hostname, port=uri.port, 
-                    key_file=key_file, cert_file=cert_file)
-    else:
-        if not uri.port:
-            connection = httplib.HTTPConnection(uri.hostname)
-        else:
-            connection = httplib.HTTPConnection(uri.hostname, uri.port)
-    return connection
-
-
-class ConnectionPool(Pool):
+class ConnectionPool(PoolInterface, Pool):
     def __init__(self, uri, use_proxy=False, key_file=None,
             cert_file=None, min_size=0, max_size=4, **kwargs):
         self.uri = uri
@@ -106,32 +40,76 @@ class ConnectionPool(Pool):
         self.key_file = key_file
         self.cert_file = cert_file
         Pool.__init__(self, min_size, max_size)
+
+    def _make_proxy_connection(self, proxy):
+        if self.uri.scheme == 'https':
+            proxy_auth = get_proxy_auth()
+            if proxy_auth:
+                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
+            port = self.uri.port
+            if not port:
+                port = 443
+            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (self.uri.hostname, port)
+            user_agent = 'User-Agent: %s\r\n' % restkit.USER_AGENT
+            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
+            proxy_uri = url_parser(proxy)
+            if not proxy_uri.port:
+                proxy_uri.port = '80'
+            # Connect to the proxy server, very simple recv and error checking
+            p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
+            p_sock.sendall(proxy_pieces)
+            response = ''
+            # Wait for the full response.
+            while response.find("\r\n\r\n") == -1:
+                response += p_sock.recv(8192)
+            p_status = response.split()[1]
+            if p_status != str(200):
+                raise errors.ProxyError('Error status=%s' % str(p_status))
+            # Trivial setup for ssl socket.
+            ssl = socket.ssl(p_sock, None, None)
+            fake_sock = httplib.FakeSocket(p_sock, ssl)
+            # Initalize httplib and replace with the proxy socket.
+            connection = httplib.HTTPConnection(proxy_uri.host)
+            connection.sock=fake_sock
+            return connection
+        else:
+            proxy_uri = url_parser(proxy)
+            if not proxy_uri.port:
+                proxy_uri.port = '80'
+            return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
+        return None
+
+    def make_connection(self):
+        if self.use_proxy:
+            proxy = ''
+            if self.uri.scheme == 'https':
+                proxy = os.environ.get('https_proxy')
+            elif self.uri.scheme == 'http':
+                proxy = os.environ.get('http_proxy')
+
+            if proxy:
+                return self._make_proxy_connection(proxy)
+
+        kwargs = {}
+        if hasattr(httplib.HTTPConnection, 'timeout'):
+            kwargs['timeout'] = self.timeout
+
+        if self.uri.port:
+            kwargs['port'] = self.uri.port
+
+        if self.uri.scheme == "https":
+            kwargs.update(dict(key_file=self.key_file, cert_file=self.cert_file))
+            connection = httplib.HTTPSConnection(self.uri.hostname, **kwargs)
+        else:
+            connection = httplib.HTTPConnection(self.uri.hostname, **kwargs)
+
+        setattr(connection, "started", time.time())
+        return connection
     
     def create(self):
         return make_connection(self.uri, use_proxy=self.use_proxy, 
                 key_file=self.key_file, cert_file=self.cert_file)
                 
-    def clean(self):
+    def clear(self):
         return True
-           
-    def put(self, connection):
-        if self.current_size > self.max_size:
-            self.current_size -= 1
-            # close the connection if needed
-            if connection.sock is not None:
-                connection.close()
-            return
-
-        try:
-            response = connection.getresponse()
-            response.close()
-        except httplib.ResponseNotReady:
-            pass
-        except:
-            connection.close()
-            connection = self.create()
-            
-        if connection.sock is None:
-            connection = self.create()
-            
-        Pool.put(self, connection)

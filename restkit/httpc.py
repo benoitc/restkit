@@ -48,6 +48,9 @@ from restkit.utils import to_bytestring
 MAX_CHUNK_SIZE = 16384
 url_parser = urlparse.urlparse
 
+
+_http_pool = {}
+
 NORMALIZE_SPACE = re.compile(r'(?:\r\n)?[ \t]+')
 def _normalize_headers(headers):
     return dict([ (key.lower(), NORMALIZE_SPACE.sub(str(value), ' ').strip())  for (key, value) in headers.iteritems()])
@@ -121,16 +124,18 @@ class HttpClient(object):
         
     def _get_pool(self, uri):
         conn_key = (uri.scheme, uri.netloc, self.use_proxy)
-        if not conn_key in self.connections:
-            self.connections[conn_key] = self.pool_class(uri, use_proxy=self.use_proxy, 
-                timeout=self.timeout, key_file=self.key_file, cert_file=self.cert_file, 
-                min_size=self.min_size, max_size=self.max_size)
-        return self.connections[conn_key]
+        if conn_key in _http_pool:
+            pool = _http_pool[conn_key]
+        else:
+            pool = self.pool_class(uri, use_proxy=self.use_proxy, 
+                        timeout=self.timeout, key_file=self.key_file, cert_file=self.cert_file, 
+                        min_size=self.min_size, max_size=self.max_size)
+            _http_pool[conn_key] = pool
+        return pool
 
-    def _get_connection(self, uri, headers=None):
+    def _get_connection(self, uri):
         pool = self._get_pool(uri)
-        connection = pool.get()
-        return connection
+        return  pool.get()
         
     def _release_connection(self, uri, connection):
         pool = self._get_pool(uri)
@@ -142,7 +147,7 @@ class HttpClient(object):
         
     def _make_request(self, uri, method, body, headers): 
         for i in range(2):
-            connection = self._get_connection(uri, headers)
+            connection = self._get_connection(uri)
             connection.debuglevel = restkit.debuglevel
             try:
                 if connection.host != uri.hostname:
@@ -189,11 +194,19 @@ class HttpClient(object):
                 self._clean_pool(uri)
                 raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
             except (socket.error, httplib.BadStatusLine):
+                # we should do better error parsing here
                 self._clean_pool(uri)
                 if i == 0:
                     continue
                 else:
                     raise
+            except Exception:
+                self._clean_pool(uri)
+                if i == 0:
+                    continue
+                else:
+                    raise
+                
             break
                     
         # Return the HTTP Response from the server.
@@ -259,6 +272,7 @@ class HttpClient(object):
                 headers['Proxy-Authorization'] = proxy_auth.strip()
             
         response, connection = self._request(uri, method, body, headers)
+
         release_callback =  lambda: self._release_connection(uri, connection)
         
         resp = HTTPResponse(response, release_callback)
@@ -276,6 +290,7 @@ class HTTPResponse(object):
         self.headerslist = response.getheaders()
         self.status = "%s %s" % (response.status, response.reason)
         self.status_int = response.status
+        self.version = response.version
         
         headers = {}
         for key, value in self.headerslist:
