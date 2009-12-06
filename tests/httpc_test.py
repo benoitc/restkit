@@ -44,29 +44,29 @@ class HTTPClientTestCase(unittest.TestCase):
 
     def testGet(self):
         result = self.res.get()
-        self.assert_(result == "welcome")
+        self.assert_(result.body == "welcome")
 
     def testUnicode(self):
         result = self.res.get('/unicode')
-        self.assert_(result == u"éàù@")
+        self.assert_(result.body == "éàù@")
 
     def testUrlWithAccents(self):
         result = self.res.get('/éàù')
-        self.assert_(result == "ok")
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.body == "ok")
+        self.assert_(result.status_int == 200)
 
     def testUrlUnicode(self):
         result = self.res.get(u'/test')
-        self.assert_(result == "ok")
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.body == "ok")
+        self.assert_(result.status_int == 200)
 
         result = self.res.get(u'/éàù')
-        self.assert_(result == "ok")
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.body == "ok")
+        self.assert_(result.status_int == 200)
 
     def testGetWithContentType(self):
         result = self.res.get('/json', headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.status_int == 200)
         def bad_get():
             result = self.res.get('/json', headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_get) 
@@ -75,7 +75,7 @@ class HTTPClientTestCase(unittest.TestCase):
         res = Resource(self.url,
             headers={'Content-Type': 'application/json'})
         result = res.get('/json')
-        self.assert_(res.response.status == 200)
+        self.assert_(result.status_int== 200)
 
     def testNotFound(self):
         def bad_get():
@@ -85,19 +85,19 @@ class HTTPClientTestCase(unittest.TestCase):
 
     def testGetWithQuery(self):
         result = self.res.get('/query', test="testing")
-        self.assert_(self.res.response.status == 200)
-        self.assert_(result == "ok")
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.status_int == 200)
+        self.assert_(result.body == "ok")
+        self.assert_(result.status_int == 200)
 
     def testGetBinary(self):
         import imghdr
         import tempfile
         res = Resource('http://e-engura.com')
         result = res.get('/images/logo.gif')
-        self.assert_(res.response.status == 200)
+        self.assert_(result.status_int == 200)
         fd, fname = tempfile.mkstemp(suffix='.gif')
         f = os.fdopen(fd, "wb")
-        f.write(result)
+        f.write(result.body)
         f.close()
         self.assert_(imghdr.what(fname) == 'gif')
         
@@ -105,11 +105,11 @@ class HTTPClientTestCase(unittest.TestCase):
         import imghdr
         import tempfile
         res = Resource('http://e-engura.com')
-        result = res.get('/images/logo.gif', _stream=True)
-        self.assert_(res.response.status == 200)
+        result = res.get('/images/logo.gif')
+        self.assert_(result.status_int == 200)
         fd, fname = tempfile.mkstemp(suffix='.gif')
         f = os.fdopen(fd, "wb")
-        for block in iter(result):
+        for block in result.body_file:
             f.write(block)
         f.close()
         self.assert_(imghdr.what(fname) == 'gif')
@@ -117,26 +117,26 @@ class HTTPClientTestCase(unittest.TestCase):
     def testGetRedirect(self):
         result = self.res.get('/redirect')
         complete_url = "%s/complete_redirect" % self.url
-        self.assert_(self.res.response.status == 200)
-        self.assert_(self.res.response.final_url == complete_url)
-        self.assert_(result == "ok")
+        self.assert_(result.status_int == 200)
+        self.assert_(result.final_url == complete_url)
+        self.assert_(result.body == "ok")
         
     def testSimplePost(self):
         result = self.res.post(payload="test")
-        self.assert_(result=="test")
+        self.assert_(result.body =="test")
 
     def testPostByteString(self):
         result = self.res.post('/bytestring', payload="éàù@")
-        self.assert_(result == u"éàù@")
+        self.assert_(result.body == "éàù@")
 
     def testPostUnicode(self):
         result = self.res.post('/unicode', payload=u"éàù@")
-        self.assert_(result == u"éàù@")
+        self.assert_(result.body == "éàù@")
 
     def testPostWithContentType(self):
         result = self.res.post('/json', payload="test",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.response.status == 200 )
+        self.assert_(result.status_int == 200 )
         def bad_post():
             return self.res.post('/json', payload="test", 
                     headers={'Content-Type': 'text/plain'})
@@ -145,28 +145,28 @@ class HTTPClientTestCase(unittest.TestCase):
     def testEmptyPost(self):
         result = self.res.post('/empty', payload="",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.response.status == 200 )
+        self.assert_(result.status_int == 200 )
         result = self.res.post('/empty',headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.response.status == 200 )
+        self.assert_(result.status_int == 200 )
 
     def testPostWithQuery(self):
         result = self.res.post('/query', test="testing")
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.status_int == 200)
         
     def testMultipartForm(self):
         result = self.res.post('/multipart', payload={"t": "test"},
             headers={'Content-Type': 'multipart/form-data'})
-        self.assert_(self.res.response.status == 200)
-        self.assert_(result == "test")
+        self.assert_(result.status_int == 200)
+        self.assert_(result.body == "test")
 
     def testSimplePut(self):
         result = self.res.put(payload="test")
-        self.assert_(result=="test")
+        self.assert_(result.body=="test")
 
     def testPutWithContentType(self):
         result = self.res.put('/json', payload="test",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.response.status == 200 )
+        self.assert_(result.status_int == 200 )
         def bad_put():
             return self.res.put('/json', payload="test",
                     headers={'Content-Type': 'text/plain'})
@@ -175,21 +175,21 @@ class HTTPClientTestCase(unittest.TestCase):
     def testEmptyPut(self):
         result = self.res.put('/empty', payload="",
                 headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.response.status == 200 )
+        self.assert_(result.status_int == 200 )
         result = self.res.put('/empty',headers={'Content-Type': 'application/json'})
-        self.assert_(self.res.response.status == 200 )
+        self.assert_(result.status_int == 200 )
 
     def testPuWithQuery(self):
         result = self.res.put('/query', test="testing")
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.status_int== 200)
 
     def testHead(self):
         result = self.res.head('/ok')
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.status_int == 200)
 
     def testDelete(self):
         result = self.res.delete('/delete')
-        self.assert_(self.res.response.status == 200)
+        self.assert_(result.status_int == 200)
 
     def testFileSend(self):
         content_length = len("test")
@@ -201,7 +201,7 @@ class HTTPClientTestCase(unittest.TestCase):
                     'Content-Length': str(content_length)
                 })
 
-        self.assert_(self.res.response.status == 200 )
+        self.assert_(result.status_int == 200 )
 
     def testBasicAuth(self):
         httptransport = httpc.HttpClient()
@@ -209,7 +209,7 @@ class HTTPClientTestCase(unittest.TestCase):
         
         res = Resource(self.url, httptransport)
         result = res.get('/auth')
-        self.assert_(res.response.status == 200)
+        self.assert_(result.status_int == 200)
 
         httptransport = httpc.HttpClient()
         httptransport.add_authorization(httpc.BasicAuth(("test", "test2")))
@@ -227,7 +227,7 @@ class HTTPClientTestCase(unittest.TestCase):
             result = res.get()
             conn_key1 = (uri.scheme, uri.netloc, False)
             pool1 = res.transport.connections[conn_key]
-            self.assert_(result == "welcome")
+            self.assert_(result.body == "welcome")
             self.assert_(pool1.channel.qsize() == 1)
         
         result = res.get()
@@ -235,7 +235,7 @@ class HTTPClientTestCase(unittest.TestCase):
         result = res.get()
         conn_key = (uri.scheme, uri.netloc, False)
         pool = res.transport.connections[conn_key]
-        self.assert_(result == "welcome")
+        self.assert_(result.body == "welcome")
         self.assert_(pool.channel.qsize() == 1)
         
         print >>sys.stderr, "waiting timeout (10s)..."
@@ -243,7 +243,7 @@ class HTTPClientTestCase(unittest.TestCase):
         result = res.get()
         conn_key1 = (uri.scheme, uri.netloc, False)
         pool1 = res.transport.connections[conn_key]
-        self.assert_(result == "welcome")
+        self.assert_(result.body == "welcome")
 
         
 

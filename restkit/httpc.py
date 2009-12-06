@@ -29,17 +29,13 @@
 # limitations under the License.
 
 import base64
-import copy
 import gzip
 import httplib
-import os
 import re
 import socket
 import StringIO
 import types
-import urllib
 import urlparse
-import sys
 import zlib
 
 import restkit
@@ -49,6 +45,7 @@ from restkit.pool import ConnectionPool, get_proxy_auth
 from restkit.utils import to_bytestring
 
 
+MAX_CHUNK_SIZE = 16384
 url_parser = urlparse.urlparse
 
 NORMALIZE_SPACE = re.compile(r'(?:\r\n)?[ \t]+')
@@ -177,9 +174,7 @@ class HttpClient(object):
                     if i > 0 and hasattr(body, 'seek'):
                         body.seek(0)
                         
-                    if isinstance(body, types.StringTypes) and len(body) == 0:
-                        connection.send("")
-                    elif isinstance(body, types.StringTypes) or hasattr(body, 'read'):
+                    if isinstance(body, types.StringTypes) or hasattr(body, 'read'):
                         _send_body_part(body, connection)
                     elif hasattr(body, "__iter__"):
                         for body_part in body:
@@ -193,7 +188,7 @@ class HttpClient(object):
             except socket.gaierror, e:
                 self._clean_pool(uri)
                 raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
-            except (socket.error, httplib.BadStatusLine), e:
+            except (socket.error, httplib.BadStatusLine):
                 self._clean_pool(uri)
                 if i == 0:
                     continue
@@ -211,7 +206,6 @@ class HttpClient(object):
             auth.request(uri, method, body, headers)
             
         headers = _normalize_headers(headers)
-        old_response = None
         
         response, connection = self._make_request(uri, method, body, headers)
         
@@ -250,16 +244,14 @@ class HttpClient(object):
                 raise errors.RedirectLimit("Redirection limit is reached")
         return response, connection
         
-    def request(self, url, method='GET', body=None, headers=None, stream=False, 
-            stream_size=16384):  
+    def request(self, url, method='GET', body=None, headers=None):  
         headers = headers or {}
         uri = url_parser(url)
         self.final_url = url
         
         headers.setdefault('User-Agent', restkit.USER_AGENT)
         if method in ["POST", "PUT"] and body is None:
-            body = ""
-            headers.setdefault("Content-Length", str(len(body)))
+            headers.setdefault("Content-Length", "0")
             
         if self.use_proxy and uri.scheme != "https":
             proxy_auth = get_proxy_auth()
@@ -267,47 +259,151 @@ class HttpClient(object):
                 headers['Proxy-Authorization'] = proxy_auth.strip()
             
         response, connection = self._request(uri, method, body, headers)
-        resp = HTTPResponse(response)
+        release_callback =  lambda: self._release_connection(uri, connection)
+        
+        resp = HTTPResponse(response, release_callback)
         resp.final_url = self.final_url
         
         if method == "HEAD":
-            response.close()
-            self._release_connection(uri, connection)
-            return resp, ""
-        else:
-            return resp, _decompress_content(resp, response, 
-                lambda: self._release_connection(uri, connection), 
-                stream, stream_size)
-                
-def _decompress_content(resp, response, release_callback, stream=False, stream_size=16384):
-    try:
-        encoding = resp.get('content-encoding', None)
-        if encoding in ['gzip', 'deflate']:
+            resp.close()
+        return resp
+     
+class HTTPResponse(object):
+    
+    def __init__(self, response, release_callback):
+        self.resp = response
+        self.release_callback = release_callback
+        self.headerslist = response.getheaders()
+        self.status = "%s %s" % (response.status, response.reason)
+        self.status_int = response.status
+        
+        headers = {}
+        for key, value in self.headerslist:
+            headers[key.lower()] = value
+        self.headers = headers
+        self.closed = False
             
+    def get_body(self, stream=False):
+        return _decompress_content(self, stream=stream)
+
+        
+    @property
+    def body(self):
+        """ get body in one bytestring """
+        _complain_ifclosed(self.closed)
+        return self.get_body()
+    
+    @property
+    def body_file(self):
+        """ get body as a file object """
+        _complain_ifclosed(self.closed)
+        return self.get_body(stream=True)
+        
+    def close(self):
+        """ close the response"""
+        if not self.closed:
+            self.closed = True
+            self.release_callback()
+            if not self.resp.isclosed():
+                self.resp.close()
+
+def _complain_ifclosed(closed):
+    if closed:
+        raise ValueError, "I/O operation on closed response"        
+            
+class ResponseStream(object):
+    
+    def __init__(self, response):
+        self.response = response
+        self.resp = response.resp
+        self._buffer = ""
+        self.stream_size = MAX_CHUNK_SIZE
+        
+    def close(self):
+        if not self.response.closed:
+            self._buffer = ""
+            self.response.close()
+        
+    def read(self, amt=None):
+        _complain_ifclosed(self.response.closed)
+        if amt is None:
+            amt = self.stream_size
+        
+        data = ''
+        if not self.resp.isclosed():
+            data = self.resp.read(amt)
+        if not data: 
+            self.close()
+        return data
+
+    def readline(self, amt=None):
+        if self.response.closed: return ''
+        buf = self._buffer
+        while True:
+            r = ''
+            i = buf.find("\n")
+            if i != -1:
+                r = buf[:i]
+                self._buffer = buf[i:]
+                return r
+            if not self.resp.isclosed():
+                r = self.read(amt)
+            if not r:
+                if self._buffer:
+                    r =  self._buffer
+                    self.close()
+                return r
+            buf += r
+                
+    def readlines(self, sizehint=0):
+        total = 0
+        lines = []
+        line = self.readline()
+        while line:
+            lines.append(line)
+            total += len(line)
+            if 0 < sizehint <= total:
+                break
+            line = self.readline()
+        return lines
+    
+    def next(self):
+        r = self.readline()
+        if not r:
+            raise StopIteration
+        return r
+        
+    def __iter__(self):
+        return self
+
+def _get_content(response):
+    data = response.resp.read()
+    response.close()
+    return data
+
+def _decompress_content(response, stream=False):
+    resp = response.resp
+    try:
+        encoding = response.headers.get('content-encoding', None)
+        if encoding in ('gzip', 'deflate'):
             if encoding == 'gzip':
-                compressedstream = StringIO.StringIO(response.read())
-                release_callback()
-                data = gzip.GzipFile(fileobj=compressedstream)
                 if stream:
-                    return ResponseStream(data, stream_size)
+                    return gzip.GzipFile(fileobj=ResponseStream(response))
                 else:
-                    return data.read()
+                    compressedstream = StringIO.StringIO(_get_content(response))
+                    return gzip.GzipFile(fileobj=compressedstream).read()
             else:
-                data =  zlib.decompress(response.read())
-                release_callback()
                 if stream:
-                    return ResponseStream(StringIO.StringIO(data), stream_size)
+                    return ResponseStream(ResponseStream(response))
                 else:
-                    return data
+                    return zlib.decompress(_get_content(response))
         else:
             if stream:
-                return ResponseStream(response, stream_size, release_callback)
+                return ResponseStream(response)
             else:
-                data = response.read()
-                release_callback()
-                return data
+                return _get_content(response)
     except Exception, e:
-        release_callback()
+        response.close()
         raise errors.ResponseError("Decompression failed %s" % str(e))
         
         
@@ -322,77 +418,3 @@ def _send_body_part(data, connection):
         binarydata = data.read(16384)
         if binarydata == '': break
         connection.send(binarydata)
-        
-        
-class ResponseStream(object):
-    
-    def __init__(self, response, amnt=16384, release_callback=None):
-        self.response = response
-        self.amnt = amnt
-        self.callback = release_callback
-        
-    def next(self):
-        return self.response.read(self.amnt)
-            
-    def __iter__(self):
-        while 1:
-            data = self.next()
-            if data:
-                yield data
-            else:
-                if not self.response.isclosed():
-                    self.response.close()
-                break
-        if self.callback is not None:
-            self.callback()
-        
-class HTTPResponse(dict):
-    """An object more like email.Message than httplib.HTTPResponse.
-    
-        >>> from restclient import Resource
-        >>> res = Resource('http://e-engura.org')
-        >>> from restclient import Resource
-        >>> res = Resource('http://e-engura.org')
-        >>> page = res.get()
-        >>> res.status
-        200
-        >>> res.response['content-type']
-        'text/html'
-        >>> logo = res.get('/images/logo.gif')
-        >>> res.response['content-type']
-        'image/gif'
-    """
-
-    final_url = None
-    
-    "Status code returned by server. "
-    status = 200
-
-    """Reason phrase returned by server."""
-    reason = "Ok"
-
-    def __init__(self, info):
-        if hasattr(info, "getheaders"):
-            for key, value in info.getheaders():
-                self[key.lower()] = value
-            self.status = info.status
-            self['status'] = str(self.status)
-            self.reason = info.reason
-            self.version = info.version
-        else:
-            for key, value in info.iteritems(): 
-                self[key.lower()] = value 
-            self.status = int(self.get('status', self.status))
-            
-        self.final_url = self.get('final_url', self.final_url)
-
-    def __getattr__(self, name):
-        if name == 'dict':
-            return self 
-        else:  
-            raise AttributeError, name
-
-    def __repr__(self):
-        return "<%s status %s for %s>" % (self.__class__.__name__,
-                                          self.status,
-                                          self.final_url)

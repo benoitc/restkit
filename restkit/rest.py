@@ -13,32 +13,6 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-#
-# _getCharacterEncoding from Feedparser under BSD License :
-#
-# Copyright (c) 2002-2006, Mark Pilgrim, All rights reserved.
-# 
-# Redistribution and use in source and binary forms, with or without modification,
-# are permitted provided that the following conditions are met:
-# 
-# * Redistributions of source code must retain the above copyright notice,
-#   this list of conditions and the following disclaimer.
-# * Redistributions in binary form must reproduce the above copyright notice,
-#   this list of conditions and the following disclaimer in the documentation
-#   and/or other materials provided with the distribution.
-# 
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-
 
 """
 restkit.rest
@@ -48,38 +22,23 @@ This module provide a common interface for all HTTP equest.
 
     >>> from restkit import Resource
     >>> res = Resource('http://friendpaste.com')
-    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
+    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).body
     u'{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
     >>> res.status
     200
 """
 
 import cgi
-import httplib
 import mimetypes
 import uuid
 import os
-import re
-import socket
-import StringIO
 import types
 
-try:
-    import chardet
-except ImportError:
-    chardet = False
-
-from restkit.errors import *
+from restkit.errors import ResourceNotFound, Unauthorized, RequestError, RequestFailed
 from restkit.forms import MultipartForm, multipart_form_encode, form_encode
-from restkit.httpc import HttpClient, ResponseStream, HTTPResponse
+from restkit.httpc import HttpClient
 from restkit.utils import to_bytestring, url_encode, url_quote
 
-
-
-
-__all__ = ['Resource', 'RestClient']
-
-__docformat__ = 'restructuredtext en'
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
@@ -89,9 +48,12 @@ class Resource(object):
     `restkit.http.HTTPClient`.
 
     """
-    def __init__(self, uri, transport=None, headers=None, follow_redirect=True, 
-            force_follow_redirect=False, use_proxy=False, timeout=300, key_file=None,
-            cert_file=None, min_size=0, max_size=4, pool_class=None):
+    
+    charset = 'utf-8'
+    encode_keys = True
+    safe = "/:"
+    
+    def __init__(self, uri, transport=None, headers=None, **client_opts):
         """Constructor for a `Resource` object.
 
         Resource represent an HTTP resource.
@@ -107,33 +69,17 @@ class Resource(object):
                 (authentification, proxy, ....).
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
-        :param follow_redirect: boolean, default is True, allow the client to follow redirection
-        :param force_follow_redirect: boolean, default is False, force redirection on POST/PUT
-        :param use_proxy: boolean, default is False, if you want to use a proxy
-        :param key_file: When you do an ssl connection, a PEM formatted file that contains your private key.
-        :param cert_file: When you do an ssl connection, a PEM formatted certificate chain file.
-        :param timeout: connection timeour, delay after a connection should be released
-        :param min_size: minimum number of connections in the pool
-        :param max_size: maximum number of connection in the pool
-        :param pool_class: custom pool class
+        :param client_opts: `HttpClient` Options
         """
 
-        self.client = RestClient(transport, headers=headers, follow_redirect=follow_redirect,
-            force_follow_redirect=force_follow_redirect, use_proxy=use_proxy,
-            key_file=key_file, cert_file=cert_file, timeout=timeout, min_size=min_size,
-             max_size=max_size, pool_class=pool_class)
+        if transport is None:
+            self.transport = HttpClient(**client_opts)
+        else:
+            self.transport = transport
         self.uri = uri
-        self.transport = self.client.transport 
-        self.follow_redirect = follow_redirect
-        self.force_follow_redirect = force_follow_redirect
-        self.use_proxy = use_proxy
-        self.timeout = timeout
-        self.key_file = key_file
-        self.cert_file = cert_file
-        self.min_size = min_size
-        self.max_size = max_size
-        self.pool_class = pool_class
-        self._headers = headers
+        self._headers = headers or {}
+        self.client_opts = client_opts
+        self._body_parts = []
 
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
@@ -149,11 +95,8 @@ class Resource(object):
             resr2 = res.clone()
         
         """
-        obj = self.__class__(self.uri, transport=self.transport, headers=self._headers,
-                follow_redirect=self.follow_redirect, force_follow_redirect=self.force_follow_redirect, 
-                use_proxy=self.use_proxy, timeout = self.timeout, key_file=self.key_file, 
-                cert_file=self.cert_file, min_size=self.min_size, max_size=self.max_size, 
-                pool_class=self.pool_class)
+        obj = self.__class__(self.uri, transport=self.transport, 
+                    headers=self._headers, **self.client_opts)
         return obj
    
     def __call__(self, path):
@@ -164,15 +107,12 @@ class Resource(object):
             Resource("/path").get()
         """
 
-        return type(self)(self.client.make_uri(self.uri, path),
-                transport=self.transport, headers=self._headers,
-                follow_redirect=self.follow_redirect, force_follow_redirect=self.force_follow_redirect, 
-                use_proxy=self.use_proxy, timeout=self.timeout, key_file=self.key_file, 
-                cert_file=self.cert_file, min_size=self.min_size, max_size=self.max_size)
+        new_uri = self.make_uri(self.uri, path)
+        return type(self)(new_uri, transport=self.transport, 
+                    headers=self._headers, **self.client_opts)
 
     
-    def get(self, path=None, headers=None, _stream=False, _stream_size=16384,
-            **params):
+    def get(self, path=None, headers=None, **params):
         """ HTTP GET         
         
         :param path: string  additionnal path to the uri
@@ -180,15 +120,7 @@ class Resource(object):
             be added to HTTP request.
         :param params: Optionnal parameterss added to the request.
         """
-        return self.request("GET", path=path, headers=headers, 
-            _stream=_stream, _stream_size=_stream_size, **params)
-
-    def delete(self, path=None, headers=None, **params):
-        """ HTTP DELETE
-
-        see GET for params description.
-        """
-        return self.request("DELETE", path=path, headers=headers, **params)
+        return self.request("GET", path=path, headers=headers, **params)
 
     def head(self, path=None, headers=None, **params):
         """ HTTP HEAD
@@ -196,6 +128,13 @@ class Resource(object):
         see GET for params description.
         """
         return self.request("HEAD", path=path, headers=headers, **params)
+
+    def delete(self, path=None, headers=None, **params):
+        """ HTTP DELETE
+
+        see GET for params description.
+        """
+        return self.request("DELETE", path=path, headers=headers, **params)
 
     def post(self, path=None, payload=None, headers=None, _stream=False, 
             _stream_size=16384,**params):
@@ -208,8 +147,7 @@ class Resource(object):
         :param params: Optionnal parameterss added to the request
         """
 
-        return self.request("POST", path=path, payload=payload, headers=headers,
-            _stream=_stream, _stream_size=_stream_size, **params)
+        return self.request("POST", path=path, payload=payload, headers=headers, **params)
 
     def put(self, path=None, payload=None, headers=None, _stream=False, 
             _stream_size=16384, **params):
@@ -217,8 +155,7 @@ class Resource(object):
 
         see POST for params description.
         """
-        return self.request("PUT", path=path, payload=payload, headers=headers, 
-            _stream=_stream, _stream_size=_stream_size, **params)
+        return self.request("PUT", path=path, payload=payload, headers=headers, **params)
 
     def request(self, method, path=None, payload=None, headers=None, 
             _stream=False, _stream_size=16384, **params):
@@ -236,314 +173,72 @@ class Resource(object):
         :param params: Optionnal parameterss added to the request
         """
         
-        return self.client.request(method, self.uri, path=path,
-                body=payload, headers=headers, _stream=_stream, 
-                _stream_size=_stream_size, **params)
+        headers = headers or {}
+        headers.update(self._headers.copy())
 
-    def get_response(self):
-        return self.client.get_response()
-    response = property(get_response)
+        
+        self._body_parts = []
+        size = None
+        if payload is not None:
+            if isinstance(payload, file):
+                try:
+                    payload.flush()
+                except IOError:
+                    pass
+                size = int(os.fstat(payload.fileno())[6])
+            elif isinstance(payload, types.StringTypes):
+                payload = to_bytestring(payload)
+                size = len(payload)
+            elif isinstance(payload, dict):
+                content_type = headers.get('Content-Type')
+                if content_type is not None and content_type.startswith("multipart/form-data"):
+                    type_, opts = cgi.parse_header(content_type)
+                    boundary = opts.get('boundary', uuid.uuid4().hex)
+                    payload, headers = multipart_form_encode(payload, headers, boundary)
+                else:
+                    headers['Content-Type'] = "application/x-www-form-urlencoded; charset=utf-8"
+                    payload = form_encode(payload)
+                    size = len(payload)
+            elif isinstance(payload, MultipartForm):
+                headers['Content-Type'] = "multipart/form-data; boundary=%s" % payload.boundary
+                headers['Content-Length'] = str(payload.get_size())
+                
+            if 'Content-Length' not in headers and size is not None:
+                headers['Content-Length'] = size
+            elif 'Content-Length' not in headers:
+                raise RequestError('Unable to calculate '
+                    'the length of the data parameter. Specify a value for '
+                    'Content-Length')
+            
+            if 'Content-Type' not in headers:
+                type_ = None
+                if hasattr(payload, 'name'):
+                    type_ = mimetypes.guess_type(payload.name)[0]
+                headers['Content-Type'] = type_ and type_ or 'application/octet-stream'
+                
+    
+        uri = self._make_uri(self.uri, path, **params)
+        resp = self.transport.request(uri, method=method, body=payload, headers=headers)
 
-    def get_status(self):
-        return self.client.status
-    status = property(get_status)
+        if resp.status_int >= 400:
+            if resp.status_int == 404:
+                raise ResourceNotFound(resp.body, http_code=404, response=resp)
+            elif resp.status_int in (401, 403):
+                raise Unauthorized(resp.body, http_code=resp.status_int,
+                        response=resp)
+            else:
+                raise RequestFailed(resp.body, http_code=resp.status_int,
+                    response=resp)
+
+        return resp
 
     def update_uri(self, path):
         """
         to set a new uri absolute path
         """
-        self.uri = self.client.make_uri(self.uri, 
-                path)
+        self.uri = self._make_uri(self.uri, path)
 
-
-class RestClient(object):
-    """Basic rest client
-
-        >>> res = RestClient()
-        >>> xml = res.get('http://pypaste.com/about')
-        >>> json = res.get('http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru', headers={'accept': 'application/json'})
-        >>> json
-        u'{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
-    """
-
-    charset = 'utf-8'
-    encode_keys = True
-    safe = "/:"
-
-    def __init__(self, transport=None, headers=None, follow_redirect=True, 
-            force_follow_redirect=False, use_proxy=False, key_file=None, cert_file=None,
-            timeout=300, min_size=0, max_size=4, pool_class=None):
-        """Constructor for a `RestClient` object.
-
-        RestClient represent an HTTP client.
-
-        :param transport: any http instance of object based on 
-                `restkit.transport.HTTPTransportBase`. By default it will use 
-                a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-                installed or `restkit.transport.HTTPLib2Transport`,a client based on 
-                `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
-                own depending of the option you need to access to the serve
-                (authentification, proxy, ....).
-        :param headers: dict, optionnal headers that will
-            be added to HTTP request.
-        :param follow_redirect: boolean, default is True, allow the client to follow redirection
-        :param force_follow_redirect: boolean, default is False, force redirection on POST/PUT
-        :param use_proxy: boolean, False, if you want to use a proxy
-        :param key_file: When you do an ssl connection, a PEM formatted file that contains your private key.
-        :param cert_file: When you do an ssl connection, a PEM formatted certificate chain file.
-        :param timeout: connection timeour, delay after a connection should be released
-        :param min_size: minimum number of connections in the pool
-        :param max_size: maximum number of connection in the pool
-        :param pool_class: custom Pool class
-        """ 
-
-        if transport is None:
-            transport = HttpClient(follow_redirect=follow_redirect, force_follow_redirect=force_follow_redirect, 
-                            use_proxy=use_proxy, key_file=key_file, cert_file=cert_file, timeout=timeout,
-                            min_size=min_size, max_size=max_size, pool_class=pool_class)
-
-        self.transport = transport
-        self.follow_redirect=follow_redirect
-        self.force_follow_redirect = force_follow_redirect
-        self.use_proxy = use_proxy
-        self.min_size = min_size
-        self.max_size = max_size
-        self.key_file = key_file
-        self.cert_file = cert_file
-        self.timeout = timeout
-        self.pool_class = pool_class
-
-        self.status = None
-        self.response = None
-        self._headers = headers
-        self._body_parts = []
-        
-        
-    def add_authorization(self, obj_auth):
-        self.transport.add_authorization(obj_auth)
-        
-    def get(self, uri, path=None, headers=None, _stream=False,
-            _stream_size=16384, **params):
-        """ HTTP GET         
-        
-        :param uri: str, uri on which you make the request
-        :param path: string  additionnal path to the uri
-        :param headers: dict, optionnal headers that will
-            be added to HTTP request.
-        :param _stream: boolean, response return a ResponseStream object
-        :param _stream_size: int, size in bytes of response stream block
-        :param params: Optionnal parameterss added to the request.
-        """
-
-        return self.request('GET', uri, path=path, headers=headers, 
-            _stream=_stream, _stream_size=_stream_size, **params)
-
-    def head(self, uri, path=None, headers=None, **params):
-        """ HTTP HEAD
-
-        see GET for params description.
-        """
-        return self.request("HEAD", uri, path=path, headers=headers, **params)
-
-    def delete(self, uri, path=None, headers=None, **params):
-        """ HTTP DELETE
-
-        see GET for params description.
-        """
-        return self.request('DELETE', uri, path=path, headers=headers, **params)
-
-    def post(self, uri, path=None, body=None, headers=None, _stream=False,
-            _stream_size=16384, **params):
-        """ HTTP POST
-
-        :param uri: str, uri on which you make the request
-        :param body: string or File object passed to the body of the request
-        :param path: string  additionnal path to the uri
-        :param headers: dict, optionnal headers that will
-            be added to HTTP request.
-        :param _stream: boolean, response return a ResponseStream object
-        :param _stream_size: int, size in bytes of response stream block
-        :param params: Optionnal parameterss added to the request
-        """
-        return self.request("POST", uri, path=path, body=body, headers=headers, 
-            _stream=_stream, _stream_size=_stream_size, **params)
-
-    def put(self, uri, path=None, body=None, headers=None, _stream=False, 
-            _stream_size=16384, **params):
-        """ HTTP PUT
-
-        see POST for params description.
-        """
-
-        return self.request('PUT', uri, path=path, body=body, headers=headers, 
-            _stream=_stream, _stream_size=_stream_size, **params)
-
-    def request(self, method, uri, path=None, body=None, headers=None, _stream=False, 
-        _stream_size=16384, **params):
-        """ Perform HTTP call support GET, HEAD, POST, PUT and DELETE.
-        
-        Usage example, get friendpaste page :
-
-        .. code-block:: python
-
-            from restkit import RestClient
-            client = RestClient()
-            page = resource.request('GET', 'http://friendpaste.com')
-
-        Or get a paste in JSON :
-
-        .. code-block:: python
-
-            from restkit import RestClient
-            client = RestClient()
-            client.request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
-                headers={'Accept': 'application/json'})
-
-        :param method: str, the HTTP action to be performed: 
-            'GET', 'HEAD', 'POST', 'PUT', or 'DELETE'
-        :param path: str or list, path to add to the uri
-        :param data: tring or File object.
-        :param headers: dict, optionnal headers that will
-            be added to HTTP request.
-        :param _stream: boolean, response return a ResponseStream object
-        :param _stream_size: int, size in bytes of response stream block
-        :param params: Optionnal parameterss added to the request.
-        
-        :return: str.
-        """
-
-        # init headers
-        
-        if self._headers is not None:
-            _headers = self._headers.copy()
-        else:
-            _headers = {}
-
-        _headers.update(headers or {})
-        
-        self._body_parts = []
-        size = None
-        if body is not None:
-            if isinstance(body, file):
-                try:
-                    body.flush()
-                except IOError:
-                    pass
-                size = int(os.fstat(body.fileno())[6])
-            elif isinstance(body, types.StringTypes):
-                body = to_bytestring(body)
-                size = len(body)
-            elif isinstance(body, dict):
-                content_type = _headers.get('Content-Type')
-                if content_type is not None and content_type.startswith("multipart/form-data"):
-                    type_, opts = cgi.parse_header(content_type)
-                    boundary = opts.get('boundary', uuid.uuid4().hex)
-                    body, _headers = multipart_form_encode(body, _headers, boundary)
-                else:
-                    _headers['Content-Type'] = "application/x-www-form-urlencoded; charset=utf-8"
-                    body = form_encode(body)
-                    size = len(body)
-            elif isinstance(body, MultipartForm):
-                _headers['Content-Type'] = "multipart/form-data; boundary=%s" % body.boundary
-                _headers['Content-Length'] = str(body.get_size())
-                
-            if 'Content-Length' not in _headers and size is not None:
-                _headers['Content-Length'] = size
-            elif 'Content-Length' not in _headers:
-                raise RequestError('Unable to calculate '
-                    'the length of the data parameter. Specify a value for '
-                    'Content-Length')
-            
-            if 'Content-Type' not in _headers:
-                type_ = None
-                if hasattr(body, 'name'):
-                    type_ = mimetypes.guess_type(body.name)[0]
-                _headers['Content-Type'] = type_ and type_ or 'application/octet-stream'
-                
-                
-        try:
-            resp, data = self.transport.request(self.make_uri(uri, path, **params), 
-                            method=method, body=body, headers=_headers, stream=_stream, 
-                            stream_size=_stream_size)
-        except (socket.error, httplib.BadStatusLine), e:
-            raise restkit.errors.RequestFailed(str(e), http_code=0,
-                            response=HTTPResponse({}))
-        except restkit.errors.RequestError, e:
-            raise restkit.errors.RequestFailed(str(e), http_code=0,
-                             response=HTTPResponse({}))
-        except:
-            raise
-            
-        self.status  = status_code = resp.status
-        self.response = resp
-        
-        
-        if status_code >= 400:
-            if status_code == 404:
-                raise ResourceNotFound(data, http_code=404, response=resp)
-            elif status_code == 401 or status_code == 403:
-                raise Unauthorized(data, http_code=status_code,
-                        response=resp)
-            else:
-                raise RequestFailed(data, http_code=status_code,
-                    response=resp)
-
-        if isinstance(data, ResponseStream):
-            return data
-            
-        # determine character encoding
-        true_encoding, http_encoding, xml_encoding, sniffed_xml_encoding, \
-        acceptable_content_type = _getCharacterEncoding(resp, data)
-        
-
-        tried_encodings = []
-        # try: HTTP encoding, declared XML encoding, encoding sniffed from BOM
-        for proposed_encoding in (true_encoding, xml_encoding, sniffed_xml_encoding):
-            if not proposed_encoding: continue
-            if proposed_encoding in tried_encodings: continue
-            tried_encodings.append(proposed_encoding)
-            try:
-               return data.decode(proposed_encoding)
-               break
-            except:
-                pass
-                
-        # if still no luck and we haven't tried utf-8 yet, try that
-        if 'utf-8' not in tried_encodings:
-            try:
-                proposed_encoding = 'utf-8'
-                tried_encodings.append(proposed_encoding)
-                return data.decode(proposed_encoding)
-              
-            except:
-                pass
-                
-        # if still no luck and we haven't tried windows-1252 yet, try that
-        if 'windows-1252' not in tried_encodings:
-            try:
-                proposed_encoding = 'windows-1252'
-                tried_encodings.append(proposed_encoding)
-                return data.decode(proposed_encoding)
-            except:
-                pass
-                
-        # if no luck and we have auto-detection library, try that
-        if chardet:
-            try:
-                proposed_encoding = chardet.detect(data)['encoding']
-                if proposed_encoding and (proposed_encoding not in tried_encodings):
-                    tried_encodings.append(proposed_encoding)
-                    return data.decode(proposed_encoding)
-            except:
-                pass
-              
-        # give up, return data as is.   
-        return data 
-
-    def get_response(self):
-        return self.response
-
-    def make_uri(self, base, *path, **query):
+    def _make_uri(self, base, *path, **query):
         """Assemble a uri based on a base, any number of path segments, and query
         string parameters.
 
@@ -586,144 +281,126 @@ class RestClient(object):
             retval.extend(['?', url_encode(dict(params), self.charset, self.encode_keys)])
 
         return ''.join(retval)
+                
+
+class RestClient(object):
+    """Basic rest client
+
+        >>> res = RestClient()
+        >>> xml = res.get('http://pypaste.com/about')
+        >>> json = res.get('http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru', headers={'accept': 'application/json'})
+        >>> json.body
+        u'{"snippet": "testing API.", "title": "", "id": "3XDqQ8G83LlzVWgCeWdwru", "language": "text", "revision": "363934613139"}'
+    """
 
     
 
+    def __init__(self, transport=None, headers=None, **client_opts):
+        """Constructor for a `RestClient` object.
 
+        RestClient represent an HTTP client.
 
+        :param transport: any http instance of object based on 
+                `restkit.transport.HTTPTransportBase`. By default it will use 
+                a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
+                installed or `restkit.transport.HTTPLib2Transport`,a client based on 
+                `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
+                own depending of the option you need to access to the serve
+                (authentification, proxy, ....).
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+            
+        :param client_opts: `restkit.httpc.HttpClient` Options
+        """ 
 
-def _getCharacterEncoding(http_headers, xml_data):
-    '''Get the character encoding of the XML document
+        self.transport = transport
+        self.headers = headers
+        self.client_opts = client_opts
+        self._resources = {}
+        
+        
+        
+    def add_authorization(self, obj_auth):
+        self.transport.add_authorization(obj_auth)
+        
+    def get(self, uri, path=None, headers=None, **params):
+        """ HTTP GET         
+        
+        :param uri: str, uri on which you make the request
+        :param path: string  additionnal path to the uri
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request.
+        """
 
-    http_headers is a dictionary
-    xml_data is a raw string (not Unicode)
-    
-    This is so much trickier than it sounds, it's not even funny.
-    According to RFC 3023 ('XML Media Types'), if the HTTP Content-Type
-    is application/xml, application/*+xml,
-    application/xml-external-parsed-entity, or application/xml-dtd,
-    the encoding given in the charset parameter of the HTTP Content-Type
-    takes precedence over the encoding given in the XML prefix within the
-    document, and defaults to 'utf-8' if neither are specified.  But, if
-    the HTTP Content-Type is text/xml, text/*+xml, or
-    text/xml-external-parsed-entity, the encoding given in the XML prefix
-    within the document is ALWAYS IGNORED and only the encoding given in
-    the charset parameter of the HTTP Content-Type header should be
-    respected, and it defaults to 'us-ascii' if not specified.
+        return self.request('GET', uri, path=path, headers=headers, **params)
 
-    Furthermore, discussion on the atom-syntax mailing list with the
-    author of RFC 3023 leads me to the conclusion that any document
-    served with a Content-Type of text/* and no charset parameter
-    must be treated as us-ascii.  (We now do this.)  And also that it
-    must always be flagged as non-well-formed.  (We now do this too.)
-    
-    If Content-Type is unspecified (input was local file or non-HTTP source)
-    or unrecognized (server just got it totally wrong), then go by the
-    encoding given in the XML prefix of the document and default to
-    'iso-8859-1' as per the HTTP specification (RFC 2616).
-    
-    Then, assuming we didn't find a character encoding in the HTTP headers
-    (and the HTTP Content-type allowed us to look in the body), we need
-    to sniff the first few bytes of the XML data and try to determine
-    whether the encoding is ASCII-compatible.  Section F of the XML
-    specification shows the way here:
-    http://www.w3.org/TR/REC-xml/#sec-guessing-no-ext-info
+    def head(self, uri, path=None, headers=None, **params):
+        """ HTTP HEAD
 
-    If the sniffed encoding is not ASCII-compatible, we need to make it
-    ASCII compatible so that we can sniff further into the XML declaration
-    to find the encoding attribute, which will tell us the true encoding.
+        see GET for params description.
+        """
+        return self.request("HEAD", uri, path=path, headers=headers, **params)
 
-    Of course, none of this guarantees that we will be able to parse the
-    feed in the declared character encoding (assuming it was declared
-    correctly, which many are not).  CJKCodecs and iconv_codec help a lot;
-    you should definitely install them if you can.
-    http://cjkpython.i18n.org/
-    '''
+    def delete(self, uri, path=None, headers=None, **params):
+        """ HTTP DELETE
 
-    def _parseHTTPContentType(content_type):
-        '''takes HTTP Content-Type header and returns (content type, charset)
+        see GET for params description.
+        """
+        return self.request('DELETE', uri, path=path, headers=headers, **params)
 
-        If no charset is specified, returns (content type, '')
-        If no content type is specified, returns ('', '')
-        Both return parameters are guaranteed to be lowercase strings
-        '''
-        content_type = content_type or ''
-        content_type, params = cgi.parse_header(content_type)
-        return content_type, params.get('charset', '').replace("'", '')
+    def post(self, uri, path=None, body=None, headers=None,  **params):
+        """ HTTP POST
 
-    sniffed_xml_encoding = ''
-    xml_encoding = ''
-    true_encoding = ''
-    http_content_type, http_encoding = _parseHTTPContentType(http_headers.get('Content-Type'))
-    # Must sniff for non-ASCII-compatible character encodings before
-    # searching for XML declaration.  This heuristic is defined in
-    # section F of the XML specification:
-    # http://www.w3.org/TR/REC-xml/#sec-guessing-no-ext-info
-    try:
-        if xml_data[:4] == '\x4c\x6f\xa7\x94':
-            # EBCDIC
-            xml_data = _ebcdic_to_ascii(xml_data)
-        elif xml_data[:4] == '\x00\x3c\x00\x3f':
-            # UTF-16BE
-            sniffed_xml_encoding = 'utf-16be'
-            xml_data = unicode(xml_data, 'utf-16be').encode('utf-8')
-        elif (len(xml_data) >= 4) and (xml_data[:2] == '\xfe\xff') and (xml_data[2:4] != '\x00\x00'):
-            # UTF-16BE with BOM
-            sniffed_xml_encoding = 'utf-16be'
-            xml_data = unicode(xml_data[2:], 'utf-16be').encode('utf-8')
-        elif xml_data[:4] == '\x3c\x00\x3f\x00':
-            # UTF-16LE
-            sniffed_xml_encoding = 'utf-16le'
-            xml_data = unicode(xml_data, 'utf-16le').encode('utf-8')
-        elif (len(xml_data) >= 4) and (xml_data[:2] == '\xff\xfe') and (xml_data[2:4] != '\x00\x00'):
-            # UTF-16LE with BOM
-            sniffed_xml_encoding = 'utf-16le'
-            xml_data = unicode(xml_data[2:], 'utf-16le').encode('utf-8')
-        elif xml_data[:4] == '\x00\x00\x00\x3c':
-            # UTF-32BE
-            sniffed_xml_encoding = 'utf-32be'
-            xml_data = unicode(xml_data, 'utf-32be').encode('utf-8')
-        elif xml_data[:4] == '\x3c\x00\x00\x00':
-            # UTF-32LE
-            sniffed_xml_encoding = 'utf-32le'
-            xml_data = unicode(xml_data, 'utf-32le').encode('utf-8')
-        elif xml_data[:4] == '\x00\x00\xfe\xff':
-            # UTF-32BE with BOM
-            sniffed_xml_encoding = 'utf-32be'
-            xml_data = unicode(xml_data[4:], 'utf-32be').encode('utf-8')
-        elif xml_data[:4] == '\xff\xfe\x00\x00':
-            # UTF-32LE with BOM
-            sniffed_xml_encoding = 'utf-32le'
-            xml_data = unicode(xml_data[4:], 'utf-32le').encode('utf-8')
-        elif xml_data[:3] == '\xef\xbb\xbf':
-            # UTF-8 with BOM
-            sniffed_xml_encoding = 'utf-8'
-            xml_data = unicode(xml_data[3:], 'utf-8').encode('utf-8')
-        else:
-            # ASCII-compatible
-            pass
-        xml_encoding_match = re.compile('^<\?.*encoding=[\'"](.*?)[\'"].*\?>').match(xml_data)
-    except:
-        xml_encoding_match = None
-    if xml_encoding_match:
-        xml_encoding = xml_encoding_match.groups()[0].lower()
-        if sniffed_xml_encoding and (xml_encoding in ('iso-10646-ucs-2', 'ucs-2', 'csunicode', 'iso-10646-ucs-4', 'ucs-4', 'csucs4', 'utf-16', 'utf-32', 'utf_16', 'utf_32', 'utf16', 'u16')):
-            xml_encoding = sniffed_xml_encoding
-    acceptable_content_type = 0
-    application_content_types = ('application/xml', 'application/xml-dtd', 'application/xml-external-parsed-entity')
-    text_content_types = ('text/xml', 'text/xml-external-parsed-entity')
-    if (http_content_type in application_content_types) or \
-       (http_content_type.startswith('application/') and http_content_type.endswith('+xml')):
-        acceptable_content_type = 1
-        true_encoding = http_encoding or xml_encoding or 'utf-8'
-    elif (http_content_type in text_content_types) or \
-         (http_content_type.startswith('text/')) and http_content_type.endswith('+xml'):
-        acceptable_content_type = 1
-        true_encoding = http_encoding or 'us-ascii'
-    elif http_content_type.startswith('text/'):
-        true_encoding = http_encoding or 'us-ascii'
-    elif http_headers and (not http_headers.has_key('content-type')):
-        true_encoding = xml_encoding or 'iso-8859-1'
-    else:
-        true_encoding = xml_encoding or 'utf-8'
-    return true_encoding, http_encoding, xml_encoding, sniffed_xml_encoding, acceptable_content_type
+        :param uri: str, uri on which you make the request
+        :param body: string or File object passed to the body of the request
+        :param path: string  additionnal path to the uri
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request
+        """
+        return self.request("POST", uri, path=path, body=body, 
+                    headers=headers, **params)
+
+    def put(self, uri, path=None, body=None, headers=None, **params):
+        """ HTTP PUT
+
+        see POST for params description.
+        """
+
+        return self.request('PUT', uri, path=path, body=body, 
+                    headers=headers, **params)
+
+    def request(self, method, uri, path=None, body=None, headers=None, **params):
+        """ Perform HTTP call support GET, HEAD, POST, PUT and DELETE.
+        
+        Usage example, get friendpaste page :
+
+        .. code-block:: python
+
+            from restkit import RestClient
+            client = RestClient()
+            page = resource.request('GET', 'http://friendpaste.com')
+
+        Or get a paste in JSON :
+
+        .. code-block:: python
+
+            from restkit import RestClient
+            client = RestClient()
+            client.request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
+                headers={'Accept': 'application/json'})
+
+        :param method: str, the HTTP action to be performed: 
+            'GET', 'HEAD', 'POST', 'PUT', or 'DELETE'
+        :param path: str or list, path to add to the uri
+        :param data: tring or File object.
+        :param headers: dict, optionnal headers that will
+            be added to HTTP request.
+        :param params: Optionnal parameterss added to the request.
+        
+        :return: str.
+        """
+        
+        res = Resource(uri, self.transport, self.headers)
+        return res.request(method, path, payload=body, headers=headers, **params)

@@ -87,7 +87,7 @@ def make_proxy_connection(uri):
             response += p_sock.recv(8192)
         p_status = response.split()[1]
         if p_status != str(200):
-            raise ProxyError('Error status=%s' % str(p_status))
+            raise errors.ProxyError('Error status=%s' % str(p_status))
         # Trivial setup for ssl socket.
         ssl = socket.ssl(p_sock, None, None)
         fake_sock = httplib.FakeSocket(p_sock, ssl)
