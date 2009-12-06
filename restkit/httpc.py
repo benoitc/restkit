@@ -41,7 +41,7 @@ import zlib
 import restkit
 from restkit import errors
 
-from restkit.pool import ConnectionPool, get_proxy_auth
+from restkit import pool
 from restkit.utils import to_bytestring
 
 
@@ -100,25 +100,17 @@ class BasicAuth(Auth):
 #TODO : manage authentification detection
 class HttpClient(object):
     MAX_REDIRECTIONS = 5
+    POOL_CLASS = pool.ConnectionPool
+    
     
     def __init__(self, follow_redirect=True, force_follow_redirect=False,
-            use_proxy=False, key_file=None, cert_file=None, timeout=300,
-            min_size=0, max_size=4, pool_class=None):
+            **conn_opts):
         self.authorizations = []
-        self.use_proxy = use_proxy
+        self.use_proxy = conn_opts.get("use_proxy", False)
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
-        self.min_size = min_size
-        self.max_size = max_size
-        self.timeout = timeout
-        self.key_file = key_file
-        self.cert_file = cert_file
-        self.connections = {}
-        if pool_class is None:
-            self.pool_class = ConnectionPool
-        else:
-            self.pool_class = pool_class
-        
+        self.conn_opts = conn_opts
+
     def add_authorization(self, obj_auth):
         self.authorizations.append(obj_auth)
         
@@ -127,9 +119,7 @@ class HttpClient(object):
         if conn_key in _http_pool:
             pool = _http_pool[conn_key]
         else:
-            pool = self.pool_class(uri, use_proxy=self.use_proxy, 
-                        timeout=self.timeout, key_file=self.key_file, cert_file=self.cert_file, 
-                        min_size=self.min_size, max_size=self.max_size)
+            pool = self.POOL_CLASS(uri, **self.conn_opts)
             _http_pool[conn_key] = pool
         return pool
 

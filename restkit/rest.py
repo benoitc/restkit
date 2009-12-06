@@ -43,10 +43,6 @@ from restkit.utils import to_bytestring, url_encode, url_quote
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
     including authentication. 
-
-    It can use pycurl, urllib2, httplib2 or any interface over
-    `restkit.http.HTTPClient`.
-
     """
     
     charset = 'utf-8'

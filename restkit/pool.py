@@ -58,16 +58,6 @@ class PoolInterface(object):
     """ abstract class from which all connection 
     pool should inherit.
     """
-    
-    def __init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
-            timeout=300, min_size=0, max_size=4):
-        self.uri = uri
-        self.use_proxy = use_proxy
-        self.key_file = key_file
-        self.cert_file = cert_file
-        self.timeout = timeout
-        self.min_size = min_size
-        self.max_size = max_size
 
     def get(self):
         """ method used to return a connection from the pool"""
@@ -87,8 +77,13 @@ class ConnectionPool(PoolInterface):
     def __init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
             timeout=300, min_size=0, max_size=4):
         
-        PoolInterface.__init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
-                    timeout=300, min_size=0, max_size=4)
+        self.uri = uri
+        self.use_proxy = use_proxy
+        self.key_file = key_file
+        self.cert_file = cert_file
+        self.timeout = timeout
+        self.min_size = min_size
+        self.max_size = max_size
                     
         self.connections = collections.deque()
         for x in xrange(min_size):
