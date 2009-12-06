@@ -16,15 +16,11 @@
 #
 import os
 import sys
-from optparse import OptionParser, OptionGroup
+from optparse import OptionParser
 import urlparse
 import urllib
 
-# python 2.6 and above compatibility
-try:
-    from urlparse import parse_qs as _parse_qs
-except ImportError:
-    from cgi import parse_qs as _parse_qs
+from urlparse import parse_qs as parse_qs
 
 import restkit
 from restkit import httpc
@@ -62,7 +58,7 @@ class Url(object):
             self.path = ''
 
         if parts[3]:
-            self.query = _parse_qs(parts[3])
+            self.query = parse_qs(parts[3])
         else:
             self.query = {}
 
@@ -102,15 +98,16 @@ def make_query(string, method='GET', fname=None,
             headers['Content-Length'] = os.path.getsize(fname)
             payload = open(fname, 'r')
 
-    data = res.request(method, path=uri.path, payload=payload, headers=headers, **uri.query)
+    result = res.request(method, path=uri.path, payload=payload, headers=headers, **uri.query)
 
     output = output or ''
     if not output or output == '-':
-        return data
+        return result.body
     else:
         try:
             f = open(output, 'wb')
-            f.write(data)
+            for block in result.body_file:
+                f.write(block)
             f.close()
         except:
             print >>sys.stderr, "Can't save result in %s" % output

@@ -15,6 +15,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import os
+import time
 import urlparse
 
 from eventlet.green import socket
@@ -23,7 +24,7 @@ from eventlet.pools import Pool
 from eventlet.util import wrap_socket_with_coroutine_socket
 
 import restkit
-from restkit.errors import ProxyError
+from restkit import errors
 from restkit.pool import get_proxy_auth, PoolInterface
 
 url_parser = urlparse.urlparse
@@ -108,7 +109,7 @@ class ConnectionPool(PoolInterface, Pool):
         return connection
     
     def create(self):
-        return make_connection(self.uri, use_proxy=self.use_proxy, 
+        return self.make_connection(self.uri, use_proxy=self.use_proxy, 
                 key_file=self.key_file, cert_file=self.cert_file)
                 
     def clear(self):

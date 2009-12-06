@@ -28,9 +28,7 @@ import os
 import time
 import collections
 import httplib
-import Queue
 import socket
-import threading
 import urlparse
 
 import restkit

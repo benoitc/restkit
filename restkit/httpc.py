@@ -257,7 +257,7 @@ class HttpClient(object):
             headers.setdefault("Content-Length", "0")
             
         if self.use_proxy and uri.scheme != "https":
-            proxy_auth = get_proxy_auth()
+            proxy_auth = pool.get_proxy_auth()
             if proxy_auth:
                 headers['Proxy-Authorization'] = proxy_auth.strip()
             
