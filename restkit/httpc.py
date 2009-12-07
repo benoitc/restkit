@@ -446,22 +446,7 @@ class ResponseStream(object):
                 buf.write(data)
                 buf_len += n
             return buf.getvalue()
-            
-        while True:
-            r = self.read(amt)
-            if not r:
-                break
-                
-            nl= r.find("\n")
-            if nl > 0:
-                self._buffer = buf[i:]
-                return r[:i]
-            
-            if not r:
-                r = buf
-                return r
-            buf += r
-                
+
     def readlines(self, sizehint=0):
         total = 0
         lines = []
