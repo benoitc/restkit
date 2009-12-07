@@ -17,19 +17,16 @@
 
 import unittest
 
-class ResourceTestCase(unittest.TestCase):
+import webob.exc
+from restkit.ext.webob_helper import wrap_exceptions
 
-    def testForceException(self):
-        
-        import webob.exc
-        from restkit.errors import use_simple_exception, use_wsgi_exception
-        use_simple_exception()
-        from restkit.errors import ResourceError
-        self.assert_(issubclass(ResourceError, webob.exc.WSGIHTTPException) == False)
-        use_wsgi_exception()
+
+wrap_exceptions()
+
+class ResourceTestCase(unittest.TestCase):
         
     def testWebobException(self):
-        import webob.exc
+       
         from restkit.errors import ResourceError
         self.assert_(issubclass(ResourceError, webob.exc.WSGIHTTPException) == True)
         

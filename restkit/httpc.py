@@ -300,7 +300,7 @@ class HTTPResponse(object):
     def unicode_body(self):
         if not self.charset:
             raise AttributeError(
-                "You cannot access Response.unicode_body unless charset is set")
+                "You cannot access HTTPResponse.unicode_body unless charset is set")
         body = self.get_body()
         return body.decode(self.charset, self.unicode_errors)
 

@@ -21,11 +21,6 @@ exception classes.
 import restkit
 import warnings
 
-try:
-    import webob
-except ImportError:
-    webob = False
-    
 class deprecated_property(object):
     """
     Wraps a decorator, with a deprecation warning or error
@@ -66,7 +61,7 @@ class deprecated_property(object):
                 stacklevel=3)
                 
                     
-class SimpleResourceError(Exception):
+class ResourceError(Exception):
     """ default error class """
     def __init__(self, msg=None, http_code=None, response=None):
         self.msg = msg or ''
@@ -102,58 +97,6 @@ class SimpleResourceError(Exception):
             return 'Unprintable exception %s: %s' \
                 % (self.__class__.__name__, str(e))
                 
-
-ResourceError = None
-if webob:
-    import webob.exc
-    class WSGIResourceError(webob.exc.WSGIHTTPException):
-
-        def __init__(self, msg=None, http_code=None, response=None):
-            webob.exc.WSGIHTTPException.__init__(self)
-            
-            http_code = http_code or 500
-            klass = webob.exc.status_map[http_code]
-            self.code = http_code
-            self.title = klass.title
-            self.status = '%s %s' % (self.code, self.title)
-            self.explanation = msg
-            self.response = response
-            # default params
-            self.msg = msg
-
-        def _status_int__get(self):
-            """
-            The status as an integer
-            """
-            return int(self.status.split()[0])
-        def _status_int__set(self, value):
-            self.status = value
-        status_int = property(_status_int__get, _status_int__set, doc=_status_int__get.__doc__)
-        
-        status_code = deprecated_property(
-            status_int, 'status_code', 'use .status_int instead',
-            warning=False)
-
-        def _get_message(self):
-            return self.explanation
-        def _set_message(self, msg):
-            self.explanation = msg or ''
-        message = property(_get_message, _set_message)
-    ResourceError = WSGIResourceError
-else:
-    WSGIResourceError = None
-    ResourceError = SimpleResourceError
-                
-def use_simple_exception():
-    global ResourceError, SimpleResourceError
-    ResourceError = SimpleResourceError
-    
-def use_wsgi_exception():
-    global ResourceError, WSGIResourceError
-    if webob:
-        ResourceError = WSGIResourceError
-    else:
-        raise ImportError("webob cannot be imported.")
 
 class ResourceNotFound(ResourceError):
     """Exception raised when no resource was found at the given url. 
