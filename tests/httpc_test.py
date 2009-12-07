@@ -48,7 +48,7 @@ class HTTPClientTestCase(unittest.TestCase):
 
     def testUnicode(self):
         result = self.res.get('/unicode')
-        self.assert_(result.body == "éàù@")
+        self.assert_(result.unicode_body == u"éàù@")
 
     def testUrlWithAccents(self):
         result = self.res.get('/éàù')
@@ -205,14 +205,14 @@ class HTTPClientTestCase(unittest.TestCase):
 
     def testBasicAuth(self):
         httptransport = httpc.HttpClient()
-        httptransport.add_authorization(httpc.BasicAuth(("test", "test")))
+        httptransport.add_authorization(httpc.BasicAuth("test", "test"))
         
         res = Resource(self.url, httptransport)
         result = res.get('/auth')
         self.assert_(result.status_int == 200)
 
         httptransport = httpc.HttpClient()
-        httptransport.add_authorization(httpc.BasicAuth(("test", "test2")))
+        httptransport.add_authorization(httpc.BasicAuth("test", "test2"))
         
         def niettest():
             res = Resource(self.url, httptransport)

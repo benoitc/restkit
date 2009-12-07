@@ -199,7 +199,7 @@ class ResourceTestCase(unittest.TestCase):
 
     def testBasicAuth(self):
         transport = httpc.HttpClient()
-        transport.add_authorization(httpc.BasicAuth(("test", "test")))
+        transport.add_authorization(httpc.BasicAuth("test", "test"))
 
         res = Resource(self.url, transport)
         result = res.get('/auth')

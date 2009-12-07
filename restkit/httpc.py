@@ -67,9 +67,7 @@ def _relative_uri(uri):
 
 class Auth(object):
     """ Interface for Auth classes """
-    def __init__(self, credentials, **kwargs):
-        self.credentials = credentials
-        
+    
     def depth(self, uri):
         return uri.path.count("/")
         
@@ -79,23 +77,24 @@ class Auth(object):
         return True
         
     def request(self, uri, method, body, headers):
+        """ path auth info to the request """
         pass
         
-    def response(self, response, content):
-        """ allow us to store new auth info from the response."""
+    def response(self, response):
+        """ allow us to store new auth info from the response.
+        if something is wrong, should return True to redo 
+        the request. Else return False.
+        """
         return False
-        
-    def add_credentials(self, *args, **kwargs):
-        raise NotImplementedError
 
 class BasicAuth(Auth):
     """ basic authentification """
+    
+    def __init__(self, username, password):
+        self.credentials = (username, password)
+    
     def request(self, uri, method, body, headers):
         headers['authorization'] = 'Basic ' + base64.encodestring("%s:%s" % self.credentials)[:-1]
-        
-    def add_credentials(self, username, password=None):
-        password = password or ""
-        self.credentials = (username, password)
 
 #TODO : manage authentification detection
 class HttpClient(object):
@@ -210,7 +209,7 @@ class HttpClient(object):
         
         response, connection = self._make_request(uri, method, body, headers)
         
-        if auth and auth.response(response, body):
+        if auth and auth.response(response):
             auth.request(uri, method, headers, body)
             response, connection = self._make_request(uri, method, body, headers)
             
@@ -271,6 +270,10 @@ class HttpClient(object):
         return resp
      
 class HTTPResponse(object):
+    """ Object containing response."""
+    
+    charset = "utf8"
+    unicode_errors = 'strict'
     
     def __init__(self, response, release_callback):
         self.resp = response
@@ -287,19 +290,28 @@ class HTTPResponse(object):
         self.closed = False
             
     def get_body(self, stream=False):
-        return _decompress_content(self, stream=stream)
+        _complain_ifclosed(self.closed)
+        body = _decompress_content(self, stream=stream)
+        if not stream:
+            self._body = body
+        return body
 
-        
+    @property
+    def unicode_body(self):
+        if not self.charset:
+            raise AttributeError(
+                "You cannot access Response.unicode_body unless charset is set")
+        body = self.get_body()
+        return body.decode(self.charset, self.unicode_errors)
+
     @property
     def body(self):
         """ get body in one bytestring """
-        _complain_ifclosed(self.closed)
         return self.get_body()
     
     @property
     def body_file(self):
         """ get body as a file object """
-        _complain_ifclosed(self.closed)
         return self.get_body(stream=True)
         
     def close(self):
