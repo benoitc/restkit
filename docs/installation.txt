@@ -6,7 +6,7 @@ Installation
 The most recent release is always available in the `cheeseshop`_ and can be
 installed using `easy_install`_::
 
-    easy_install restkit
+    easy_install -U restkit
 
 Alternatively, you can also install the development version from 
 our `Mercurial`_ repository::

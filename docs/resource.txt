@@ -11,12 +11,12 @@ Example:
 
     >>> from restkit import Resource
     >>> res = Resource('http://friendpaste.com')
-    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
+    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).body
     u'{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
-    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).http_code
+    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).status_int
     200
     
-Data returned are unicode or binaries.
+Data returned are `restkit.HTTPResponse` instance. 
 
 Resource class
 --------------
@@ -101,6 +101,60 @@ decide that keys don't need to be encoded.
 
     .. automethod:: restkit.rest.RestClient.request
 
-.. _Pycurl: http://pycurl.sourceforge.net/
-.. _Httplib2: http://code.google.com/p/httplib2/
+Response class
+--------------
+
+.. autoclass:: restkit.httpc.HTTPResponse
+
+    **Properties**
+
+    .. attribute:: body
+
+        str body
+        
+    .. attribute:: body_file
+
+        a `fileobject` instance
+        
+    .. attribute:: unicode_body
+    
+        body as unicode
+        
+    .. attribute:: status_int
+    
+        the status code of the response
+        
+    .. attribute:: status
+    
+        the status of the response
+        
+    .. attribute:: headers
+    
+        headers of response as dict
+        
+    .. attribute:: headerslist
+    
+        headers of response as list
+
+    .. describe:: charset
+        
+        By default it's 'utf8', it define charset to convert in unicode_body_
+
+Example : 
+
+    >>> from restkit import Resource
+    >>> res = Resource('http://friendpaste.com')
+    >>> resp = res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'})
+    >>> resp.status_int
+    200
+    >>> resp.status
+    '200 OK'
+    >>> resp.version
+    11
+    >>> resp.headers
+    {'content-length': '111', 'set-cookie': 'FRIENDPASTE_SID=c025e3e1b0a63b60fed6edbe782f9fdae17eb2dd; expires=Mon, 21-Dec-2009 14:34:03 GMT; Max-Age=1209600; Path=/', 'server': 'nginx/0.7.62', 'connection': 'keep-alive', 'date': 'Mon, 07 Dec 2009 14:34:03 GMT', 'content-type': 'application/json'}
+    >>> resp.headerslist
+    [('content-length', '111'), ('set-cookie', 'FRIENDPASTE_SID=c025e3e1b0a63b60fed6edbe782f9fdae17eb2dd; expires=Mon, 21-Dec-2009 14:34:03 GMT; Max-Age=1209600; Path=/'), ('server', 'nginx/0.7.62'), ('connection', 'keep-alive'), ('date', 'Mon, 07 Dec 2009 14:34:03 GMT'), ('content-type', 'application/json')]
+    >>> resp.unicode_body
+    u'{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
 

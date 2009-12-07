@@ -20,8 +20,8 @@ Usage example, get friendpaste page :
     from restkit import Resource
     res = Resource('http://friendpaste.com')
     page = res.get()
-    print page
-    print page.http_code
+    print page.body
+    print page.status_int_
 
 Perform HTTP call support  with `restkit.rest.RestClient`.
 -------------------------------------------------------------
@@ -54,6 +54,7 @@ Basic Authentification:
     from restkit import RestClient
     from restkit import httpc
     transport = httpc.HttpClient()
-    transport.add_authorization(httpc.BasicAuth((username, password)))
+    transport.add_authorization(httpc.BasicAuth("username", "password"))
     client = RestClient(transport=transport)
     user_timeline = client.request('GET', "http://twitter.com/statuses/user_timeline.json")
+    print user_timeline.body
