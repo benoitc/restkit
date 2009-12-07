@@ -115,9 +115,11 @@ class HTTPResponse(object):
             headers[key.lower()] = value
         self.headers = headers
         self.closed = False
+        self._body = ""
             
     def get_body(self, stream=False):
-        _complain_ifclosed(self.closed)
+        if self._body:
+            return self._body
         body = _decompress_content(self, stream=stream)
         if not stream:
             self._body = body
@@ -240,19 +242,13 @@ class HttpClient(object):
             except socket.gaierror, e:
                 self._clean_pool(uri)
                 raise errors.ResourceNotFound("Unable to find the server at %s" % connection.host, 404)
-            except (socket.error, httplib.BadStatusLine):
+            except (socket.error, httplib.BadStatusLine), e:
                 # we should do better error parsing here
                 self._clean_pool(uri)
                 if i == 0:
                     continue
                 else:
-                    raise
-            except Exception:
-                self._clean_pool(uri)
-                if i == 0:
-                    continue
-                else:
-                    raise
+                    raise errors.RequestFailed("socket error %s" % str(e), 500)
             break
                     
         # Return the HTTP Response from the server.

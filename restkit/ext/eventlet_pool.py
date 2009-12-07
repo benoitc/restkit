@@ -19,7 +19,7 @@ import time
 import urlparse
 
 from eventlet.green import socket
-from eventlet.green import httplib
+from eventlet.green import httplib as ehttplib
 from eventlet.pools import Pool
 from eventlet.util import wrap_socket_with_coroutine_socket
 
@@ -32,6 +32,13 @@ url_parser = urlparse.urlparse
 
 wrap_socket_with_coroutine_socket()
 
+eventlet_httplib = False
+def wrap_eventlet_ehttplib():
+    if eventlet_httplib: return
+    import httplib
+    ehttplib.BadStatusLine = httplib.BadStatusLine
+    
+wrap_eventlet_ehttplib()
 
 class ConnectionPool(PoolInterface, Pool):
     def __init__(self, uri, use_proxy=False, key_file=None,
@@ -69,16 +76,16 @@ class ConnectionPool(PoolInterface, Pool):
                 raise errors.ProxyError('Error status=%s' % str(p_status))
             # Trivial setup for ssl socket.
             ssl = socket.ssl(p_sock, None, None)
-            fake_sock = httplib.FakeSocket(p_sock, ssl)
-            # Initalize httplib and replace with the proxy socket.
-            connection = httplib.HTTPConnection(proxy_uri.host)
+            fake_sock = ehttplib.FakeSocket(p_sock, ssl)
+            # Initalize ehttplib and replace with the proxy socket.
+            connection = ehttplib.HTTPConnection(proxy_uri.host)
             connection.sock=fake_sock
             return connection
         else:
             proxy_uri = url_parser(proxy)
             if not proxy_uri.port:
                 proxy_uri.port = '80'
-            return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
+            return ehttplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
         return None
 
     def make_connection(self):
@@ -93,7 +100,7 @@ class ConnectionPool(PoolInterface, Pool):
                 return self._make_proxy_connection(proxy)
 
         kwargs = {}
-        if hasattr(httplib.HTTPConnection, 'timeout'):
+        if hasattr(ehttplib.HTTPConnection, 'timeout'):
             kwargs['timeout'] = self.timeout
 
         if self.uri.port:
@@ -101,9 +108,9 @@ class ConnectionPool(PoolInterface, Pool):
 
         if self.uri.scheme == "https":
             kwargs.update(dict(key_file=self.key_file, cert_file=self.cert_file))
-            connection = httplib.HTTPSConnection(self.uri.hostname, **kwargs)
+            connection = ehttplib.HTTPSConnection(self.uri.hostname, **kwargs)
         else:
-            connection = httplib.HTTPConnection(self.uri.hostname, **kwargs)
+            connection = ehttplib.HTTPConnection(self.uri.hostname, **kwargs)
 
         setattr(connection, "started", time.time())
         return connection
