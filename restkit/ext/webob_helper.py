@@ -17,7 +17,7 @@
 import restkit.errors
 import webob.exc
 
-class WebBobResourceError(webob.exc.WSGIHTTPException):
+class WebobResourceError(webob.exc.WSGIHTTPException):
 
     def __init__(self, msg=None, http_code=None, response=None):
         webob.exc.WSGIHTTPException.__init__(self)
@@ -50,15 +50,12 @@ class WebBobResourceError(webob.exc.WSGIHTTPException):
     def _set_message(self, msg):
         self.explanation = msg or ''
     message = property(_get_message, _set_message)
-    
-    
+
 webob_exceptions = False
 def wrap_exceptions():
     """ wrap restkit exception to return WebBob exceptions"""
     global webob_exceptions
     if webob_exceptions: return
-    restkit.errors.ResourceError = WebBobResourceError
+    restkit.errors.ResourceError = WebobResourceError
     webob_exceptions = True
-    
-    
     
