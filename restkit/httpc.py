@@ -33,7 +33,7 @@ import gzip
 import httplib
 import re
 import socket
-import StringIO
+from StringIO import StringIO
 import types
 import urlparse
 import zlib
@@ -333,7 +333,7 @@ class ResponseStream(object):
     def __init__(self, response):
         self.response = response
         self.resp = response.resp
-        self._buffer = ""
+        self._rbuf = StringIO()
         self.stream_size = MAX_CHUNK_SIZE
         
     def close(self):
@@ -346,29 +346,119 @@ class ResponseStream(object):
         if amt is None:
             amt = self.stream_size
         
-        data = ''
-        if not self.resp.isclosed():
-            data = self.resp.read(amt)
-        if not data: 
-            self.close()
-        return data
+        buf = self._rbuf()
+        buf.seek(0, 2)
+        if not amt:
+            self._rbuf = StringIO()
+            while True:
+                data = self.resp.read(MAX_CHUNK_SIZE)
+                if not data:
+                    break
+                buf.write(data)
+            return buf.getvalue()
+        else:
+            buf_len = buf.tell()
+            if buf_len >= amt:
+                buf.seek(0)
+                r = buf.read(amt)
+                self._rbuf = StringIO()
+                self._rbuf.write(buf.read())
+                return r
+            self._rbuf = StringIO()
+            while True: 
+                left = amt - buf_len
+                data = self.resp.read(left)
+                if not data: 
+                    self.close()
+                    break
+                n = len(data)
+                if n == amt and not buf_len:
+                    return data
+                if n == left:
+                    buf.write(data)
+                    del data
+                    break
+                buf.write(data)
+                buf_len += n
+                del data
+            return buf.get_value()
 
     def readline(self, amt=None):
-        if self.response.closed: return ''
-        buf = self._buffer
-        while True:
-            r = ''
-            i = buf.find("\n")
-            if i != -1:
-                r = buf[:i]
-                self._buffer = buf[i:]
-                return r
-            if not self.resp.isclosed():
-                r = self.read(amt)
-            if not r:
-                if self._buffer:
-                    r =  self._buffer
+        buf = self._rbuf
+        buf.seek(0, 2)
+        if buf.tell() > 0:
+            buf.seek(0)
+            bline = buf.readline(amt)
+            if bline.endswith("\n") or len(bline) == amt:
+                self._rbuf = StringIO()
+                self._rbuf.write(buf.read())
+                return bline
+            del bline
+        if amt is None:
+            buf.seek(0, 2)
+            self._rbuf = StringIO()
+            while True:
+                data = self.resp.read(MAX_CHUNK_SIZE)
+                if not data:
                     self.close()
+                    break
+                nl = data.find('\n')
+                if nl >= 0:
+                    nl += 1
+                    buf.write(data[:nl])
+                    self._rbuf.write(data[nl:])
+                    del data
+                    break
+                buf.write(data)
+            return buf.getvalue()
+        else:
+            buf.seek(0, 2)  # seek end
+            buf_len = buf.tell()
+            if buf_len >= amt:
+                buf.seek(0)
+                r = buf.read(amt)
+                self._rbuf = StringIO()
+                self._rbuf.write(buf.read())
+                return r
+            self._rbuf = StringIO()
+            while True:
+                data = self.resp.read(MAX_CHUNK_SIZE)
+                if not data:
+                    self.close()
+                    break
+                left = amt - buf_len
+                nl = data.find('\n', 0, left)
+                if nl >= 0:
+                    nl += 1
+                    self._rbuf.write(data[nl:])
+                    if buf_len:
+                        buf.write(data[:nl])
+                        break
+                    else:
+                        return data[:nl]
+                n = len(data)
+                if n == size and not buf_len:
+                    return data
+                if n >= left:
+                    buf.write(data[:left])
+                    self._rbuf.write(data[left:])
+                    break
+                buf.write(data)
+                buf_len += n
+            return buf.getvalue()
+            
+        while True:
+            r = self.read(amt)
+            if not r:
+                break
+                
+            nl= r.find("\n")
+            if nl > 0:
+                self._buffer = buf[i:]
+                return r[:i]
+            
+            if not r:
+                r = buf
                 return r
             buf += r
                 
@@ -427,9 +517,9 @@ def _decompress_content(response, stream=False):
         
 def _send_body_part(data, connection):
     if isinstance(data, types.StringTypes):
-        data = StringIO.StringIO(to_bytestring(data))
+        data = StringIO(to_bytestring(data))
     elif not hasattr(data, 'read'):
-        data = StringIO.StringIO(str(data))
+        data = StringIO(str(data))
     
     # we always stream
     while 1:
