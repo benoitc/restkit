@@ -20,6 +20,7 @@ Fisrt steps
    installation
    gettingstarted
    console
+   changelog
 
 .. _api:
 
