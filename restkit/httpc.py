@@ -101,8 +101,7 @@ class BasicAuth(Auth):
 class HttpClient(object):
     MAX_REDIRECTIONS = 5
     POOL_CLASS = pool.ConnectionPool
-    
-    
+     
     def __init__(self, follow_redirect=True, force_follow_redirect=False,
             **conn_opts):
         self.authorizations = []
@@ -196,7 +195,6 @@ class HttpClient(object):
                     continue
                 else:
                     raise
-                
             break
                     
         # Return the HTTP Response from the server.
@@ -395,8 +393,9 @@ def _decompress_content(response, stream=False):
                 if stream:
                     return gzip.GzipFile(fileobj=ResponseStream(response))
                 else:
-                    compressedstream = StringIO.StringIO(_get_content(response))
-                    return gzip.GzipFile(fileobj=compressedstream).read()
+                    data =  gzip.GzipFile(fileobj=ResponseStream(response)).read()
+                    response.close()
+                    return data
             else:
                 if stream:
                     return ResponseStream(ResponseStream(response))
