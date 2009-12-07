@@ -103,7 +103,7 @@ class Resource(object):
             Resource("/path").get()
         """
 
-        new_uri = self.make_uri(self.uri, path)
+        new_uri = self._make_uri(self.uri, path)
         return type(self)(new_uri, transport=self.transport, 
                     headers=self._headers, **self.client_opts)
  
