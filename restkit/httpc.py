@@ -190,7 +190,7 @@ class HttpClient(object):
         
     def _clean_pool(self, uri):
         pool = self._get_pool(uri)
-        pool.clean()
+        pool.clear()
         
     def _make_request(self, uri, method, body, headers): 
         for i in range(2):
