@@ -81,7 +81,7 @@ class Resource(object):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
         
     def add_authorization(self, obj_auth):
-        self.client.transport.add_authorization(obj_auth)
+        self.transport.add_authorization(obj_auth)
 
     def clone(self):
         """if you want to add a path to resource uri, you can do:
