@@ -106,8 +106,7 @@ class Resource(object):
         new_uri = self.make_uri(self.uri, path)
         return type(self)(new_uri, transport=self.transport, 
                     headers=self._headers, **self.client_opts)
-
-    
+ 
     def get(self, path=None, headers=None, **params):
         """ HTTP GET         
         
@@ -132,8 +131,7 @@ class Resource(object):
         """
         return self.request("DELETE", path=path, headers=headers, **params)
 
-    def post(self, path=None, payload=None, headers=None, _stream=False, 
-            _stream_size=16384,**params):
+    def post(self, path=None, payload=None, headers=None, **params):
         """ HTTP POST
 
         :param payload: string passed to the body of the request
@@ -143,18 +141,18 @@ class Resource(object):
         :param params: Optionnal parameterss added to the request
         """
 
-        return self.request("POST", path=path, payload=payload, headers=headers, **params)
+        return self.request("POST", path=path, payload=payload, 
+                        headers=headers, **params)
 
-    def put(self, path=None, payload=None, headers=None, _stream=False, 
-            _stream_size=16384, **params):
+    def put(self, path=None, payload=None, headers=None, **params):
         """ HTTP PUT
 
         see POST for params description.
         """
-        return self.request("PUT", path=path, payload=payload, headers=headers, **params)
+        return self.request("PUT", path=path, payload=payload,
+                        headers=headers, **params)
 
-    def request(self, method, path=None, payload=None, headers=None, 
-            _stream=False, _stream_size=16384, **params):
+    def request(self, method, path=None, payload=None, headers=None, **params):
         """ HTTP request
 
         This method may be the only one you want to override when
@@ -164,8 +162,6 @@ class Resource(object):
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
-        :param _stream: boolean, response return a ResponseStream object
-        :param _stream_size: int, size in bytes of response stream block
         :param params: Optionnal parameterss added to the request
         """
         
