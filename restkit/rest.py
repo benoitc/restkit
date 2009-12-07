@@ -304,11 +304,14 @@ class RestClient(object):
             
         :param client_opts: `restkit.httpc.HttpClient` Options
         """ 
-
-        self.transport = transport
         self.headers = headers
         self.client_opts = client_opts
         self._resources = {}
+        
+        if transport is None:
+            self.transport = HttpClient(**client_opts)
+        else:
+            self.transport = transport
         
         
         
