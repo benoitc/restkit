@@ -96,18 +96,77 @@ class BasicAuth(Auth):
     def request(self, uri, method, body, headers):
         headers['authorization'] = 'Basic ' + base64.encodestring("%s:%s" % self.credentials)[:-1]
 
+class HTTPResponse(object):
+    """ Object containing response."""
+    
+    charset = "utf8"
+    unicode_errors = 'strict'
+    
+    def __init__(self, response, release_callback):
+        self.resp = response
+        self.release_callback = release_callback
+        self.headerslist = response.getheaders()
+        self.status = "%s %s" % (response.status, response.reason)
+        self.status_int = response.status
+        self.version = response.version
+        
+        headers = {}
+        for key, value in self.headerslist:
+            headers[key.lower()] = value
+        self.headers = headers
+        self.closed = False
+            
+    def get_body(self, stream=False):
+        _complain_ifclosed(self.closed)
+        body = _decompress_content(self, stream=stream)
+        if not stream:
+            self._body = body
+        return body
+
+    @property
+    def unicode_body(self):
+        if not self.charset:
+            raise AttributeError(
+                "You cannot access HTTPResponse.unicode_body unless charset is set")
+        body = self.get_body()
+        return body.decode(self.charset, self.unicode_errors)
+
+    @property
+    def body(self):
+        """ get body in one bytestring """
+        return self.get_body()
+    
+    @property
+    def body_file(self):
+        """ get body as a file object """
+        return self.get_body(stream=True)
+        
+    def close(self):
+        """ close the response"""
+        if not self.closed:
+            self.closed = True
+            self.release_callback()
+            if not self.resp.isclosed():
+                self.resp.close()
+
+
 #TODO : manage authentification detection
 class HttpClient(object):
-    MAX_REDIRECTIONS = 5
-    POOL_CLASS = pool.ConnectionPool
+    max_redirections = 5
+    pool_class = pool.ConnectionPool
+    response_class = HTTPResponse
      
-    def __init__(self, follow_redirect=True, force_follow_redirect=False,
-            **conn_opts):
+    def __init__(self, follow_redirect=True, force_follow_redirect=False, 
+            response_class=None, pool_class=None, **conn_opts):
         self.authorizations = []
         self.use_proxy = conn_opts.get("use_proxy", False)
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
         self.conn_opts = conn_opts
+        if response_class is not None:
+            self.response_class = response_class
+        if pool_class is not None:
+            self.pool_class = pool_class
 
     def add_authorization(self, obj_auth):
         self.authorizations.append(obj_auth)
@@ -117,7 +176,7 @@ class HttpClient(object):
         if conn_key in _http_pool:
             pool = _http_pool[conn_key]
         else:
-            pool = self.POOL_CLASS(uri, **self.conn_opts)
+            pool = self.pool_class(uri, **self.conn_opts)
             _http_pool[conn_key] = pool
         return pool
 
@@ -214,7 +273,7 @@ class HttpClient(object):
             response, connection = self._make_request(uri, method, body, headers)
             
         if self.follow_redirect:
-            if nb_redirections < self.MAX_REDIRECTIONS: 
+            if nb_redirections < self.max_redirections: 
                 if response.status in [301, 302, 307]:
                     if method in ["GET", "HEAD"] or self.force_follow_redirect:
                         if method not in ["GET", "HEAD"] and hasattr(body, 'seek'):
@@ -262,66 +321,13 @@ class HttpClient(object):
 
         release_callback =  lambda: self._release_connection(uri, connection)
         
-        resp = HTTPResponse(response, release_callback)
+        resp = self.response_class(response, release_callback)
         resp.final_url = self.final_url
         
         if method == "HEAD":
             resp.close()
         return resp
      
-class HTTPResponse(object):
-    """ Object containing response."""
-    
-    charset = "utf8"
-    unicode_errors = 'strict'
-    
-    def __init__(self, response, release_callback):
-        self.resp = response
-        self.release_callback = release_callback
-        self.headerslist = response.getheaders()
-        self.status = "%s %s" % (response.status, response.reason)
-        self.status_int = response.status
-        self.version = response.version
-        
-        headers = {}
-        for key, value in self.headerslist:
-            headers[key.lower()] = value
-        self.headers = headers
-        self.closed = False
-            
-    def get_body(self, stream=False):
-        _complain_ifclosed(self.closed)
-        body = _decompress_content(self, stream=stream)
-        if not stream:
-            self._body = body
-        return body
-
-    @property
-    def unicode_body(self):
-        if not self.charset:
-            raise AttributeError(
-                "You cannot access HTTPResponse.unicode_body unless charset is set")
-        body = self.get_body()
-        return body.decode(self.charset, self.unicode_errors)
-
-    @property
-    def body(self):
-        """ get body in one bytestring """
-        return self.get_body()
-    
-    @property
-    def body_file(self):
-        """ get body as a file object """
-        return self.get_body(stream=True)
-        
-    def close(self):
-        """ close the response"""
-        if not self.closed:
-            self.closed = True
-            self.release_callback()
-            if not self.resp.isclosed():
-                self.resp.close()
-
 def _complain_ifclosed(closed):
     if closed:
         raise ValueError, "I/O operation on closed response"        
