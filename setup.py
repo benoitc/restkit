@@ -30,7 +30,7 @@ except ImportError:
 
 setup(
     name = 'restkit',
-    version = '0.9',
+    version = '0.9.1',
     description = 'Python REST kit',
     long_description = \
 """An HTTP resource kit for Python""",
