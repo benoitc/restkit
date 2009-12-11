@@ -72,6 +72,7 @@ class Resource(object):
             self.transport = HttpClient(**client_opts)
         else:
             self.transport = transport
+            
         self.uri = uri
         self._headers = headers or {}
         self.client_opts = client_opts

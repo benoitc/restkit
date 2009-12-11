@@ -333,7 +333,7 @@ class ResponseStream(object):
     def __init__(self, response):
         self.response = response
         self.resp = response.resp
-        self._rbuf = StringIO()
+        self._rbuf = ''
         self.stream_size = MAX_CHUNK_SIZE
         
     def close(self):
@@ -342,110 +342,40 @@ class ResponseStream(object):
             self.response.close()
         
     def read(self, amt=None):
-        _complain_ifclosed(self.response.closed)
-        if amt is None:
-            amt = self.stream_size
-        
-        buf = self._rbuf()
-        buf.seek(0, 2)
-        if not amt:
-            self._rbuf = StringIO()
-            while True:
-                data = self.resp.read(MAX_CHUNK_SIZE)
-                if not data:
-                    break
-                buf.write(data)
-            return buf.getvalue()
-        else:
-            buf_len = buf.tell()
-            if buf_len >= amt:
-                buf.seek(0)
-                r = buf.read(amt)
-                self._rbuf = StringIO()
-                self._rbuf.write(buf.read())
-                return r
-            self._rbuf = StringIO()
-            while True: 
-                left = amt - buf_len
-                data = self.resp.read(left)
-                if not data: 
-                    self.close()
-                    break
-                n = len(data)
-                if n == amt and not buf_len:
-                    return data
-                if n == left:
-                    buf.write(data)
-                    del data
-                    break
-                buf.write(data)
-                buf_len += n
-                del data
-            return buf.get_value()
+        if self._rbuf and not amt is None:
+            L = len(self._rbuf)
+            if amt > L:
+                amt -= L
+            else:
+                s = self._rbuf[:amt]
+                self._rbuf = self._rbuf[amt:]
+                return s
+        data = self.resp.read(amt)
+        if not data:
+            self.close()
+        s = self._rbuf + data
+        self._rbuf = ''
+        return s
 
-    def readline(self, amt=None):
-        buf = self._rbuf
-        buf.seek(0, 2)
-        if buf.tell() > 0:
-            buf.seek(0)
-            bline = buf.readline(amt)
-            if bline.endswith("\n") or len(bline) == amt:
-                self._rbuf = StringIO()
-                self._rbuf.write(buf.read())
-                return bline
-            del bline
-        if amt is None:
-            buf.seek(0, 2)
-            self._rbuf = StringIO()
-            while True:
-                data = self.resp.read(MAX_CHUNK_SIZE)
-                if not data:
-                    self.close()
-                    break
-                nl = data.find('\n')
-                if nl >= 0:
-                    nl += 1
-                    buf.write(data[:nl])
-                    self._rbuf.write(data[nl:])
-                    del data
-                    break
-                buf.write(data)
-            return buf.getvalue()
-        else:
-            buf.seek(0, 2)  # seek end
-            buf_len = buf.tell()
-            if buf_len >= amt:
-                buf.seek(0)
-                r = buf.read(amt)
-                self._rbuf = StringIO()
-                self._rbuf.write(buf.read())
-                return r
-            self._rbuf = StringIO()
-            while True:
-                data = self.resp.read(MAX_CHUNK_SIZE)
-                if not data:
-                    self.close()
-                    break
-                left = amt - buf_len
-                nl = data.find('\n', 0, left)
-                if nl >= 0:
-                    nl += 1
-                    self._rbuf.write(data[nl:])
-                    if buf_len:
-                        buf.write(data[:nl])
-                        break
-                    else:
-                        return data[:nl]
-                n = len(data)
-                if n == size and not buf_len:
-                    return data
-                if n >= left:
-                    buf.write(data[:left])
-                    self._rbuf.write(data[left:])
-                    break
-                buf.write(data)
-                buf_len += n
-            return buf.getvalue()
+    def readline(self, amt=-1):
+        i = self._rbuf.find('\n')
+        while i < 0 and not (0 < amt <= len(self._rbuf)):
+            new = self.resp.read(self.stream_size)
+            if not new: 
+                self.close()
+                break
+            i = new.find('\n')
+            if i >= 0: 
+                i = i + len(self._rbuf)
+            self._rbuf = self._rbuf + new
+        if i < 0: 
+            i = len(self._rbuf)
+        else: 
+            i = i+1
+        if 0 <= amt < len(self._rbuf): 
+            i = amt
+        data, self._rbuf = self._rbuf[:i], self._rbuf[i:]
+        return data
 
     def readlines(self, sizehint=0):
         total = 0
