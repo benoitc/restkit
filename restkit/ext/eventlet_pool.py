@@ -40,14 +40,15 @@ def wrap_eventlet_ehttplib():
     
 wrap_eventlet_ehttplib()
 
-class ConnectionPool(PoolInterface, Pool):
+class ConnectionPool(Pool, PoolInterface):
     def __init__(self, uri, use_proxy=False, key_file=None,
             cert_file=None, min_size=0, max_size=4, **kwargs):
+        Pool.__init__(self, min_size, max_size)
         self.uri = uri
         self.use_proxy = use_proxy
         self.key_file = key_file
         self.cert_file = cert_file
-        Pool.__init__(self, min_size, max_size)
+        
 
     def _make_proxy_connection(self, proxy):
         if self.uri.scheme == 'https':
@@ -116,8 +117,7 @@ class ConnectionPool(PoolInterface, Pool):
         return connection
     
     def create(self):
-        return self.make_connection(self.uri, use_proxy=self.use_proxy, 
-                key_file=self.key_file, cert_file=self.cert_file)
+        return self.make_connection()
                 
     def clear(self):
-        return True
+        self.free()

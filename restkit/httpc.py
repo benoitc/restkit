@@ -48,9 +48,6 @@ from restkit.utils import to_bytestring
 MAX_CHUNK_SIZE = 16384
 url_parser = urlparse.urlparse
 
-
-_http_pool = {}
-
 NORMALIZE_SPACE = re.compile(r'(?:\r\n)?[ \t]+')
 def _normalize_headers(headers):
     return dict([ (key.lower(), NORMALIZE_SPACE.sub(str(value), ' ').strip())  for (key, value) in headers.iteritems()])
@@ -165,6 +162,7 @@ class HttpClient(object):
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
         self.conn_opts = conn_opts
+        self._http_pool = {}
         if response_class is not None:
             self.response_class = response_class
         if pool_class is not None:
@@ -175,11 +173,11 @@ class HttpClient(object):
         
     def _get_pool(self, uri):
         conn_key = (uri.scheme, uri.netloc, self.use_proxy)
-        if conn_key in _http_pool:
-            pool = _http_pool[conn_key]
+        if conn_key in self._http_pool:
+            pool = self._http_pool[conn_key]
         else:
             pool = self.pool_class(uri, **self.conn_opts)
-            _http_pool[conn_key] = pool
+            self._http_pool[conn_key] = pool
         return pool
 
     def _get_connection(self, uri):
