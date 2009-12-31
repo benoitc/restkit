@@ -312,9 +312,7 @@ class HttpClient(object):
                 headers['Proxy-Authorization'] = proxy_auth.strip()
             
         response, connection = self._request(uri, method, body, headers)
-
         release_callback =  lambda: self._release_connection(uri, connection)
-        
         resp = self.response_class(response, release_callback)
         resp.final_url = self.final_url
         
