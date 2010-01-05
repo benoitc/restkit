@@ -144,7 +144,8 @@ class HTTPResponse(object):
         """ close the response"""
         if not self.closed:
             self.closed = True
-            self.release_callback()
+            if not self.resp._check_close():
+                self.release_callback()
             if not self.resp.isclosed():
                 self.resp.close()
 
