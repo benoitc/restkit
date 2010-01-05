@@ -187,7 +187,20 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self._respond(200, extra_headers, body)
             else:
                 self.error_Response()
-            
+        elif path == "/1M":
+            content_type = self.headers.get('content-type', 'text/plain')
+            extra_headers.append(('Content-type', content_type))
+            content_length = int(self.headers.get('Content-length', 0))
+            body = self.rfile.read(content_length)
+            self._respond(200, extra_headers, str(len(body)))
+        elif path == "/large":
+            content_type = self.headers.get('content-type', 'text/plain')
+            extra_headers.append(('Content-Type', content_type))
+            content_length = int(self.headers.get('Content-length', 0))
+            body = self.rfile.read(content_length)
+            extra_headers.append(('Content-Length', str(len(body))))
+            self._respond(200, extra_headers, body)
+        
         else:
             self.error_Response('Bad path')
             
