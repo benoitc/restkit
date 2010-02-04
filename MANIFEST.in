@@ -2,3 +2,4 @@ include COPYING
 include LICENSE
 include README.txt
 include distribute_setup.py
+recursive-include tests *

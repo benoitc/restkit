@@ -153,7 +153,8 @@ class Resource(object):
         return self.request("PUT", path=path, payload=payload,
                         headers=headers, **params)
 
-    def request(self, method, path=None, payload=None, headers=None, **params):
+    def request(self, method, path=None, payload=None, headers=None, 
+        **params):
         """ HTTP request
 
         This method may be the only one you want to override when

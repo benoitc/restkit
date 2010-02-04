@@ -30,7 +30,7 @@ except ImportError:
 
 setup(
     name = 'restkit',
-    version = '0.9.3',
+    version = '0.9.4',
     description = 'Python REST kit',
     long_description = \
 """An HTTP resource kit for Python""",
@@ -50,7 +50,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries',
     ],
-    packages = find_packages(),
+    packages = find_packages(exclude=['tests']),
     entry_points = {
         'console_scripts': [
             'restcli = restkit.bin.rest_cli:main',
