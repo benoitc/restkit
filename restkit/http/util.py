@@ -6,6 +6,7 @@
 import errno
 import os
 import select
+import socket
 import time
 
 CHUNK_SIZE = (16 * 1024)
@@ -15,6 +16,14 @@ weekdayname = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 monthname = [None,
              'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+             
+try:
+    import ssl # python 2.6
+    _ssl_wrap_socket = ssl.wrap_socket
+except ImportError:
+    def _ssl_wrap_socket(sock, key_file, cert_file):
+        ssl_sock = socket.ssl(sock, key_file, cert_file)
+        return ssl_sock
 
 def read_partial(sock, length):
     while True:

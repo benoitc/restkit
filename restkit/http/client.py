@@ -14,31 +14,46 @@ from restkit.util import to_bytestring
 
 MAX_FOLLOW_REDIRECTS = 5
 
-def has_timeout(timeout): # python 2.6
-    if hasattr(socket, '_GLOBAL_DEFAULT_TIMEOUT'):
-        return (timeout is not None and \
-            timeout is not socket._GLOBAL_DEFAULT_TIMEOUT)
-    return (timeout is not None)
-    
-try:
-    import ssl # python 2.6
-    _ssl_wrap_socket = ssl.wrap_socket
-except ImportError:
-    def _ssl_wrap_socket(sock, key_file, cert_file):
-        ssl_sock = socket.ssl(sock, key_file, cert_file)
-        return ssl_sock
-    
+
+if hasattr(socket, 'create_connection'): # python 2.6
+    _create_connection = socket.create_connection
+else:
+    # backport from python 2.6
+    _GLOBAL_DEFAULT_TIMEOUT = object()
+    def _create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT):
+        msg = "getaddrinfo returns an empty list"
+        host, port = address
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                sock.connect(sa)
+                return sock
+
+            except error, msg:
+                if sock is not None:
+                    sock.close()
+
+        raise error, msg  
+
+class InvalidUrl(Exception):
+    pass
+
 
 class HttpConnection(object):
     
     VERSION = (1, 1)
     USER_AGENT = "restkit/%s" % __version__
     
-    def __init__(self, sock=None, timeout=None, follow_redirect=False, 
-            force_follow_redirect=False, 
+    def __init__(self, sock=None, timeout=_GLOBAL_DEFAULT_TIMEOUT, 
+            filters=None, follow_redirect=False, force_follow_redirect=False, 
             max_follow_redirect=MAX_FOLLOW_REDIRECTS, key_file=None, 
             cert_file=None):
         self.sock = sock
+        self.timeout = timeout
         self.headers = []
         self.ua = self.USER_AGENT
         self.date = ""
@@ -51,27 +66,61 @@ class HttpConnection(object):
         self.body = None
         self.response_body = StringIO.StringIO()
         self.final_uri = None
+        
+        # build filter lists
+        self.filters = filters or []
+        self.on_request_filters = []
+        self.on_response_filters = []
+        for f in self.filters:
+            if hasattr(f, 'on_request'):
+                self.on_request_filters.append(f)
+            if hasattr(f, 'on_response'):
+                self.on_response_filters.append(f)
+        
 
     def make_connection(self):
         if not self.sock:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            
             if self.uri.scheme == "https":
                 import ssl
-                sock.connect(self.uri.)
-                sock = socket.create_connection((self.host, self.port), 
-                                                self.timeout)
-                self.sock = _ssl_wrap_socket(sock, self.key_file, 
-                                            self.cert_file)
+                sock = _create_connection((self.host, self.port), 
+                                        self.timeout)
+                self.sock = util._ssl_wrap_socket(sock, self.key_file, 
+                                        self.cert_file)
             else:
-                self.sock = socket.create_connection((self.host, self.port), 
-                                                    self.timeout)
+                self.sock = _create_connection((self.host, self.port), 
+                                        self.timeout)
                                                     
         # We should check if sock hostname is the same
         return self.sock
         
-    def request(self, url, method='GET', body=None, headers=None):
+        
+    def parse_url(self, url):
         self.uri = urlparse.urlparse(url)
+        
+        host = uri.netloc
+        i = host.rfind(':')
+        j = host.rfind(']')         # ipv6 addresses have [...]
+        if i > j:
+            try:
+                port = int(host[i+1:])
+            except ValueError:
+                raise InvalidURL("nonnumeric port: '%s'" % host[i+1:])
+            host = host[:i]
+        else:
+            # default por
+            if self.uri.scheme == "https":
+                port = 443
+            else:
+                port = 80
+                
+        if host and host[0] == '[' and host[-1] == ']':
+            host = host[1:-1]
+            
+        self.host = host
+        self.port = port
+        
+    def request(self, url, method='GET', body=None, headers=None):   
+        self.parse_url(self, url)
         self.method = method.upper()
         self.body = body
         headers = headers = or []
@@ -96,6 +145,9 @@ class HttpConnection(object):
         self.headers = normalized_headers
         self.ua = ua
         self.date = req_date
+        
+        for bf in self.on_request_filters:
+            bf(self)
 
         # by default all connections are HTTP/1.1    
         if VERSION == (1,1):
@@ -128,6 +180,8 @@ class HttpConnection(object):
                         util.writelines(body)
                 self.start_response()
                 break
+            except socket.gaierror, e:
+                raise
             except socket.error, e:
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED):
                     raise
@@ -165,6 +219,9 @@ class HttpConnection(object):
             self.response_body = StringIO.StringIO()
         else:
             self.response_body = tee.TeeInput(self.sock, self.parser, buf[i:])
+            
+        for af in self.on_response_filters:
+            af(self)
             
         if self.follow_redirect:
             if self.parser.status_int in (301, 302, 307):
