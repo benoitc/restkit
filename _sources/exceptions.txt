@@ -1,0 +1,13 @@
+.. _exceptions_ref:
+
+Exceptions
+==========
+
+.. module:: restkit.errors
+
+.. autoexception:: restkit.errors.ResourceNotFound
+.. autoexception:: restkit.errors.Unauthorized
+.. autoexception:: restkit.errors.RequestFailed
+.. autoexception:: restkit.errors.RequestError
+.. autoexception:: restkit.errors.TransportError
+.. autoexception:: restkit.errors.InvalidUrl

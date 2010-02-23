@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; restkit v0.9.4 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.9.4',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="restkit v0.9.4 documentation" href="index.html" />
+    <link rel="next" title="Console client" href="console.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="console.html" title="Console client"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">restkit v0.9.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<span id="gettingstarted"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>This tutoriall exposes key features of this library mainly through code
+examples. For in-depth description of the modules, you&#8217;ll want to read
+the <a class="reference external" href="index.html#api"><em>API</em></a> documentation.</p>
+<p>If you have not installed restkit yet, the <a class="reference external" href="installation.html#installation"><em>installation docs</em></a>
+will get you started.</p>
+<div class="section" id="perform-http-call-support-with-restkit-rest-resource">
+<h2>Perform HTTP call support  with <cite>restkit.rest.Resource</cite>.<a class="headerlink" href="#perform-http-call-support-with-restkit-rest-resource" title="Permalink to this headline">¶</a></h2>
+<p>Usage example, get friendpaste page :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">page</span><span class="o">.</span><span class="n">body</span>
+<span class="k">print</span> <span class="n">page</span><span class="o">.</span><span class="n">status_int_</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="perform-http-call-support-with-restkit-rest-restclient">
+<h2>Perform HTTP call support  with <cite>restkit.rest.RestClient</cite>.<a class="headerlink" href="#perform-http-call-support-with-restkit-rest-restclient" title="Permalink to this headline">¶</a></h2>
+<p>Usage example, get friendpaste page:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or get a paste in JSON :</p>
+<div class="highlight-python"><pre>from restkit import RestClient
+client = RestClient()
+client.request('GET',
+    'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
+headers={'Accept': 'application/json'})</pre>
+</div>
+</div>
+<div class="section" id="basic-authentification">
+<h2>Basic Authentification:<a class="headerlink" href="#basic-authentification" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">httpc</span>
+<span class="n">transport</span> <span class="o">=</span> <span class="n">httpc</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">()</span>
+<span class="n">transport</span><span class="o">.</span><span class="n">add_authorization</span><span class="p">(</span><span class="n">httpc</span><span class="o">.</span><span class="n">BasicAuth</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">))</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">(</span><span class="n">transport</span><span class="o">=</span><span class="n">transport</span><span class="p">)</span>
+<span class="n">user_timeline</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&quot;http://twitter.com/statuses/user_timeline.json&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">user_timeline</span><span class="o">.</span><span class="n">body</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Getting Started</a><ul>
+<li><a class="reference external" href="#perform-http-call-support-with-restkit-rest-resource">Perform HTTP call support  with <cite>restkit.rest.Resource</cite>.</a></li>
+<li><a class="reference external" href="#perform-http-call-support-with-restkit-rest-restclient">Perform HTTP call support  with <cite>restkit.rest.RestClient</cite>.</a></li>
+<li><a class="reference external" href="#basic-authentification">Basic Authentification:</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="installation.html"
+                                  title="previous chapter">Installation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="console.html"
+                                  title="next chapter">Console client</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/gettingstarted.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="console.html" title="Console client"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">restkit v0.9.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2010 Benoit Chesneau &lt;benoitc@e-engura.org&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>
