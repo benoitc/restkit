@@ -24,6 +24,30 @@ except ImportError:
     def _ssl_wrap_socket(sock, key_file, cert_file):
         ssl_sock = socket.ssl(sock, key_file, cert_file)
         return ssl_sock
+        
+if hasattr(socket, 'create_connection'): # python 2.6
+    _create_connection = socket.create_connection
+else:
+    # backport from python 2.6
+    _GLOBAL_DEFAULT_TIMEOUT = object()
+    def _create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT):
+        msg = "getaddrinfo returns an empty list"
+        host, port = address
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                sock.connect(sa)
+                return sock
+
+            except error, msg:
+                if sock is not None:
+                    sock.close()
+
+        raise error, msg
 
 def read_partial(sock, length):
     while True:

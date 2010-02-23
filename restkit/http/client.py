@@ -14,31 +14,6 @@ from restkit.util import to_bytestring
 
 MAX_FOLLOW_REDIRECTS = 5
 
-
-if hasattr(socket, 'create_connection'): # python 2.6
-    _create_connection = socket.create_connection
-else:
-    # backport from python 2.6
-    _GLOBAL_DEFAULT_TIMEOUT = object()
-    def _create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT):
-        msg = "getaddrinfo returns an empty list"
-        host, port = address
-        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
-            af, socktype, proto, canonname, sa = res
-            sock = None
-            try:
-                sock = socket(af, socktype, proto)
-                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
-                    sock.settimeout(timeout)
-                sock.connect(sa)
-                return sock
-
-            except error, msg:
-                if sock is not None:
-                    sock.close()
-
-        raise error, msg  
-
 class InvalidUrl(Exception):
     pass
 
@@ -82,12 +57,12 @@ class HttpConnection(object):
         if not self.sock:
             if self.uri.scheme == "https":
                 import ssl
-                sock = _create_connection((self.host, self.port), 
+                sock = util._create_connection((self.host, self.port), 
                                         self.timeout)
                 self.sock = util._ssl_wrap_socket(sock, self.key_file, 
                                         self.cert_file)
             else:
-                self.sock = _create_connection((self.host, self.port), 
+                self.sock = util._create_connection((self.host, self.port), 
                                         self.timeout)
                                                     
         # We should check if sock hostname is the same
