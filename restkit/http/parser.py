@@ -185,7 +185,7 @@ class Parser(object):
             if self._chunk_eof:
                 return True
         elif self._content_len == 0:
-                return True
+            return True
         return False
         
     def read_chunk(self, data):
@@ -230,9 +230,6 @@ class Parser(object):
                 chunk = data[:nr]
                 self._content_len -= nr
                 data = data[:nr]
-            elif data:
-                chunk = data
-                data = ''
                 
         self.start_offset = 0
         return (chunk, data)
