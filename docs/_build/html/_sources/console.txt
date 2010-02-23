@@ -1,0 +1,58 @@
+.. _console:
+
+Console client
+==============
+
+A console client is available with restkit. It allow you to perform any HTTP
+ request you need in console.
+
+Examples :
+----------
+
+create a paste in Friendpaste from command line:
+
+.. code-block:: bash
+
+    $ restcli -H "Accept:application/json" -H "Content-Type: application/json" http://friendpaste.com POST - < test.json 
+    {"url": "http://friendpaste.com/1Po5tOC012QeFYOS3b3RaA", "rev": "373163383163", "ok": true, "id": "1Po5tOC012QeFYOS3b3RaA"}
+
+This command send test.json file to Friendpaste and you get back the full url of paste in the json result.
+
+test.json file :
+
+.. code-block:: javascript
+
+    {
+        "title":"I like to paste stuff",
+        "snippet":"My own paste",
+        "language":"text"
+    }
+
+
+Get your twitter status time line :
+
+.. code-block:: bash
+
+    $ restcli http://XXXXXXX:XXXXXXX@twitter.com/statuses/user_timeline.json
+
+
+Usage :
+-------
+
+
+restcli [options] url [METHOD] [filename]
+
+Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+  -H HEADERS, --header=HEADERS
+                        http string header in the form of Key:Value. For
+                        example: "Accept: application/json"
+  -i FILE, --input=FILE
+                        the name of the file to read from
+  -o OUTPUT, --output=OUTPUT
+                        the name of the file to write to
+  --proxy=PROXY         Full uri of proxy, ex:
+                        http://username:password@proxy:port/
+
+

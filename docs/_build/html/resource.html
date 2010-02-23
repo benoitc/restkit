@@ -1,0 +1,477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Resource &mdash; restkit v0.9.4 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.9.4',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="restkit v0.9.4 documentation" href="index.html" />
+    <link rel="next" title="Exceptions" href="exceptions.html" />
+    <link rel="prev" title="Changelog" href="changelog.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="Exceptions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">restkit v0.9.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-restkit">
+<span id="resource-ref"></span><h1>Resource<a class="headerlink" href="#module-restkit" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a common interface for all HTTP requests.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">body</span>
+<span class="go">u&#39;{&quot;snippet&quot;: &quot;hi!&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;5rOqE9XTz7lccLgZoQS4IP&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;386233396230&quot;}&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">status_int</span>
+<span class="go">200</span>
+</pre></div>
+</div>
+<p>Data returned are <cite>restkit.HTTPResponse</cite> instance.</p>
+<div class="section" id="resource-class">
+<h2>Resource class<a class="headerlink" href="#resource-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="restkit.rest.Resource">
+<em class="property">class </em><tt class="descclassname">restkit.rest.</tt><tt class="descname">Resource</tt><big>(</big><em>uri</em>, <em>transport=None</em>, <em>headers=None</em>, <em>**client_opts</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that can be instantiated for access to a RESTful resource, 
+including authentication.</p>
+<p><strong>Properties</strong></p>
+<dl class="attribute">
+<dt id="restkit.Resource.uri">
+<tt class="descname">uri</tt><a class="headerlink" href="#restkit.Resource.uri" title="Permalink to this definition">¶</a></dt>
+<dd>Str, full uri to the server.</dd></dl>
+
+<dl class="attribute">
+<dt id="restkit.Resource.transport">
+<tt class="descname">transport</tt><a class="headerlink" href="#restkit.Resource.transport" title="Permalink to this definition">¶</a></dt>
+<dd>Any instance of object based on <cite>restkit.httpc.HTTPClient</cite>.</dd></dl>
+
+<p><strong>Methods</strong></p>
+<dl class="method">
+<dt id="restkit.rest.Resource.clone">
+<tt class="descname">clone</tt><big>(</big><big>)</big><a class="headerlink" href="#restkit.rest.Resource.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>if you want to add a path to resource uri, you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">resr2</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.Resource.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>if you want to add a path to resource uri, you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Resource</span><span class="p">(</span><span class="s">&quot;/path&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.Resource.get">
+<tt class="descname">get</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP GET</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.Resource.head">
+<tt class="descname">head</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP HEAD</p>
+<p>see GET for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.Resource.delete">
+<tt class="descname">delete</tt><big>(</big><em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP DELETE</p>
+<p>see GET for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.Resource.post">
+<tt class="descname">post</tt><big>(</big><em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP POST</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>payload</em> &#8211; string passed to the body of the request</li>
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.Resource.put">
+<tt class="descname">put</tt><big>(</big><em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP PUT</p>
+<p>see POST for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.Resource.request">
+<tt class="descname">request</tt><big>(</big><em>method</em>, <em>path=None</em>, <em>payload=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP request</p>
+<p>This method may be the only one you want to override when
+subclassing <cite>restkit.rest.Resource</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>payload</em> &#8211; string or File object passed to the body of the request</li>
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.Resource.update_uri">
+<tt class="descname">update_uri</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#restkit.rest.Resource.update_uri" title="Permalink to this definition">¶</a></dt>
+<dd>to set a new uri absolute path</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="restclient-class">
+<h2>RestClient class<a class="headerlink" href="#restclient-class" title="Permalink to this headline">¶</a></h2>
+<p>RestClient represent a simple HTTP client. <strong>New in 1.1</strong> By default all urls are utf8
+encoded. But you could change default charset, safe characters and
+decide that keys don&#8217;t need to be encoded.</p>
+<dl class="class">
+<dt id="restkit.rest.RestClient">
+<em class="property">class </em><tt class="descclassname">restkit.rest.</tt><tt class="descname">RestClient</tt><big>(</big><em>transport=None</em>, <em>headers=None</em>, <em>**client_opts</em><big>)</big><a class="headerlink" href="#restkit.rest.RestClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic rest client</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/about&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pypaste.com/3XDqQ8G83LlzVWgCeWdwru&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">body</span>
+<span class="go">u&#39;{&quot;snippet&quot;: &quot;testing API.&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;3XDqQ8G83LlzVWgCeWdwru&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;363934613139&quot;}&#39;</span>
+</pre></div>
+</div>
+<p><strong>Properties</strong></p>
+<dl class="attribute">
+<dt id="restkit.RestClient.transport">
+<tt class="descname">transport</tt><a class="headerlink" href="#restkit.RestClient.transport" title="Permalink to this definition">¶</a></dt>
+<dd>Any http instance of object based on
+<cite>restkit.httpc.HttpClient</cite>. By default it will use
+<a href="#id1"><span class="problematic" id="id2">`</span></a>restkit.httpc.ProxiedHttpClient that support simple proxy auth.</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">charset</tt></dt>
+<dd>By default it&#8217;s &#8216;utf-8&#8217;, it define charset of urls.</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">encode_keys</tt></dt>
+<dd>By default True. Encode params keys</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">safe</tt></dt>
+<dd>By default is &#8220;:/&#8221;, define which charaters are safe in url and
+don&#8217;t need to be encoded.</dd></dl>
+
+<p><strong>Methods</strong></p>
+<dl class="method">
+<dt id="restkit.rest.RestClient.get">
+<tt class="descname">get</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.RestClient.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP GET</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>uri</em> &#8211; str, uri on which you make the request</li>
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.RestClient.head">
+<tt class="descname">head</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.RestClient.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP HEAD</p>
+<p>see GET for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.RestClient.delete">
+<tt class="descname">delete</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.RestClient.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP DELETE</p>
+<p>see GET for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.RestClient.post">
+<tt class="descname">post</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>body=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.RestClient.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP POST</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>uri</em> &#8211; str, uri on which you make the request</li>
+<li><em>body</em> &#8211; string or File object passed to the body of the request</li>
+<li><em>path</em> &#8211; string  additionnal path to the uri</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.RestClient.put">
+<tt class="descname">put</tt><big>(</big><em>uri</em>, <em>path=None</em>, <em>body=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.RestClient.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP PUT</p>
+<p>see POST for params description.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restkit.rest.RestClient.request">
+<tt class="descname">request</tt><big>(</big><em>method</em>, <em>uri</em>, <em>path=None</em>, <em>body=None</em>, <em>headers=None</em>, <em>**params</em><big>)</big><a class="headerlink" href="#restkit.rest.RestClient.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform HTTP call support GET, HEAD, POST, PUT and DELETE.</p>
+<p>Usage example, get friendpaste page :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">RestClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">RestClient</span><span class="p">()</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or get a paste in JSON :</p>
+<div class="highlight-python"><pre>from restkit import RestClient
+client = RestClient()
+client.request('GET', 'http://friendpaste.com/5rOqE9XTz7lccLgZoQS4IP'),
+    headers={'Accept': 'application/json'})</pre>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>method</em> &#8211; str, the HTTP action to be performed: 
+&#8216;GET&#8217;, &#8216;HEAD&#8217;, &#8216;POST&#8217;, &#8216;PUT&#8217;, or &#8216;DELETE&#8217;</li>
+<li><em>path</em> &#8211; str or list, path to add to the uri</li>
+<li><em>data</em> &#8211; tring or File object.</li>
+<li><em>headers</em> &#8211; dict, optionnal headers that will
+be added to HTTP request.</li>
+<li><em>params</em> &#8211; Optionnal parameterss added to the request.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="response-class">
+<h2>Response class<a class="headerlink" href="#response-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="restkit.httpc.HTTPResponse">
+<em class="property">class </em><tt class="descclassname">restkit.httpc.</tt><tt class="descname">HTTPResponse</tt><big>(</big><em>response</em>, <em>release_callback</em><big>)</big><a class="headerlink" href="#restkit.httpc.HTTPResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object containing response.</p>
+<p><strong>Properties</strong></p>
+<dl class="attribute">
+<dt id="restkit.HTTPResponse.body">
+<tt class="descname">body</tt><a class="headerlink" href="#restkit.HTTPResponse.body" title="Permalink to this definition">¶</a></dt>
+<dd>str body</dd></dl>
+
+<dl class="attribute">
+<dt id="restkit.HTTPResponse.body_file">
+<tt class="descname">body_file</tt><a class="headerlink" href="#restkit.HTTPResponse.body_file" title="Permalink to this definition">¶</a></dt>
+<dd>a <cite>fileobject</cite> instance</dd></dl>
+
+<dl class="attribute">
+<dt id="restkit.HTTPResponse.unicode_body">
+<tt class="descname">unicode_body</tt><a class="headerlink" href="#restkit.HTTPResponse.unicode_body" title="Permalink to this definition">¶</a></dt>
+<dd>body as unicode</dd></dl>
+
+<dl class="attribute">
+<dt id="restkit.HTTPResponse.status_int">
+<tt class="descname">status_int</tt><a class="headerlink" href="#restkit.HTTPResponse.status_int" title="Permalink to this definition">¶</a></dt>
+<dd>the status code of the response</dd></dl>
+
+<dl class="attribute">
+<dt id="restkit.HTTPResponse.status">
+<tt class="descname">status</tt><a class="headerlink" href="#restkit.HTTPResponse.status" title="Permalink to this definition">¶</a></dt>
+<dd>the status of the response</dd></dl>
+
+<dl class="attribute">
+<dt id="restkit.HTTPResponse.headers">
+<tt class="descname">headers</tt><a class="headerlink" href="#restkit.HTTPResponse.headers" title="Permalink to this definition">¶</a></dt>
+<dd>headers of response as dict</dd></dl>
+
+<dl class="attribute">
+<dt id="restkit.HTTPResponse.headerslist">
+<tt class="descname">headerslist</tt><a class="headerlink" href="#restkit.HTTPResponse.headerslist" title="Permalink to this definition">¶</a></dt>
+<dd>headers of response as list</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">charset</tt></dt>
+<dd>By default it&#8217;s &#8216;utf8&#8217;, it define charset to convert in <a href="#id3"><span class="problematic" id="id4">unicode_body_</span></a></dd></dl>
+
+</dd></dl>
+
+<p>Example :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/5rOqE9XTz7lccLgZoQS4IP&#39;</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span><span class="o">.</span><span class="n">status_int</span>
+<span class="go">200</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span><span class="o">.</span><span class="n">status</span>
+<span class="go">&#39;200 OK&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span><span class="o">.</span><span class="n">version</span>
+<span class="go">11</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span><span class="o">.</span><span class="n">headers</span>
+<span class="go">{&#39;content-length&#39;: &#39;111&#39;, &#39;set-cookie&#39;: &#39;FRIENDPASTE_SID=c025e3e1b0a63b60fed6edbe782f9fdae17eb2dd; expires=Mon, 21-Dec-2009 14:34:03 GMT; Max-Age=1209600; Path=/&#39;, &#39;server&#39;: &#39;nginx/0.7.62&#39;, &#39;connection&#39;: &#39;keep-alive&#39;, &#39;date&#39;: &#39;Mon, 07 Dec 2009 14:34:03 GMT&#39;, &#39;content-type&#39;: &#39;application/json&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span><span class="o">.</span><span class="n">headerslist</span>
+<span class="go">[(&#39;content-length&#39;, &#39;111&#39;), (&#39;set-cookie&#39;, &#39;FRIENDPASTE_SID=c025e3e1b0a63b60fed6edbe782f9fdae17eb2dd; expires=Mon, 21-Dec-2009 14:34:03 GMT; Max-Age=1209600; Path=/&#39;), (&#39;server&#39;, &#39;nginx/0.7.62&#39;), (&#39;connection&#39;, &#39;keep-alive&#39;), (&#39;date&#39;, &#39;Mon, 07 Dec 2009 14:34:03 GMT&#39;), (&#39;content-type&#39;, &#39;application/json&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span><span class="o">.</span><span class="n">unicode_body</span>
+<span class="go">u&#39;{&quot;snippet&quot;: &quot;hi!&quot;, &quot;title&quot;: &quot;&quot;, &quot;id&quot;: &quot;5rOqE9XTz7lccLgZoQS4IP&quot;, &quot;language&quot;: &quot;text&quot;, &quot;revision&quot;: &quot;386233396230&quot;}&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Resource</a><ul>
+<li><a class="reference external" href="#resource-class">Resource class</a></li>
+<li><a class="reference external" href="#restclient-class">RestClient class</a></li>
+<li><a class="reference external" href="#response-class">Response class</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="changelog.html"
+                                  title="previous chapter">Changelog</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="exceptions.html"
+                                  title="next chapter">Exceptions</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/resource.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="Exceptions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             >previous</a> |</li>
+        <li><a href="index.html">restkit v0.9.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2010 Benoit Chesneau &lt;benoitc@e-engura.org&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

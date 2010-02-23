@@ -1,0 +1,31 @@
+.. _changelog:
+
+Changelog
+=========
+
+Version 0.9 - 2009/12/07
+------------------------
+
+- New response object. Now a `restkit.Resource` and `restkit.RestClient` return an  `restkit.HTTPResponse` instance and no longer an unicode. The HTTPResponse allow you to get all in one the headers, the body and allow you to stream it by using the property `body_file` which give you a `fileobject`:
+
+.. code-block:: python
+
+    from restkit import Resource
+    import tempfile
+    
+    res = Resource('http://e-engura.com')
+    result = res.get('/images/logo.gif')
+    fd, fname = tempfile.mkstemp(suffix='.gif')
+    f = os.fdopen(fd, "wb")
+    for block in result.body_file:
+        f.write(block)
+    f.close()
+    
+
+.. see-also:: :ref:`resource doc <resource>`
+    
+- Fix in spool class. Reuse spool across all objects. It doesn't use Queue anymore since collection.deque is already threadsafe
+
+- Change in WebOb helper. Now you have to use `restkit.ext.webob_helper.wrap_exceptions` to use WebOb extensions.
+
+- Fix eventlet extension.
