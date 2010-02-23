@@ -229,7 +229,7 @@ class Parser(object):
                 nr = min(dlen, self._content_len)
                 chunk = data[:nr]
                 self._content_len -= nr
-                data = data[:nr]
+                data = ''
                 
         self.start_offset = 0
         return (chunk, data)
