@@ -1,0 +1,16 @@
+HTTP/1.1 301 Moved Permanently\r\n
+Location: http://www.google.com/\r\n
+Content-Type: text/html; charset=UTF-8\r\n
+Date: Sun, 26 Apr 2009 11:11:49 GMT\r\n
+Expires: Tue, 26 May 2009 11:11:49 GMT\r\n
+Cache-Control: public, max-age=2592000\r\n
+Server: gws\r\n
+Content-Length: 211\r\n
+\r\n
+
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="http://www.google.com/">here</A>.
+</BODY></HTML>

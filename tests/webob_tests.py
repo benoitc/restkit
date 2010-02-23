@@ -28,7 +28,8 @@ class ResourceTestCase(unittest.TestCase):
     def testWebobException(self):
        
         from restkit.errors import ResourceError
-        self.assert_(issubclass(ResourceError, webob.exc.WSGIHTTPException) == True)
+        self.assert_(issubclass(ResourceError, 
+                webob.exc.WSGIHTTPException) == True)
         
 if __name__ == '__main__':
     unittest.main()

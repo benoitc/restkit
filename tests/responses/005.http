@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK\r\n
+Content-Type: text/plain\r\n
+Transfer-Encoding: chunked\r\n
+\r\n
+25\r\n
+  This is the data in the first chunk\r\n
+1C\r\n
+  and this is the second one\r\n
+0\r\n

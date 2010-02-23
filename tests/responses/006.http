@@ -1,0 +1,6 @@
+HTTP/1.1 200 OK\r\n
+Content-Type: text/html; charset=utf-8\r\n
+Connection: close\r\n
+\r\n
+
+these headers are from http://news.ycombinator.com/

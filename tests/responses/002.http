@@ -1,0 +1,17 @@
+HTTP/1.1 200 OK\r\n
+Date: Tue, 04 Aug 2009 07:59:32 GMT\r\n
+Server: Apache\r\n
+X-Powered-By: Servlet/2.5 JSP/2.1\r\n
+Content-Type: text/xml; charset=utf-8\r\n
+Connection: close\r\n
+\r\n
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP-ENV:Body>
+    <SOAP-ENV:Fault>
+       <faultcode>SOAP-ENV:Client</faultcode>
+       <faultstring>Client Error</faultstring>
+    </SOAP-ENV:Fault>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
