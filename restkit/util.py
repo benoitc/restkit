@@ -26,29 +26,30 @@ except ImportError:
         ssl_sock = socket.ssl(sock, key_file, cert_file)
         return ssl_sock
         
-if hasattr(socket, 'create_connection'): # python 2.6
-    _create_connection = socket.create_connection
-else:
-    # backport from python 2.6
+if not hasattr(socket, '_GLOBAL_DEFAULT_TIMEOUT'): # python < 2.6
     _GLOBAL_DEFAULT_TIMEOUT = object()
-    def _create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT):
-        msg = "getaddrinfo returns an empty list"
-        host, port = address
-        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
-            af, socktype, proto, canonname, sa = res
-            sock = None
-            try:
-                sock = socket(af, socktype, proto)
-                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
-                    sock.settimeout(timeout)
-                sock.connect(sa)
-                return sock
 
-            except error, msg:
-                if sock is not None:
-                    sock.close()
+def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False, 
+        key_file=None, cert_file=None):
+    msg = "getaddrinfo returns an empty list"
+    host, port = address
+    for res in socket.getaddrinfo(host, port, 0, SOCK_STREAM):
+        af, socktype, proto, canonname, sa = res
+        sock = None
+        try:
+            sock = socket.socket(af, socktype, proto)
+            if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                sock.settimeout(timeout)
+            sock.connect(sa)
+            if ssl:
+                sock = _ssl_wrap_socket(sock, key_file, cert_file)
+            return sock
+        except socket.error, msg:
+            if sock is not None:
+                sock.close()
 
-        raise error, msg
+    raise error, msg
+    
 
 def read_partial(sock, length):
     while True:

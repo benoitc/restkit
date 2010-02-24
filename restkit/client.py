@@ -59,14 +59,10 @@ class HttpConnection(object):
         """ initate a connection if needed or reuse a socket"""
         if not self.sock:
             if self.uri.scheme == "https":
-                import ssl
-                sock = util._create_connection((self.host, self.port), 
-                                        self.timeout)
-                self.sock = util._ssl_wrap_socket(sock, self.key_file, 
-                                        self.cert_file)
+                self.sock = util.connect((self.host, self.port), self.timeout, 
+                                True, self.key_file, self.cert_file)
             else:
-                self.sock = util._create_connection((self.host, self.port), 
-                                        self.timeout)
+                self.sock = util.connect((self.host, self.port), self.timeout)
                                                     
         # We should check if sock hostname is the same
         return self.sock
