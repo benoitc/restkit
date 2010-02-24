@@ -34,6 +34,24 @@ class HttpConnection(object):
             filters=None, follow_redirect=False, force_follow_redirect=False, 
             max_follow_redirect=MAX_FOLLOW_REDIRECTS, key_file=None, 
             cert_file=None, pool_instance=None, socket=None):
+            
+        """ HttpConnection constructor
+        
+        :param timeout: socket timeout
+        :param filters: list, list of http filters. see the doc of http filters 
+        for more info
+        :param follow_redirect: boolean, by default is false. If true, 
+        if the HTTP status is 301, 302 or 303 the client will follow
+        the location.
+        :param max_follow_redirect: max number of redirection. If max is reached
+        the RedirectLimit exception is raised.
+        :param key_file: the key fle to use with ssl
+        :param cert_file: the cert file to use with ssl
+        :param pool_instance: a pool instance inherited from 
+        `restkit.pool.PoolInterface`
+        :param socket: eventually you can pass your own socket object to 
+        the client.
+        """
         self.socket = socket
         self.timeout = timeout
         self.headers = []

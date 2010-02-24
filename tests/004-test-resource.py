@@ -1,19 +1,7 @@
 # -*- coding: utf-8 -
 #
-# Copyright (c) 2008 (c) Benoit Chesneau <benoitc@e-engura.com> 
-#
-# Permission to use, copy, modify, and distribute this software for any
-# purpose with or without fee is hereby granted, provided that the above
-# copyright notice and this permission notice appear in all copies.
-#
-# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-#
+# This file is part of restkit released under the MIT license. 
+# See the NOTICE for more information.
 
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
@@ -30,27 +18,30 @@ from restkit.errors import RequestFailed, ResourceNotFound, \
 Unauthorized, RequestError
 
 
+import t
+
 from _server_test import HOST, PORT, run_server_test
+run_server_test()
 
 
-class MakeUriTestCase(unittest.TestCase):
-    
-    def setUp(self):
-        self.res = Resource("http://friendpaste.com")
-        
-    def testMakeUri(self):
-        self.assert_(self.res._make_uri("http://localhost", "/") == "http://localhost/")
-        self.assert_(self.res._make_uri("http://localhost/") == "http://localhost/")
-        self.assert_(self.res._make_uri("http://localhost/", "/test/echo") == "http://localhost/test/echo")
-        self.assert_(self.res._make_uri("http://localhost/", "/test/echo/") == "http://localhost/test/echo/")
-        self.assert_(self.res._make_uri("http://localhost", "/test/echo/") == "http://localhost/test/echo/")
-        self.assert_(self.res._make_uri("http://localhost", "test/echo") == "http://localhost/test/echo")
-        self.assert_(self.res._make_uri("http://localhost", "test/echo/") == "http://localhost/test/echo/")
-        
+def 001_test():
+    res = Resource("http://localhost")
+    t.eq(res._make_uri("http://localhost", "/"), "http://localhost/")
+    t.eq(res._make_uri("http://localhost/"), "http://localhost/")
+    t.eq(res._make_uri("http://localhost/", "/test/echo"), 
+        "http://localhost/test/echo")
+    t.eq(res._make_uri("http://localhost/", "/test/echo/"), 
+        "http://localhost/test/echo/")
+    t.eq(res._make_uri("http://localhost", "/test/echo/"),
+        "http://localhost/test/echo/")
+    t.eq(res._make_uri("http://localhost", "test/echo"), 
+        "http://localhost/test/echo")
+    t.eq(res._make_uri("http://localhost", "test/echo/"),
+        "http://localhost/test/echo/")
+
 class ResourceTestCase(unittest.TestCase):
 
     def setUp(self):
-        run_server_test()
         self.url = 'http://%s:%s' % (HOST, PORT)
         self.res = Resource(self.url)
 
@@ -80,10 +71,12 @@ class ResourceTestCase(unittest.TestCase):
         self.assert_(result.status_int == 200)
 
     def testGetWithContentType(self):
-        result = self.res.get('/json', headers={'Content-Type': 'application/json'})
+        result = self.res.get('/json', 
+            headers={'Content-Type': 'application/json'})
         self.assert_(result.status_int == 200)
         def bad_get():
-            result = self.res.get('/json', headers={'Content-Type': 'text/plain'})
+            result = self.res.get('/json', 
+                headers={'Content-Type': 'text/plain'})
         self.assertRaises(RequestFailed, bad_get) 
 
     def testGetWithContentType2(self):
@@ -211,11 +204,3 @@ class ResourceTestCase(unittest.TestCase):
             result = res.get('/auth')
         self.assertRaises(Unauthorized, niettest)
         
-    
-
- 
-    
-if __name__ == '__main__':
-    from _server_test import run_server_test
-    run_server_test() 
-    unittest.main()

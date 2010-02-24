@@ -10,12 +10,15 @@ import sys
 if not hasattr(sys, 'version_info') or sys.version_info < (2, 5, 0, 'final'):
     raise SystemExit("Couchapp requires Python 2.5 or later.")
 
+from distribute_setup import use_setuptools
+use_setuptools()
 from setuptools import setup, find_packages
 
+from restkit import __version__
 
 setup(
     name = 'restkit',
-    version = '0.9.5',
+    version = __version__,
     description = 'Python REST kit',
     long_description = \
 """An HTTP resource kit for Python""",
