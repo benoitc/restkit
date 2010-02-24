@@ -15,7 +15,7 @@ import os
 import StringIO
 import tempfile
 
-from restkit.util import MAX_BODY, CHUNK_SIZE, read_partial
+from restkit.sock import MAX_BODY, CHUNK_SIZE, recv
 
 class TeeInput(object):
     
@@ -126,7 +126,7 @@ class TeeInput(object):
     def _tee(self, length):
         """ fetch partial body"""
         while not self.parser.body_eof():
-            data = read_partial(self.socket, length)
+            data = recv(self.socket, length)
             self.buf += data
             chunk, self.buf = self.parser.filter_body(self.buf)
             if chunk:
@@ -143,7 +143,7 @@ class TeeInput(object):
             # handle trailing headers
             if self.parser.is_chunked and self._is_socket:
                 while not self.parser.trailing_header(self.buf):
-                    data = read_partial(self.socket, CHUNK_SIZE)
+                    data = recv(self.socket, CHUNK_SIZE)
                     if not data: break
                     self.buf += data
             del self.buf

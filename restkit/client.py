@@ -9,8 +9,9 @@ import StringIO
 import urlparse
 
 from restkit import __version__
-from restkit import util
 from restkit.parser import Parser
+from restkit import sock
+from restkit import util
 
 MAX_FOLLOW_REDIRECTS = 5
 
@@ -59,10 +60,10 @@ class HttpConnection(object):
         """ initate a connection if needed or reuse a socket"""
         if not self.sock:
             if self.uri.scheme == "https":
-                self.sock = util.connect((self.host, self.port), self.timeout, 
+                self.sock = sock.connect((self.host, self.port), self.timeout, 
                                 True, self.key_file, self.cert_file)
             else:
-                self.sock = util.connect((self.host, self.port), self.timeout)
+                self.sock = sock.connect((self.host, self.port), self.timeout)
                                                     
         # We should check if sock hostname is the same
         return self.sock
@@ -145,15 +146,15 @@ class HttpConnection(object):
             sock = self.make_connection(sock)
             try:
                 # send request
-                util.writelines(sock, req_headers)
+                sock.sendlines(sock, req_headers)
         
                 if body is not None:
                     if hasattr(body, 'read'):
-                        util.writefile(body)
+                        sock.sendfile(body)
                     elif isinstance(body, basestring):
-                        util.writefile(StringIO.StringIO(util.to_bytestring(body)))
+                        sock.sendfile(StringIO.StringIO(util.to_bytestring(body)))
                     else:
-                        util.writelines(body)
+                        sock.sendlines(body)
                 self.start_response()
                 break
             except socket.gaierror, e:
@@ -186,11 +187,11 @@ class HttpConnection(object):
         
         # read headers
         buf = ""
-        buf = read_partial(self.sock, util.CHUNK_SIZE)
+        buf = recv(self.sock, util.CHUNK_SIZE)
         i = self.parser.filter_headers(headers, buf)
         if i == -1 and buf:
             while True:
-                data = util.read_partial(self.sock, util.CHUNK_SIZE)
+                data = sock.recv(self.sock, util.CHUNK_SIZE)
                 if not data: break
                 buf += data
                 i = self.parser.filter_headers(headers, buf)
