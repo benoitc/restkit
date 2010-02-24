@@ -15,8 +15,8 @@ class ParserError(Exception):
     pass
 
 class Parser(object):
-    
-    def __init__(self, ptype='response'):
+
+    def __init__(self, ptype='response', should_close=False):
         self.status_line = ""
         self.status_int = None
         self.reason = ""
@@ -34,10 +34,11 @@ class Parser(object):
         self.chunk_size = 0
         self._chunk_eof = False
         self.type = ptype
+        self._should_close = force_close
         
     @classmethod
-    def parse_response(cls):
-        return cls()
+    def parse_response(cls, should_close=True):
+        return cls(should_close=force_close)
         
     @classmethod
     def parse_request(cls):

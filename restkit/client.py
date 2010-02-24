@@ -26,17 +26,17 @@ class HttpConnection(object):
     VERSION = (1, 1)
     USER_AGENT = "restkit/%s" % __version__
     
-    def __init__(self, sock=None, timeout=_GLOBAL_DEFAULT_TIMEOUT, 
+    def __init__(self, timeout=_GLOBAL_DEFAULT_TIMEOUT, 
             filters=None, follow_redirect=False, force_follow_redirect=False, 
             max_follow_redirect=MAX_FOLLOW_REDIRECTS, key_file=None, 
-            cert_file=None):
-        self.sock = sock
+            cert_file=None, pool_instance=None, socket=None):
+        self.socket = socket
         self.timeout = timeout
         self.headers = []
         self.ua = self.USER_AGENT
         self.date = ""
         self.uri = None
-        self.parser = Parser.parse_response()
+        
         self.follow_redirect = follow_redirect
         self.nb_redirections = max_follow_redirect
         self.force_follow_redirect = force_follow_redirect
@@ -54,20 +54,46 @@ class HttpConnection(object):
                 self.on_request_filters.append(f)
             if hasattr(f, 'on_response'):
                 self.on_response_filters.append(f)
+                
+        if not pool_instance:
+            should_close = True
+            self.connections = None
+        else:
+            self.connections = pool_instance
+            should_close = False
         
-
+        self.parser = Parser.parse_response(should_close=should_close)
+        
     def make_connection(self):
         """ initate a connection if needed or reuse a socket"""
-        if not self.sock:
-            if self.uri.scheme == "https":
-                self.sock = sock.connect((self.host, self.port), self.timeout, 
-                                True, self.key_file, self.cert_file)
-            else:
-                self.sock = sock.connect((self.host, self.port), self.timeout)
-                                                    
-        # We should check if sock hostname is the same
-        return self.sock
+        addr = (self.host, self.port)
+        socket = self.socket or None
         
+        # if we defined a pool use it
+        if self.connections is not None:
+            socket = self.connections.get(addr)
+            
+        if not socket:
+            # pool is empty or we don't use a pool
+            if self.uri.scheme == "https":
+                socket = sock.connect(addr, self.timeout, True, 
+                                self.key_file, self.cert_file)
+            else:
+                socket = sock.connect(addr, self.timeout)
+                
+        self.socket = socket
+        return socket
+        
+    def clean_connections(self):
+        self.socket = None
+        self.connections.clean((self.host, self.port))
+        
+    def maybe_close(self):
+        if not self.socket: return
+        if self.parser.should_close:
+            sock.close(self.socket)
+        self.connection.put((self.host, self.port), self.socket)
+        self.socket = None
         
     def parse_url(self, url):
         """ parse url and get host/port"""
@@ -158,10 +184,13 @@ class HttpConnection(object):
                 self.start_response()
                 break
             except socket.gaierror, e:
+                self.clean_connections()
                 raise
             except socket.error, e:
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED):
+                    self.clean_connections()
                     raise
+                self.socket = None
       
     def follow_redirect(self):
         """ follow redirections if needed"""
@@ -187,11 +216,11 @@ class HttpConnection(object):
         
         # read headers
         buf = ""
-        buf = recv(self.sock, util.CHUNK_SIZE)
+        buf = recv(self.socket, util.CHUNK_SIZE)
         i = self.parser.filter_headers(headers, buf)
         if i == -1 and buf:
             while True:
-                data = sock.recv(self.sock, util.CHUNK_SIZE)
+                data = sock.recv(self.socket, util.CHUNK_SIZE)
                 if not data: break
                 buf += data
                 i = self.parser.filter_headers(headers, buf)
@@ -200,7 +229,8 @@ class HttpConnection(object):
         if not self.parser.content_len and not self.parser.is_chunked:
             self.response_body = StringIO.StringIO()
         else:
-            self.response_body = tee.TeeInput(self.sock, self.parser, buf[i:])
+            self.response_body = tee.TeeInput(self.socket, self.parser, 
+                                        buf[i:], maybe_close=self.maybe_close)
             
         for af in self.on_response_filters:
             af(self)

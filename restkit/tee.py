@@ -19,12 +19,13 @@ from restkit.sock import MAX_BODY, CHUNK_SIZE, recv
 
 class TeeInput(object):
     
-    def __init__(self, socket, parser, buf):
+    def __init__(self, socket, parser, buf, maybe_close=None):
         self.buf = buf
         self.parser = parser
         self.socket = socket
         self._is_socket = True
         self._len = parser.content_len
+        self.maybe_close = maybe_close
         if self._len and self._len < MAX_BODY:
             self.tmp = StringIO.StringIO()
         else:
@@ -146,6 +147,9 @@ class TeeInput(object):
                     data = recv(self.socket, CHUNK_SIZE)
                     if not data: break
                     self.buf += data
+                    
+            if callable(self.maybe_close):
+                self.maybe_close()
             del self.buf
             self._is_socket = False
             

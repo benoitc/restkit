@@ -11,7 +11,6 @@ import socket
 CHUNK_SIZE = (16 * 1024)
 MAX_BODY = 1024 * (80 + 32)
 
-
 try:
     import ssl # python 2.6
     _ssl_wrap_socket = ssl.wrap_socket

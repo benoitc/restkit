@@ -5,38 +5,10 @@
 
 """
 Threadsafe Pool class 
-
-TODO:
-- log errors
 """
 
-import os
-import time
 import collections
-import httplib
-import socket
-import urlparse
-
-import restkit
-from restkit import errors
-
-has_timeout = hasattr(socket, '_GLOBAL_DEFAULT_TIMEOUT')
-url_parser = urlparse.urlparse
-
-def get_proxy_auth():
-  import base64
-  proxy_username = os.environ.get('proxy-username')
-  if not proxy_username:
-    proxy_username = os.environ.get('proxy_username')
-  proxy_password = os.environ.get('proxy-password')
-  if not proxy_password:
-    proxy_password = os.environ.get('proxy_password')
-  if proxy_username:
-    user_auth = base64.b64encode('%s:%s' % (proxy_username,
-                                            proxy_password))
-    return 'Basic %s\r\n' % (user_auth.strip())
-  else:
-    return ''
+from restkit import sock
 
 class PoolInterface(object):
     """ abstract class from which all connection 
@@ -56,120 +28,40 @@ class PoolInterface(object):
         raise NotImplementedError
     
 
-
 class ConnectionPool(PoolInterface):
-    def __init__(self, uri, use_proxy=False, key_file=None, cert_file=None, 
-            timeout=300, min_size=0, max_size=4):
-        
-        self.uri = uri
-        self.use_proxy = use_proxy
-        self.key_file = key_file
-        self.cert_file = cert_file
-        self.timeout = timeout
-        self.min_size = min_size
-        self.max_size = max_size
-                    
-        self.connections = collections.deque()
-        for x in xrange(min_size):
-            self.current_size += 1
-            self.connections.append(self.make_connection())
-            
-    def _make_proxy_connection(self, proxy):
-        if self.uri.scheme == 'https':
-            proxy_auth = get_proxy_auth()
-            if proxy_auth:
-                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-            port = self.uri.port
-            if not port:
-                port = 443
-            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (self.uri.hostname, port)
-            user_agent = 'User-Agent: %s\r\n' % restkit.USER_AGENT
-            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
-            proxy_uri = url_parser(proxy)
-            if not proxy_uri.port:
-                proxy_uri.port = '80'
-            # Connect to the proxy server, very simple recv and error checking
-            p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-            p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
-            p_sock.sendall(proxy_pieces)
-            response = ''
-            # Wait for the full response.
-            while response.find("\r\n\r\n") == -1:
-                response += p_sock.recv(8192)
-            p_status = response.split()[1]
-            if p_status != str(200):
-                raise errors.ProxyError('Error status=%s' % str(p_status))
-            # Trivial setup for ssl socket.
-            ssl = socket.ssl(p_sock, None, None)
-            fake_sock = httplib.FakeSocket(p_sock, ssl)
-            # Initalize httplib and replace with the proxy socket.
-            connection = httplib.HTTPConnection(proxy_uri.host)
-            connection.sock=fake_sock
-            return connection
-        else:
-            proxy_uri = url_parser(proxy)
-            if not proxy_uri.port:
-                proxy_uri.port = '80'
-            return httplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
-        return None
-
-    def make_connection(self):
-        if self.use_proxy:
-            proxy = ''
-            if self.uri.scheme == 'https':
-                proxy = os.environ.get('https_proxy')
-            elif self.uri.scheme == 'http':
-                proxy = os.environ.get('http_proxy')
-                
-            if proxy:
-                return self._make_proxy_connection(proxy)
-            
-        kwargs = {}
-        if hasattr(httplib.HTTPConnection, 'timeout'):
-            kwargs['timeout'] = self.timeout
-        
-        if self.uri.port:
-            kwargs['port'] = self.uri.port
-
-        if self.uri.scheme == "https":
-            kwargs.update(dict(key_file=self.key_file, cert_file=self.cert_file))
-            connection = httplib.HTTPSConnection(self.uri.hostname, **kwargs)
-        else:
-            connection = httplib.HTTPConnection(self.uri.hostname, **kwargs)
-            
-        setattr(connection, "started", time.time())
-        return connection
-            
-    def do_get(self):
+    def __init__(self, max_connections=4):
+        """ Initialize ConnectionPool
+        :attr max_connections: int, the number of maximum connectioons 
+        per _host_port
         """
-        Return an item from the pool, when one is available
-        """ 
-        if self.connections:
-            connection = self.connections.popleft()
-            return connection
-        else:
-            return self.make_connection()
-
-    def get(self):
-        while True:
-            connection = self.do_get()
-            since = time.time() - connection.started
-            if since < self.timeout:
-                if connection._HTTPConnection__response:
-                    connection._HTTPConnection__response.read()
-                return connection
-            else:
-                connection.close()
+        self.max_connections = max_connections
+        self.hosts = {}
         
-    def put(self, connection):
-        if len(self.connections) >= self.max_size:
-            connection.close()
+    def get(self, address):
+        connections = self.hosts.get(address)
+        if connections:
+            socket = connections.popleft()
+            self.hosts[address] = connections
+            return socket
+        return None
+        
+    def put(self, address, socket):
+        connections = self.hosts.get(address)
+        if not connections: 
+            connections = collections.deque()
+        
+        # do we have already enough connections opened ?
+        if len(connections) > self.max_connections:
+            sock.close(socket)
             return
-        if connection.sock is None:
-            connection = self.make_connection()
-        self.connections.append(connection)
             
-    def clear(self):
-        while self.connections:
-            connection = self.connections.pop()
+        connections.append(socket)
+        self.hosts[address] = connections
+        
+    def clear(self, address):
+        connections = self.hosts.get(address)
+        while True:
+            if not connections: break
+            socket = connections.popleft()
+            sock.close(socket)
             connection.close()
