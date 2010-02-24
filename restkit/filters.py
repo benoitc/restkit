@@ -29,9 +29,10 @@ import base64
 import os
 import urlparse
 
-
-from restkit.client import InvalidUrl
+from restkit import __version__
+from restkit.errors import InvalidUrl
 from restkit.parser import Parser
+from restkit import sock
 from restkit import util
 
 
@@ -62,7 +63,7 @@ class SimpleProxy(object):
             try:
                 proxy_port = int(proxy_host[i+1:])
             except ValueError:
-                raise InvalidURL("nonnumeric port: '%s'" % proxy_host[i+1:])
+                raise InvalidUrl("nonnumeric port: '%s'" % proxy_host[i+1:])
             proxy_host = proxy_host[:i]
         else:
             proxy_port = 80
@@ -80,24 +81,26 @@ class SimpleProxy(object):
                 if proxy_auth:
                     proxy_auth = 'Proxy-authorization: %s' % proxy_auth
                 proxy_connect = 'CONNECT %s HTTP/1.0\r\n' % (req.uri.netloc)
+                user_agent = "User-Agent: restkit/%s\r\n" % __version__
                 proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, 
                                         user_agent)
                 proxy_uri = urlparse.urlparse(proxy)
                 proxy_host, proxy_port = self._host_port(proxy_uri)
                 # Connect to the proxy server, 
                 # very simple recv and error checking
-                p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-                p_sock.connect((proxy_host, int(proxy_port)))
-                p_sock.sendall(proxy_pieces)
+                
+                p_sock = sock.connect((proxy_host, int(proxy_port))   )          
+                sock.send(p_sock, proxy_pieces)
             
                 # wait header
                 p = Parser.parse_response()
+                headers = []
                 buf = ""
-                buf = read_partial(self.sock, util.CHUNK_SIZE)
+                buf = sock.recv(p_sock, util.CHUNK_SIZE)
                 i = self.parser.filter_headers(headers, buf)
                 if i == -1 and buf:
                     while True:
-                        data = util.read_partial(self.sock, util.CHUNK_SIZE)
+                        data = sock.recv(p_sock, util.CHUNK_SIZE)
                         if not data: break
                         buf += data
                         i = self.parser.filter_headers(headers, buf)
@@ -106,10 +109,10 @@ class SimpleProxy(object):
                 if p.status_int != 200:
                     raise ProxyError('Error status=%s' % p.status)
                     
-                util._ssl_wrap_socket(sock, None, None)
+                sock._ssl_wrap_socket(p_sock, None, None)
                 
                 # update socket
-                req.sock = sock
+                req.sock = p_sock
                 req.host = proxy_host
         else:
             proxy = os.environ.get('http_proxy')

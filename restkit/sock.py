@@ -4,7 +4,6 @@
 # See the NOTICE for more information.
 
 import errno
-import os
 import select
 import socket
 
@@ -47,7 +46,6 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
         
 def recv(sock, length):
     while True:
-        import sys
         try:
             ret = select.select([sock.fileno()], [], [], 0)
             if ret[0]: break

@@ -21,11 +21,8 @@ This module provide a common interface for all HTTP equest.
 import cgi
 import mimetypes
 import uuid
-import os
-import types
 
-from restkit.errors import ResourceNotFound, Unauthorized, RequestError, \
-RequestFailed
+from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed
 from restkit.forms import MultipartForm, multipart_form_encode, form_encode
 from restkit.client import HttpConnection
 from restkit import util
@@ -64,10 +61,10 @@ class Resource(object):
         """
 
         if transport is None:
-            pool_instance = clients_opts.get('pool_instance')
+            pool_instance = client_opts.get('pool_instance')
             if not pool_instance:
                 pool = self.pool_class(max_connections=self.max_connections)
-                clients_opts['pool_instance'] = pool
+                client_opts['pool_instance'] = pool   
             self.transport = HttpConnection(**client_opts)
         else:
             self.transport = transport
@@ -81,7 +78,20 @@ class Resource(object):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
         
     def add_authorization(self, obj_auth):
-        self.transport.add_authorization(obj_auth)
+        self.transport.add_filter(obj_auth)
+        
+    def add_filter(self, f):
+        """ add an htt filter """
+        self.transport.add_filter(f)
+
+    add_authorization = util/deprecated_property(
+        add_filter, 'add_authorization', 'use add_filter() instead',
+        warning=False)
+        
+    def remmove_filter(self, f):
+        """ remove an http filter """
+        self.transport.remmove_filter(f)
+    
 
     def clone(self):
         """if you want to add a path to resource uri, you can do:
@@ -240,7 +250,7 @@ class Resource(object):
                     trailing_slash = True
                 else:
                     trailing_slash = False
-                _path.append(url_quote(s.strip('/'), self.charset, self.safe))
+                _path.append(util.url_quote(s.strip('/'), self.charset, self.safe))
                        
         path_str =""
         if _path:
@@ -261,7 +271,7 @@ class Resource(object):
                 params.append((k,v))
 
         if params:
-            retval.extend(['?', url_encode(params, self.charset, 
-            elf.encode_keys)])
+            retval.extend(['?', util.url_encode(params, self.charset, 
+                    self.encode_keys)])
 
         return ''.join(retval)

@@ -11,6 +11,7 @@ dirname = os.path.dirname(__file__)
 
 from restkit.parser import Parser
 from restkit.client import HttpConnection
+from restkit.rest import Resource
 
 from _server_test import HOST, PORT, run_server_test
 
@@ -64,44 +65,20 @@ class client_request(object):
         run.func_name = func.func_name
         return run
         
-class FakeSocket(object):
+def resource_request(object):
     
-    def __init__(self, data=""):
-        self.tmp = tempfile.TemporaryFile()
-        if data:
-            self.tmp.write(data)
-            self.tmp.flush()
-            self.tmp.seek(0)
-
-    def fileno(self):
-        return self.tmp.fileno()
+    def __init__(self, url=None):
+        if not url:
+            url = 'http://%s:%s' % (HOST, PORT)
+        self.res = Resource(url)
         
-    def len(self):
-        return self.tmp.len
-        
-    def recv(self, length=None):
-        return self.tmp.read()
-        
-    def send(self, data):
-        self.tmp.write(data)
-        self.tmp.flush()
-        
-    def seek(self, offset, whence=0):
-        self.tmp.seek(offset, whence)
-        
-        
-class http_request(object):
-    def __init__(self, name):
-        self.fname = os.path.join(dirname, "requests", name)
-    
     def __call__(self, func):
         def run():
-            fsock = FakeSocket(data_source(self.fname))
-            req = Request(fsock, ('127.0.0.1', 6000), ('127.0.0.1', 8000))
-            func(req)
+            func(self.res)
         run.func_name = func.func_name
         return run
-    
+        
+        
 def eq(a, b):
     assert a == b, "%r != %r" % (a, b)
 

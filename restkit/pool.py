@@ -64,4 +64,4 @@ class ConnectionPool(PoolInterface):
             if not connections: break
             socket = connections.popleft()
             sock.close(socket)
-            connection.close()
+            socket.close()

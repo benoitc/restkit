@@ -11,7 +11,7 @@ import StringIO
 import urlparse
 
 from restkit import __version__
-from restkit.errors import RequestError
+from restkit.errors import RequestError, InvalidUrl, RedirectLimit
 from restkit.parser import Parser
 from restkit import sock
 from restkit import tee
@@ -19,8 +19,6 @@ from restkit import util
 
 MAX_FOLLOW_REDIRECTS = 5
 
-class InvalidUrl(Exception):
-    pass
 
 
 class HttpConnection(object):
@@ -105,22 +103,22 @@ class HttpConnection(object):
     def make_connection(self):
         """ initate a connection if needed or reuse a socket"""
         addr = (self.host, self.port)
-        socket = self.socket or None
+        s = self.socket or None
         
         # if we defined a pool use it
         if self.connections is not None:
-            socket = self.connections.get(addr)
+            s = self.connections.get(addr)
             
-        if not socket:
+        if not s:
             # pool is empty or we don't use a pool
             if self.uri.scheme == "https":
-                socket = sock.connect(addr, self.timeout, True, 
+                s = sock.connect(addr, self.timeout, True, 
                                 self.key_file, self.cert_file)
             else:
-                socket = sock.connect(addr, self.timeout)
+                s = sock.connect(addr, self.timeout)
                 
-        self.socket = socket
-        return socket
+        self.socket = s
+        return s
         
     def clean_connections(self):
         self.socket = None
@@ -146,7 +144,7 @@ class HttpConnection(object):
             try:
                 port = int(host[i+1:])
             except ValueError:
-                raise InvalidURL("nonnumeric port: '%s'" % host[i+1:])
+                raise InvalidUrl("nonnumeric port: '%s'" % host[i+1:])
             host = host[:i]
         else:
             # default por
@@ -259,7 +257,7 @@ class HttpConnection(object):
     def do_redirect(self):
         """ follow redirections if needed"""
         if self.nb_redirections <= 0:
-            raise errors.RedirectLimit("Redirection limit is reached")
+            raise RedirectLimit("Redirection limit is reached")
             
         location = self.parser.headers_dict.get('Location')
         if not location:
