@@ -42,8 +42,8 @@ class BasicAuth(object):
         self.credentials = (username, password)
     
     def on_request(self, req):
-        encode = base64.encodestring("%s:%s" % self.credentials)
-        req.headers.append(('Authorization', 'Basic %s' %  encode)[:-1]))
+        encode = base64.encodestring("%s:%s" % self.credentials)[:-1]
+        req.headers.append(('Authorization', 'Basic %s' %  encode))
         
 class ProxyError(Exception):
     pass

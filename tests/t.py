@@ -10,7 +10,9 @@ import tempfile
 dirname = os.path.dirname(__file__)
 
 from restkit.parser import Parser
+from restkit.client import HttpConnection
 
+from _server_test import HOST, PORT, run_server_test
 
 def data_source(fname):
     with open(fname) as handle:
@@ -39,6 +41,26 @@ class response(object):
         def run():
             src = data_source(self.fname)
             func(src, Parser.parse_response())
+        run.func_name = func.func_name
+        return run
+        
+class client_request(object):
+    
+    def __init__(self, path, pool=False):
+        self.pool = pool
+        if path.startswith("http://") or path.startswith("https://"):
+            self.url = path
+        else:
+            self.url = 'http://%s:%s%s' % (HOST, PORT, path)
+        
+    def __call__(self, func):
+        def run():
+            if self.pool:
+                pool_instance = ConnectionPool()
+            else:
+                pool_instance = None
+            cli = HttpConnection(pool_instance=None)
+            func(self.url, cli)
         run.func_name = func.func_name
         return run
         

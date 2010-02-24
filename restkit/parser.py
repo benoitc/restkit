@@ -20,6 +20,7 @@ class Parser(object):
         self.status_line = ""
         self.status_int = None
         self.reason = ""
+        self.status = ""
         self.headers = []
         self.headers_dict = {}
         self.raw_version = "HTTP/1.0"
@@ -34,11 +35,11 @@ class Parser(object):
         self.chunk_size = 0
         self._chunk_eof = False
         self.type = ptype
-        self._should_close = force_close
+        self._should_close = should_close
         
     @classmethod
     def parse_response(cls, should_close=True):
-        return cls(should_close=force_close)
+        return cls(should_close=should_close)
         
     @classmethod
     def parse_request(cls):
@@ -50,8 +51,6 @@ class Parser(object):
         if parsing isn't done. headers dict is updated
         with new headers.
         """
-        if self.headers:
-            return self.headers
         
         ld = len("\r\n\r\n")
         i = buf.find("\r\n\r\n")

@@ -3,14 +3,18 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+import errno
 import gzip
+import os
 import socket
 import StringIO
 import urlparse
 
 from restkit import __version__
+from restkit.errors import RequestError
 from restkit.parser import Parser
 from restkit import sock
+from restkit import tee
 from restkit import util
 
 MAX_FOLLOW_REDIRECTS = 5
@@ -26,15 +30,15 @@ class HttpConnection(object):
     VERSION = (1, 1)
     USER_AGENT = "restkit/%s" % __version__
     
-    def __init__(self, timeout=_GLOBAL_DEFAULT_TIMEOUT, 
+    def __init__(self, timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
             filters=None, follow_redirect=False, force_follow_redirect=False, 
             max_follow_redirect=MAX_FOLLOW_REDIRECTS, key_file=None, 
             cert_file=None, pool_instance=None, socket=None):
         self.socket = socket
         self.timeout = timeout
         self.headers = []
+        self.req_headers = []
         self.ua = self.USER_AGENT
-        self.date = ""
         self.uri = None
         
         self.follow_redirect = follow_redirect
@@ -50,10 +54,7 @@ class HttpConnection(object):
         self.on_request_filters = []
         self.on_response_filters = []
         for f in self.filters:
-            if hasattr(f, 'on_request'):
-                self.on_request_filters.append(f)
-            if hasattr(f, 'on_response'):
-                self.on_response_filters.append(f)
+            self.add_filter(f)
                 
         if not pool_instance:
             should_close = True
@@ -63,6 +64,25 @@ class HttpConnection(object):
             should_close = False
         
         self.parser = Parser.parse_response(should_close=should_close)
+        
+    def add_filter(self, f):
+        self.filters.append(f)
+        if hasattr(f, 'on_request'):
+            self.on_request_filters.append(f)
+        if hasattr(f, 'on_response'):
+            self.on_response_filters.append(f)
+            
+    def remove_filter(self, f):
+        for i, f1 in enumerate(self.filters):
+            if f == f1: del self.filters[i]
+            
+        if hasattr(f, 'on_request'):
+            for i, f1 in enumerate(self.on_request_filters):
+                if f == f1: del self.on_request_filters[i]
+                
+        if hasattr(f, 'on_response'):
+            for i, f1 in enumerate(self.on_response_filters):
+                if f == f1: del self.on_response_filters[i]   
         
     def make_connection(self):
         """ initate a connection if needed or reuse a socket"""
@@ -86,20 +106,22 @@ class HttpConnection(object):
         
     def clean_connections(self):
         self.socket = None
-        self.connections.clean((self.host, self.port))
+        if hasattr(self.connections,'clean'):
+            self.connections.clean((self.host, self.port))
         
     def maybe_close(self):
         if not self.socket: return
         if self.parser.should_close:
             sock.close(self.socket)
-        self.connection.put((self.host, self.port), self.socket)
+        if hasattr(self.connections,'clean'):
+            self.connection.put((self.host, self.port), self.socket)
         self.socket = None
         
     def parse_url(self, url):
         """ parse url and get host/port"""
         self.uri = urlparse.urlparse(url)
         
-        host = uri.netloc
+        host = self.uri.netloc
         i = host.rfind(':')
         j = host.rfind(']')         # ipv6 addresses have [...]
         if i > j:
@@ -122,90 +144,118 @@ class HttpConnection(object):
         self.port = port
         
     def request(self, url, method='GET', body=None, headers=None):
-        """ make effective request """   
-        self.parse_url(self, url)
+        """ make effective request """
+        self.final_url = url
+        self.parse_url(url)
         self.method = method.upper()
         self.body = body
-        headers = headers = or []
+        headers = headers  or []
         if isinstance(headers, dict):
             headers = list(headers.items())
             
         ua = self.USER_AGENT
-        req_date =  http_date()
         normalized_headers = []
-        
+        content_len = None
+        host = "%s:%s" % (self.host, str(self.port))
         for name, value in headers:
             name = util.normalize_name(name)
             if name == "User-Agenr":
                 ua = value
-            elif name == "Date":
-                req_date = date
+            elif name == "Content-Length":
+                content_len = str(value)
+            elif name == "Host":
+                host = value
             else:
                 if not isinstance(value, basestring):
                     value = str(value)
                 normalized_headers.append((name, value))
+        
+        if body and not content_len:
+            if hasattr(body, 'fileno'):
+                try:
+                    body.flush()
+                except IOError:
+                    pass
+                content_len = str(os.fstat(body.fileno())[6])
+            elif hasattr(body, 'read'):
+                content_len = str(len(body))
+            elif isinstance(body, basestring):
+                body = util.to_bytestring(body)
+                content_len = len(body)
+            else:
+                raise RequestError("Can't determine content length")
                 
+            normalized_headers.append(("Content-Length", content_len))
+            
+        
+        if self.method in ('POST', 'PUT') and not body:
+            normalized_headers.append(("Content-Length", content_len or "0"))
+
         self.headers = normalized_headers
         self.ua = ua
-        self.date = req_date
         
         for bf in self.on_request_filters:
-            bf(self)
+            bf.on_request(self)
 
         # by default all connections are HTTP/1.1    
-        if VERSION == (1,1):
+        if self.VERSION == (1,1):
             httpver = "HTTP/1.1"
         else:
             httpver = "HTTP/1.0"
 
         # build request path
-        req_path = urlparse.urlunparse(('','', uri.path, '', uri.query, 
-                                uri.fragment))
-            
-        req_headers.append("%s %s %s\r\n" % (httpver, method, req_path))   
+        req_path = urlparse.urlunparse(('','', self.uri.path, '', 
+                        self.uri.query, self.uri.fragment))
+         
+        req_headers = []   
+        req_headers.append("%s %s %s\r\n" % (method, req_path, httpver))
+        req_headers.append("Host: %s\r\n" % host)
         req_headers.append("User-Agent: %s\r\n" % self.ua)
-        req_headers.append("Date: %s\r\n" % self.date)
         for name, value in self.headers:
             req_headers.append("%s: %s\r\n" % (name, value))
+        req_headers.append("\r\n")
+        self.req_headers = req_headers
         
         for i in range(2):
-            sock = self.make_connection(sock)
+            s = self.make_connection()
             try:
                 # send request
-                sock.sendlines(sock, req_headers)
-        
+                sock.sendlines(s, req_headers)
                 if body is not None:
                     if hasattr(body, 'read'):
-                        sock.sendfile(body)
+                        sock.sendfile(s, body)
                     elif isinstance(body, basestring):
-                        sock.sendfile(StringIO.StringIO(util.to_bytestring(body)))
+                        sock.sendfile(s, StringIO.StringIO(
+                                util.to_bytestring(body)))
                     else:
-                        sock.sendlines(body)
-                self.start_response()
-                break
+                        sock.sendlines(s, body)
+                return self.start_response()
             except socket.gaierror, e:
                 self.clean_connections()
                 raise
             except socket.error, e:
-                if e[0] not in (errno.EAGAIN, errno.ECONNABORTED):
+                if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, errno.EPIPE):
                     self.clean_connections()
                     raise
-                self.socket = None
       
-    def follow_redirect(self):
+    def do_redirect(self):
         """ follow redirections if needed"""
-        if self.nb_redirection <= 0:
+        if self.nb_redirections <= 0:
             raise errors.RedirectLimit("Redirection limit is reached")
             
-        location = self.parser.headers_dict.get('location')
+        location = self.parser.headers_dict.get('Location')
+        if not location:
+            raise RequestError('no Location header')
+        
         new_uri = urlparse.urlparse(location)
         if not new_uri.netloc: # we got a relative url
-            absolute_uri = "%s://%s" % (uri.scheme, uri.netloc)
-            location = urlparse.urljoin(absolute_uri, new_url)
+            absolute_uri = "%s://%s" % (self.uri.scheme, self.uri.netloc)
+            location = urlparse.urljoin(absolute_uri, location)
             
         self.final_uri = location
         self.response_body.read() 
-        self.nb_redirections -= 1   
+        self.nb_redirections -= 1
+        self.maybe_close()
         return self.request(location, self.method, self.body,
                         self.headers)
                         
@@ -213,41 +263,45 @@ class HttpConnection(object):
         """
         Get headers, set Body object and return HttpResponse
         """
-        
         # read headers
+        headers = []
         buf = ""
-        buf = recv(self.socket, util.CHUNK_SIZE)
+        buf = sock.recv(self.socket, sock.CHUNK_SIZE)
         i = self.parser.filter_headers(headers, buf)
         if i == -1 and buf:
             while True:
-                data = sock.recv(self.socket, util.CHUNK_SIZE)
+                data = sock.recv(self.socket, sock.CHUNK_SIZE)
                 if not data: break
                 buf += data
                 i = self.parser.filter_headers(headers, buf)
                 if i != -1: break
-                    
+        
         if not self.parser.content_len and not self.parser.is_chunked:
             self.response_body = StringIO.StringIO()
         else:
             self.response_body = tee.TeeInput(self.socket, self.parser, 
                                         buf[i:], maybe_close=self.maybe_close)
-            
+
+        # apply on response filters
         for af in self.on_response_filters:
-            af(self)
-            
+            af.on_response(self)
+
         if self.follow_redirect:
             if self.parser.status_int in (301, 302, 307):
                 if self.method in ('GET', 'HEAD') or \
                                 self.force_follow_redirect:
-                    if method not in 'GET', 'HEAD') and \
+                    if self.method not in ('GET', 'HEAD') and \
                         hasattr(self.body, 'seek'):
                             self.body.seek(0)
-                    return self.follow_redirect()
+                    return self.do_redirect()
             elif self.parser.status_int == 303 and self.method in ('GET', 
                     'HEAD'):
                 # only 'GET' is possible with this status
                 # according the rfc
-                return self.follow_redirect()
+                return self.do_redirect()
+                
+        self.final_url = self.parser.headers_dict.get('Location', 
+                    self.final_url)
         return HttpResponse(self)
         
 class HttpResponse(object):
@@ -262,9 +316,10 @@ class HttpResponse(object):
         self.status_int = self.http_client.parser.status_int
         self.version = self.http_client.parser.version
         self.headerslist = self.http_client.parser.headers
+        self.final_url = self.http_client.final_url
         
         headers = {}
-        for key, value in self.http_client.parser.headers_dict:
+        for key, value in self.http_client.parser.headers:
             headers[key.lower()] = value
         self.headers = headers
         
@@ -282,7 +337,7 @@ class HttpResponse(object):
         return self.headers[key]
         
     def __getattr__(self, key):
-         try:
+        try:
             getattr(super(HttpResponse, self), key)
         except AttributeError:
             if key in self.headers:

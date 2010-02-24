@@ -26,7 +26,7 @@ import types
 
 from restkit.errors import ResourceNotFound, Unauthorized, RequestError, RequestFailed
 from restkit.forms import MultipartForm, multipart_form_encode, form_encode
-from restkit.httpc import HttpClient
+from restkit.client import HttpConnection
 from restkit.utils import to_bytestring, url_encode, url_quote
 
 

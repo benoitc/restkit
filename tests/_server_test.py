@@ -46,6 +46,8 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         path = self.parsed_uri[2]
 
         if path == "/":
+            import sys
+            print >>sys.stderr, "got it"
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "welcome")
 
@@ -237,10 +239,16 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
 
     def _respond(self, http_code, extra_headers, body):
         self.send_response(http_code)
+        keys = []
         for k, v in extra_headers:
             self.send_header(k, v)
+            keys.append(k)
+        if body:
+            body = to_bytestring(body)
+        if body and "Content-Length" not in keys:
+            self.send_header("Content-Length", len(body))
         self.end_headers()
-        self.wfile.write(to_bytestring(body))
+        self.wfile.write(body)
         self.wfile.close()
 
     def finish(self):
@@ -249,19 +257,18 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         self.wfile.close()
         self.rfile.close()
 
-
+import sys
+import os
 server_thread = None
 def run_server_test():
     global server_thread
+    if server_thread is not None:
+        return
 
-    try:
-        server = HTTPServer((HOST, PORT), HTTPTestHandler)
+    print >>sys.stderr, "start test server on %s" % str((HOST, PORT))
+        
+    server = HTTPServer((HOST, PORT), HTTPTestHandler)
 
-        server_thread = threading.Thread(target=server.serve_forever)
-        server_thread.setDaemon(True)
-        server_thread.start()
-    except:
-        pass
-
-if __name__ == '__main__':
-    pass
+    server_thread = threading.Thread(target=server.serve_forever)
+    server_thread.setDaemon(True)
+    server_thread.start()

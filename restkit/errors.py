@@ -121,9 +121,6 @@ class InvalidUrl(Exception):
     Not a valid url for use with this software.
     """
     
-class TransportError(Exception):
-    """Error raised by a transport """
-    
 class ResponseError(Exception):
     """ Error raised while getting response or decompressing response stream"""
     

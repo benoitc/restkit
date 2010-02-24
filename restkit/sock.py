@@ -21,12 +21,14 @@ except ImportError:
         
 if not hasattr(socket, '_GLOBAL_DEFAULT_TIMEOUT'): # python < 2.6
     _GLOBAL_DEFAULT_TIMEOUT = object()
+else:
+    _GLOBAL_DEFAULT_TIMEOUT = socket._GLOBAL_DEFAULT_TIMEOUT
 
 def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False, 
         key_file=None, cert_file=None):
     msg = "getaddrinfo returns an empty list"
     host, port = address
-    for res in socket.getaddrinfo(host, port, 0, SOCK_STREAM):
+    for res in socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM):
         af, socktype, proto, canonname, sa = res
         sock = None
         try:
@@ -40,10 +42,12 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
         except socket.error, msg:
             if sock is not None:
                 sock.close()
-    raise error, msg
+    raise socket.error, msg
     
+        
 def recv(sock, length):
     while True:
+        import sys
         try:
             ret = select.select([sock.fileno()], [], [], 0)
             if ret[0]: break
@@ -82,15 +86,15 @@ def send_nonblock(sock, data):
     if timeout != 0.0:
         try:
             sock.setblocking(0)
-            return write(sock, data)
+            return send(sock, data)
         finally:
             sock.setblocking(1)
     else:
-        return write(sock, data)
+        return send(sock, data)
     
 def sendlines(sock, lines):
     for line in list(lines):
-        write(sock, line)
+        send(sock, line)
         
 def sendfile(sock, data):
     if hasattr(data, 'seek'):
@@ -99,4 +103,4 @@ def sendfile(sock, data):
     while True:
         binarydata = data.read(CHUNK_SIZE)
         if binarydata == '': break
-        write(data)
+        send(sock, binarydata)
