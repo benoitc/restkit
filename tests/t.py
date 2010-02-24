@@ -9,7 +9,7 @@ import tempfile
 
 dirname = os.path.dirname(__file__)
 
-from restkit.http_parser import Parser
+from restkit.parser import Parser
 
 
 def data_source(fname):

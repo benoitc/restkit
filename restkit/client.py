@@ -10,7 +10,7 @@ import urlparse
 
 from restkit import __version__
 from restkit import util
-from restkit.http_parser import Parser
+from restkit.parser import Parser
 
 MAX_FOLLOW_REDIRECTS = 5
 

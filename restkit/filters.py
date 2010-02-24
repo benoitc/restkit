@@ -30,8 +30,8 @@ import os
 import urlparse
 
 
-from restkit.http.client import InvalidUrl
-from restkit.http_parser import Parser
+from restkit.client import InvalidUrl
+from restkit.parser import Parser
 from restkit import util
 
 
