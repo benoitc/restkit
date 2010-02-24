@@ -6,7 +6,7 @@
 
 import urlparse
 
-from restkit.http.util import normalize_name
+from restkit.util import normalize_name
 
 class BadStatusLine(Exception):
     pass

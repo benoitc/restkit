@@ -8,6 +8,7 @@ import os
 import select
 import socket
 import time
+import urllib
 
 CHUNK_SIZE = (16 * 1024)
 MAX_BODY = 1024 * (80 + 32)
@@ -122,3 +123,48 @@ def http_date(timestamp=None):
             day, monthname[month], year,
             hh, mm, ss)
     return s
+
+def to_bytestring(s):
+    if not isinstance(s, basestring):
+        raise TypeError("value should be a str or unicode")
+
+    if isinstance(s, unicode):
+        return s.encode('utf-8')
+    return s
+    
+def url_quote(s, charset='utf-8', safe='/:'):
+    """URL encode a single string with a given encoding."""
+    if isinstance(s, unicode):
+        s = s.encode(charset)
+    elif not isinstance(s, str):
+        s = str(s)
+    return urllib.quote(s, safe=safe)
+
+def url_encode(obj, charset="utf8", encode_keys=False):
+    if isinstance(obj, dict):
+        items = []
+        for k, v in obj.iteritems():
+            if not isinstance(v, (tuple, list)):
+                v = [v]
+            items.append((k, v))
+    else:
+        items = obj or ()
+
+    tmp = []
+    for key, values in items:
+        if encode_keys and isinstance(key, unicode):
+            key = key.encode(charset)
+        else:
+            key = str(key)
+
+        for value in values:
+            if value is None:
+                continue
+            elif isinstance(value, unicode):
+                value = value.encode(charset)
+            else:
+                value = str(value)
+        tmp.append('%s=%s' % (urllib.quote(key),
+            urllib.quote_plus(value)))
+
+    return '&'.join(tmp)

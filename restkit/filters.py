@@ -31,8 +31,8 @@ import urlparse
 
 
 from restkit.http.client import InvalidUrl
-from restkit.http import parser
-from restkit.http import util
+from restkit.http_parser import Parser
+from restkit import util
 
 
 class BasicAuth(object):
@@ -91,7 +91,7 @@ class SimpleProxy(object):
                 p_sock.sendall(proxy_pieces)
             
                 # wait header
-                p = parser.Parser.parse_response()
+                p = Parser.parse_response()
                 buf = ""
                 buf = read_partial(self.sock, util.CHUNK_SIZE)
                 i = self.parser.filter_headers(headers, buf)

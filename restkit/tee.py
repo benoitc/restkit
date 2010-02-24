@@ -15,7 +15,7 @@ import os
 import StringIO
 import tempfile
 
-from restkit.http.util import MAX_BODY, CHUNK_SIZE, read_partial
+from restkit.util import MAX_BODY, CHUNK_SIZE, read_partial
 
 class TeeInput(object):
     

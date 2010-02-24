@@ -3,14 +3,14 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+import gzip
 import socket
 import StringIO
 import urlparse
 
 from restkit import __version__
-from restkit.http import util
-from restkit.http import parser
-from restkit.util import to_bytestring
+from restkit import util
+from restkit.http_parser import Parser
 
 MAX_FOLLOW_REDIRECTS = 5
 
@@ -35,7 +35,7 @@ class HttpConnection(object):
         self.ua = self.USER_AGENT
         self.date = ""
         self.uri = None
-        self.parser = parser.Parser.parse_response()
+        self.parser = Parser.parse_response()
         self.follow_redirect = follow_redirect
         self.nb_redirections = max_follow_redirect
         self.force_follow_redirect = force_follow_redirect
@@ -155,7 +155,7 @@ class HttpConnection(object):
                     if hasattr(body, 'read'):
                         util.writefile(body)
                     elif isinstance(body, basestring):
-                        util.writefile(StringIO.StringIO(to_bytestring(body)))
+                        util.writefile(StringIO.StringIO(util.to_bytestring(body)))
                     else:
                         util.writelines(body)
                 self.start_response()
@@ -287,9 +287,5 @@ class HttpResponse(object):
             "You cannot access HttpResponse.unicode_body unless charset is set")
         body = self._body.read()
         return body.decode(self.charset, self.unicode_errors)
-        
-        
-        
-        
         
         
