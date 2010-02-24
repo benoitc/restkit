@@ -48,6 +48,15 @@ class TeeInput(object):
             self.tmp.seek(pos)
         self._len = self._tmp_size()
         return self._len
+        
+    def seek(self, offset, whence=0):
+        if self._is_socket:
+            pos = self.tmp.tell()
+            while True:
+                if not self._tee(CHUNK_SIZE):
+                    break
+            self.tmp.seek(pos)
+        self.tmp.seek(offset, whence)
 
     def flush(self):
         self.tmp.flush()
