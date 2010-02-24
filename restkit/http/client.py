@@ -19,6 +19,8 @@ class InvalidUrl(Exception):
 
 
 class HttpConnection(object):
+    """ Http Connection object. """
+    
     
     VERSION = (1, 1)
     USER_AGENT = "restkit/%s" % __version__
@@ -54,6 +56,7 @@ class HttpConnection(object):
         
 
     def make_connection(self):
+        """ initate a connection if needed or reuse a socket"""
         if not self.sock:
             if self.uri.scheme == "https":
                 import ssl
@@ -70,6 +73,7 @@ class HttpConnection(object):
         
         
     def parse_url(self, url):
+        """ parse url and get host/port"""
         self.uri = urlparse.urlparse(url)
         
         host = uri.netloc
@@ -94,7 +98,8 @@ class HttpConnection(object):
         self.host = host
         self.port = port
         
-    def request(self, url, method='GET', body=None, headers=None):   
+    def request(self, url, method='GET', body=None, headers=None):
+        """ make effective request """   
         self.parse_url(self, url)
         self.method = method.upper()
         self.body = body
@@ -162,6 +167,7 @@ class HttpConnection(object):
                     raise
       
     def follow_redirect(self):
+        """ follow redirections if needed"""
         if self.nb_redirection <= 0:
             raise errors.RedirectLimit("Redirection limit is reached")
             
@@ -178,6 +184,10 @@ class HttpConnection(object):
                         self.headers)
                         
     def start_response(self):
+        """
+        Get headers, set Body object and return HttpResponse
+        """
+        
         # read headers
         buf = ""
         buf = read_partial(self.sock, util.CHUNK_SIZE)
@@ -214,6 +224,8 @@ class HttpConnection(object):
         return HttpResponse(self)
         
 class HttpResponse(object):
+    """ Http Response object returned by HttpConnction"""
+    
     charset = "utf8"
     unicode_errors = 'strict'
     
@@ -253,14 +265,17 @@ class HttpResponse(object):
         
     @property
     def body(self):
+        """ body in bytestring """
         return self.http_client.response_body.read()
         
     @property
     def body_file(self):
+        """ return body as a file like object"""
         return self.http_client.response_body
         
     @property
     def unicode_body(self):
+        """ like body but converted to unicode"""
         if not self.charset:
             raise AttributeError(
             "You cannot access HttpResponse.unicode_body unless charset is set")
