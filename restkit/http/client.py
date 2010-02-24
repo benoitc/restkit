@@ -241,6 +241,12 @@ class HttpResponse(object):
             headers[key.lower()] = value
         self.headers = headers
         
+        encoding = headers.get('content-encoding', None)
+        if encoding in ('gzip', 'deflate'):
+            self._body = gzip.GzipFile(fileobj=self.http_client.response_body)
+        else:
+            self._body = self.http_client.response_body
+            
     def __getitem__(self, key):
         try:
             return getattr(self, key)
@@ -266,12 +272,12 @@ class HttpResponse(object):
     @property
     def body(self):
         """ body in bytestring """
-        return self.http_client.response_body.read()
+        return self._body.read()
         
     @property
     def body_file(self):
         """ return body as a file like object"""
-        return self.http_client.response_body
+        return self._body
         
     @property
     def unicode_body(self):
@@ -279,7 +285,7 @@ class HttpResponse(object):
         if not self.charset:
             raise AttributeError(
             "You cannot access HttpResponse.unicode_body unless charset is set")
-        body = self.http_client.response_body.read()
+        body = self._body.read()
         return body.decode(self.charset, self.unicode_errors)
         
         
