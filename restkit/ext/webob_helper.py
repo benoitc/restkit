@@ -8,6 +8,18 @@ import restkit.errors
 import webob.exc
 
 class WebobResourceError(webob.exc.WSGIHTTPException):
+    """
+    Wrapper to return webob exceptions instead of restkit errors. Usefull
+    for those who want to build `WSGI <http://wsgi.org/wsgi/>`_ applications
+    speaking directly to others via HTTP.
+    
+    To do it place somewhere in your application the function 
+    `wrap_exceptions`::
+    
+        wrap_exceptions()
+
+    It will automatically replace restkit errors by webob exceptions.
+    """
 
     def __init__(self, msg=None, http_code=None, response=None):
         webob.exc.WSGIHTTPException.__init__(self)
@@ -29,11 +41,8 @@ class WebobResourceError(webob.exc.WSGIHTTPException):
         return int(self.status.split()[0])
     def _status_int__set(self, value):
         self.status = value
-    status_int = property(_status_int__get, _status_int__set, doc=_status_int__get.__doc__)
-    
-    status_code = restkit.errors.deprecated_property(
-        status_int, 'status_code', 'use .status_int instead',
-        warning=False)
+    status_int = property(_status_int__get, _status_int__set, 
+        doc=_status_int__get.__doc__)
 
     def _get_message(self):
         return self.explanation
