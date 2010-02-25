@@ -19,14 +19,14 @@ from restkit import util
 
 MAX_FOLLOW_REDIRECTS = 5
 
-
+USER_AGENT = "restkit/%s" % __version__
 
 class HttpConnection(object):
     """ Http Connection object. """
     
     
     VERSION = (1, 1)
-    USER_AGENT = "restkit/%s" % __version__
+    
     
     def __init__(self, timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
             filters=None, follow_redirect=False, force_follow_redirect=False, 
@@ -54,7 +54,7 @@ class HttpConnection(object):
         self.timeout = timeout
         self.headers = []
         self.req_headers = []
-        self.ua = self.USER_AGENT
+        self.ua = USER_AGENT
         self.uri = None
         
         self.follow_redirect = follow_redirect
@@ -180,11 +180,22 @@ class HttpConnection(object):
         if isinstance(headers, dict):
             headers = list(headers.items())
             
-        ua = self.USER_AGENT
+        ua = USER_AGENT
         normalized_headers = []
         content_len = None
         accept_encoding = 'identity'
-        host = "%s:%s" % (self.host, str(self.port))
+        
+        default_port = None
+        if self.uri.scheme == "http":
+            default_port = 80
+        elif self.uri.scheme == "https":
+            default_port = 443
+            
+        if self.port == default_port:
+            host = self.host
+        else:
+            host = "%s:%s" % (self.host, str(self.port))
+            
         for name, value in headers:
             name = util.normalize_name(name)
             if name == "User-Agenr":
@@ -199,8 +210,6 @@ class HttpConnection(object):
                 if not isinstance(value, basestring):
                     value = str(value)
                 normalized_headers.append((name, value))
-        
-        normalized_headers.append(('Accept-Encoding', accept_encoding))
         
         # set content lengh if needed
         if body and body is not None:
@@ -244,11 +253,14 @@ class HttpConnection(object):
         req_path = urlparse.urlunparse(('','', path, '', 
                         self.uri.query, self.uri.fragment))
         
+
+        
          
         req_headers = []   
         req_headers.append("%s %s %s\r\n" % (method, req_path, httpver))
         req_headers.append("Host: %s\r\n" % host)
         req_headers.append("User-Agent: %s\r\n" % self.ua)
+        req_headers.append("Accept-Encoding: %s\r\n" % accept_encoding)
         for name, value in self.headers:
             req_headers.append("%s: %s\r\n" % (name, value))
         req_headers.append("\r\n")

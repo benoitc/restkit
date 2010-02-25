@@ -24,7 +24,7 @@ import uuid
 import urlparse
 
 from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
-ResourceError, ParserError
+ResourceError, ParserError, RequestError
 from restkit.forms import MultipartForm, multipart_form_encode, form_encode
 from restkit.client import HttpConnection
 from restkit.filters import BasicAuth
