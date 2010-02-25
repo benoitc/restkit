@@ -19,6 +19,6 @@ def test_001():
     qs = {'a': [1, 2], 'b': [3, 4]}
     t.eq(util.url_encode(qs), "a=1&a=2&b=3&b=4")
     qs = {'a': lambda : 1}
-    qs = {'a': 1}
+    t.eq(util.url_encode(qs), "a=1")
     
     
