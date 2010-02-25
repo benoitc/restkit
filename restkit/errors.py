@@ -23,7 +23,8 @@ class ResourceError(Exception):
         return self.status
     def _status_int__set(self, http_code):
         self.status = http_code
-    status_int = property(_status_int__get, _status_int__set, doc=_status_int__get.__doc__)
+    status_int = property(_status_int__get, _status_int__set, 
+        doc=_status_int__get.__doc__)
         
     status_code = deprecated_property(
         status_int, 'status_code', 'use .status_int instead',

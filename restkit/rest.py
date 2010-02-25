@@ -5,9 +5,6 @@
 
 import warnings
 
-warnings.warn(
-"restkit.utils has bee, deprecated in favor of restkit.resource .", 
-DeprecationWarning, stacklevel=2)
 
 from restkit.client import HttpConnection
 from restkit.resource import Resource
