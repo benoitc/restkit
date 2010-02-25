@@ -43,34 +43,39 @@ def url_quote(s, charset='utf-8', safe='/:'):
         s = str(s)
     return urllib.quote(s, safe=safe)
 
+
 def url_encode(obj, charset="utf8", encode_keys=False):
+    items = []
     if isinstance(obj, dict):
-        items = []
-        for k, v in obj.iteritems():
-            if not isinstance(v, (tuple, list)):
-                v = [v]
+        for k, v in list(obj.items()):
             items.append((k, v))
     else:
-        items = obj or ()
-
+        items = list(items)
+        
     tmp = []
-    for key, values in items:
-        if encode_keys and isinstance(key, unicode):
-            key = key.encode(charset)
-        else:
-            key = str(key)
-
-        for value in values:
-            if value is None:
-                continue
-            elif isinstance(value, unicode):
-                value = value.encode(charset)
+    for k, v in items:
+        if encode_keys: 
+            k = encode(k, charset)
+        
+        if not isinstance(v, (tuple, list)):
+            v = [v]
+            
+        for v1 in v:
+            if v1 is None:
+                v1 = ''
+            elif callable(v1):
+                v1 = encode(v1(), charset)
             else:
-                value = str(value)
-        tmp.append('%s=%s' % (urllib.quote(key),
-            urllib.quote_plus(value)))
-
+                v1 = encode(v1, charset)
+            tmp.append('%s=%s' % (urllib.quote(k), urllib.quote_plus(v1)))
     return '&'.join(tmp)
+                
+def encode(v, charset="utf8"):
+    if isinstance(v, unicode):
+        v = v.encode(charset)
+    else:
+        v = str(v)
+    return v
     
 class deprecated_property(object):
     """

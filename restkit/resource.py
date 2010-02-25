@@ -263,15 +263,8 @@ class Resource(object):
         if path_str:
             retval.append(path_str)
 
-        params = []
-        for k, v in query.items():
-            if type(v) in (list, tuple):
-                params.extend([(k, i) for i in v if i is not None])
-            elif v is not None:
-                params.append((k,v))
-
-        if params:
-            retval.extend(['?', util.url_encode(dict(params), self.charset, 
-                    self.encode_keys)])
+        params_str = util.url_encode(query, self.charset, self.encode_keys)
+        if params_str:
+            retval.extend(['?', params_str])
 
         return ''.join(retval)
