@@ -60,15 +60,11 @@ class Resource(object):
         :param client_opts: `restkit.client.HttpConnection` Options
         """
 
-        if transport is None:
-            pool_instance = client_opts.get('pool_instance')
-            if not pool_instance:
-                pool = self.pool_class(max_connections=self.max_connections)
-                client_opts['pool_instance'] = pool   
-            self.transport = HttpConnection(**client_opts)
-        else:
-            self.transport = transport
-            
+        pool_instance = client_opts.get('pool_instance')
+        if not pool_instance:
+            pool = self.pool_class(max_connections=self.max_connections)
+            client_opts['pool_instance'] = pool   
+
         self.uri = uri
         self._headers = headers or {}
         self.client_opts = client_opts
@@ -161,6 +157,11 @@ class Resource(object):
         """
         return self.request("PUT", path=path, payload=payload,
                         headers=headers, **params)
+                        
+    def do_request(self, url, method='GET', payload=None, headers=None):
+        http_client = HttpConnection(**self.client_opts)
+        return http_client.request(url, method=method, body=payload, 
+                            headers=headers)
 
     def request(self, method, path=None, payload=None, headers=None, 
         **params):
@@ -209,7 +210,7 @@ class Resource(object):
                 
     
         uri = self._make_uri(self.uri, path, **params)
-        resp = self.transport.request(uri, method=method, body=payload, 
+        resp = self.do_request(uri, method=method, payload=payload, 
                                 headers=headers)
 
         if resp.status_int >= 400:

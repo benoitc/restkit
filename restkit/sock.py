@@ -66,7 +66,7 @@ def close(sock):
 def send(sock, data):
     try:
         sock.sendall(data)
-    except:
+    except socket.error, e:
         if e[0] not in (errno.EWOULDBLOCK, errno.EAGAIN):
             pass
         raise
