@@ -79,10 +79,6 @@ def test_002():
     
 def test_003():
      u = "http://test:test@%s:%s/auth" % (HOST, PORT)
-     print u
-     
-     import urlparse
-     print urlparse.urlparse(u)
      r = request(u)
      t.eq(r.status_int, 200)
      u = "http://test:test2@%s:%s/auth" % (HOST, PORT)

@@ -73,9 +73,13 @@ class Resource(object):
             u = urlparse.urlparse(uri)
             if u.username:
                 password = u.password or ""
+                
+                # add filters
                 filters = client_opts.get('filters', [])
                 filters.append(BasicAuth(u.username, password))
                 client_opts['filters'] = filters
+                
+                # update uri
                 uri = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
                     u.path, u.params, u.query, u.fragment))
                 

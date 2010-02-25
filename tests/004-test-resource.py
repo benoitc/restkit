@@ -9,7 +9,7 @@ import t
 from restkit.errors import RequestFailed, ResourceNotFound, \
 Unauthorized, RequestError
 from restkit.resource import Resource
-
+from _server_test import HOST, PORT
 
 def test_001():
     res = Resource("http://localhost")
@@ -143,4 +143,13 @@ def test_018(res):
     content = StringIO.StringIO("test")
     t.raises(RequestFailed, res.post, '/json', payload=content,
             headers={'Content-Type': 'text/plain'})
+            
+def test_019():
+    u = "http://test:test@%s:%s/auth" % (HOST, PORT)
+    res = Resource(u)
+    r = res.get()
+    t.eq(r.status_int, 200)
+    u = "http://test:test2@%s:%s/auth" % (HOST, PORT)
+    res = Resource(u)
+    t.raises(Unauthorized, res.get)
             
