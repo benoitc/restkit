@@ -394,7 +394,6 @@ class HttpResponse(object):
         if not self.charset:
             raise AttributeError(
             "You cannot access HttpResponse.unicode_body unless charset is set")
-        body = self.body()
-        return body.decode(self.charset, self.unicode_errors)
+        return self.body.decode(self.charset, self.unicode_errors)
         
         

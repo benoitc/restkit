@@ -199,7 +199,6 @@ class Parser(object):
                 if self.chunk_size == 0:
                     self._chunk_eof = True
                     ret = '', data[:self.start_offset]
-                    self.start_offset = 0
                     return ret
         else:
             buf = data[self.start_offset:self.start_offset+self.chunk_size]

@@ -10,7 +10,6 @@ if size > MAX_BODY or memory. It's now possible to rewind
 read or restart etc ... It's based on TeeInput from unicorn.
 
 """
-
 import os
 import StringIO
 import tempfile
@@ -30,13 +29,13 @@ class TeeInput(object):
             self.tmp = StringIO.StringIO()
         else:
             self.tmp = tempfile.TemporaryFile()
-            
+                        
         if len(buf) > 0:
             chunk, self.buf = parser.filter_body(buf)
             if chunk:
                 self.tmp.write(chunk)
-                self.tmp.seek(0)
             self._finalize()
+            
         
     @property
     def len(self):
@@ -126,13 +125,13 @@ class TeeInput(object):
 
     def _tee(self, length):
         """ fetch partial body"""
-        while not self.parser.body_eof():
+        while True:
             chunk, self.buf = self.parser.filter_body(self.buf)
             if chunk:
                 self.tmp.write(chunk)
                 self.tmp.seek(0, os.SEEK_END)
                 return chunk
-            self.parser.filter_body(self.buf)
+            
             if self.parser.body_eof(): break
             data = recv(self.socket, length)
             self.buf += data
@@ -143,9 +142,10 @@ class TeeInput(object):
     def _finalize(self):
         """ here we wil fetch final trailers
         if any."""
-        if self.parser.body_eof():  
+        if self.parser.body_eof():
             if callable(self.maybe_close):
                 self.maybe_close()
+            
             del self.buf
             self._is_socket = False
             
