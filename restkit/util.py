@@ -12,7 +12,6 @@ monthname = [None,
              'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
              
-        
 def normalize_name(name):
     return  "-".join([w.lower().capitalize() for w in name.split("-")])
     

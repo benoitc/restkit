@@ -21,14 +21,15 @@ This module provide a common interface for all HTTP equest.
 import cgi
 import mimetypes
 import uuid
+import urlparse
 
 from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
 ResourceError, ParserError
 from restkit.forms import MultipartForm, multipart_form_encode, form_encode
 from restkit.client import HttpConnection
+from restkit.filters import BasicAuth
 from restkit import util
 from restkit import pool
-
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
@@ -40,6 +41,7 @@ class Resource(object):
     safe = "/:"
     pool_class = pool.ConnectionPool
     max_connections = 4
+    basic_auth_url = True
     
     def __init__(self, uri, transport=None, headers=None, 
             **client_opts):
@@ -64,8 +66,19 @@ class Resource(object):
         pool_instance = client_opts.get('pool_instance')
         if not pool_instance:
             pool = self.pool_class(max_connections=self.max_connections)
-            client_opts['pool_instance'] = pool   
-
+            client_opts['pool_instance'] = pool
+            
+        if self.basic_auth_url:
+            # detect credentials from url
+            u = urlparse.urlparse(uri)
+            if u.username:
+                password = u.password or ""
+                filters = client_opts.get('filters', [])
+                filters.append(BasicAuth(u.username, password))
+                client_opts['filters'] = filters
+                uri = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
+                    u.path, u.params, u.query, u.fragment))
+                
         self.uri = uri
         self._headers = headers or {}
         self.client_opts = client_opts

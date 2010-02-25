@@ -77,3 +77,14 @@ def test_002():
     t.eq(int(r['content-length']), len(LONG_BODY_PART))
     t.eq(r.body, LONG_BODY_PART)
     
+def test_003():
+     u = "http://test:test@%s:%s/auth" % (HOST, PORT)
+     print u
+     
+     import urlparse
+     print urlparse.urlparse(u)
+     r = request(u)
+     t.eq(r.status_int, 200)
+     u = "http://test:test2@%s:%s/auth" % (HOST, PORT)
+     r = request(u)
+     t.eq(r.status_int, 403)

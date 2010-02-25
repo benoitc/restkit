@@ -14,6 +14,7 @@ RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceErro
     from restkit.client import HttpConnection, HttpResponse
     from restkit.resource import Resource
     from restkit.pool import ConnectionPool
+    from restkit.filters import BasicAuth, SimpleProxy
     
     # deprecated
     from restkit.rest import RestClient
@@ -22,6 +23,7 @@ except ImportError:
     import traceback
     traceback.print_exc()
     
+import urlparse
     
 def request(url, method='GET', body=None, headers=None, pool_instance=None, 
         follow_redirect=False, filters=None, key_file=None, cert_file=None):
@@ -42,6 +44,15 @@ def request(url, method='GET', body=None, headers=None, pool_instance=None,
     :param cert_file: the cert file to use with ssl
     
     """
+    # detect credentials from url
+    u = urlparse.urlparse(url)
+    if u.username is not None:
+        password = u.password or ""
+        filters = filters or []
+        url = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
+            u.path, u.params, u.query, u.fragment))
+        filters.append(BasicAuth(u.username, password))
+    
     http_client = HttpConnection(follow_redirect=follow_redirect,
             filters=filters, key_file=key_file, cert_file=cert_file,
             pool_instance=pool_instance)

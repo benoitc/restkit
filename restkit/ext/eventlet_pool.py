@@ -23,12 +23,12 @@ class EventletPool(PoolInterface):
     
     To use restkit with eventlet::
     
-        >>> import eventlet
-        >>> eventlet.monkey_patch(all=False, socket=True, select=True)
-        >>> from restkit import request
-        >>> from restkit.ext.eventlet_pool import EventletPool
-        >>> pool = EventletPool()
-        >>> r = request('http://openbsd.org', pool_instance=pool)
+        import eventlet
+        eventlet.monkey_patch(all=False, socket=True, select=True)
+        from restkit import request
+        from restkit.ext.eventlet_pool import EventletPool
+        pool = EventletPool()
+        r = request('http://openbsd.org', pool_instance=pool)
     """
     
     def __init__(self, max_connections=4, timeout=300):

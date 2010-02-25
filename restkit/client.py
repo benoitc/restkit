@@ -67,10 +67,11 @@ class HttpConnection(object):
         
         # build filter lists
         self.filters = filters or []
-        self.on_request_filters = []
-        self.on_response_filters = []
+        self.request_filters = []
+        self.response_filters = []
+
         for f in self.filters:
-            self.add_filter(f)
+            self._add_filter(f)
                 
         if not pool_instance:
             should_close = True
@@ -83,22 +84,26 @@ class HttpConnection(object):
         
     def add_filter(self, f):
         self.filters.append(f)
+        self._add_filter(f)
+            
+    def _add_filter(self, f):
         if hasattr(f, 'on_request'):
-            self.on_request_filters.append(f)
+            self.request_filters.append(f)
+            
         if hasattr(f, 'on_response'):
-            self.on_response_filters.append(f)
+            self.response_filters.append(f)
             
     def remove_filter(self, f):
         for i, f1 in enumerate(self.filters):
             if f == f1: del self.filters[i]
             
         if hasattr(f, 'on_request'):
-            for i, f1 in enumerate(self.on_request_filters):
-                if f == f1: del self.on_request_filters[i]
+            for i, f1 in enumerate(self.request_filters):
+                if f == f1: del self.request_filters[i]
                 
         if hasattr(f, 'on_response'):
-            for i, f1 in enumerate(self.on_response_filters):
-                if f == f1: del self.on_response_filters[i]   
+            for i, f1 in enumerate(self.response_filters):
+                if f == f1: del self.response_filters[i]   
         
     def make_connection(self):
         """ initate a connection if needed or reuse a socket"""
@@ -225,7 +230,7 @@ class HttpConnection(object):
         self.headers = normalized_headers
         self.ua = ua
         
-        for bf in self.on_request_filters:
+        for bf in self.request_filters:
             bf.on_request(self)
 
         # by default all connections are HTTP/1.1    
@@ -316,7 +321,7 @@ class HttpConnection(object):
                                         buf[i:], maybe_close=self.maybe_close)
 
         # apply on response filters
-        for af in self.on_response_filters:
+        for af in self.response_filters:
             af.on_response(self)
 
         if self.follow_redirect:
