@@ -64,21 +64,12 @@ def close(sock):
         pass  
 
 def send(sock, data):
-    buf = ""
-    buf += data
-    i = 0
-    while buf:
-        try:
-            bytes = sock.send(buf)
-            if bytes < len(buf):
-                buf = buf[bytes:]
-                continue
-            return len(data)
-        except socket.error, e:
-            if e[0] in (errno.EWOULDBLOCK, errno.EAGAIN):
-                break
-            raise
-        i += 1
+    try:
+        sock.sendall(data)
+    except:
+        if e[0] not in (errno.EWOULDBLOCK, errno.EAGAIN):
+            pass
+        raise
         
 def send_nonblock(sock, data):
     timeout = sock.gettimeout()
