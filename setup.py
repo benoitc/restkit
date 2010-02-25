@@ -4,7 +4,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-
+import os
 import sys
 
 if not hasattr(sys, 'version_info') or sys.version_info < (2, 5, 0, 'final'):
@@ -20,8 +20,12 @@ setup(
     name = 'restkit',
     version = __version__,
     description = 'Python REST kit',
-    long_description = \
-"""An HTTP resource kit for Python""",
+    long_description = file(
+        os.path.join(
+            os.path.dirname(__file__),
+            'README.rst'
+        )
+    ).read(),
     author = 'Benoit Chesneau',
     author_email = 'benoitc@e-engura.org',
     license = 'BSD',
