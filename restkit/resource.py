@@ -194,7 +194,7 @@ class Resource(object):
                     ctype = "application/x-www-form-urlencoded; charset=utf-8"
                     headers['Content-Type'] = ctype
                     payload = form_encode(payload)
-                    headers['Content-Length'] = str(payload.get_size())
+                    headers['Content-Length'] = len(payload)
             elif isinstance(payload, MultipartForm):
                 ctype = "multipart/form-data; boundary=%s" % payload.boundary
                 headers['Content-Type'] = ctype
@@ -271,7 +271,7 @@ class Resource(object):
                 params.append((k,v))
 
         if params:
-            retval.extend(['?', util.url_encode(params, self.charset, 
+            retval.extend(['?', util.url_encode(dict(params), self.charset, 
                     self.encode_keys)])
 
         return ''.join(retval)

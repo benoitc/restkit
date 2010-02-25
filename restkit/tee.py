@@ -25,6 +25,7 @@ class TeeInput(object):
         self._is_socket = True
         self._len = parser.content_len
         self.maybe_close = maybe_close
+        
         if self._len and self._len < MAX_BODY:
             self.tmp = StringIO.StringIO()
         else:
@@ -34,10 +35,9 @@ class TeeInput(object):
             chunk, self.buf = parser.filter_body(buf)
             if chunk:
                 self.tmp.write(chunk)
-                self.tmp.seek(0, os.SEEK_END)
             self._finalize()
+            self.tmp.seek(0)
             
-        
     @property
     def len(self):
         if self._len: return self._len
@@ -94,12 +94,18 @@ class TeeInput(object):
         
         # now we can get line
         line = self.tmp.readline()
-        if size > 0 and len(line) < size:
-            self.tmp.seek(orig_size)
+        i = line.find("\n")
+        if i == -1:
             while True:
+                orig_size = self.tmp.tell()
                 if not self._tee(CHUNK_SIZE):
-                    self.tmp.seek(orig_size)
-                    return self.temp.readline(size)
+                    break
+                self.tmp.seek(orig_size)
+                line = self.tmp.readline()
+                i = line.find("\n")
+                if i != -1: 
+                    break
+                    
         return line
        
     def readlines(self, sizehint=0):
@@ -122,7 +128,7 @@ class TeeInput(object):
     __next__ = next
     
     def __iter__(self):
-        return self    
+        return self
 
     def _tee(self, length):
         """ fetch partial body"""
@@ -133,9 +139,11 @@ class TeeInput(object):
                 self.tmp.seek(0, os.SEEK_END)
                 return chunk
             
-            if self.parser.body_eof(): break
+            if self.parser.body_eof():
+                break
+            
             data = recv(self.socket, length)
-            self.buf += data
+            self.buf = self.buf + data
             
         self._finalize()
         return ""

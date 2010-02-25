@@ -138,7 +138,6 @@ def test_008(u, c):
     for block in r.body_file:
         f.write(block)
     f.close()
-    print fname
     t.eq(imghdr.what(fname), 'gif')
     c.maybe_close()
 

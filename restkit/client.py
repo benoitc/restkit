@@ -191,31 +191,31 @@ class HttpConnection(object):
         
         normalized_headers.append(('Accept-Encoding', accept_encoding))
         
-        if body and not content_len:
-            if hasattr(body, 'fileno'):
-                try:
-                    body.flush()
-                except IOError:
-                    pass
-                content_len = str(os.fstat(body.fileno())[6])
-            elif hasattr(body, 'read'):
-                try:
-                    content_len = str(body.len)
-                except AttributeError:
-                    raise RequestError("Can't determine content length")
+        # set content lengh if needed
+        if body and body is not None:
+            if not content_len:
+                if hasattr(body, 'fileno'):
+                    try:
+                        body.flush()
+                    except IOError:
+                        pass
+                    content_len = str(os.fstat(body.fileno())[6])
+                elif hasattr(body, 'len'):
+                    try:
+                        content_len = str(body.len)
+                    except AttributeError:
+                        raise RequestError("Can't determine content length")
                     
-            elif isinstance(body, basestring):
-                body = util.to_bytestring(body)
-                content_len = len(body)
-            else:
-                raise RequestError("Can't determine content length")
-                
+                elif isinstance(body, basestring):
+                    body = util.to_bytestring(body)
+                    content_len = len(body)
+                else:
+                    raise RequestError("Can't determine content length")
             normalized_headers.append(("Content-Length", content_len))
-            
-            
+                
         if self.method in ('POST', 'PUT') and not body:
-            normalized_headers.append(("Content-Length", content_len or "0"))
-            
+            normalized_headers.append(("Content-Length", "0"))
+       
         self.headers = normalized_headers
         self.ua = ua
         
@@ -242,7 +242,7 @@ class HttpConnection(object):
             req_headers.append("%s: %s\r\n" % (name, value))
         req_headers.append("\r\n")
         self.req_headers = req_headers
-        
+
         for i in range(2):
             s = self.make_connection()
             try:
@@ -355,6 +355,7 @@ class HttpResponse(object):
             self._body = gzip.GzipFile(fileobj=self.http_client.response_body)
         else:
             self._body = self.http_client.response_body
+        self._body_eof = False
             
     def __getitem__(self, key):
         try:
@@ -377,14 +378,13 @@ class HttpResponse(object):
     def __iter__(self):
         for item in list(self.headers.items()):
             yield item
-        
+          
     @property
     def body(self):
         """ body in bytestring """
-        try:
+        if self._body_eof:
             self._body.seek(0)
-        except:
-            pass
+        self._body_eof = True
         return self._body.read()
         
     @property

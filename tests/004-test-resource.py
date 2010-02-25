@@ -142,5 +142,5 @@ def test_018(res):
     import StringIO
     content = StringIO.StringIO("test")
     t.raises(RequestFailed, res.post, '/json', payload=content,
-            headers={'Content-Type': 'application/json'})
+            headers={'Content-Type': 'text/plain'})
             
