@@ -21,3 +21,10 @@ RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceErro
 except ImportError:
     import traceback
     traceback.print_exc()
+    
+    
+def request(url, method='GET', body=None, headers=None, pool_instance=None):
+    """ Quick shortcut method to pass a request """
+    http_client = HttpConnection(pool_instance=pool_instance)
+    return http_client.request(url, method=method, body=body, 
+        headers=headers)
