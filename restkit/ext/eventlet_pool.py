@@ -7,106 +7,62 @@ import os
 import time
 import urlparse
 
-from eventlet.green import socket
-from eventlet.green import httplib as ehttplib
-from eventlet.pools import Pool
-from eventlet.util import wrap_socket_with_coroutine_socket
+import eventlet
+from eventlet import queue
+from eventlet.timeout import Timeout
 
-import restkit
-from restkit import errors
-from restkit.pool import get_proxy_auth, PoolInterface
+from restkit.pool import PoolInterface
+from restkit import sock
 
-url_parser = urlparse.urlparse
-
-
-wrap_socket_with_coroutine_socket()
-
-eventlet_httplib = False
-def wrap_eventlet_ehttplib():
-    if eventlet_httplib: return
-    import httplib
-    ehttplib.BadStatusLine = httplib.BadStatusLine
+class EventletPool(PoolInterface):
     
-wrap_eventlet_ehttplib()
-
-class ConnectionPool(Pool, PoolInterface):
-    def __init__(self, uri, use_proxy=False, key_file=None,
-            cert_file=None, min_size=0, max_size=4, **kwargs):
-        Pool.__init__(self, min_size, max_size)
-        self.uri = uri
-        self.use_proxy = use_proxy
-        self.key_file = key_file
-        self.cert_file = cert_file
-        
-
-    def _make_proxy_connection(self, proxy):
-        if self.uri.scheme == 'https':
-            proxy_auth = get_proxy_auth()
-            if proxy_auth:
-                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-            port = self.uri.port
-            if not port:
-                port = 443
-            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % (self.uri.hostname, port)
-            user_agent = 'User-Agent: %s\r\n' % restkit.USER_AGENT
-            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, user_agent)
-            proxy_uri = url_parser(proxy)
-            if not proxy_uri.port:
-                proxy_uri.port = '80'
-            # Connect to the proxy server, very simple recv and error checking
-            p_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-            p_sock.connect((proxy_uri.host, int(proxy_uri.port)))
-            p_sock.sendall(proxy_pieces)
-            response = ''
-            # Wait for the full response.
-            while response.find("\r\n\r\n") == -1:
-                response += p_sock.recv(8192)
-            p_status = response.split()[1]
-            if p_status != str(200):
-                raise errors.ProxyError('Error status=%s' % str(p_status))
-            # Trivial setup for ssl socket.
-            ssl = socket.ssl(p_sock, None, None)
-            fake_sock = ehttplib.FakeSocket(p_sock, ssl)
-            # Initalize ehttplib and replace with the proxy socket.
-            connection = ehttplib.HTTPConnection(proxy_uri.host)
-            connection.sock=fake_sock
-            return connection
-        else:
-            proxy_uri = url_parser(proxy)
-            if not proxy_uri.port:
-                proxy_uri.port = '80'
-            return ehttplib.HTTPConnection(proxy_uri.hostname, proxy_uri.port)
-        return None
-
-    def make_connection(self):
-        if self.use_proxy:
-            proxy = ''
-            if self.uri.scheme == 'https':
-                proxy = os.environ.get('https_proxy')
-            elif self.uri.scheme == 'http':
-                proxy = os.environ.get('http_proxy')
-
-            if proxy:
-                return self._make_proxy_connection(proxy)
-
-        kwargs = {}
-        if hasattr(ehttplib.HTTPConnection, 'timeout'):
-            kwargs['timeout'] = self.timeout
-
-        if self.uri.port:
-            kwargs['port'] = self.uri.port
-
-        if self.uri.scheme == "https":
-            kwargs.update(dict(key_file=self.key_file, cert_file=self.cert_file))
-            connection = ehttplib.HTTPSConnection(self.uri.hostname, **kwargs)
-        else:
-            connection = ehttplib.HTTPConnection(self.uri.hostname, **kwargs)
-
-        setattr(connection, "started", time.time())
-        return connection
-    
-    def create(self):
-        return self.make_connection()
+    def __init__(self, max_connections=4, timeout=60):
+        self.max_connections = max_connections
+        self.timeout = 60
+        self.hosts = {}
+        self.sockets = {}
                 
-    def clear(self):
-        self.free()
+    def get(self, address):
+        connections = self.hosts.get(address)
+        if hasattr(connections, 'get'):
+            try:
+                socket = connections.get(False)
+                self.hosts[address] = connections
+                del self.sockets[socket.fileno()]
+                return socket
+            except queue.Empty:
+                pass
+        return None
+                
+    def monitor_socket(self, fn):
+        with Timeout(self.timeout, False):
+            if fn in self.sockets:
+                socket = self.sockets[fn]
+                sock.close(socket)
+                del self.sockets[fn]
+        
+    def put(self, address, socket):
+        connections = self.hosts.get(address)
+        if not connections: 
+            connections = queue.LightQueue(None)
+        
+        # do we have already enough connections opened ?
+        if connections.qsize() > self.max_connections:
+            sock.close(socket)
+            return
+            
+        connections.put(socket, False)
+        self.sockets[socket.fileno()] = socket
+        eventlet.spawn(self.monitor_socket, socket.fileno())
+        self.hosts[address] = connections
+        
+    def clear(self, address):
+        connections = self.hosts.get(address)
+        while True:
+            try:
+                socket = connections.get(False)
+                sock.close(socket)
+                socket.close()
+            except queue.Empty:
+                break
+        

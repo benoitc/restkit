@@ -87,3 +87,11 @@ class ResponseError(Exception):
 
 class ProxyError(Exception):
     """ raised when proxy error happend"""
+    
+class BadStatusLine(Exception):
+    """ Exception returned by the parser when the status line is invalid"""
+    pass
+
+class ParserError(Exception):
+    """ Generic exception returned by the parser """
+    pass

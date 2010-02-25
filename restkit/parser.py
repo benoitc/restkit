@@ -6,13 +6,8 @@
 
 import urlparse
 
+from restkit.errors import BadStatusLine, ParserError
 from restkit.util import normalize_name
-
-class BadStatusLine(Exception):
-    pass
-
-class ParserError(Exception):
-    pass
 
 class Parser(object):
 
@@ -38,7 +33,7 @@ class Parser(object):
         self._should_close = should_close
         
     @classmethod
-    def parse_response(cls, should_close=True):
+    def parse_response(cls, should_close=False):
         return cls(should_close=should_close)
         
     @classmethod
@@ -100,9 +95,7 @@ class Parser(object):
                 self.status_int =  self.status
             self.status_int = int(self.status_int)
         except ValueError:
-            raise BadStatusLine("can't find status code")
-        
-        
+            raise BadStatusLine("can't find status code")       
         
     def _first_line(self, line):
         """ parse first line """
@@ -159,6 +152,7 @@ class Parser(object):
             return False
         if int("%s%s" % self.version) < 11:
             return True
+        return False
         
     @property
     def is_chunked(self):

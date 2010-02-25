@@ -22,7 +22,8 @@ import cgi
 import mimetypes
 import uuid
 
-from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed
+from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
+ResourceError, ParserError
 from restkit.forms import MultipartForm, multipart_form_encode, form_encode
 from restkit.client import HttpConnection
 from restkit import util
@@ -210,8 +211,13 @@ class Resource(object):
                 
     
         uri = self._make_uri(self.uri, path, **params)
-        resp = self.do_request(uri, method=method, payload=payload, 
+        try:
+            resp = self.do_request(uri, method=method, payload=payload, 
                                 headers=headers)
+        except ParserError:
+            raise
+        except Exception, e:
+            raise RequestError(str(e))
 
         if resp.status_int >= 400:
             if resp.status_int == 404:
@@ -232,8 +238,8 @@ class Resource(object):
         self.uri = self._make_uri(self.uri, path)
 
     def _make_uri(self, base, *path, **query):
-        """Assemble a uri based on a base, any number of path segments, and query
-        string parameters.
+        """Assemble a uri based on a base, any number of path segments, 
+        and query string parameters.
 
         """
         base_trailing_slash = False

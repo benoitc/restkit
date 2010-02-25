@@ -127,10 +127,10 @@ class HttpConnection(object):
         
     def maybe_close(self):
         if not self.socket: return
-        if self.parser.should_close:
-            sock.close(self.socket)
-        if hasattr(self.connections,'clean'):
-            self.connection.put((self.host, self.port), self.socket)
+        if not hasattr(self.connections,'clear') or self.parser.should_close:
+            sock.close(self.socket) 
+        else: # release the socket in the pool
+            self.connections.put((self.host, self.port), self.socket)
         self.socket = None
         
     def parse_url(self, url):
@@ -369,14 +369,6 @@ class HttpResponse(object):
         except AttributeError:
             pass
         return self.headers[key]
-        
-    def __getattr__(self, key):
-        try:
-            getattr(super(HttpResponse, self), key)
-        except AttributeError:
-            if key in self.headers:
-                return self.conf[key]
-            raise
     
     def __contains__(self, key):
         return (key in self.headers)
