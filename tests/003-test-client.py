@@ -138,6 +138,7 @@ def test_008(u, c):
     for block in r.body_file:
         f.write(block)
     f.close()
+    print fname
     t.eq(imghdr.what(fname), 'gif')
     c.maybe_close()
 
@@ -145,8 +146,7 @@ def test_008(u, c):
 def test_009(u, c):
     c.follow_redirect = True
     r = c.request(u)
-    
-    
+
     complete_url = "%s/complete_redirect" % u.rsplit("/", 1)[0]
     t.eq(r.status_int, 200)
     t.eq(r.body, "ok")

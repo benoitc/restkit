@@ -66,7 +66,7 @@ class client_request(object):
         run.func_name = func.func_name
         return run
         
-def resource_request(object):
+class resource_request(object):
     
     def __init__(self):
         self.url = 'http://%s:%s' % (HOST, PORT)

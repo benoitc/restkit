@@ -199,7 +199,11 @@ class HttpConnection(object):
                     pass
                 content_len = str(os.fstat(body.fileno())[6])
             elif hasattr(body, 'read'):
-                content_len = str(len(body))
+                try:
+                    content_len = str(body.len)
+                except AttributeError:
+                    raise RequestError("Can't determine content length")
+                    
             elif isinstance(body, basestring):
                 body = util.to_bytestring(body)
                 content_len = len(body)
