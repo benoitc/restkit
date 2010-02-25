@@ -4,6 +4,7 @@
 # See the NOTICE for more information.
 
 import errno
+import os
 import select
 import socket
 
@@ -48,14 +49,14 @@ def recv(sock, length):
     while True:
         try:
             ret = select.select([sock.fileno()], [], [], 0)
-            if ret[0]: break
+            if ret[0]:
+                return sock.recv(length)
         except select.error, e:
             if e[0] == errno.EINTR:
                 continue
             raise
-    data = sock.recv(length)
-    return data
-    
+    return ''
+  
 def close(sock):
     try:
         sock.close()

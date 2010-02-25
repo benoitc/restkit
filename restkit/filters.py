@@ -29,12 +29,12 @@ import base64
 import os
 import urlparse
 
-from restkit import __version__
+
 from restkit.errors import InvalidUrl
 from restkit.parser import Parser
 from restkit import sock
 from restkit import util
-
+from restkit import __version__
 
 class BasicAuth(object):
     """ Simple filter to manage basic authentification"""

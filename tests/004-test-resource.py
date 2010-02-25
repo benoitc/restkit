@@ -3,28 +3,15 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-import cgi
-import os
-import socket
-import threading
-import unittest
-import urlparse
-import urllib2
-
-from restkit import httpc
-from restkit.rest import Resource, RestClient
-from restkit.errors import RequestFailed, ResourceNotFound, \
-Unauthorized, RequestError
-
 
 import t
 
-from _server_test import HOST, PORT, run_server_test
-run_server_test()
+from restkit.errors import RequestFailed, ResourceNotFound, \
+Unauthorized, RequestError
+from restkit.resource import Resource
 
 
-def 001_test():
+def test_001():
     res = Resource("http://localhost")
     t.eq(res._make_uri("http://localhost", "/"), "http://localhost/")
     t.eq(res._make_uri("http://localhost/"), "http://localhost/")
@@ -39,168 +26,121 @@ def 001_test():
     t.eq(res._make_uri("http://localhost", "test/echo/"),
         "http://localhost/test/echo/")
 
-class ResourceTestCase(unittest.TestCase):
+@t.resource_request
+def test_002(res):
+    r = res.get()
+    t.eq(r.status_int, 200)
+    t.eq(r.body, "welcome")
 
-    def setUp(self):
-        self.url = 'http://%s:%s' % (HOST, PORT)
-        self.res = Resource(self.url)
+@t.resource_request
+def test_003(res):
+    r = res.get('/unicode')
+    t.eq(r.body, "éàù@")
 
-    def tearDown(self):
-        self.res = None
+@t.resource_request
+def test_003(res):
+    r = res.get('/éàù')
+    t.eq(r.status_int, 200)
+    t.eq(r.body, "ok")
 
-    def testGet(self):
-        result = self.res.get()
-        self.assert_(result.body == "welcome")
-        self.assert_(result.status_int== 200)
+@t.resource_request
+def test_003(res):
+    r = res.get(u'/test')
+    t.eq(r.status_int, 200)
+    r = res.get(u'/éàù')
+    t.eq(r.status_int, 200)
 
-    def testUnicode(self):
-        result = self.res.get('/unicode')
-        self.assert_(result.body == "éàù@")
-
-    def testUrlWithAccents(self):
-        result = self.res.get('/éàù')
-        self.assert_(result.body == "ok")
-        self.assert_(result.status_int == 200)
-
-    def testUrlUnicode(self):
-        result = self.res.get(u'/test')
-        self.assert_(result.body == "ok")
-        self.assert_(result.status_int == 200)
-        result = self.res.get(u'/éàù')
-        self.assert_(result.body == "ok")
-        self.assert_(result.status_int == 200)
-
-    def testGetWithContentType(self):
-        result = self.res.get('/json', 
-            headers={'Content-Type': 'application/json'})
-        self.assert_(result.status_int == 200)
-        def bad_get():
-            result = self.res.get('/json', 
-                headers={'Content-Type': 'text/plain'})
-        self.assertRaises(RequestFailed, bad_get) 
-
-    def testGetWithContentType2(self):
-        res = Resource(self.url,
-            headers={'Content-Type': 'application/json'})
-        result = res.get('/json')
-        self.assert_(result.status_int == 200)
+@t.resource_request
+def test_004(res):
+    r = res.get('/json', headers={'Content-Type': 'application/json'})
+    t.eq(r.status_int, 200)
+    r.raises(RequestFailed, r.get, '/json', 
+        headers={'Content-Type': 'text/plain'})
         
+@t.resource_request
+def test_005(res):
+    t.raises(ResourceNotFound, res.get, '/unknown')
 
-    def testNotFound(self):
-        def bad_get():
-            result = self.res.get("/unknown")
+@t.resource_request
+def test_006(res):
+    r = res.get('/query', test='testing')
+    t.eq(r.status_int, 200)
+    r = res.get('/qint', test=1)
+    t.eq(r.status_int, 200)
 
-        self.assertRaises(ResourceNotFound, bad_get)
+@t.resource_request
+def test_007(res):
+    r = res.post(payload="test")
+    t.eq(r.body, "test")
 
-    def testGetWithQuery(self):
-        result = self.res.get('/query', test="testing")
-        self.assert_(result.status_int == 200)
+@t.resource_request
+def test_008(res):
+    r = res.post('/bytestring', payload="éàù@")
+    t.eq(r.body == "éàù@")
 
-    def testGetWithIntParam(self):
-        result = self.res.get('/qint', test=1)
-        self.assert_(result.status_int == 200)
+@t.resource_request
+def test_009(res):
+    r = res.post('/unicode', payload=u"éàù@")
+    t.eq(r.body == "éàù@")
+    t.eq(r.unicode_body == u"éàù@")
 
-    def testSimplePost(self):
-        result = self.res.post(payload="test")
-        self.assert_(result.body=="test")
+@t.resource_request
+def test_010(res):
+    r = res.post('/json', payload="test", 
+            headers={'Content-Type': 'application/json'})
+    t.eq(r.status_int, 200)
+    t.raises(RequestFailed, r.post, '/json', payload='test',
+            headers={'Content-Type': 'text/plain'})
 
-    def testPostByteString(self):
-        result = self.res.post('/bytestring', payload="éàù@")
-        self.assert_(result.body == "éàù@")
-
-    def testPostUnicode(self):
-        result = self.res.post('/unicode', payload=u"éàù@")
-        self.assert_(result.body == "éàù@")
-
-    def testPostWithContentType(self):
-        result = self.res.post('/json', payload="test",
-                headers={'Content-Type': 'application/json'})
-        self.assert_(result.status_int == 200 )
-        def bad_post():
-            result = self.res.post('/json', payload="test",
-                    headers={'Content-Type': 'text/plain'})
-        self.assertRaises(RequestFailed, bad_post)
-
-    def testEmptyPost(self):
-        result = self.res.post('/empty', payload="",
-                headers={'Content-Type': 'application/json'})
-        self.assert_(result.status_int == 200 )
-        result = self.res.post('/empty',headers={'Content-Type': 'application/json'})
-        self.assert_(result.status_int == 200 )
-
-    def testPostWithQuery(self):
-        result = self.res.post('/query', test="testing")
-        self.assert_(result.status_int == 200)
+@t.resource_request
+def test_011(res):
+    r = res.post('/empty', payload="",
+            headers={'Content-Type': 'application/json'})
+    t.eq(r.status_int, 200)
+    r = res.post('/empty', headers={'Content-Type': 'application/json'})
+    t.eq(r.status_int, 200)
     
-    def testPostForm(self):
-        result = self.res.post('/form', payload={ "a": "a", "b": "b" })
-        self.assert_(result.status_int == 200)
+@t.resource_request
+def test_012(res):
+    r = res.post('/query', test="testing")
+    t.eq(r.status_int, 200)
 
-    def testSimplePut(self):
-        result = self.res.put(payload="test")
-        self.assert_(result.body=="test")
+@t.resource_request
+def test_013(res):
+    r = res.post('/form', payload={ "a": "a", "b": "b" })
+    t.eq(r.status_int, 200)
+    
+@t.resource_request
+def test_014(res):
+    r = res.put(payload="test")
+    t.eq(r.body, 'test')
 
-    def testPutWithContentType(self):
-        result = self.res.put('/json', payload="test",
-                headers={'Content-Type': 'application/json'})
-        self.assert_(result.status_int== 200 )
-        def bad_put():
-            result = self.res.put('/json', payload="test",
-                    headers={'Content-Type': 'text/plain'})
-        self.assertRaises(RequestFailed, bad_put)
+@t.resource_request
+def test_015(res):
+    r = res.head('/ok')
+    t.eq(r.status_int, 200)
 
-    def testEmptyPut(self):
-        result = self.res.put('/empty', payload="",
-                headers={'Content-Type': 'application/json'})
-        self.assert_(result.status_int == 200 )
-        result = self.res.put('/empty',headers={'Content-Type': 'application/json'})
-        self.assert_(result.status_int == 200 )
+@t.resource_request
+def test_016(res):
+    r = res.delete('/delete')    
+    t.eq(r.status_int, 200)
 
-    def testPutWithQuery(self):
-        result = self.res.put('/query', test="testing")
-        self.assert_(result.status_int== 200)
+@t.resource_request
+def test_017(res):
+    content_length = len("test")
+    import StringIO
+    content = StringIO.StringIO("test")
+    r = res.post('/json', payload=content,
+            headers={
+                'Content-Type': 'application/json',
+                'Content-Length': str(content_length)
+            }) 
+    t.eq(r.status_int, 200)
 
-    def testHead(self):
-        result = self.res.head('/ok')
-        self.assert_(result.status_int == 200)
-
-    def testDelete(self):
-        result = self.res.delete('/delete')
-        self.assert_(result.status_int == 200)
-
-    def testFileSend(self):
-        content_length = len("test")
-        import StringIO
-        content = StringIO.StringIO("test")
-        result = self.res.post('/json', payload=content,
-                headers={
-                    'Content-Type': 'application/json',
-                    'Content-Length': str(content_length)
-                })
-
-        self.assert_(result.status_int == 200 )
-
-    def testFileSend2(self):
-        import StringIO
-        content = StringIO.StringIO("test")
-
-        def bad_post():
-            result = self.res.post('/json', payload=content,
-                headers={'Content-Type': 'application/json'})
-
-        self.assertRaises(RequestError, bad_post)
-
-    def testBasicAuth(self):
-        transport = httpc.HttpClient()
-        transport.add_authorization(httpc.BasicAuth("test", "test"))
-
-        res = Resource(self.url, transport)
-        result = res.get('/auth')
-        self.assert_(result.status_int == 200)
-
-        transport = httpc.HttpClient()
-        def niettest():
-            res = Resource(self.url, transport)
-            result = res.get('/auth')
-        self.assertRaises(Unauthorized, niettest)
-        
+@t.resource_request
+def test_018(res):
+    import StringIO
+    content = StringIO.StringIO("test")
+    t.raises(RequestError, res.post, '/json', payload=content,
+            headers={'Content-Type': 'application/json'})
+            

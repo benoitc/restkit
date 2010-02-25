@@ -84,7 +84,7 @@ class Resource(object):
         """ add an htt filter """
         self.transport.add_filter(f)
 
-    add_authorization = util/deprecated_property(
+    add_authorization = util.deprecated_property(
         add_filter, 'add_authorization', 'use add_filter() instead',
         warning=False)
         

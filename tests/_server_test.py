@@ -25,7 +25,7 @@ import threading
 import unittest
 import urlparse
 import urllib
-from restkit.utils import to_bytestring
+from restkit.util import to_bytestring
 
 HOST = socket.getfqdn('127.0.0.1')
 PORT = (os.getpid() % 31000) + 1024
@@ -46,8 +46,6 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         path = self.parsed_uri[2]
 
         if path == "/":
-            import sys
-            print >>sys.stderr, "got it"
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "welcome")
 
@@ -257,15 +255,12 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         self.wfile.close()
         self.rfile.close()
 
-import sys
-import os
 server_thread = None
 def run_server_test():
     global server_thread
     if server_thread is not None:
         return
 
-    print >>sys.stderr, "start test server on %s" % str((HOST, PORT))
         
     server = HTTPServer((HOST, PORT), HTTPTestHandler)
 

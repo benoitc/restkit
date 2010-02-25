@@ -11,9 +11,10 @@ dirname = os.path.dirname(__file__)
 
 from restkit.parser import Parser
 from restkit.client import HttpConnection
-from restkit.rest import Resource
+from restkit.resource import Resource
 
 from _server_test import HOST, PORT, run_server_test
+run_server_test()
 
 def data_source(fname):
     with open(fname) as handle:
@@ -67,14 +68,13 @@ class client_request(object):
         
 def resource_request(object):
     
-    def __init__(self, url=None):
-        if not url:
-            url = 'http://%s:%s' % (HOST, PORT)
-        self.res = Resource(url)
+    def __init__(self):
+        self.url = 'http://%s:%s' % (HOST, PORT)
         
     def __call__(self, func):
         def run():
-            func(self.res)
+            res = Resource(self.url)
+            func(res)
         run.func_name = func.func_name
         return run
         

@@ -198,7 +198,9 @@ class Parser(object):
                 self.chunk_size = chunk_size
                 if self.chunk_size == 0:
                     self._chunk_eof = True
-                    return '', data[:self.start_offset]
+                    ret = '', data[:self.start_offset]
+                    self.start_offset = 0
+                    return ret
         else:
             buf = data[self.start_offset:self.start_offset+self.chunk_size]
             end_offset = self.start_offset + self.chunk_size + 2

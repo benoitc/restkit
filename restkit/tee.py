@@ -127,27 +127,23 @@ class TeeInput(object):
     def _tee(self, length):
         """ fetch partial body"""
         while not self.parser.body_eof():
-            data = recv(self.socket, length)
-            self.buf += data
             chunk, self.buf = self.parser.filter_body(self.buf)
             if chunk:
                 self.tmp.write(chunk)
                 self.tmp.seek(0, os.SEEK_END)
-                return chunk        
+                return chunk
+            self.parser.filter_body(self.buf)
+            if self.parser.body_eof(): break
+            data = recv(self.socket, length)
+            self.buf += data
+            
         self._finalize()
         return ""
         
     def _finalize(self):
         """ here we wil fetch final trailers
         if any."""
-        if self.parser.body_eof():
-            # handle trailing headers
-            if self.parser.is_chunked and self._is_socket:
-                while not self.parser.trailing_header(self.buf):
-                    data = recv(self.socket, CHUNK_SIZE)
-                    if not data: break
-                    self.buf += data
-                    
+        if self.parser.body_eof():  
             if callable(self.maybe_close):
                 self.maybe_close()
             del self.buf

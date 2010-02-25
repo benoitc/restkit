@@ -19,9 +19,6 @@ import time
 import t
 from restkit.filters import BasicAuth
 
-from _server_test import HOST, PORT, run_server_test
-run_server_test()
-
 
 LONG_BODY_PART = """This is a relatively long body, that we send to the client...
 This is a relatively long body, that we send to the client...
@@ -190,6 +187,7 @@ def test_014(u, c):
     r = c.request(u, 'POST', body="", 
             headers={'Content-Type': 'application/json'})
     t.eq(r.status_int, 200)
+    c.maybe_close()
     r = c.request(u, 'POST', body="", 
             headers={'Content-Type': 'application/json'})
     t.eq(r.status_int, 200)
@@ -245,4 +243,5 @@ def test_020(u, c):
     c.add_filter(auth_filter1)
     r = c.request(u)
     t.eq(r.status_int, 403)
+
 

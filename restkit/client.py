@@ -172,6 +172,7 @@ class HttpConnection(object):
         ua = self.USER_AGENT
         normalized_headers = []
         content_len = None
+        accept_encoding = 'identity'
         host = "%s:%s" % (self.host, str(self.port))
         for name, value in headers:
             name = util.normalize_name(name)
@@ -179,12 +180,16 @@ class HttpConnection(object):
                 ua = value
             elif name == "Content-Length":
                 content_len = str(value)
+            elif name == "Accept-Encoding":
+                accept_encoding = 'identity'
             elif name == "Host":
                 host = value
             else:
                 if not isinstance(value, basestring):
                     value = str(value)
                 normalized_headers.append((name, value))
+        
+        normalized_headers.append(('Accept-Encoding', accept_encoding))
         
         if body and not content_len:
             if hasattr(body, 'fileno'):
@@ -203,10 +208,10 @@ class HttpConnection(object):
                 
             normalized_headers.append(("Content-Length", content_len))
             
-        
+            
         if self.method in ('POST', 'PUT') and not body:
             normalized_headers.append(("Content-Length", content_len or "0"))
-
+            
         self.headers = normalized_headers
         self.ua = ua
         
@@ -220,8 +225,10 @@ class HttpConnection(object):
             httpver = "HTTP/1.0"
 
         # build request path
-        req_path = urlparse.urlunparse(('','', self.uri.path, '', 
+        path = self.uri.path or "/"
+        req_path = urlparse.urlunparse(('','', path, '', 
                         self.uri.query, self.uri.fragment))
+        
          
         req_headers = []   
         req_headers.append("%s %s %s\r\n" % (method, req_path, httpver))
