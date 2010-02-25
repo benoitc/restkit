@@ -377,6 +377,10 @@ class HttpResponse(object):
     @property
     def body(self):
         """ body in bytestring """
+        try:
+            self._body.seek(0)
+        except:
+            pass
         return self._body.read()
         
     @property
@@ -390,7 +394,7 @@ class HttpResponse(object):
         if not self.charset:
             raise AttributeError(
             "You cannot access HttpResponse.unicode_body unless charset is set")
-        body = self._body.read()
+        body = self.body()
         return body.decode(self.charset, self.unicode_errors)
         
         
