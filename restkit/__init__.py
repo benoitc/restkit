@@ -24,7 +24,15 @@ except ImportError:
     
     
 def request(url, method='GET', body=None, headers=None, pool_instance=None):
-    """ Quick shortcut method to pass a request """
+    """ Quick shortcut method to pass a request
+    
+    :param url: str, url string
+    :param method: str, by default GET. http verbs
+    :param body: the body, could be a string, an iterator or a file-like object
+    :param headers: dict or list of tupple, http headers
+    :pool intance: instance inherited from `restkit.pool.PoolInterface`. 
+    It allows you to share and reuse connections connections.
+    """
     http_client = HttpConnection(pool_instance=pool_instance)
     return http_client.request(url, method=method, body=body, 
         headers=headers)

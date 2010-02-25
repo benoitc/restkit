@@ -160,7 +160,13 @@ class HttpConnection(object):
         self.port = port
         
     def request(self, url, method='GET', body=None, headers=None):
-        """ make effective request """
+        """ make effective request 
+        
+        :param url: str, url string
+        :param method: str, by default GET. http verbs
+        :param body: the body, could be a string, an iterator or a file-like object
+        :param headers: dict or list of tupple, http headers
+        """
         self.final_url = url
         self.parse_url(url)
         self.method = method.upper()
