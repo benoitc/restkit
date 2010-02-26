@@ -95,7 +95,7 @@ Using `eventlet <http://eventlet.net>`_ pool is definitely better since it allow
 Authentication
 ==============
 
-Restkit support for now `basic authentification <http://www.ietf.org/rfc/rfc2617.txt>`_  and `OAuth <http://oauth.net/>`_ . But any other authentication schema can easily be added using http filters.
+Restkit support for now `basic authentication`_  and `OAuth`_ . But any other authentication schema can easily be added using http filters.
 
 Basic authentication
 ++++++++++++++++++++
@@ -110,6 +110,9 @@ To use `basic authentication` in a `Resource object` you can do::
 Or simply use an authentication url::
 
   r = Resource("http://username:password@friendpaste.com")
+  
+.. _basic authentification: http://www.ietf.org/rfc/rfc2617.txt
+.. _OAuth: http://oauth.net/
 
 OAuth
 +++++
