@@ -12,7 +12,7 @@ Restkit requires Python 2.x superior to 2.5.
 
 Install from sources::
 
-    $ python setup.py install
+  $ python setup.py install
 
 Or from Pypi::
 
@@ -22,7 +22,7 @@ Usage
 =====
 
 Perform HTTP call support  with `restkit.request`.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Usage example, get friendpaste page::
 
@@ -35,8 +35,7 @@ Usage example, get friendpaste page::
 Create a simple Twitter Search resource
 +++++++++++++++++++++++++++++++++++++++
 
-Building a resource object is easy using `restkit.Resource` class. We use `simplejson <http://code.google.com/p/simplejson/>`_ to handle deserialisation
-of data.
+Building a resource object is easy using `restkit.Resource` class. We use `simplejson <http://code.google.com/p/simplejson/>`_ to handle deserialisation of data.
 
 Here is the snippet::
 
@@ -95,7 +94,8 @@ Using `eventlet <http://eventlet.net>`_ pool is definitely better since it allow
 Authentication
 ==============
 
-Restkit support for now `basic authentication`_  and `OAuth`_ . But any other authentication schema can easily be added using http filters.
+Restkit support for now `basic authentication`_  and `OAuth`_. But any
+other authentication schema can easily be added using http filters.
 
 Basic authentication
 ++++++++++++++++++++
@@ -122,16 +122,15 @@ Restkit OAuth is based on `simplegeo python-oauth2 module <http://github.com/sim
 The OAuth filter allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples::
       
           (path, consumer, token, signaturemethod) 
-      
-token and method signature are optionnals. Consumer should be an 
-instance of `restkit.oauth2.Consumer`, token an  instance of `restkit.oauth2.Token`  signature method an instance of `oauth2.SignatureMethod`  (`restkit.oauth2.Token `is only needed for three-legged requests.
-      
+          
+`token` and `method signature` are optionnals. Consumer should be an instance of `restkit.oauth2.Consumer`, token an  instance of `restkit.oauth2.Token`  signature method an instance of `oauth2.SignatureMethod`  (`restkit.oauth2.Token` is only needed for three-legged requests.
+
 With a list of tupple, the filter will try to match the path with the rule. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.
 
 Example the rule `/some/resource/*` will match `/some/resource/other` and `/some/resource/other2`, while the rule `/some/resource` will only match the path `/some/resource`.
-  
+
 Simple client example:
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -163,6 +162,4 @@ If you want to add OAuth  to your `TwitterSearch` resource::
   client = OAuthfilter(('*', consumer))
     
   s = TwitterSearch(filters=[client])
-  
-
 
