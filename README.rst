@@ -1,8 +1,9 @@
 About
 -----
 
-Restkit is an HTTP resource kit for `Python <http://python.org>`_. It allows you to easily access to HTTP resource and build objects around it. It's the base of `couchdbkit <http://www.couchdbkit.org>`_ a Python `CouchDB <http://couchdb.org>`_ framework.
+Restkit is an HTTP resource kit for `Python <http://python.org>`_. It allows you to easily access to HTTP resource and build objects around it. It's the base of `couchdbkit <http://www.couchdbkit.org>`_ a Python `CouchDB <http://couchdb.org>`_ framework. 
 
+Restkit is a full HTTP client using pure socket calls and its own HTTP parser. It's not based on httplib or urllib2. 
 
 Installation
 ------------
