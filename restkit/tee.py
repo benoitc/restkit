@@ -7,7 +7,7 @@
 """
 TeeInput replace old FileInput. It use a file 
 if size > MAX_BODY or memory. It's now possible to rewind
-read or restart etc ... It's based on TeeInput from unicorn.
+read or restart etc ... It's based on TeeInput from Gunicorn.
 
 """
 import os
