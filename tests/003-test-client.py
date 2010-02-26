@@ -242,5 +242,23 @@ def test_020(u, c):
     c.add_filter(auth_filter1)
     r = c.request(u)
     t.eq(r.status_int, 403)
+   
+
+@t.client_request('/list')
+def test_021(u, c):
+    lines = ["line 1\n", " line2\n"]
+    r = c.request(u, 'POST', body=lines, 
+            headers=[("Content-Length", "14")])
+    t.eq(r.status_int, 200)
+    t.eq(r.body, 'line 1\n line2\n')
+     
+@t.client_request('/chunked')
+def test_022(u, c):
+    lines = ["line 1\n", " line2\n"]
+    r = c.request(u, 'POST', body=lines, 
+            headers=[("Transfer-Encoding", "chunked")])
+    t.eq(r.status_int, 200)
+    t.eq(r.body, '7\r\nline 1\n\r\n7\r\n line2\n\r\n0\r\n\r\n')
+    
 
 

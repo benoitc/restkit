@@ -241,6 +241,8 @@ class HttpConnection(object):
         self.parse_url(url)
         self.method = method.upper()
         self.body = body
+        
+        # headers are better as list
         headers = headers  or []
         if isinstance(headers, dict):
             headers = list(headers.items())
@@ -249,18 +251,15 @@ class HttpConnection(object):
         normalized_headers = []
         content_len = None
         accept_encoding = 'identity'
+        chunked = False
         
-        default_port = None
-        if self.uri.scheme == "http":
-            default_port = 80
-        elif self.uri.scheme == "https":
-            default_port = 443
-            
+        # default host
         try:
             host = self.uri.netloc.encode('ascii')
         except UnicodeEncodeError:
             host = self.uri.netloc.encode('idna')
 
+        # normalize headers
         for name, value in headers:
             name = util.normalize_name(name)
             if name == "User-Agenr":
@@ -271,6 +270,10 @@ class HttpConnection(object):
                 accept_encoding = 'identity'
             elif name == "Host":
                 host = value
+            elif name == "Transfer-Encoding":
+                if value.lower() == "chunked":
+                    chunked = True
+                normalized_headers.append((name, value))
             else:
                 if not isinstance(value, basestring):
                     value = str(value)
@@ -289,14 +292,16 @@ class HttpConnection(object):
                     try:
                         content_len = str(body.len)
                     except AttributeError:
-                        raise RequestError("Can't determine content length")
-                    
+                        pass
                 elif isinstance(body, basestring):
                     body = util.to_bytestring(body)
                     content_len = len(body)
-                else:
-                    raise RequestError("Can't determine content length")
-            normalized_headers.append(("Content-Length", content_len))
+            
+            if content_len:
+                normalized_headers.append(("Content-Length", content_len))
+            elif not chunked:
+                raise RequestError("Can't determine content length and" +
+                        "Transfer-Encoding header is not chunked")
                 
         if self.method in ('POST', 'PUT') and not body:
             normalized_headers.append(("Content-Length", "0"))
@@ -313,14 +318,12 @@ class HttpConnection(object):
         else:
             httpver = "HTTP/1.0"
 
-        # build request path
+        # request path
         path = self.uri.path or "/"
         req_path = urlparse.urlunparse(('','', path, '', 
                         self.uri.query, self.uri.fragment))
-        
-
-        
-         
+           
+        # build final request headers
         req_headers = []   
         req_headers.append("%s %s %s\r\n" % (method, req_path, httpver))
         req_headers.append("Host: %s\r\n" % host)
@@ -331,6 +334,10 @@ class HttpConnection(object):
         req_headers.append("\r\n")
         self.req_headers = req_headers
 
+        return self.do_send(req_headers, body, chunked)
+        
+        
+    def do_send(self, req_headers, body=None, chunked=False):
         for i in range(2):
             s = self.make_connection()
             try:
@@ -338,12 +345,16 @@ class HttpConnection(object):
                 sock.sendlines(s, req_headers)
                 if body is not None:
                     if hasattr(body, 'read'):
-                        sock.sendfile(s, body)
+                        sock.sendfile(s, body, chunked)
                     elif isinstance(body, basestring):
                         sock.sendfile(s, StringIO.StringIO(
-                                util.to_bytestring(body)))
+                                util.to_bytestring(body)), chunked)
                     else:
-                        sock.sendlines(s, body)
+                        sock.sendlines(s, body, chunked)
+                        
+                    if chunked: # final chunk
+                        sock.send_chunk(s, "")
+                        
                 return self.start_response()
             except socket.gaierror, e:
                 self.clean_connections()

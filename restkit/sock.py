@@ -53,35 +53,37 @@ def close(sock):
         sock.close()
     except socket.error:
         pass  
-
-def send(sock, data):
-    try:
-        sock.sendall(data)
-    except socket.error, e:
-        if e[0] not in (errno.EWOULDBLOCK, errno.EAGAIN):
-            pass
-        raise
         
-def send_nonblock(sock, data):
+def send_chunk(sock, data):
+    chunk = "".join(("%X\r\n" % len(data), data, "\r\n"))
+    sock.sendall(chunk)
+
+def send(sock, data, chunked=False):
+    if chunked:
+        return send_chunk(sock, data)
+    sock.sendall(data)
+    
+        
+def send_nonblock(sock, data, chunked=False):
     timeout = sock.gettimeout()
     if timeout != 0.0:
         try:
             sock.setblocking(0)
-            return send(sock, data)
+            return send(sock, data, chunked)
         finally:
             sock.setblocking(1)
     else:
-        return send(sock, data)
+        return send(sock, data, chunked)
     
-def sendlines(sock, lines):
+def sendlines(sock, lines, chunked=False):
     for line in list(lines):
-        send(sock, line)
+        send(sock, line, chunked)
         
-def sendfile(sock, data):
+def sendfile(sock, data, chunked=False):
     if hasattr(data, 'seek'):
         data.seek(0)
         
     while True:
         binarydata = data.read(CHUNK_SIZE)
         if binarydata == '': break
-        send(sock, binarydata)
+        send(sock, binarydata, chunked)

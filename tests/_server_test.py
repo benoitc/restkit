@@ -26,6 +26,7 @@ import unittest
 import urlparse
 import urllib
 from restkit.util import to_bytestring
+from restkit.parser import Parser
 
 HOST = socket.getfqdn('127.0.0.1')
 PORT = (os.getpid() % 31000) + 1024
@@ -200,7 +201,19 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length)
             extra_headers.append(('Content-Length', str(len(body))))
             self._respond(200, extra_headers, body)
-        
+        elif path == "/list":
+            content_length = int(self.headers.get('Content-length', 0))
+            body = self.rfile.read(content_length)
+            extra_headers.append(('Content-Length', str(len(body))))
+            self._respond(200, extra_headers, body)
+        elif path == "/chunked":
+            te = (self.headers.get("transfer-encoding") == "chunked")
+            if te:
+                body = self.rfile.read(29)
+                extra_headers.append(('Content-Length', "29"))
+                self._respond(200, extra_headers, body)
+            else:
+                self.error_Response()
         else:
             self.error_Response('Bad path')
             
