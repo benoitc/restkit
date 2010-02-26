@@ -151,6 +151,7 @@ class TeeInput(object):
     def _finalize(self):
         """ here we wil fetch final trailers
         if any."""
+
         if self.parser.body_eof():
             if callable(self.maybe_close):
                 self.maybe_close()

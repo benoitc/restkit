@@ -190,23 +190,26 @@ class Parser(object):
                 chunk_size = int(chunk.pop(0), 16)
                 self.start_offset = i+2
                 self.chunk_size = chunk_size
-                if self.chunk_size == 0:
-                    self._chunk_eof = True
-                    ret = '', data[:self.start_offset]
-                    return ret
-        else:
-            buf = data[self.start_offset:self.start_offset+self.chunk_size]
-            end_offset = self.start_offset + self.chunk_size + 2
-            # we wait CRLF else return None
-            if len(data) >= end_offset:
-                ret = buf, data[end_offset:]
-                self.chunk_size = 0
+                
+        if self.start_offset:
+            if self.chunk_size == 0:
+                self._chunk_eof = True
+                ret = '', data[:self.start_offset]
                 return ret
+            else:
+                buf = data[self.start_offset:self.start_offset+self.chunk_size]
+                end_offset = self.start_offset + self.chunk_size + 2
+                # we wait CRLF else return None
+                if len(data) >= end_offset:
+                    ret = buf, data[end_offset:]
+                    self.chunk_size = 0
+                    return ret
+
         return '', data
         
     def trailing_header(self, data):
         i = data.find("\r\n\r\n")
-        return (i != -1)
+        return i
         
     def filter_body(self, data):
         """
