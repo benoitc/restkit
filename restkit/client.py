@@ -191,11 +191,11 @@ class HttpConnection(object):
         elif self.uri.scheme == "https":
             default_port = 443
             
-        if self.port == default_port:
-            host = self.host
-        else:
-            host = "%s:%s" % (self.host, str(self.port))
-            
+        try:
+            host = self.uri.netloc.encode('ascii')
+        except UnicodeEncodeError:
+            host = self.uri.netloc.encode('idna')
+
         for name, value in headers:
             name = util.normalize_name(name)
             if name == "User-Agenr":

@@ -48,17 +48,6 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
 def recv(sock, length):
     return sock.recv(length)
     
-    while True:
-        try:
-            ret = select.select([sock.fileno()], [], [], 0)
-            if ret[0]:
-                return sock.recv(length)
-        except select.error, e:
-            if e[0] == errno.EINTR:
-                continue
-            raise
-    return ''
-  
 def close(sock):
     try:
         sock.close()
