@@ -407,7 +407,7 @@ class HttpConnection(object):
                 if i != -1: break
         
         if (not self.parser.content_len and not self.parser.is_chunked):
-            buf = list(buf[i:])
+            buf = buf[i:]
             if self.parser.should_close:
                 # http 1.0 or something like it. 
                 # we try to get missing body
