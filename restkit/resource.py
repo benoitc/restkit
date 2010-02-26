@@ -43,21 +43,12 @@ class Resource(object):
     max_connections = 4
     basic_auth_url = True
     
-    def __init__(self, uri, transport=None, headers=None, 
-            **client_opts):
+    def __init__(self, uri, headers=None, **client_opts):
         """Constructor for a `Resource` object.
 
         Resource represent an HTTP resource.
 
         :param uri: str, full uri to the server.
-        :param transport: any http instance of object based on 
-                `restkit.http.HTTPClient`. By default it will use 
-                a client based on `pycurl <http://pycurl.sourceforge.net/>`_ if 
-                installed or urllib2. You could also use 
-                `restkit.http.HTTPLib2HTTPClient`,a client based on 
-                `Httplib2 <http://code.google.com/p/httplib2/>`_ or make your
-                own depending of the option you need to access to the serve
-                (authentification, proxy, ....).
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
         :param client_opts: `restkit.client.HttpConnection` Options
@@ -115,8 +106,8 @@ class Resource(object):
             resr2 = res.clone()
         
         """
-        obj = self.__class__(self.uri, transport=self.transport, 
-                    headers=self._headers, **self.client_opts)
+        obj = self.__class__(self.uri, headers=self._headers, 
+                        **self.client_opts)
         return obj
    
     def __call__(self, path):
@@ -128,8 +119,7 @@ class Resource(object):
         """
 
         new_uri = self._make_uri(self.uri, path)
-        return type(self)(new_uri, transport=self.transport, 
-                    headers=self._headers, **self.client_opts)
+        return type(self)(new_uri, headers=self._headers, **self.client_opts)
  
     def get(self, path=None, headers=None, **params):
         """ HTTP GET         

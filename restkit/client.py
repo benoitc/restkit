@@ -21,17 +21,79 @@ MAX_FOLLOW_REDIRECTS = 5
 
 USER_AGENT = "restkit/%s" % __version__
 
+class HttpResponse(object):
+    """ Http Response object returned by HttpConnction"""
+    
+    charset = "utf8"
+    unicode_errors = 'strict'
+    
+    def __init__(self, http_client):
+        self.http_client = http_client
+        self.status = self.http_client.parser.status
+        self.status_int = self.http_client.parser.status_int
+        self.version = self.http_client.parser.version
+        self.headerslist = self.http_client.parser.headers
+        self.final_url = self.http_client.final_url
+        
+        headers = {}
+        for key, value in self.http_client.parser.headers:
+            headers[key.lower()] = value
+        self.headers = headers
+        
+        encoding = headers.get('content-encoding', None)
+        if encoding in ('gzip', 'deflate'):
+            self._body = gzip.GzipFile(fileobj=self.http_client.response_body)
+        else:
+            self._body = self.http_client.response_body
+        self._body_eof = False
+            
+    def __getitem__(self, key):
+        try:
+            return getattr(self, key)
+        except AttributeError:
+            pass
+        return self.headers[key]
+    
+    def __contains__(self, key):
+        return (key in self.headers)
+
+    def __iter__(self):
+        for item in list(self.headers.items()):
+            yield item
+          
+    @property
+    def body(self):
+        """ body in bytestring """
+        if self._body_eof:
+            self._body.seek(0)
+        self._body_eof = True
+        return self._body.read()
+        
+    @property
+    def body_file(self):
+        """ return body as a file like object"""
+        return self._body
+        
+    @property
+    def unicode_body(self):
+        """ like body but converted to unicode"""
+        if not self.charset:
+            raise AttributeError(
+            "You cannot access HttpResponse.unicode_body unless charset is set")
+        return self.body.decode(self.charset, self.unicode_errors)
+
 class HttpConnection(object):
     """ Http Connection object. """
     
-    
-    VERSION = (1, 1)
+    version = (1, 1)
+    response_class = HttpResponse
     
     
     def __init__(self, timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
             filters=None, follow_redirect=False, force_follow_redirect=False, 
             max_follow_redirect=MAX_FOLLOW_REDIRECTS, key_file=None, 
-            cert_file=None, pool_instance=None, socket=None):
+            cert_file=None, pool_instance=None, socket=None,
+            response_class=None):
             
         """ HttpConnection constructor
         
@@ -81,6 +143,9 @@ class HttpConnection(object):
             should_close = False
         
         self.parser = Parser.parse_response(should_close=should_close)
+
+        if response_class is not None:
+            self.response_class = response_class
         
     def add_filter(self, f):
         self.filters.append(f)
@@ -243,7 +308,7 @@ class HttpConnection(object):
             bf.on_request(self)
 
         # by default all connections are HTTP/1.1    
-        if self.VERSION == (1,1):
+        if self.version == (1,1):
             httpver = "HTTP/1.1"
         else:
             httpver = "HTTP/1.0"
@@ -354,67 +419,6 @@ class HttpConnection(object):
                 
         self.final_url = self.parser.headers_dict.get('Location', 
                     self.final_url)
-        return HttpResponse(self)
-        
-class HttpResponse(object):
-    """ Http Response object returned by HttpConnction"""
-    
-    charset = "utf8"
-    unicode_errors = 'strict'
-    
-    def __init__(self, http_client):
-        self.http_client = http_client
-        self.status = self.http_client.parser.status
-        self.status_int = self.http_client.parser.status_int
-        self.version = self.http_client.parser.version
-        self.headerslist = self.http_client.parser.headers
-        self.final_url = self.http_client.final_url
-        
-        headers = {}
-        for key, value in self.http_client.parser.headers:
-            headers[key.lower()] = value
-        self.headers = headers
-        
-        encoding = headers.get('content-encoding', None)
-        if encoding in ('gzip', 'deflate'):
-            self._body = gzip.GzipFile(fileobj=self.http_client.response_body)
-        else:
-            self._body = self.http_client.response_body
-        self._body_eof = False
-            
-    def __getitem__(self, key):
-        try:
-            return getattr(self, key)
-        except AttributeError:
-            pass
-        return self.headers[key]
-    
-    def __contains__(self, key):
-        return (key in self.headers)
-
-    def __iter__(self):
-        for item in list(self.headers.items()):
-            yield item
-          
-    @property
-    def body(self):
-        """ body in bytestring """
-        if self._body_eof:
-            self._body.seek(0)
-        self._body_eof = True
-        return self._body.read()
-        
-    @property
-    def body_file(self):
-        """ return body as a file like object"""
-        return self._body
-        
-    @property
-    def unicode_body(self):
-        """ like body but converted to unicode"""
-        if not self.charset:
-            raise AttributeError(
-            "You cannot access HttpResponse.unicode_body unless charset is set")
-        return self.body.decode(self.charset, self.unicode_errors)
+        return self.response_class(self)
         
         
