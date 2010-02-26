@@ -145,10 +145,10 @@ Simple client example:
   request_token_url = "http://twitter.com/oauth/request_token"
 
   # Create our filter.
-  client = OAuthfilter(('*', consumer))
+  auth = OAuthfilter(('*', consumer))
 
-  # The OAuth Client request works just like httplib2 for the most part.
-  resp = request(request_token_url, "GET")
+  # The request.
+  resp = request(request_token_url, filters=[auth])
   print resp.body
   
 
