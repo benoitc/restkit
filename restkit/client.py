@@ -326,7 +326,9 @@ class HttpConnection(object):
                 i = self.parser.filter_headers(headers, buf)
                 if i != -1: break
         
-        if not self.parser.content_len and not self.parser.is_chunked:
+        if (not self.parser.content_len and not self.parser.is_chunked):
+            self.response_body = StringIO.StringIO()
+        elif self.method == "HEAD":
             self.response_body = StringIO.StringIO()
         else:
             self.response_body = tee.TeeInput(self.socket, self.parser, 

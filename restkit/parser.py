@@ -157,7 +157,7 @@ class Parser(object):
     @property
     def is_chunked(self):
         """ is TE: chunked ?"""
-        transfert_encoding = self.headers_dict.get('Transfer-Encoding', False)
+        transfert_encoding = self.headers_dict.get('Transfer-Encoding')
         return (transfert_encoding == "chunked")
         
     @property
