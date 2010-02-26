@@ -10,8 +10,6 @@ import sys
 if not hasattr(sys, 'version_info') or sys.version_info < (2, 5, 0, 'final'):
     raise SystemExit("Restkit requires Python 2.5 or later.")
 
-from distribute_setup import use_setuptools
-use_setuptools()
 from setuptools import setup, find_packages
 
 from restkit import __version__

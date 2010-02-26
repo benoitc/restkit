@@ -411,6 +411,7 @@ class HttpConnection(object):
             if self.parser.should_close:
                 # http 1.0 or something like it. 
                 # we try to get missing body
+                
                 l = sock.CHUNK_SIZE
                 while True:
                     b = ctypes.create_string_buffer(l)
@@ -420,6 +421,7 @@ class HttpConnection(object):
                         break
                     response_body.write(b.value)
                     if l == 0: break
+                    
             response_body.seek(0)
             self.response_body = response_body
         elif self.method == "HEAD":
