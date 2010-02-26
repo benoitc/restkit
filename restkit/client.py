@@ -117,7 +117,7 @@ class HttpConnection(object):
         self.headers = []
         self.req_headers = []
         self.ua = USER_AGENT
-        self.uri = None
+        self.url = None
         
         self.follow_redirect = follow_redirect
         self.nb_redirections = max_follow_redirect
@@ -237,10 +237,11 @@ class HttpConnection(object):
         :param body: the body, could be a string, an iterator or a file-like object
         :param headers: dict or list of tupple, http headers
         """
+        self.url = url
         self.final_url = url
         self.parse_url(url)
         self.method = method.upper()
-        self.body = body
+        
         
         # headers are better as list
         headers = headers  or []
@@ -306,12 +307,14 @@ class HttpConnection(object):
         if self.method in ('POST', 'PUT') and not body:
             normalized_headers.append(("Content-Length", "0"))
        
+        self.body = body
         self.headers = normalized_headers
         self.ua = ua
         
+        # apply on request filters
         for bf in self.request_filters:
             bf.on_request(self)
-
+            
         # by default all connections are HTTP/1.1    
         if self.version == (1,1):
             httpver = "HTTP/1.1"
@@ -333,9 +336,9 @@ class HttpConnection(object):
             req_headers.append("%s: %s\r\n" % (name, value))
         req_headers.append("\r\n")
         self.req_headers = req_headers
-
-        return self.do_send(req_headers, body, chunked)
         
+        # Finally do the request
+        return self.do_send(req_headers, body, chunked)
         
     def do_send(self, req_headers, body=None, chunked=False):
         for i in range(2):
