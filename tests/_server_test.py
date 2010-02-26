@@ -256,8 +256,8 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             keys.append(k)
         if body:
             body = to_bytestring(body)
-        if body and "Content-Length" not in keys:
-            self.send_header("Content-Length", len(body))
+        #if body and "Content-Length" not in keys:
+        #    self.send_header("Content-Length", len(body))
         self.end_headers()
         self.wfile.write(body)
         self.wfile.close()
