@@ -19,8 +19,8 @@ except ImportError:
 import urllib
 
 from restkit import request
-from restkit.ext.oauth2 import Consumer
-from restkit.ext.oauth_filter import OauthFilter
+from restkit.oauth2 import Consumer
+from restkit.oauth2.filter import OauthFilter
 import t
 
 

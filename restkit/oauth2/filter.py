@@ -10,7 +10,7 @@ except ImportError:
     from cgi import parse_qs, parse_qsl
 import re
 
-from restkit.ext.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
+from restkit.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
 Token,SignatureMethod
 
     
@@ -40,6 +40,24 @@ class OauthFilter(object):
         token and method signature are optionnals. Consumer should be an 
         instance of `oauth2.Consumer`, token an  instance of `oauth2.Toke` 
         signature method an instance of `oauth2.SignatureMethod`.
+        
+        With a list of tupple, the filter will try to match the path with 
+        the rule. It allows you to maintain different authorization per
+        path. A wildcard at the indicate to the filter to match all path
+        behind.
+        
+        Example the rule::
+        
+            /some/resource/*
+            
+        will match :
+        
+            /some/resource/other
+            /some/resource/other2
+            
+        while the rule `/some/resource` will only match the path 
+        `/some/resource`.
+            
             
         """
         
