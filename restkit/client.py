@@ -407,7 +407,7 @@ class HttpConnection(object):
                 if i != -1: break
         
         if (not self.parser.content_len and not self.parser.is_chunked):
-            buf = buf[i:]
+            response_body = StringIO.StringIO(buf[i:])
             if self.parser.should_close:
                 # http 1.0 or something like it. 
                 # we try to get missing body
@@ -418,9 +418,10 @@ class HttpConnection(object):
                         l = self.socket.recv_into(b, l)
                     except socket.error:
                         break
-                    buf += b.value
+                    response_body.write(b.value)
                     if l == 0: break
-            self.response_body = StringIO.StringIO("".join(buf))
+            response_body.seek(0)
+            self.response_body = response_body
         elif self.method == "HEAD":
             self.response_body = StringIO.StringIO()
         else:
