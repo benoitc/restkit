@@ -125,7 +125,7 @@ class HttpConnection(object):
         self.method = 'GET'
         self.body = None
         self.response_body = StringIO.StringIO()
-        self.final_uri = None
+        self.final_url = None
         
         # build filter lists
         self.filters = filters or []
@@ -378,7 +378,7 @@ class HttpConnection(object):
             absolute_uri = "%s://%s" % (self.uri.scheme, self.uri.netloc)
             location = urlparse.urljoin(absolute_uri, location)
             
-        self.final_uri = location
+        self.final_url = location
         self.response_body.read() 
         self.nb_redirections -= 1
         self.maybe_close()
