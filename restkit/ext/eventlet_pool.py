@@ -5,10 +5,6 @@
 
 from __future__ import with_statement
 
-import os
-import time
-import urlparse
-
 import eventlet
 from eventlet import queue
 from eventlet.timeout import Timeout

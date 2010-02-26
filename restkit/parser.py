@@ -219,7 +219,11 @@ class Parser(object):
         dlen = len(data)
         chunk = ''
         if self.is_chunked:
-            chunk, data = self.read_chunk(data)
+            try:
+                chunk, data = self.read_chunk(data)
+            except Exception, e:
+                raise ParserError("chunked decoding error [%s]" % str(e))
+                
             if not chunk:
                 return '', data
         else:

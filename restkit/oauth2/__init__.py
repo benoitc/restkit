@@ -14,9 +14,9 @@ import binascii
 from types import ListType
 
 try:
-    from urlparse import parse_qs, parse_qsl
+    from urlparse import parse_qs
 except ImportError:
-    from cgi import parse_qs, parse_qsl
+    from cgi import parse_qs
 
 
 VERSION = '1.0' # Hi Blaine!
@@ -311,7 +311,8 @@ class Request(dict):
     def get_normalized_parameters(self):
         """Return a string that contains the parameters that must be signed."""
         # 1.0a/9.1.1 states that kvp must be sorted by key, then by value
-        items = [(k, v if type(v) != ListType else sorted(v)) for k,v in sorted(self.items()) if k != 'oauth_signature']
+        items = [(k, v if type(v) != ListType else sorted(v)) for \
+            k,v in sorted(self.items()) if k != 'oauth_signature']
         encoded_str = urllib.urlencode(items, True)
         # Encode signature parameters per Oauth Core 1.0 protocol
         # spec draft 7, section 3.6
@@ -494,7 +495,9 @@ class Server(object):
             signature_method = self.signature_methods[signature_method]
         except:
             signature_method_names = ', '.join(self.signature_methods.keys())
-            raise Error('Signature method %s not supported try one of the following: %s' % (signature_method, signature_method_names))
+            raise Error(
+            'Signature method %s not supported try one of the following: %s' % (
+                    signature_method, signature_method_names))
 
         return signature_method
 
@@ -529,7 +532,8 @@ class Server(object):
         lapsed = now - timestamp
         if lapsed > self.timestamp_threshold:
             raise Error('Expired timestamp: given %d and now %s has a '
-                'greater difference than threshold %d' % (timestamp, now, self.timestamp_threshold))
+                'greater difference than threshold %d' % (timestamp, now, 
+                self.timestamp_threshold))
 
 
 class SignatureMethod(object):

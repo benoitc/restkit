@@ -338,7 +338,7 @@ class HttpConnection(object):
         self.req_headers = req_headers
         
         # Finally do the request
-        return self.do_send(req_headers, body, chunked)
+        return self.do_send(req_headers, self.body, chunked)
         
     def do_send(self, req_headers, body=None, chunked=False):
         for i in range(2):

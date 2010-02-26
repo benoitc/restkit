@@ -3,15 +3,15 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+import re
 import urlparse
 try:
-    from urlparse import parse_qs, parse_qsl
+    from urlparse import parse_qsl
 except ImportError:
-    from cgi import parse_qs, parse_qsl
-import re
-
+    from cgi import parse_qsl
+    
 from restkit.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
-Token,SignatureMethod
+Token
 
     
 from restkit import util
@@ -129,7 +129,7 @@ class OauthFilter(object):
         oauth_req.sign_request(method, consumer, token)
         
         if form:
-            body = oauth_req.to_postdata()
+            req.body = oauth_req.to_postdata()
         elif req.method in ('GET', 'HEAD'):
             req.url = req.final_url = oauth_req.to_url()
             req.uri = urlparse.urlparse(req.url)
