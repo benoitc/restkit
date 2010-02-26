@@ -29,7 +29,7 @@ def validate_token(token):
     return token
 
 
-class OauthFilter(object):
+class OAuthFilter(object):
     
     def __init__(self, rules):
         """ 

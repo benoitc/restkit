@@ -18,9 +18,8 @@ except ImportError:
     from cgi import parse_qs, parse_qsl
 import urllib
 
-from restkit import request
+from restkit import request, OAuthFilter
 from restkit.oauth2 import Consumer
-from restkit.oauth2.filter import OauthFilter
 import t
 
 
@@ -50,7 +49,7 @@ class oauth_request(object):
         
     def __call__(self, func):
         def run():
-            o = OauthFilter(('*', self.consumer))
+            o = OAuthFilter(('*', self.consumer))
             func(o, self.url, urllib.urlencode(self.body))
         run.func_name = func.func_name
         return run
