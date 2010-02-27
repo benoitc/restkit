@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# RESTKit documentation build configuration file, created by
-# sphinx-quickstart on Fri Feb 26 23:09:27 2010.
+# restkit documentation build configuration file, created by
+# sphinx-quickstart on Sat Feb 27 11:42:16 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -22,10 +22,10 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinxtogithub']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['restkit-templates']
+templates_path = ['_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -38,7 +38,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'restkit'
-copyright = u'2008-2010, Benoît Chesneau <benoitc@e-engura.org>'
+copyright = u'2010, Benoît Chesneau'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -64,7 +64,7 @@ release = '1.0'
 
 # List of directories, relative to source directory, that shouldn't be searched
 # for source files.
-exclude_trees = ['restkit-build']
+exclude_trees = ['_build']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -89,11 +89,9 @@ pygments_style = 'sphinx'
 
 # -- Options for HTML output ---------------------------------------------------
 
-html_theme = "default"
-html_theme_options = {
-    "rightsidebar": "true",
-    "relbarbgcolor": "black"
-}
+# The theme to use for HTML and HTML Help pages.  Major themes that come with
+# Sphinx are currently 'default' and 'sphinxdoc'.
+html_theme = 'basic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -122,7 +120,7 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['restkit-static']
+html_static_path = ['_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -160,7 +158,7 @@ html_static_path = ['restkit-static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'RESTKitdoc'
+htmlhelp_basename = 'restkitdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -174,7 +172,7 @@ htmlhelp_basename = 'RESTKitdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'RESTKit.tex', u'RESTKit Documentation',
+  ('index', 'restkit.tex', u'restkit Documentation',
    u'Benoît Chesneau', 'manual'),
 ]
 
