@@ -1,4 +1,4 @@
-.. _oauth
+.. _oauth:
 
 OAuth
 +++++

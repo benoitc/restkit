@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OAuth &mdash; restkit v1.0 documentation</title>
+    <title>OAuth &mdash; restkit v1.0.0 documentation</title>
     <link rel="stylesheet" href="../static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0',
+        VERSION:     '1.0.0',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,22 +19,35 @@
     </script>
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="restkit v1.0 documentation" href="../index.html" />
+    <link rel="top" title="restkit v1.0.0 documentation" href="../index.html" />
 
   <link rel="stylesheet" href="../static/restkit.css" type="text/css" />
   
 
   </head>
   <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li><a href="../index.html">restkit v1.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="../index.html">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <ul id="actions">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../installation.html">Installation</a></li>
+    <li><a href="index.html">Documentation</a></li>
+    <li><a href="../api/index.html.htmll">Api</a></li>
+    <li><a href="../news.html/news.html">News</a></li>
+  </ul>
+  
+  
+</div>
+
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -42,7 +55,7 @@
           <div class="body">
             
   <div class="section" id="oauth">
-<h1>OAuth<a class="headerlink" href="#oauth" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>OAuth<a class="headerlink" href="#oauth" title="Permalink to this headline">¶</a></h1>
 <p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use restkit.oauth2 module in your applications).</p>
 <p>The OAuth filter allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">consumer</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">signaturemethod</span><span class="p">)</span>
@@ -126,13 +139,15 @@
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li><a href="../index.html">restkit v1.0 documentation</a> &raquo;</li> 
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">restkit v1.0.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-      &copy; Copyright 2010, Benoît Chesneau.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
-    </div>
+  </div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+
   </body>
 </html>
