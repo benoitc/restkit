@@ -7,13 +7,12 @@ SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = _build
 GHPIMPORT     = ${PWD}/ghp-import
+SPHINXTOGITHUB = ${PWD}/sphinxtogithub.py
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
-
-export PYTHONPATH = ${PWD}
 
 
 .PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex changes linkcheck doctest
@@ -40,6 +39,9 @@ html: clean
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 	
 github:
+	@echo "Prepare build for Github gh-pages"
+	$(SPHINXTOGITHUB) $(BUILDDIR)/html
+	@echo "Send to github"
 	$(GHPIMPORT) -p $(BUILDDIR)/html
 
 dirhtml:

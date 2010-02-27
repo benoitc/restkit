@@ -5,3 +5,37 @@
   <link rel="stylesheet" href="{{ pathto('_static/restkit.css', 1) }}" type="text/css" />
   
 {% endblock %}
+
+{% block header %}
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="{{ pathto(master_doc) }}">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <ul id="actions">
+    <li><a href="{{ pathto(master_doc) }}">Home</a></li>
+    <li><a href="{{ pathto("installation.html", 1) }}">Installation</a></li>
+    <li><a href="{{ pathto("doc/index.html", 1) }}">Documentation</a></li>
+    <li><a href="{{ pathto("api/index.html") }}l">Api</a></li>
+    <li><a href="{{ pathto("news.html", 1) }}/news.html">News</a></li>
+  </ul>
+  
+  
+</div>
+
+{% endblock %}
+
+{%- block relbar1 %}{% endblock %}
+
+{% block footer %}
+  </div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+{% endblock %}
