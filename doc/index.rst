@@ -23,10 +23,13 @@ Features
 - HTTP Filters, you can hook requests in responses with your own callback
 - Compatible with Python 2.x (>= 2.5)
 
-Contents:
-
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   
+   installation
+   doc/index
+   api/index
+   news
 
 Indices and tables
 ==================

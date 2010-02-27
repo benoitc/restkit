@@ -1,7 +1,7 @@
 .. _oauth:
 
 OAuth
-+++++
+=====
 
 Restkit OAuth is based on `simplegeo python-oauth2 module <http://github.com/simplegeo/python-oauth2>`_ So you don't need other installation to use OAuth (you can also simply use restkit.oauth2 module in your applications).
   
@@ -16,7 +16,7 @@ With a list of tupple, the filter will try to match the path with the rule. It a
 Example the rule `/some/resource/*` will match `/some/resource/other` and `/some/resource/other2`, while the rule `/some/resource` will only match the path `/some/resource`.
 
 Simple client example:
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 ::
 

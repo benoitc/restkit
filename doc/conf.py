@@ -6,7 +6,10 @@
 import sys, os
 import restkit
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage']
+sys.path.append(os.getcwd())
+
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 
+    'extapi']
 
 templates_path = ['_templates']
 

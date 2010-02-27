@@ -43,7 +43,7 @@ setup(
     packages = find_packages(exclude=['tests']),
     entry_points = {
         'console_scripts': [
-            'restcli = restkit.bin.rest_cli:main',
+            'restcli = restkit.console:main',
         ]
     },
 

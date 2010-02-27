@@ -1,6 +1,6 @@
 #! /usr/bin/env python
  
-from optparse import OptionParser
+import optparse as op
 import os
 import sys
 import shutil

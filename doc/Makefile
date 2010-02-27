@@ -8,6 +8,7 @@ PAPER         =
 BUILDDIR      = _build
 GHPIMPORT     = ${PWD}/ghp-import
 SPHINXTOGITHUB = ${PWD}/sphinxtogithub.py
+EPYDOC = epydoc
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -35,6 +36,7 @@ clean:
 
 html: clean
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	$(EPYDOC) -o html/api ../restkit
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 	
