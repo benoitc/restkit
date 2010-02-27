@@ -36,7 +36,7 @@ class TeeInput(object):
             if chunk:
                 self.tmp.write(chunk)
             self._finalize()
-            self.tmp.seek(0)
+            self.tmp.seek(0)      
             
     @property
     def len(self):
@@ -44,6 +44,7 @@ class TeeInput(object):
         if self._is_socket:
             pos = self.tmp.tell()
             while True:
+                self.tmp.seek(self._tmp_size())
                 if not self._tee(CHUNK_SIZE):
                     break
             self.tmp.seek(pos)
@@ -54,6 +55,7 @@ class TeeInput(object):
         if self._is_socket:
             pos = self.tmp.tell()
             while True:
+                self.tmp.seek(self._tmp_size())
                 if not self._tee(CHUNK_SIZE):
                     break
             self.tmp.seek(pos)
@@ -136,6 +138,9 @@ class TeeInput(object):
             chunk, self.buf = self.parser.filter_body(self.buf)
             if chunk:
                 self.tmp.write(chunk)
+                self.tmp.flush()
+                if hasattr(self.tmp, 'fileno'):
+                    os.fsync(self.tmp.fileno())
                 self.tmp.seek(0, os.SEEK_END)
                 return chunk
             

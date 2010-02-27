@@ -137,13 +137,13 @@ class HttpConnection(object):
             self._add_filter(f)
                 
         if not pool_instance:
-            should_close = True
+            self.should_close = True
             self.connections = None
         else:
             self.connections = pool_instance
-            should_close = False
+            self.should_close = False
         
-        self.parser = Parser.parse_response(should_close=should_close)
+        
 
         if response_class is not None:
             self.response_class = response_class
@@ -238,6 +238,7 @@ class HttpConnection(object):
         :param body: the body, could be a string, an iterator or a file-like object
         :param headers: dict or list of tupple, http headers
         """
+        self.parser = Parser.parse_response(should_close=self.should_close)
         self.url = url
         self.final_url = url
         self.parse_url(url)
