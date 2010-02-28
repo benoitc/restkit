@@ -129,8 +129,14 @@ div.highlight {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     padding: .2em;
+    
+    
 }
 
+
+div.highlight pre {
+    overflow-x: hidden;
+}
 #footer {
     border-top: 1px solid #ccc;
     clear: both;
