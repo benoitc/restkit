@@ -2,9 +2,9 @@
 
 Documentation
 =============
-You can do simply use  :api:`restkit.request` function to do any HTTP requests.
+You can simply use  :api:`restkit.request` function to do any HTTP requests.
 
-Usage example, get friendpaste page::
+Usage example, get a friendpaste paste::
 
   >>> from restkit import request
   >>> r = request('http://friendpaste.com/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw')
