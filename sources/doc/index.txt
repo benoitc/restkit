@@ -17,5 +17,6 @@ but you can do more like building object mapping HTTP resources, ....
    :maxdepth: 2
    
    resource
+   pool
    authentication
    client

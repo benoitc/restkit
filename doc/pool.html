@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Documentation &mdash; restkit v1.0.0 documentation</title>
+    <title>Reuses connections &mdash; restkit v1.0.0 documentation</title>
     <link rel="stylesheet" href="../static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -41,7 +41,7 @@
   <ul id="actions">
     <li><a href="../index.html">Home</a></li>
     <li><a href="../installation.html">Installation</a></li>
-    <li><a href="#">Documentation</a></li>
+    <li><a href="index.html">Documentation</a></li>
     <li><a href="../api/index.html">Api</a></li>
     <li><a href="../news.html">News</a></li>
     
@@ -70,29 +70,27 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="documentation">
-<span id="doc"></span><h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
-<p>You can do simply use  <a class="reference external" href="../api/restkit-module.html#request">request</a> function to do any HTTP requests.</p>
-<p>Usage example, get friendpaste page:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
-<span class="n">resp</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">resp</span><span class="o">.</span><span class="n">body</span>
+  <div class="section" id="reuses-connections">
+<h1>Reuses connections<a class="headerlink" href="#reuses-connections" title="Permalink to this headline">¶</a></h1>
+<p>Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a pool instance inheriting reskit.pool.PoolInterface. You can use our threadsafe pool in any application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">ConnectionPool</span>
+
+<span class="n">pool</span> <span class="o">=</span> <span class="n">ConnectionPool</span><span class="p">(</span><span class="n">max_connections</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">,</span> <span class="n">pool_instance</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>but you can do more like building object mapping HTTP resources, ....</p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="resource.html">Build resource object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="resource.html#create-a-simple-twitter-search-resource">Create a simple Twitter Search resource</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="pool.html">Reuses connections</a></li>
-<li class="toctree-l1"><a class="reference external" href="authentication.html">Authentication</a><ul>
-<li class="toctree-l2"><a class="reference external" href="authentication.html#basic-authentication">Basic authentication</a></li>
-<li class="toctree-l2"><a class="reference external" href="authentication.html#oauth">OAuth</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="client.html">Command Line</a></li>
-</ul>
+<p>or if you use Eventlet:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">eventlet</span>
+<span class="n">eventlet</span><span class="o">.</span><span class="n">monkey_patch</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="kn">from</span> <span class="nn">restkit.ext.eventlet_pool</span> <span class="kn">import</span> <span class="n">EventletPool</span>
+
+<span class="n">pool</span> <span class="o">=</span> <span class="n">EventletPool</span><span class="p">(</span><span class="n">max_connections</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">,</span> <span class="n">pool_instance</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using <a class="reference external" href="http://eventlet.net">eventlet</a> pool is definitely better since it allows you to define a timeout for connections. When timeout is reached and the connection is still in the pool, it will be closed.</p>
 </div>
 
 
@@ -103,7 +101,7 @@
         <div class="sphinxsidebarwrapper">
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/doc/index.txt"
+              <li><a href="../sources/doc/pool.txt"
                      rel="nofollow">Show Source</a></li>
             </ul>
           <div id="searchbox" style="display: none">
