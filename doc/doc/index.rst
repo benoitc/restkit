@@ -6,11 +6,14 @@ You can do simply use  :api:`restkit.request` function to do any HTTP requests.
 
 Usage example, get friendpaste page::
 
-  from restkit import request
-  resp = request('http://friendpaste.com')
-  print resp.body
-
-
+  >>> r = request('http://friendpaste.com/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw')
+  >>> r.headers
+  {'status': '200 OK', 'transfer-encoding': 'chunked', 'set-cookie': 'FRIENDPASTE_SID=b581975029d689119d3e89416e4c2f6480a65d96; expires=Sun, 14-Mar-2010 03:29:31 GMT; Max-Age=1209600; Path=/', 'server': 'nginx/0.7.62', 'connection': 'keep-alive', 'date': 'Sun, 28 Feb 2010 03:29:31 GMT', 'content-type': 'text/plain'}
+  >>> r.body
+  'welcome to friendpaste'
+  >>> r.body_file.read()
+  'welcome to friendpaste'
+  
 but you can do more like building object mapping HTTP resources, ....
 
 .. toctree::

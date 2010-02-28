@@ -68,7 +68,9 @@ class HttpResponse(object):
         if self._body_eof:
             self._body.seek(0)
         self._body_eof = True
-        return self._body.read()
+        ret = self._body.read()
+        self._body.seek(0)
+        return ret
         
     @property
     def body_file(self):
