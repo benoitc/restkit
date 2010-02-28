@@ -8,7 +8,11 @@ p {
 }
 
 a {
-   color: #489848;
+   color: #e21a1a;
+}
+
+a:hover {
+    color: #000;
 }
 
 h1 {
@@ -109,8 +113,13 @@ ul#actions li a {
     text-decoration: None;
 }
 
-
-
+div.highlight {
+    background: #000;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: .2em;
+}
 
 #footer {
     border-top: 1px solid #ccc;

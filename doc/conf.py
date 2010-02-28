@@ -25,7 +25,7 @@ release = version
 
 
 exclude_trees = ['_build']
-pygments_style = 'sphinx'
+pygments_style = 'fruity'
 html_theme = 'basic'
 html_theme_path = [""]
 html_static_path = ['_static']
