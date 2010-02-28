@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Authentication &mdash; restkit v1.0.0 documentation</title>
+    <title>Basic authentication &mdash; restkit v1.0.0 documentation</title>
     <link rel="stylesheet" href="../static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -40,8 +40,8 @@
     <li><a href="../index.html">Home</a></li>
     <li><a href="../installation.html">Installation</a></li>
     <li><a href="index.html">Documentation</a></li>
-    <li><a href="../api/index.html.htmll">Api</a></li>
-    <li><a href="../news.html/news.html">News</a></li>
+    <li><a href="../api/index.html">Api</a></li>
+    <li><a href="../news.html">News</a></li>
   </ul>
   
   
@@ -54,10 +54,20 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="authentication">
-<h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
-<p>Restkit support for now <a href="#id1"><span class="problematic" id="id2">`basic authentication`_</span></a>  and <a class="reference external" href="http://oauth.net/">OAuth</a>. But any
-other authentication schema can easily be added using http filters.</p>
+  <div class="section" id="basic-authentication">
+<span id="id1"></span><h1>Basic authentication<a class="headerlink" href="#basic-authentication" title="Permalink to this headline">¶</a></h1>
+<p>Basic authentication is managed by the object <a class="reference external" href="../api/restkit.filters.BasicAuth-class.html">BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="../api/restkit-module.html#request">request</a> function and in <a class="reference external" href="../api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
+<p>To use <cite>basic authentication</cite> in a <cite>Resource object</cite> you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">BasicAuth</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">BasicAuth</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&quot;http://friendpaste.com&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">auth</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Or simply use an authentication url:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&quot;http://username:password@friendpaste.com&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 
 
@@ -68,7 +78,7 @@ other authentication schema can easily be added using http filters.</p>
         <div class="sphinxsidebarwrapper">
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/doc/authentification.txt"
+              <li><a href="../sources/doc/basic_authentication.txt"
                      rel="nofollow">Show Source</a></li>
             </ul>
           <div id="searchbox" style="display: none">

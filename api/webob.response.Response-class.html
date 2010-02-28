@@ -1,0 +1,2413 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>webob.response.Response</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        webob ::
+        response ::
+        Response ::
+        Class&nbsp;Response
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="webob.response.Response-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class Response</h1><p class="nomargin-top"></p>
+<pre class="base-tree">
+object --+
+         |
+        <strong class="uidshort">Response</strong>
+</pre>
+
+<dl><dt>Known Subclasses:</dt>
+<dd>
+      <ul class="subclass-list">
+<li>exc.WSGIHTTPException</li>  </ul>
+</dd></dl>
+
+<hr />
+<p>Represents a WSGI response</p>
+
+<!-- ==================== NESTED CLASSES ==================== -->
+<a name="section-NestedClasses"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Nested Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-NestedClasses"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.request.Request-class.html" class="summary-name">RequestClass</a><br />
+      The default request implementation
+    </td>
+  </tr>
+</table>
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">environ</span>,
+        <span class="summary-sig-arg">start_response</span>)</span><br />
+      WSGI application interface</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">body</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">status</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">headerlist</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">app_iter</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">request</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">content_type</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">conditional_response</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kw</span>)</span><br />
+      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      repr(x)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">skip_body</span>=<span class="summary-sig-default">False</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_abs_headerlist"></a><span class="summary-sig-name">_abs_headerlist</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">environ</span>)</span><br />
+      Returns a headerlist, with the Location header possibly made absolute
+      given the request environ.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_add_cookie"></a><span class="summary-sig-name">_add_cookie</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">cookie</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_app_iter__del"></a><span class="summary-sig-name">_app_iter__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_app_iter__get" class="summary-sig-name" onclick="show_private();">_app_iter__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the app_iter of the response.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_app_iter__set"></a><span class="summary-sig-name">_app_iter__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_body__del"></a><span class="summary-sig-name">_body__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_body__get" class="summary-sig-name" onclick="show_private();">_body__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      The body of the response, as a ``str``.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_body__set"></a><span class="summary-sig-name">_body__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_body_file__del"></a><span class="summary-sig-name">_body_file__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_body_file__get" class="summary-sig-name" onclick="show_private();">_body_file__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      A file-like object that can be used to write to the body.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_cache_control__del"></a><span class="summary-sig-name">_cache_control__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_cache_control__get"></a><span class="summary-sig-name">_cache_control__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get/set/modify the Cache-Control header (section `14.9 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_cache_control__set"></a><span class="summary-sig-name">_cache_control__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_cache_expires" class="summary-sig-name" onclick="show_private();">_cache_expires</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">seconds</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">**kw</span>)</span><br />
+      Set expiration on this request.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_charset__del"></a><span class="summary-sig-name">_charset__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_charset__get"></a><span class="summary-sig-name">_charset__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get/set the charset (in the Content-Type)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_charset__set"></a><span class="summary-sig-name">_charset__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">charset</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_content_type__del"></a><span class="summary-sig-name">_content_type__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_content_type__get" class="summary-sig-name" onclick="show_private();">_content_type__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get/set the Content-Type header (or None), *without* the charset or 
+      any parameters.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_content_type__set"></a><span class="summary-sig-name">_content_type__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_content_type_params__del"></a><span class="summary-sig-name">_content_type_params__del</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_content_type_params__get" class="summary-sig-name" onclick="show_private();">_content_type_params__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      A dictionary of all the parameters in the content type.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_content_type_params__set"></a><span class="summary-sig-name">_content_type_params__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value_dict</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_environ__del"></a><span class="summary-sig-name">_environ__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_environ__get"></a><span class="summary-sig-name">_environ__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get/set the request environ associated with this response, if any.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_environ__set"></a><span class="summary-sig-name">_environ__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headerlist__del"></a><span class="summary-sig-name">_headerlist__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headerlist__get"></a><span class="summary-sig-name">_headerlist__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      The list of response headers</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headerlist__set"></a><span class="summary-sig-name">_headerlist__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headers__get"></a><span class="summary-sig-name">_headers__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      The headers in a dictionary-like object</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headers__set"></a><span class="summary-sig-name">_headers__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_request__del"></a><span class="summary-sig-name">_request__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_request__get"></a><span class="summary-sig-name">_request__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return the request associated with this response if any.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_request__set"></a><span class="summary-sig-name">_request__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_status__get"></a><span class="summary-sig-name">_status__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      The status string</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_status__set"></a><span class="summary-sig-name">_status__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_status_int__get"></a><span class="summary-sig-name">_status_int__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      The status as an integer</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_status_int__set"></a><span class="summary-sig-name">_status_int__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">code</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_unicode_body__del"></a><span class="summary-sig-name">_unicode_body__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_unicode_body__get"></a><span class="summary-sig-name">_unicode_body__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get/set the unicode value of the body (using the charset of the 
+      Content-Type)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_unicode_body__set"></a><span class="summary-sig-name">_unicode_body__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_update_cache_control"></a><span class="summary-sig-name">_update_cache_control</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">prop_dict</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="app_iter_range"></a><span class="summary-sig-name">app_iter_range</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">start</span>,
+        <span class="summary-sig-arg">stop</span>)</span><br />
+      Return a new app_iter built from the response app_iter, that serves 
+      up only the given ``start:stop`` range.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#conditional_response_app" class="summary-sig-name">conditional_response_app</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">environ</span>,
+        <span class="summary-sig-arg">start_response</span>)</span><br />
+      Like the normal __call__ interface, but checks conditional headers:</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="copy"></a><span class="summary-sig-name">copy</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Makes a copy of the response</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="decode_content"></a><span class="summary-sig-name">decode_content</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#delete_cookie" class="summary-sig-name">delete_cookie</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">path</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">domain</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Delete a cookie from the client.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="encode_content"></a><span class="summary-sig-name">encode_content</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">encoding</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">gzip</code><code class="variable-quote">'</code></span>)</span><br />
+      Encode the content with the given encoding (only gzip and identity 
+      are supported).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#md5_etag" class="summary-sig-name">md5_etag</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">body</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">set_content_md5</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Generate an etag for the response object using an MD5 hash of the 
+      body (the body parameter, or ``self.body`` if not given)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#merge_cookies" class="summary-sig-name">merge_cookies</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">resp</span>)</span><br />
+      Merge the cookies that were set on this response with the given 
+      `resp` object (which can be any WSGI application).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="set_cookie"></a><span class="summary-sig-name">set_cookie</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">value</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">max_age</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">path</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">domain</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">secure</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">httponly</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">comment</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">expires</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">overwrite</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Set (add) a cookie for the response</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#unset_cookie" class="summary-sig-name">unset_cookie</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">strict</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Unset a cookie with the given name (remove it from the response).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="write"></a><span class="summary-sig-name">write</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">text</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_cache_control_obj"></a><span class="summary-name">_cache_control_obj</span> = <code title="None">None</code><br />
+      hash(x)
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_safe_methods"></a><span class="summary-name">_safe_methods</span> = <code title="('GET', 'HEAD')"><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">GET</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">HEAD</code><code class="variable-quote">'</code><code class="variable-group">)</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="accept_ranges"></a><span class="summary-name">accept_ranges</span> = <code title="&lt;Proxy for header Accept-Ranges&gt;">&lt;Proxy for header Accept-Ranges&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="age"></a><span class="summary-name">age</span> = <code title="&lt;Converted &lt;Proxy for header Age&gt; int&gt;">&lt;Converted &lt;Proxy for header Age&gt; int&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="allow"></a><span class="summary-name">allow</span> = <code title="&lt;Converted &lt;Proxy for header Allow&gt; list&gt;">&lt;Converted &lt;Proxy for header Allow&gt; list&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#cache_expires" class="summary-name">cache_expires</a> = <code title="set_via_call(&lt;function _cache_expires at 0x10277b668&gt;)">set_via_call(&lt;function _cache_expires at 0x102<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="content_disposition"></a><span class="summary-name">content_disposition</span> = <code title="&lt;Proxy for header Content-Disposition&gt;">&lt;Proxy for header Content-Disposition&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="content_encoding"></a><span class="summary-name">content_encoding</span> = <code title="&lt;Proxy for header Content-Encoding&gt;">&lt;Proxy for header Content-Encoding&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#content_language" class="summary-name">content_language</a> = <code title="&lt;Converted &lt;Proxy for header Content-Language&gt; list&gt;">&lt;Converted &lt;Proxy for header Content-Langua<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#content_length" class="summary-name">content_length</a> = <code title="&lt;Converted &lt;Proxy for header Content-Length&gt; int&gt;">&lt;Converted &lt;Proxy for header Content-Length&gt; <code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="content_location"></a><span class="summary-name">content_location</span> = <code title="&lt;Proxy for header Content-Location&gt;">&lt;Proxy for header Content-Location&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="content_md5"></a><span class="summary-name">content_md5</span> = <code title="&lt;Proxy for header Content-MD5&gt;">&lt;Proxy for header Content-MD5&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#content_range" class="summary-name">content_range</a> = <code title="&lt;Converted &lt;Proxy for header Content-Range&gt; ContentRange object&gt;">&lt;Converted &lt;Proxy for header Content-Range&gt; Co<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="date"></a><span class="summary-name">date</span> = <code title="&lt;Converted &lt;Proxy for header Date&gt; HTTP date&gt;">&lt;Converted &lt;Proxy for header Date&gt; HTTP date&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="default_charset"></a><span class="summary-name">default_charset</span> = <code title="'UTF-8'"><code class="variable-quote">'</code><code class="variable-string">UTF-8</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="default_conditional_response"></a><span class="summary-name">default_conditional_response</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="default_content_type"></a><span class="summary-name">default_content_type</span> = <code title="'text/html'"><code class="variable-quote">'</code><code class="variable-string">text/html</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="etag"></a><span class="summary-name">etag</span> = <code title="&lt;Converted &lt;Proxy for header ETag&gt; Entity tag&gt;">&lt;Converted &lt;Proxy for header ETag&gt; Entity tag&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="expires"></a><span class="summary-name">expires</span> = <code title="&lt;Converted &lt;Proxy for header Expires&gt; HTTP date&gt;">&lt;Converted &lt;Proxy for header Expires&gt; HTTP date&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#last_modified" class="summary-name">last_modified</a> = <code title="&lt;Converted &lt;Proxy for header Last-Modified&gt; HTTP date&gt;">&lt;Converted &lt;Proxy for header Last-Modified&gt; HT<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="location"></a><span class="summary-name">location</span> = <code title="&lt;Proxy for header Location&gt;">&lt;Proxy for header Location&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="pragma"></a><span class="summary-name">pragma</span> = <code title="&lt;Proxy for header Pragma&gt;">&lt;Proxy for header Pragma&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#retry_after" class="summary-name">retry_after</a> = <code title="&lt;Converted &lt;Proxy for header Retry-After&gt; HTTP date or delta seconds&gt;">&lt;Converted &lt;Proxy for header Retry-After&gt; HTTP d<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="server"></a><span class="summary-name">server</span> = <code title="&lt;Proxy for header Server&gt;">&lt;Proxy for header Server&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#status_code" class="summary-name">status_code</a> = <code title="&lt;Deprecated attribute status_code: &lt;property object at 0x102774470&gt;&gt;">&lt;Deprecated attribute status_code: &lt;property obj<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="unicode_errors"></a><span class="summary-name">unicode_errors</span> = <code title="'strict'"><code class="variable-quote">'</code><code class="variable-string">strict</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="vary"></a><span class="summary-name">vary</span> = <code title="&lt;Converted &lt;Proxy for header Vary&gt; list&gt;">&lt;Converted &lt;Proxy for header Vary&gt; list&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#www_authenticate" class="summary-name">www_authenticate</a> = <code title="&lt;Converted &lt;Proxy for header WWW-Authenticate&gt;&gt;">&lt;Converted &lt;Proxy for header WWW-Authentica<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#app_iter" class="summary-name">app_iter</a><br />
+      Returns the app_iter of the response.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#body" class="summary-name">body</a><br />
+      The body of the response, as a ``str``.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#body_file" class="summary-name">body_file</a><br />
+      A file-like object that can be used to write to the body.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#cache_control" class="summary-name">cache_control</a><br />
+      Get/set/modify the Cache-Control header (section `14.9 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#charset" class="summary-name">charset</a><br />
+      Get/set the charset (in the Content-Type)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#content_type" class="summary-name">content_type</a><br />
+      Get/set the Content-Type header (or None), *without* the charset or 
+      any parameters.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#content_type_params" class="summary-name">content_type_params</a><br />
+      A dictionary of all the parameters in the content type.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#environ" class="summary-name">environ</a><br />
+      Get/set the request environ associated with this response, if any.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#headerlist" class="summary-name">headerlist</a><br />
+      The list of response headers
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#headers" class="summary-name">headers</a><br />
+      The headers in a dictionary-like object
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#request" class="summary-name">request</a><br />
+      Return the request associated with this response if any.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#status" class="summary-name">status</a><br />
+      The status string
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#status_int" class="summary-name">status_int</a><br />
+      The status as an integer
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#ubody" class="summary-name">ubody</a><br />
+      Alias for unicode_body
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#unicode_body" class="summary-name">unicode_body</a><br />
+      Get/set the unicode value of the body (using the charset of the 
+      Content-Type)
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">body</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">status</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">headerlist</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">app_iter</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">request</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">content_type</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">conditional_response</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kw</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x.__init__(...) initializes x; see x.__class__.__doc__ for 
+  signature</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>repr(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">skip_body</span>=<span class="sig-default">False</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>str(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_app_iter__get"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_app_iter__get</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns the app_iter of the response.</p>
+  <p>If body was set, this will create an app_iter from that body (a 
+  single-item list)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_body__get"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_body__get</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>The body of the response, as a ``str``.  This will read in the entire 
+  app_iter if necessary.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_body_file__get"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_body_file__get</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>A file-like object that can be used to write to the body.  If you 
+  passed in a list app_iter, that app_iter will be modified by writes.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_cache_expires"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_cache_expires</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">seconds</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">**kw</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Set expiration on this request.  This sets the response to expire in 
+  the given seconds, and any other attributes are used for cache_control 
+  (e.g., private=True, etc).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_content_type__get"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_content_type__get</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get/set the Content-Type header (or None), *without* the charset or 
+  any parameters.</p>
+  <p>If you include parameters (or ``;`` at all) when setting the 
+  content_type, any existing parameters will be deleted; otherwise they 
+  will be preserved.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_content_type_params__get"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_content_type_params__get</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>A dictionary of all the parameters in the content type.</p>
+  <p>(This is not a view, set to change, modifications of the dict would 
+  not be applied otherwise)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="conditional_response_app"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">conditional_response_app</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">environ</span>,
+        <span class="sig-arg">start_response</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Like the normal __call__ interface, but checks conditional 
+  headers:</p>
+  <p>* If-Modified-Since   (304 Not Modified; only on GET, HEAD) * 
+  If-None-Match       (304 Not Modified; only on GET, HEAD) * Range
+  (406 Partial Content; only on GET, HEAD)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="delete_cookie"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">delete_cookie</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">path</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">domain</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Delete a cookie from the client.  Note that path and domain must match
+  how the cookie was originally set.</p>
+  <p>This sets the cookie to the empty string, and max_age=0 so that it 
+  should expire immediately.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="md5_etag"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">md5_etag</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">body</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">set_content_md5</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Generate an etag for the response object using an MD5 hash of the body
+  (the body parameter, or ``self.body`` if not given)</p>
+  <p>Sets ``self.etag`` If ``set_content_md5`` is True sets 
+  ``self.content_md5`` as well</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="merge_cookies"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">merge_cookies</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">resp</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Merge the cookies that were set on this response with the given `resp`
+  object (which can be any WSGI application).</p>
+  <p>If the `resp` is a :class:`webob.Response` object, then the other 
+  object will be modified in-place.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="unset_cookie"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">unset_cookie</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">strict</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Unset a cookie with the given name (remove it from the response).  If 
+  there are multiple cookies (e.g., two cookies with the same name and 
+  different paths or domains), all such cookies will be deleted.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== CLASS VARIABLE DETAILS ==================== -->
+<a name="section-ClassVariableDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variable Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariableDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="cache_expires"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">cache_expires</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+set_via_call(&lt;function _cache_expires at 0x10277b668&gt;)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="content_language"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">content_language</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;Converted &lt;Proxy for header Content-Language&gt; list&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="content_length"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">content_length</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;Converted &lt;Proxy for header Content-Length&gt; int&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="content_range"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">content_range</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;Converted &lt;Proxy for header Content-Range&gt; ContentRange object&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="last_modified"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">last_modified</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;Converted &lt;Proxy for header Last-Modified&gt; HTTP date&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="retry_after"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">retry_after</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;Converted &lt;Proxy for header Retry-After&gt; HTTP date or delta seconds&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="status_code"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">status_code</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;Deprecated attribute status_code: &lt;property object at 0x102774470&gt;&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="www_authenticate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">www_authenticate</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;Converted &lt;Proxy for header WWW-Authenticate&gt;&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="app_iter"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">app_iter</h3>
+  <p>Returns the app_iter of the response.</p>
+  <p>If body was set, this will create an app_iter from that body (a 
+  single-item list)</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_app_iter__get(<span class="summary-sig-arg">self</span>)</span>
+        - Returns the app_iter of the response.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_app_iter__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_app_iter__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="body"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">body</h3>
+  <p>The body of the response, as a ``str``.  This will read in the entire 
+  app_iter if necessary.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_body__get(<span class="summary-sig-arg">self</span>)</span>
+        - The body of the response, as a ``str``.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_body__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_body__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="body_file"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">body_file</h3>
+  <p>A file-like object that can be used to write to the body.  If you 
+  passed in a list app_iter, that app_iter will be modified by writes.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_body_file__get(<span class="summary-sig-arg">self</span>)</span>
+        - A file-like object that can be used to write to the body.
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_body_file__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="cache_control"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">cache_control</h3>
+  <p>Get/set/modify the Cache-Control header (section `14.9 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_cache_control__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set/modify the Cache-Control header (section `14.9 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_cache_control__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_cache_control__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="charset"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">charset</h3>
+  <p>Get/set the charset (in the Content-Type)</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_charset__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the charset (in the Content-Type)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_charset__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">charset</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_charset__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="content_type"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">content_type</h3>
+  <p>Get/set the Content-Type header (or None), *without* the charset or 
+  any parameters.</p>
+  <p>If you include parameters (or ``;`` at all) when setting the 
+  content_type, any existing parameters will be deleted; otherwise they 
+  will be preserved.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_content_type__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the Content-Type header (or None), *without* the charset or 
+      any parameters.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_content_type__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_content_type__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="content_type_params"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">content_type_params</h3>
+  <p>A dictionary of all the parameters in the content type.</p>
+  <p>(This is not a view, set to change, modifications of the dict would 
+  not be applied otherwise)</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_content_type_params__get(<span class="summary-sig-arg">self</span>)</span>
+        - A dictionary of all the parameters in the content type.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_content_type_params__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value_dict</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_content_type_params__del(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="environ"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">environ</h3>
+  <p>Get/set the request environ associated with this response, if any.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_environ__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the request environ associated with this response, if any.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_environ__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_environ__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="headerlist"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">headerlist</h3>
+  <p>The list of response headers</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_headerlist__get(<span class="summary-sig-arg">self</span>)</span>
+        - The list of response headers
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_headerlist__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_headerlist__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="headers"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">headers</h3>
+  <p>The headers in a dictionary-like object</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_headers__get(<span class="summary-sig-arg">self</span>)</span>
+        - The headers in a dictionary-like object
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_headers__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="request"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">request</h3>
+  <p>Return the request associated with this response if any.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_request__get(<span class="summary-sig-arg">self</span>)</span>
+        - Return the request associated with this response if any.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_request__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_request__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="status"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">status</h3>
+  <p>The status string</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_status__get(<span class="summary-sig-arg">self</span>)</span>
+        - The status string
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_status__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="status_int"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">status_int</h3>
+  <p>The status as an integer</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_status_int__get(<span class="summary-sig-arg">self</span>)</span>
+        - The status as an integer
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_status_int__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">code</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ubody"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">ubody</h3>
+  <p>Alias for unicode_body</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_unicode_body__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the unicode value of the body (using the charset of the 
+      Content-Type)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_unicode_body__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_unicode_body__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="unicode_body"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">unicode_body</h3>
+  <p>Get/set the unicode value of the body (using the charset of the 
+  Content-Type)</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_unicode_body__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the unicode value of the body (using the charset of the 
+      Content-Type)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_unicode_body__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_unicode_body__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Feb 28 02:42:32 2010
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>restkit.pool</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="restkit-module.html">Package&nbsp;restkit</a> ::
+        Module&nbsp;pool
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="restkit.pool-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="restkit.pool-module.html">Module restkit.pool</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of restkit released under the MIT license. </tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># See the NOTICE for more information.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">Threadsafe Pool class </tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">collections</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package restkit=restkit-module.html"><a title="restkit" class="py-name" href="#" onclick="return doclink('link-0', 'restkit', 'link-0');">restkit</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Module restkit.sock=restkit.sock-module.html"><a title="restkit.sock" class="py-name" href="#" onclick="return doclink('link-1', 'sock', 'link-1');">sock</a></tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"> </tt>
+<a name="PoolInterface"></a><div id="PoolInterface-def"><a name="L13"></a><tt class="py-lineno">13</tt> <a class="py-toggle" href="#" id="PoolInterface-toggle" onclick="return toggle('PoolInterface');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="restkit.pool.PoolInterface-class.html">PoolInterface</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PoolInterface-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="PoolInterface-expanded"><a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">    <tt class="py-docstring">""" abstract class from which all connection </tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring">    pool should inherit.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"> </tt>
+<a name="PoolInterface.get"></a><div id="PoolInterface.get-def"><a name="L18"></a><tt class="py-lineno">18</tt> <a class="py-toggle" href="#" id="PoolInterface.get-toggle" onclick="return toggle('PoolInterface.get');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.pool.PoolInterface-class.html#get">get</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PoolInterface.get-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PoolInterface.get-expanded"><a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-docstring">""" method used to return a connection from the pool"""</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">NotImplementedError</tt> </tt>
+</div><a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">         </tt>
+<a name="PoolInterface.put"></a><div id="PoolInterface.put-def"><a name="L22"></a><tt class="py-lineno">22</tt> <a class="py-toggle" href="#" id="PoolInterface.put-toggle" onclick="return toggle('PoolInterface.put');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.pool.PoolInterface-class.html#put">put</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PoolInterface.put-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PoolInterface.put-expanded"><a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-docstring">""" Put an item back into the pool, when done """</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">NotImplementedError</tt> </tt>
+</div><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">         </tt>
+<a name="PoolInterface.clear"></a><div id="PoolInterface.clear-def"><a name="L26"></a><tt class="py-lineno">26</tt> <a class="py-toggle" href="#" id="PoolInterface.clear-toggle" onclick="return toggle('PoolInterface.clear');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.pool.PoolInterface-class.html#clear">clear</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PoolInterface.clear-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PoolInterface.clear-expanded"><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">        <tt class="py-docstring">""" method used to release all connections """</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">NotImplementedError</tt> </tt>
+</div></div><a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">     </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="ConnectionPool"></a><div id="ConnectionPool-def"><a name="L31"></a><tt class="py-lineno">31</tt> <a class="py-toggle" href="#" id="ConnectionPool-toggle" onclick="return toggle('ConnectionPool');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="restkit.pool.ConnectionPool-class.html">ConnectionPool</a><tt class="py-op">(</tt><tt class="py-base-class">PoolInterface</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ConnectionPool-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="ConnectionPool-expanded"><a name="ConnectionPool.__init__"></a><div id="ConnectionPool.__init__-def"><a name="L32"></a><tt class="py-lineno">32</tt> <a class="py-toggle" href="#" id="ConnectionPool.__init__-toggle" onclick="return toggle('ConnectionPool.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.pool.ConnectionPool-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">max_connections</tt><tt class="py-op">=</tt><tt class="py-number">4</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ConnectionPool.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ConnectionPool.__init__-expanded"><a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">        <tt class="py-docstring">""" Initialize ConnectionPool</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt class="py-docstring">        :attr max_connections: int, the number of maximum connectioons </tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"><tt class="py-docstring">        per _host_port</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Variable restkit.resource.Resource.max_connections=restkit.resource.Resource-class.html#max_connections"><a title="restkit.resource.Resource.max_connections" class="py-name" href="#" onclick="return doclink('link-2', 'max_connections', 'link-2');">max_connections</a></tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name"><a title="restkit.resource.Resource.max_connections" class="py-name" href="#" onclick="return doclink('link-3', 'max_connections', 'link-2');">max_connections</a></tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hosts</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+</div><a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">         </tt>
+<a name="ConnectionPool.get"></a><div id="ConnectionPool.get-def"><a name="L40"></a><tt class="py-lineno">40</tt> <a class="py-toggle" href="#" id="ConnectionPool.get-toggle" onclick="return toggle('ConnectionPool.get');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.pool.ConnectionPool-class.html#get">get</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">address</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ConnectionPool.get-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ConnectionPool.get-expanded"><a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">        <tt class="py-name">connections</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hosts</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method restkit.ext.eventlet_pool.EventletPool.get()=restkit.ext.eventlet_pool.EventletPool-class.html#get,Method restkit.pool.ConnectionPool.get()=restkit.pool.ConnectionPool-class.html#get,Method restkit.pool.PoolInterface.get()=restkit.pool.PoolInterface-class.html#get,Method restkit.resource.Resource.get()=restkit.resource.Resource-class.html#get"><a title="restkit.ext.eventlet_pool.EventletPool.get
+restkit.pool.ConnectionPool.get
+restkit.pool.PoolInterface.get
+restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-4', 'get', 'link-4');">get</a></tt><tt class="py-op">(</tt><tt class="py-name">address</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">connections</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">            <tt class="py-name">socket</tt> <tt class="py-op">=</tt> <tt class="py-name">connections</tt><tt class="py-op">.</tt><tt class="py-name">popleft</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hosts</tt><tt class="py-op">[</tt><tt class="py-name">address</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">connections</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">socket</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">         </tt>
+<a name="ConnectionPool.put"></a><div id="ConnectionPool.put-def"><a name="L48"></a><tt class="py-lineno">48</tt> <a class="py-toggle" href="#" id="ConnectionPool.put-toggle" onclick="return toggle('ConnectionPool.put');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.pool.ConnectionPool-class.html#put">put</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">address</tt><tt class="py-op">,</tt> <tt class="py-param">socket</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ConnectionPool.put-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ConnectionPool.put-expanded"><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-name">connections</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hosts</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="restkit.ext.eventlet_pool.EventletPool.get
+restkit.pool.ConnectionPool.get
+restkit.pool.PoolInterface.get
+restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-5', 'get', 'link-4');">get</a></tt><tt class="py-op">(</tt><tt class="py-name">address</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">connections</tt><tt class="py-op">:</tt>  </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">            <tt class="py-name">connections</tt> <tt class="py-op">=</tt> <tt class="py-name">collections</tt><tt class="py-op">.</tt><tt class="py-name">deque</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">         </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">        <tt class="py-comment"># do we have already enough connections opened ?</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-6" class="py-name" targets="Variable restkit.tee.TeeInput.len=restkit.tee.TeeInput-class.html#len"><a title="restkit.tee.TeeInput.len" class="py-name" href="#" onclick="return doclink('link-6', 'len', 'link-6');">len</a></tt><tt class="py-op">(</tt><tt class="py-name">connections</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="restkit.resource.Resource.max_connections" class="py-name" href="#" onclick="return doclink('link-7', 'max_connections', 'link-2');">max_connections</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">            <tt id="link-8" class="py-name"><a title="restkit.sock" class="py-name" href="#" onclick="return doclink('link-8', 'sock', 'link-1');">sock</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Function restkit.sock.close()=restkit.sock-module.html#close"><a title="restkit.sock.close" class="py-name" href="#" onclick="return doclink('link-9', 'close', 'link-9');">close</a></tt><tt class="py-op">(</tt><tt class="py-name">socket</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">             </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">        <tt class="py-name">connections</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">socket</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hosts</tt><tt class="py-op">[</tt><tt class="py-name">address</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">connections</tt> </tt>
+</div><a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">         </tt>
+<a name="ConnectionPool.clear"></a><div id="ConnectionPool.clear-def"><a name="L61"></a><tt class="py-lineno">61</tt> <a class="py-toggle" href="#" id="ConnectionPool.clear-toggle" onclick="return toggle('ConnectionPool.clear');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.pool.ConnectionPool-class.html#clear">clear</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">address</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ConnectionPool.clear-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ConnectionPool.clear-expanded"><a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">        <tt class="py-name">connections</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hosts</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="restkit.ext.eventlet_pool.EventletPool.get
+restkit.pool.ConnectionPool.get
+restkit.pool.PoolInterface.get
+restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-10', 'get', 'link-4');">get</a></tt><tt class="py-op">(</tt><tt class="py-name">address</tt><tt class="py-op">)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">connections</tt><tt class="py-op">:</tt> <tt class="py-keyword">break</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">            <tt class="py-name">socket</tt> <tt class="py-op">=</tt> <tt class="py-name">connections</tt><tt class="py-op">.</tt><tt class="py-name">popleft</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">            <tt id="link-11" class="py-name"><a title="restkit.sock" class="py-name" href="#" onclick="return doclink('link-11', 'sock', 'link-1');">sock</a></tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="restkit.sock.close" class="py-name" href="#" onclick="return doclink('link-12', 'close', 'link-9');">close</a></tt><tt class="py-op">(</tt><tt class="py-name">socket</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">            <tt class="py-name">socket</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="restkit.sock.close" class="py-name" href="#" onclick="return doclink('link-13', 'close', 'link-9');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Feb 28 02:42:33 2010
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

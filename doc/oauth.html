@@ -40,8 +40,8 @@
     <li><a href="../index.html">Home</a></li>
     <li><a href="../installation.html">Installation</a></li>
     <li><a href="index.html">Documentation</a></li>
-    <li><a href="../api/index.html.htmll">Api</a></li>
-    <li><a href="../news.html/news.html">News</a></li>
+    <li><a href="../api/index.html">Api</a></li>
+    <li><a href="../news.html">News</a></li>
   </ul>
   
   
@@ -56,12 +56,12 @@
             
   <div class="section" id="oauth">
 <span id="id1"></span><h1>OAuth<a class="headerlink" href="#oauth" title="Permalink to this headline">¶</a></h1>
-<p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use restkit.oauth2 module in your applications).</p>
-<p>The OAuth filter allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples:</p>
+<p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use <a class="reference external" href="../api/restkit.oauth2-module.html">restkit.oauth2</a> module in your applications).</p>
+<p>The OAuth filter <a class="reference external" href="../api/restkit.oauth2.filter.OAuthFilter-class.html">OAuthFilter</a> allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">consumer</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">signaturemethod</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><cite>token</cite> and <cite>method signature</cite> are optionnals. Consumer should be an instance of <cite>restkit.oauth2.Consumer</cite>, token an  instance of <cite>restkit.oauth2.Token</cite>  signature method an instance of <cite>oauth2.SignatureMethod</cite>  (<cite>restkit.oauth2.Token</cite> is only needed for three-legged requests.</p>
+<p><cite>token</cite> and <cite>method signature</cite> are optionnals. Consumer should be an instance of <a class="reference external" href="../api/restkit.oauth2.Consumer-class.html">Consumer</a>, token an  instance of <a class="reference external" href="../api/restkit.oauth2.Token-class.html">Token</a>  signature method an instance of <tt class="docutils literal"><span class="pre">oauth2.SignatureMethod</span></tt>  (<a class="reference external" href="../api/restkit.oauth2.Token-class.html">Token</a> is only needed for three-legged requests.</p>
 <p>With a list of tupple, the filter will try to match the path with the rule. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.</p>
 <p>Example the rule <cite>/some/resource/*</cite> will match <cite>/some/resource/other</cite> and <cite>/some/resource/other2</cite>, while the rule <cite>/some/resource</cite> will only match the path <cite>/some/resource</cite>.</p>
 <div class="section" id="simple-client-example">

@@ -1,4 +1,9 @@
-.. _documentation
+.. _doc:
 
 Documentation
 =============
+
+.. toctree::
+   :maxdepth: 2
+   
+   authentication
