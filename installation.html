@@ -21,8 +21,9 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="restkit v1.0.0 documentation" href="index.html" />
 
+  <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
   <link rel="stylesheet" href="static/restkit.css" type="text/css" />
-  
+  <script src="http://www.google.com/jsapi" type="text/javascript"></script>
 
   </head>
   <body>
@@ -36,13 +37,28 @@
     <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
   </div>
   
+  <div id="menu">
   <ul id="actions">
     <li><a href="index.html">Home</a></li>
     <li><a href="#">Installation</a></li>
     <li><a href="doc/index.html">Documentation</a></li>
     <li><a href="api/index.html">Api</a></li>
     <li><a href="news.html">News</a></li>
+    
   </ul>
+  <div id="cse">loading</div>
+  <script type="text/javascript">
+    google.load('search', '1', {language : 'en'});
+    google.setOnLoadCallback(function(){
+      var customSearchControl = new google.search.CustomSearchControl('005434981105004447958:7wnbzt3zexa');
+      customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+      customSearchControl.draw('cse');
+    }, true);
+  </script>
+  </div>
+  
+  
+  
   
   
 </div>

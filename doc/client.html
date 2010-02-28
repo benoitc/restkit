@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Authentication &mdash; restkit v1.0.0 documentation</title>
+    <title>Command Line &mdash; restkit v1.0.0 documentation</title>
     <link rel="stylesheet" href="../static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -70,17 +70,25 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="authentication">
-<h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
-<p>Restkit support for now <a class="reference external" href="http://www.ietf.org/rfc/rfc2617.txt">basic authentication</a>  and <a class="reference external" href="http://oauth.net/">OAuth</a>. But any
-other authentication schema can easily be added using http filters.</p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="basic_authentication.html">Basic authentication</a></li>
-<li class="toctree-l1"><a class="reference external" href="oauth.html">OAuth</a><ul>
-<li class="toctree-l2"><a class="reference external" href="oauth.html#simple-client-example">Simple client example:</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="command-line">
+<h1>Command Line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h1>
+<p>Restkit integrate a simple HTTP client in command line named <cite>restcli</cite> allowing  you to perform requests.</p>
+<p>Usage:</p>
+<div class="highlight-python"><pre>$ restcli --help
+Usage: 'restcli [options] url [METHOD] [filename]'
+
+Options:
+  -H HEADERS, --header=HEADERS
+                        http string header in the form of Key:Value. For
+                        example: "Accept: application/json"
+  -i FILE, --input=FILE
+                        the name of the file to read from
+  -o OUTPUT, --output=OUTPUT
+                        the name of the file to write to
+  --follow-redirect
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit</pre>
+</div>
 </div>
 
 
@@ -91,7 +99,7 @@ other authentication schema can easily be added using http filters.</p>
         <div class="sphinxsidebarwrapper">
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/doc/authentication.txt"
+              <li><a href="../sources/doc/client.txt"
                      rel="nofollow">Show Source</a></li>
             </ul>
           <div id="searchbox" style="display: none">
