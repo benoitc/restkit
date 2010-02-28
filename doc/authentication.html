@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -17,12 +18,23 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
     <link rel="top" title="restkit v1.0.0 documentation" href="../index.html" />
 
   <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
-  <link rel="stylesheet" href="../static/restkit.css" type="text/css" />
+  <link rel="stylesheet" href="../static/blitzer/jquery-ui-custom.css"
+   type="text/css" />
+  <link rel="stylesheet" href="../static/restkit.css"
+   type="text/css" />
+  
+   
+   
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAlwR2WqkJqSQkp3ltvd0NQxTdZZbkdkYaSGUN67ZRlKqnJX74gRQ-NQUM6HVgKkUT9t2gAa363uI1NA" type="text/javascript"></script>
+  
+  <script>
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+  </script
+  
   <script src="http://www.google.com/jsapi" type="text/javascript"></script>
 
   </head>
@@ -38,29 +50,28 @@
   </div>
   
   <div id="menu">
-  <ul id="actions">
-    <li><a href="../index.html">Home</a></li>
-    <li><a href="../installation.html">Installation</a></li>
-    <li><a href="index.html">Documentation</a></li>
-    <li><a href="../api/index.html">Api</a></li>
-    <li><a href="../news.html">News</a></li>
+    <div id="cse">
+      <form action="http://www.google.com/cse" id="cse-search-box">
+          <input type="hidden" name="cx" value="005434981105004447958:7wnbzt3zexa" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="25" />
+          <input type="submit" name="sa" value="Search" />
+      </form>
+      <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+    </div>
+    <ul id="actions">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../installation.html">Installation</a></li>
+      <li><a href="index.html">Documentation</a></li>
+      <li><a href="../api/index.html">Api</a></li>
+      <li><a href="../news.html">News</a></li>
     
-  </ul>
-  <div id="cse">loading</div>
-  <script type="text/javascript">
-    google.load('search', '1', {language : 'en'});
-    google.setOnLoadCallback(function(){
-      var customSearchControl = new google.search.CustomSearchControl('005434981105004447958:7wnbzt3zexa');
-      customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-      customSearchControl.draw('cse');
-    }, true);
-  </script>
+    </ul>
+
   </div>
   
-  
-  
-  
-  
+
 </div>
 
   
@@ -175,10 +186,12 @@ other authentication schema can easily be added using http filters.</p>
       <div class="clearer"></div>
     </div>
   </div>
+  <div id="apibox"></div>
   <div id="footer">
     <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
     <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
   </div>
+
 
   </body>
 </html>
