@@ -72,19 +72,20 @@
             
   <div class="section" id="documentation">
 <span id="doc"></span><h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
-<p>You can do simply use  <a class="reference external" href="../api/restkit-module.html#request">request</a> function to do any HTTP requests.</p>
-<p>Usage example, get friendpaste page:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw&#39;</span><span class="p">)</span>
+<p>You can simply use  <a class="reference external" href="../api/restkit-module.html#request">request</a> function to do any HTTP requests.</p>
+<p>Usage example, get a friendpaste paste:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body</span>
+<span class="go">&#39;welcome to friendpaste&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="go">&#39;welcome to friendpaste&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">headers</span>
 <span class="go">{&#39;status&#39;: &#39;200 OK&#39;, &#39;transfer-encoding&#39;: &#39;chunked&#39;, &#39;set-cookie&#39;:</span>
 <span class="go">&#39;FRIENDPASTE_SID=b581975029d689119d3e89416e4c2f6480a65d96; expires=Sun,</span>
 <span class="go">14-Mar-2010 03:29:31 GMT; Max-Age=1209600; Path=/&#39;, &#39;server&#39;: &#39;nginx/0.7.62&#39;,</span>
 <span class="go">&#39;connection&#39;: &#39;keep-alive&#39;, &#39;date&#39;: &#39;Sun, 28 Feb 2010 03:29:31 GMT&#39;,</span>
 <span class="go">&#39;content-type&#39;: &#39;text/plain&#39;}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body</span>
-<span class="go">&#39;welcome to friendpaste&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="go">&#39;welcome to friendpaste&#39;</span>
 </pre></div>
 </div>
 <p>but you can do more like building object mapping HTTP resources, ....</p>
