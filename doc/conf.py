@@ -8,8 +8,8 @@ import restkit
 
 sys.path.append(os.getcwd())
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 
-    'extapi']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'epydoc_ext',
+        'sphinxtogithub']
 
 templates_path = ['_templates']
 

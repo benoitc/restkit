@@ -3,13 +3,13 @@
 OAuth
 =====
 
-Restkit OAuth is based on `simplegeo python-oauth2 module <http://github.com/simplegeo/python-oauth2>`_ So you don't need other installation to use OAuth (you can also simply use restkit.oauth2 module in your applications).
+Restkit OAuth is based on `simplegeo python-oauth2 module <http://github.com/simplegeo/python-oauth2>`_ So you don't need other installation to use OAuth (you can also simply use :api:`restkit.oauth2` module in your applications).
   
-The OAuth filter allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples::
+The OAuth filter :api:`restkit.oauth2.filter.OAuthFilter` allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples::
       
           (path, consumer, token, signaturemethod) 
           
-`token` and `method signature` are optionnals. Consumer should be an instance of `restkit.oauth2.Consumer`, token an  instance of `restkit.oauth2.Token`  signature method an instance of `oauth2.SignatureMethod`  (`restkit.oauth2.Token` is only needed for three-legged requests.
+`token` and `method signature` are optionnals. Consumer should be an instance of :api:`restkit.oauth2.Consumer`, token an  instance of :api:`restkit.oauth2.Token`  signature method an instance of :api:`oauth2.SignatureMethod`  (:api:`restkit.oauth2.Token` is only needed for three-legged requests.
 
 With a list of tupple, the filter will try to match the path with the rule. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.
 

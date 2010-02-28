@@ -35,14 +35,13 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 
 html: clean
+	@mkdir -p _build/html/api
+	$(EPYDOC) -o _build/html/api ../restkit
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
-	$(EPYDOC) -o html/api ../restkit
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 	
 github:
-	@echo "Prepare build for Github gh-pages"
-	$(SPHINXTOGITHUB) $(BUILDDIR)/html
 	@echo "Send to github"
 	$(GHPIMPORT) -p $(BUILDDIR)/html
 

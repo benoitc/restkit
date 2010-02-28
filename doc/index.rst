@@ -23,21 +23,6 @@ Features
 - HTTP Filters, you can hook requests in responses with your own callback
 - Compatible with Python 2.x (>= 2.5)
 
-.. toctree::
-   :maxdepth: 1
-   
-   installation
-   doc/index
-   api/index
-   news
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 .. _Chunked transfer encoding: http://en.wikipedia.org/wiki/Chunked_transfer_encoding
 .. _Basic Authentification: http://www.ietf.org/rfc/rfc2617.txt
 .. _OAuth: http://oauth.net/

@@ -64,14 +64,14 @@ def main():
                 headers.append(("Content-Length", str(len(body))))
         
             resp = request(args[0], method=args[1], body=body,
-                    headers=headers, follow_redirect=opts.follow_redirect)
+                        headers=headers, follow_redirect=opts.follow_redirect)
         else:
             if opts.input:
                 method = 'POST'
             else:
                 method='GET'
             resp = request(args[0], method=method, body=body,
-                    headers=headers, follow_redirect=opts.follow_redirect)
+                        headers=headers, follow_redirect=opts.follow_redirect)
                         
         if opts.output:
             f = open(opts.output, 'wb')
