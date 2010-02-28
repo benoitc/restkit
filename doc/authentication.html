@@ -74,13 +74,64 @@
 <h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
 <p>Restkit support for now <a class="reference external" href="http://www.ietf.org/rfc/rfc2617.txt">basic authentication</a>  and <a class="reference external" href="http://oauth.net/">OAuth</a>. But any
 other authentication schema can easily be added using http filters.</p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="basic_authentication.html">Basic authentication</a></li>
-<li class="toctree-l1"><a class="reference external" href="oauth.html">OAuth</a><ul>
-<li class="toctree-l2"><a class="reference external" href="oauth.html#simple-client-example">Simple client example:</a></li>
-</ul>
-</li>
-</ul>
+<div class="section" id="basic-authentication">
+<h2>Basic authentication<a class="headerlink" href="#basic-authentication" title="Permalink to this headline">¶</a></h2>
+<p>Basic authentication is managed by the object <a class="reference external" href="../api/restkit.filters.BasicAuth-class.html">BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="../api/restkit-module.html#request">request</a> function and in <a class="reference external" href="../api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
+<p>To use <cite>basic authentication</cite> in a <cite>Resource object</cite> you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">BasicAuth</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">BasicAuth</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&quot;http://friendpaste.com&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">auth</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Or simply use an authentication url:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&quot;http://username:password@friendpaste.com&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="oauth">
+<h2>OAuth<a class="headerlink" href="#oauth" title="Permalink to this headline">¶</a></h2>
+<p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use <a class="reference external" href="../api/restkit.oauth2-module.html">restkit.oauth2</a> module in your applications).</p>
+<p>The OAuth filter <a class="reference external" href="../api/restkit.oauth2.filter.OAuthFilter-class.html">OAuthFilter</a> allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">consumer</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">signaturemethod</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>token</cite> and <cite>method signature</cite> are optionnals. Consumer should be an instance of <a class="reference external" href="../api/restkit.oauth2.Consumer-class.html">Consumer</a>, token an  instance of <a class="reference external" href="../api/restkit.oauth2.Token-class.html">Token</a>  signature method an instance of <tt class="docutils literal"><span class="pre">oauth2.SignatureMethod</span></tt>  (<a class="reference external" href="../api/restkit.oauth2.Token-class.html">Token</a> is only needed for three-legged requests.</p>
+<p>With a list of tupple, the filter will try to match the path with the rule. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.</p>
+<p>Example the rule <cite>/some/resource/*</cite> will match <cite>/some/resource/other</cite> and <cite>/some/resource/other2</cite>, while the rule <cite>/some/resource</cite> will only match the path <cite>/some/resource</cite>.</p>
+<div class="section" id="simple-client-example">
+<h3>Simple client example:<a class="headerlink" href="#simple-client-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">OAuthfilter</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">import</span> <span class="nn">restkit.oauth2</span> <span class="kn">as</span> <span class="nn">oauth</span>
+
+<span class="c"># Create your consumer with the proper key/secret.</span>
+<span class="n">consumer</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">Consumer</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s">&quot;your-twitter-consumer-key&quot;</span><span class="p">,</span>
+  <span class="n">secret</span><span class="o">=</span><span class="s">&quot;your-twitter-consumer-secret&quot;</span><span class="p">)</span>
+
+<span class="c"># Request token URL for Twitter.</span>
+<span class="n">request_token_url</span> <span class="o">=</span> <span class="s">&quot;http://twitter.com/oauth/request_token&quot;</span>
+
+<span class="c"># Create our filter.</span>
+<span class="n">auth</span> <span class="o">=</span> <span class="n">OAuthfilter</span><span class="p">((</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="n">consumer</span><span class="p">))</span>
+
+<span class="c"># The request.</span>
+<span class="n">resp</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">request_token_url</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">auth</span><span class="p">])</span>
+<span class="k">print</span> <span class="n">resp</span><span class="o">.</span><span class="n">body</span>
+</pre></div>
+</div>
+<p>If you want to add OAuth  to your <cite>TwitterSearch</cite> resource:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create your consumer with the proper key/secret.</span>
+<span class="n">consumer</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">Consumer</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s">&quot;your-twitter-consumer-key&quot;</span><span class="p">,</span>
+  <span class="n">secret</span><span class="o">=</span><span class="s">&quot;your-twitter-consumer-secret&quot;</span><span class="p">)</span>
+
+<span class="c"># Create our filter.</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">OAuthfilter</span><span class="p">((</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="n">consumer</span><span class="p">))</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">TwitterSearch</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">client</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -89,6 +140,18 @@ other authentication schema can easily be added using http filters.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Authentication</a><ul>
+<li><a class="reference external" href="#basic-authentication">Basic authentication</a></li>
+<li><a class="reference external" href="#oauth">OAuth</a><ul>
+<li><a class="reference external" href="#simple-client-example">Simple client example:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="../sources/doc/authentication.txt"
@@ -110,15 +173,6 @@ other authentication schema can easily be added using http filters.</p>
         </div>
       </div>
       <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li><a href="../index.html">restkit v1.0.0 documentation</a> &raquo;</li> 
-      </ul>
     </div>
   </div>
   <div id="footer">
