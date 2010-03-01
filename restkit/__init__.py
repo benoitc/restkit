@@ -31,11 +31,12 @@ LOG_LEVELS = {
     "debug": logging.DEBUG
 }
 
-def set_logging(level):
+def set_logging(level, handler=None):
     """
     Set level of logging, and choose where to display/save logs (file or standard output).
     """
-    handler = logging.StreamHandler()
+    if not handler:
+        handler = logging.StreamHandler()
 
     loglevel = LOG_LEVELS.get(level, logging.INFO)
     logger = logging.getLogger('restkit')
