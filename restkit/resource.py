@@ -225,6 +225,8 @@ class Resource(object):
             raise
         except Exception, e:
             raise RequestError(str(e))
+        except _, e:
+            raise RequestError("unkown error [%s]" % str(e))
 
         if resp.status_int >= 400:
             if resp.status_int == 404:
