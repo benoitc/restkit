@@ -1,2 +1,1 @@
-- add support for oauth
-- add proper support for keepalive connections.
+- Improve Resource mapping
