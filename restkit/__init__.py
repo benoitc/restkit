@@ -33,7 +33,8 @@ LOG_LEVELS = {
 
 def set_logging(level, handler=None):
     """
-    Set level of logging, and choose where to display/save logs (file or standard output).
+    Set level of logging, and choose where to display/save logs 
+    (file or standard output).
     """
     if not handler:
         handler = logging.StreamHandler()
@@ -46,7 +47,6 @@ def set_logging(level, handler=None):
     
     handler.setFormatter(logging.Formatter(format, datefmt))
     logger.addHandler(handler)
-    
 
     
 def request(url, method='GET', body=None, headers=None, pool_instance=None, 
