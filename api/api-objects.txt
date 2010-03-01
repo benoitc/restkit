@@ -66,9 +66,9 @@ restkit.sock.MAX_BODY	restkit.sock-module.html#MAX_BODY
 restkit.sock.connect	restkit.sock-module.html#connect
 restkit.sock.CHUNK_SIZE	restkit.sock-module.html#CHUNK_SIZE
 restkit.sock.close	restkit.sock-module.html#close
-restkit.sock.send_chunk	restkit.sock-module.html#send_chunk
 restkit.sock._GLOBAL_DEFAULT_TIMEOUT	restkit.sock-module.html#_GLOBAL_DEFAULT_TIMEOUT
 restkit.sock.recv	restkit.sock-module.html#recv
+restkit.sock.send_chunk	restkit.sock-module.html#send_chunk
 restkit.tee	restkit.tee-module.html
 restkit.tee.recv	restkit.sock-module.html#recv
 restkit.tee.__package__	restkit.tee-module.html#__package__
@@ -362,7 +362,7 @@ restkit.oauth2.filter.OAuthFilter.add_rule	restkit.oauth2.filter.OAuthFilter-cla
 restkit.oauth2.filter.OAuthFilter.on_path	restkit.oauth2.filter.OAuthFilter-class.html#on_path
 restkit.oauth2.filter.OAuthFilter.__init__	restkit.oauth2.filter.OAuthFilter-class.html#__init__
 restkit.parser.Parser	restkit.parser.Parser-class.html
-restkit.parser.Parser.trailing_header	restkit.parser.Parser-class.html#trailing_header
+restkit.parser.Parser.is_chunked	restkit.parser.Parser-class.html#is_chunked
 restkit.parser.Parser.parse_request	restkit.parser.Parser-class.html#parse_request
 restkit.parser.Parser.read_chunk	restkit.parser.Parser-class.html#read_chunk
 restkit.parser.Parser.filter_body	restkit.parser.Parser-class.html#filter_body
@@ -370,12 +370,11 @@ restkit.parser.Parser._parse_headerl	restkit.parser.Parser-class.html#_parse_hea
 restkit.parser.Parser._first_line	restkit.parser.Parser-class.html#_first_line
 restkit.parser.Parser.__init__	restkit.parser.Parser-class.html#__init__
 restkit.parser.Parser.body_eof	restkit.parser.Parser-class.html#body_eof
-restkit.parser.Parser.is_chunked	restkit.parser.Parser-class.html#is_chunked
+restkit.parser.Parser.trailing_header	restkit.parser.Parser-class.html#trailing_header
 restkit.parser.Parser.finalize_headers	restkit.parser.Parser-class.html#finalize_headers
 restkit.parser.Parser.should_close	restkit.parser.Parser-class.html#should_close
 restkit.parser.Parser.content_len	restkit.parser.Parser-class.html#content_len
 restkit.parser.Parser.filter_headers	restkit.parser.Parser-class.html#filter_headers
-restkit.parser.Parser.parse_status	restkit.parser.Parser-class.html#parse_status
 restkit.parser.Parser.parse_response	restkit.parser.Parser-class.html#parse_response
 restkit.pool.ConnectionPool	restkit.pool.ConnectionPool-class.html
 restkit.pool.ConnectionPool.get	restkit.pool.ConnectionPool-class.html#get
