@@ -46,13 +46,12 @@ class Parser(object):
         if parsing isn't done. headers dict is updated
         with new headers.
         """
-        
-        ld = len("\r\n\r\n")
-        i = buf.find("\r\n\r\n")
+
+        s = "".join(buf)
+        i = s.find("\r\n\r\n")
         if i != -1:
-            if i > 0:
-                r = buf[:i]
-            pos = i+ld
+            r = s[:i]
+            pos = i+4
             return self.finalize_headers(headers, r, pos)
         return -1
         
@@ -81,26 +80,15 @@ class Parser(object):
         headers.extend(list(_headers.items()))
         self.headers = headers
         self._content_len = int(_headers.get('Content-Length',0))
-        
         if self.type == 'request':
             (_, _, self.path, self.query_string, self.fragment) = \
                 urlparse.urlsplit(self.raw_path)
         return pos
     
-    def parse_status(self, status):
-        try:
-            try:
-                self.status_int, self.reason = self.status.split(" ", 1)
-            except ValueError:
-                self.status_int =  self.status
-            self.status_int = int(self.status_int)
-        except ValueError:
-            raise BadStatusLine("can't find status code")       
-        
     def _first_line(self, line):
         """ parse first line """
         self.status_line = status_line = line.strip()
-        
+                
         try:
             if self.type == 'response':
                 version, self.status = status_line.split(" ", 1)
@@ -108,7 +96,7 @@ class Parser(object):
                 method, path, version = status_line.split(" ")
         except ValueError:
             return
-  
+        
         version = version.strip()
         self.raw_version = version
         try:
@@ -118,6 +106,7 @@ class Parser(object):
             version = (1, 0)
 
         self.version = version
+        
         if self.type == 'response':
             try:
                 try:
@@ -157,8 +146,7 @@ class Parser(object):
     @property
     def is_chunked(self):
         """ is TE: chunked ?"""
-        transfert_encoding = self.headers_dict.get('Transfer-Encoding')
-        return (transfert_encoding == "chunked")
+        return (self.headers_dict.get('Transfer-Encoding') == "chunked")
         
     @property
     def content_len(self):
@@ -183,10 +171,11 @@ class Parser(object):
         return False
         
     def read_chunk(self, data):
+        s = "".join(data)
         if not self.start_offset:
-            i = data.find("\r\n")
+            i = s.find("\r\n")
             if i != -1:
-                chunk = data[:i].strip().split(";", 1)
+                chunk = s[:i].strip().split(";", 1)
                 chunk_size = int(chunk.pop(0), 16)
                 self.start_offset = i+2
                 self.chunk_size = chunk_size
@@ -197,22 +186,22 @@ class Parser(object):
                 ret = '', data[:self.start_offset]
                 return ret
             else:
-                buf = data[self.start_offset:self.start_offset+self.chunk_size]
+                chunk = s[self.start_offset:self.start_offset+self.chunk_size]
                 end_offset = self.start_offset + self.chunk_size + 2
                 # we wait CRLF else return None
                 if len(data) >= end_offset:
-                    ret = buf, data[end_offset:]
+                    ret = chunk, data[end_offset:]
                     self.chunk_size = 0
                     return ret
-
         return '', data
         
     def trailing_header(self, data):
-        i = data.find("\r\n\r\n")
-        return i
+        s = "".join(data)
+        i = s.find("\r\n\r\n")
+        return (i != -1)
         
     def filter_body(self, data):
-        """
+        """\
         Filter body and return a tuple: (body_chunk, new_buffer)
         Both can be None, and new_buffer is always None if its empty.
         """
@@ -221,17 +210,18 @@ class Parser(object):
         if self.is_chunked:
             try:
                 chunk, data = self.read_chunk(data)
-            except Exception, e:
+            except Exception, E:
                 raise ParserError("chunked decoding error [%s]" % str(e))
-                
+            
             if not chunk:
                 return '', data
         else:
             if self._content_len > 0:
                 nr = min(dlen, self._content_len)
-                chunk = data[:nr]
+                chunk = "".join(data[:nr])
                 self._content_len -= nr
-                data = ''
+                data = []
                 
         self.start_offset = 0
         return (chunk, data)
+    

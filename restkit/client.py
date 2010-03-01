@@ -346,8 +346,8 @@ class HttpConnection(object):
         
     def do_send(self, req_headers, body=None, chunked=False):
         for i in range(2):
-            s = self.make_connection()
             try:
+                s = self.make_connection()
                 # send request
                 sock.sendlines(s, req_headers)
                 if body is not None:
@@ -367,7 +367,8 @@ class HttpConnection(object):
                 self.clean_connections()
                 raise
             except socket.error, e:
-                if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, errno.EPIPE):
+                if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, errno.EPIPE,
+                            errno.ECONNREFUSED):
                     self.clean_connections()
                     raise
       
@@ -398,7 +399,6 @@ class HttpConnection(object):
         """
         # read headers
         headers = []
-        buf = ""
         buf = sock.recv(self.socket, sock.CHUNK_SIZE)
         i = self.parser.filter_headers(headers, buf)
         if i == -1 and buf:
@@ -407,23 +407,23 @@ class HttpConnection(object):
                 if not data: break
                 buf += data
                 i = self.parser.filter_headers(headers, buf)
-                if i != -1: break
+                if i != -1:
+                    break
         
         if (not self.parser.content_len and not self.parser.is_chunked):
-            response_body = StringIO.StringIO(buf[i:])
+            response_body = StringIO.StringIO("".join(buf[i:]))
+            
             if self.parser.should_close:
                 # http 1.0 or something like it. 
                 # we try to get missing body
-                
-                l = sock.CHUNK_SIZE
                 while True:
-                    b = ctypes.create_string_buffer(l)
                     try:
-                        l = self.socket.recv_into(b, l)
+                        chunk = sock.recv(self.socket, sock.CHUNK_SIZE)
                     except socket.error:
                         break
-                    response_body.write(b.value)
-                    if l == 0: break
+                    response_body.write("".join(chunk))
+                    if not chunk: break
+                self.maybe_close()
                     
             response_body.seek(0)
             self.response_body = response_body

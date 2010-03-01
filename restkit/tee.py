@@ -22,28 +22,26 @@ class TeeInput(object):
         self.buf = buf
         self.parser = parser
         self.socket = socket
+        self.maybe_close = maybe_close
         self._is_socket = True
         self._len = parser.content_len
-        self.maybe_close = maybe_close
         
         if self._len and self._len < MAX_BODY:
             self.tmp = StringIO.StringIO()
         else:
             self.tmp = tempfile.TemporaryFile()
-                        
+            
         if len(buf) > 0:
             chunk, self.buf = parser.filter_body(buf)
             if chunk:
                 self.tmp.write(chunk)
-                self.tmp.flush()
-                if hasattr(self.tmp, 'fileno'):
-                    os.fsync(self.tmp.fileno())
             self._finalize()
-            self.tmp.seek(0)      
-            
+            self.tmp.seek(0)
+        
     @property
     def len(self):
         if self._len: return self._len
+        
         if self._is_socket:
             pos = self.tmp.tell()
             while True:
@@ -56,12 +54,10 @@ class TeeInput(object):
         
     def seek(self, offset, whence=0):
         if self._is_socket:
-            pos = self.tmp.tell()
             while True:
                 self.tmp.seek(self._tmp_size())
                 if not self._tee(CHUNK_SIZE):
                     break
-            self.tmp.seek(pos)
         self.tmp.seek(offset, whence)
 
     def flush(self):
@@ -133,7 +129,7 @@ class TeeInput(object):
     __next__ = next
     
     def __iter__(self):
-        return self
+        return self    
 
     def _tee(self, length):
         """ fetch partial body"""
@@ -142,17 +138,13 @@ class TeeInput(object):
             if chunk:
                 self.tmp.write(chunk)
                 self.tmp.flush()
-                if hasattr(self.tmp, 'fileno'):
-                    os.fsync(self.tmp.fileno())
                 self.tmp.seek(0, os.SEEK_END)
                 return chunk
             
             if self.parser.body_eof():
-                break
-            
-            data = recv(self.socket, length)
-            self.buf = self.buf + data
-            
+                break       
+
+            self.buf = recv(self.socket, length, self.buf)
         self._finalize()
         return ""
         
@@ -166,7 +158,7 @@ class TeeInput(object):
             
             del self.buf
             self._is_socket = False
-            
+
     def _tmp_size(self):
         if isinstance(self.tmp, StringIO.StringIO):
             return self.tmp.len
@@ -176,6 +168,10 @@ class TeeInput(object):
     def _ensure_length(self, buf, length):
         if not buf or not self._len:
             return buf
-        while len(buf) < length and self.len != self.tmp.tell():
-            buf += self._tee(length - len(buf))
+        while True:
+            if len(buf) >= length: 
+                break
+            data = self._tee(length - len(buf))
+            if not data: break
+            buf += data
         return buf
