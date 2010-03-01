@@ -19,8 +19,34 @@ RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceErro
 except ImportError:
     import traceback
     traceback.print_exc()
-    
+
 import urlparse
+import logging    
+
+LOG_LEVELS = {
+    "critical": logging.CRITICAL,
+    "error": logging.ERROR,
+    "warning": logging.WARNING,
+    "info": logging.INFO,
+    "debug": logging.DEBUG
+}
+
+def set_logging(level):
+    """
+    Set level of logging, and choose where to display/save logs (file or standard output).
+    """
+    handler = logging.StreamHandler()
+
+    loglevel = LOG_LEVELS.get(level, logging.INFO)
+    logger = logging.getLogger('restkit')
+    logger.setLevel(loglevel)
+    format = r"%(asctime)s [%(process)d] [%(levelname)s] %(message)s"
+    datefmt = r"%Y-%m-%d %H:%M:%S"
+    
+    handler.setFormatter(logging.Formatter(format, datefmt))
+    logger.addHandler(handler)
+    
+
     
 def request(url, method='GET', body=None, headers=None, pool_instance=None, 
         follow_redirect=False, filters=None, key_file=None, cert_file=None):

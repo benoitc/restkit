@@ -6,6 +6,7 @@
 import ctypes
 import errno
 import gzip
+import logging
 import os
 import socket
 import StringIO
@@ -21,6 +22,8 @@ from restkit import util
 MAX_FOLLOW_REDIRECTS = 5
 
 USER_AGENT = "restkit/%s" % __version__
+
+log = logging.getLogger(__name__)
 
 class HttpResponse(object):
     """ Http Response object returned by HttpConnction"""
@@ -144,9 +147,7 @@ class HttpConnection(object):
         else:
             self.connections = pool_instance
             self.should_close = False
-        
-        
-
+            
         if response_class is not None:
             self.response_class = response_class
         
@@ -350,6 +351,10 @@ class HttpConnection(object):
                 s = self.make_connection()
                 # send request
                 sock.sendlines(s, req_headers)
+                
+                log.debug('%s %s\n\n' % (self.method, self.url))
+                log.debug("Headers: [%s]" % "".join(req_headers))
+                
                 if body is not None:
                     if hasattr(body, 'read'):
                         sock.sendfile(s, body, chunked)
@@ -409,6 +414,8 @@ class HttpConnection(object):
                 i = self.parser.filter_headers(headers, buf)
                 if i != -1:
                     break
+        log.debug("Start response")
+        log.debug("Response headers: [%s]" % str(headers))
         
         if (not self.parser.content_len and not self.parser.is_chunked):
             response_body = StringIO.StringIO("".join(buf[i:]))
