@@ -352,7 +352,7 @@ class HttpConnection(object):
                 # send request
                 sock.sendlines(s, req_headers)
                 
-                log.debug('%s %s\n\n' % (self.method, self.url))
+                log.info('%s %s\n\n' % (self.method, self.url))
                 log.debug("Headers: [%s]" % "".join(req_headers))
                 
                 if body is not None:
