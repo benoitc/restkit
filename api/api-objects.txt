@@ -1,11 +1,14 @@
 restkit	restkit-module.html
+restkit.LOG_LEVELS	restkit-module.html#LOG_LEVELS
 restkit.__package__	restkit-module.html#__package__
+restkit.set_logging	restkit-module.html#set_logging
 restkit.version_info	restkit-module.html#version_info
 restkit.request	restkit-module.html#request
 restkit.client	restkit.client-module.html
 restkit.client.MAX_FOLLOW_REDIRECTS	restkit.client-module.html#MAX_FOLLOW_REDIRECTS
-restkit.client.__package__	restkit.client-module.html#__package__
 restkit.client.USER_AGENT	restkit.client-module.html#USER_AGENT
+restkit.client.log	restkit.client-module.html#log
+restkit.client.__package__	restkit.client-module.html#__package__
 restkit.console	restkit.console-module.html
 restkit.console.request	restkit-module.html#request
 restkit.console.__usage__	restkit.console-module.html#__usage__

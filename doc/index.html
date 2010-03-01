@@ -6,19 +6,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Documentation &mdash; restkit v1.1.0 documentation</title>
+    <title>Documentation &mdash; restkit v1.1.1 documentation</title>
     <link rel="stylesheet" href="../static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.0',
+        VERSION:     '1.1.1',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v1.1.0 documentation" href="../index.html" />
+    <link rel="top" title="restkit v1.1.1 documentation" href="../index.html" />
 
   <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
   <link rel="stylesheet" href="../static/blitzer/jquery-ui-custom.css"
@@ -97,6 +97,14 @@
 <span class="go">14-Mar-2010 03:29:31 GMT; Max-Age=1209600; Path=/&#39;, &#39;server&#39;: &#39;nginx/0.7.62&#39;,</span>
 <span class="go">&#39;connection&#39;: &#39;keep-alive&#39;, &#39;date&#39;: &#39;Sun, 28 Feb 2010 03:29:31 GMT&#39;,</span>
 <span class="go">&#39;content-type&#39;: &#39;text/plain&#39;}</span>
+</pre></div>
+</div>
+<p>of from a resource:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body</span>
+<span class="go">&#39;welcome to friendpaste&#39;</span>
 </pre></div>
 </div>
 <p>but you can do more like building object mapping HTTP resources, ....</p>

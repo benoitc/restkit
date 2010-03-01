@@ -7,6 +7,7 @@ News
 ----------------
 
 - Improved HTTP Parser - Now buffered.
+- Logging facility
 
 1.0 / 2010-02-28
 ----------------

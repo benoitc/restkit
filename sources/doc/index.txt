@@ -19,6 +19,14 @@ Usage example, get a friendpaste paste::
   'connection': 'keep-alive', 'date': 'Sun, 28 Feb 2010 03:29:31 GMT',
   'content-type': 'text/plain'}
   
+of from a resource:
+
+  >>> from restkit import Resource
+  >>> res = Resource('http://friendpaste.com')
+  >>> r = res.get('/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw')
+  >>> r.body
+  'welcome to friendpaste'
+  
 but you can do more like building object mapping HTTP resources, ....
 
 .. toctree::
