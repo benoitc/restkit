@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site
+ base_url="http://benoitc.github.com/restkit"
+ store_into="_build/html/sitemap.xml"
+ verbose="1"
+ sitemap_type="web"
+>
+
+<directory  path="_build/html/" url="http://benoitc.github.com/restkit/" />
+</site>
