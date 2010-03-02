@@ -226,6 +226,10 @@ class Resource(object):
             raise
         except Exception, e:
             raise RequestError(e)
+            
+        if resp is None:
+            # race condition
+            raise RequestError("unkown error")
 
         if resp.status_int >= 400:
             if resp.status_int == 404:

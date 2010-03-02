@@ -46,7 +46,6 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
 def recv(sock, length, buf=None):
     tmp_buf = array.array("c", '\0' * length)
     l = sock.recv_into(tmp_buf, length)
-    
     if not buf:
         return tmp_buf[:l]
         
@@ -66,7 +65,6 @@ def send(sock, data, chunked=False):
     if chunked:
         return send_chunk(sock, data)
     sock.sendall(data)
-    
         
 def send_nonblock(sock, data, chunked=False):
     timeout = sock.gettimeout()

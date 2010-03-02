@@ -201,7 +201,7 @@ class HttpConnection(object):
         
     def maybe_close(self):
         if not self.socket: return
-        if not hasattr(self.connections,'clear') or self.parser.should_close:
+        if self.parser.should_close:
             sock.close(self.socket) 
         else: # release the socket in the pool
             self.connections.put((self.host, self.port), self.socket)
@@ -424,27 +424,27 @@ class HttpConnection(object):
         
         if (not self.parser.content_len and not self.parser.is_chunked):
             response_body = StringIO.StringIO("".join(buf[i:]))
-            
             if self.parser.should_close:
                 # http 1.0 or something like it. 
                 # we try to get missing body
+                log.debug("No content len an not chunked transfer, get body")
                 while True:
                     try:
                         chunk = sock.recv(self.socket, sock.CHUNK_SIZE)
                     except socket.error:
                         break
-                    response_body.write("".join(chunk))
                     if not chunk: break
+                    response_body.write("".join(chunk))
                 self.maybe_close()
                     
             response_body.seek(0)
             self.response_body = response_body
         elif self.method == "HEAD":
             self.response_body = StringIO.StringIO()
+            self.maybe_close()
         else:
             self.response_body = tee.TeeInput(self.socket, self.parser, 
                                         buf[i:], maybe_close=self.maybe_close)
-
         
         # apply on response filters
         for af in self.response_filters:
