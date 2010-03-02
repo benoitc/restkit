@@ -348,7 +348,8 @@ class HttpConnection(object):
         return self.do_send(req_headers, self.body, chunked)
         
     def do_send(self, req_headers, body=None, chunked=False):
-        for i in range(2):
+        tries = 2
+        while True:
             try:
                 s = self.make_connection()
                 # send request
@@ -375,9 +376,14 @@ class HttpConnection(object):
                 raise
             except socket.error, e:
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, errno.EPIPE,
-                            errno.ECONNREFUSED):
+                            errno.ECONNREFUSED) or tries <= 0:
                     self.clean_connections()
                     raise
+            except:
+                if tries > 0: continue
+                raise
+            tries -= 1
+            
       
     def do_redirect(self):
         """ follow redirections if needed"""
