@@ -354,8 +354,8 @@ class HttpConnection(object):
                 # send request
                 sock.sendlines(s, req_headers)
                 
-                log.info('%s %s' % (self.method, self.url))
-                log.debug("Headers: [%s]" % str(req_headers))
+                log.info('Start request: %s %s' % (self.method, self.url))
+                log.debug("Request headers: [%s]" % str(req_headers))
                 
                 if body is not None:
                     if hasattr(body, 'read'):
@@ -464,9 +464,10 @@ class HttpConnection(object):
                 # according the rfc
                 return self.do_redirect()
         
-        log.debug("return response")        
+               
         self.final_url = self.parser.headers_dict.get('Location', 
                     self.final_url)
+        log.debug("Return response: %s" % self.final_url) 
         return self.response_class(self)
         
         
