@@ -2,6 +2,11 @@
 
 News
 ====
+1.1.2 / 2010-03-02
+------------------
+
+- More logging information
+- Fix retry loop so an error is raised instead of returning None.
 
 1.1 / 2010-03-01
 ----------------
