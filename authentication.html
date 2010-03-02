@@ -7,27 +7,25 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Authentication &mdash; restkit v1.1.1 documentation</title>
-    <link rel="stylesheet" href="../static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    '#',
         VERSION:     '1.1.1',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v1.1.1 documentation" href="../index.html" />
-    <link rel="next" title="Command Line" href="client.html" />
-    <link rel="prev" title="Reuses connections" href="pool.html" />
+    <link rel="top" title="restkit v1.1.1 documentation" href="index.html" />
 
   <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
   
   <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
-  <link rel="stylesheet" href="../static/blitzer/jquery-ui-custom.css"
+  <link rel="stylesheet" href="static/blitzer/jquery-ui-custom.css"
    type="text/css" />
-  <link rel="stylesheet" href="../static/restkit.css"
+  <link rel="stylesheet" href="static/restkit.css"
    type="text/css" />
   
    
@@ -45,7 +43,7 @@
   <body>
 <div class="container">
 <div id="header">
-  <h1 class="logo"><a href="../index.html">restkit</a></h1>
+  <h1 class="logo"><a href="index.html">restkit</a></h1>
   
   <div id="links"> 
     Get the source via
@@ -65,10 +63,10 @@
 
     </div>
     <ul id="actions">
-      <li><a href="../index.html">Usage</a></li>
-      <li><a href="../installation.html">Installation</a></li>
-      <li><a href="../api/index.html">Api</a></li>
-      <li><a href="../news.html">News</a></li>
+      <li><a href="index.html">Usage</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="api/index.html">Api</a></li>
+      <li><a href="news.html">News</a></li>
     
     </ul>
 
@@ -90,7 +88,7 @@
 other authentication schema can easily be added using http filters.</p>
 <div class="section" id="basic-authentication">
 <h2>Basic authentication<a class="headerlink" href="#basic-authentication" title="Permalink to this headline">¶</a></h2>
-<p>Basic authentication is managed by the object <a class="reference external" href="../api/restkit.filters.BasicAuth-class.html">BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="../api/restkit-module.html#request">request</a> function and in <a class="reference external" href="../api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
+<p>Basic authentication is managed by the object <a class="reference external" href="api/restkit.filters.BasicAuth-class.html">BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="api/restkit-module.html#request">request</a> function and in <a class="reference external" href="api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
 <p>To use <cite>basic authentication</cite> in a <cite>Resource object</cite> you can do:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">BasicAuth</span>
 
@@ -105,12 +103,12 @@ other authentication schema can easily be added using http filters.</p>
 </div>
 <div class="section" id="oauth">
 <h2>OAuth<a class="headerlink" href="#oauth" title="Permalink to this headline">¶</a></h2>
-<p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use <a class="reference external" href="../api/restkit.oauth2-module.html">restkit.oauth2</a> module in your applications).</p>
-<p>The OAuth filter <a class="reference external" href="../api/restkit.oauth2.filter.OAuthFilter-class.html">OAuthFilter</a> allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples:</p>
+<p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use <a class="reference external" href="api/restkit.oauth2-module.html">restkit.oauth2</a> module in your applications).</p>
+<p>The OAuth filter <a class="reference external" href="api/restkit.oauth2.filter.OAuthFilter-class.html">OAuthFilter</a> allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">consumer</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">signaturemethod</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><cite>token</cite> and <cite>method signature</cite> are optionnals. Consumer should be an instance of <a class="reference external" href="../api/restkit.oauth2.Consumer-class.html">Consumer</a>, token an  instance of <a class="reference external" href="../api/restkit.oauth2.Token-class.html">Token</a>  signature method an instance of <tt class="docutils literal"><span class="pre">oauth2.SignatureMethod</span></tt>  (<a class="reference external" href="../api/restkit.oauth2.Token-class.html">Token</a> is only needed for three-legged requests.</p>
+<p><cite>token</cite> and <cite>method signature</cite> are optionnals. Consumer should be an instance of <a class="reference external" href="api/restkit.oauth2.Consumer-class.html">Consumer</a>, token an  instance of <a class="reference external" href="api/restkit.oauth2.Token-class.html">Token</a>  signature method an instance of <tt class="docutils literal"><span class="pre">oauth2.SignatureMethod</span></tt>  (<a class="reference external" href="api/restkit.oauth2.Token-class.html">Token</a> is only needed for three-legged requests.</p>
 <p>With a list of tupple, the filter will try to match the path with the rule. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.</p>
 <p>Example the rule <cite>/some/resource/*</cite> will match <cite>/some/resource/other</cite> and <cite>/some/resource/other2</cite>, while the rule <cite>/some/resource</cite> will only match the path <cite>/some/resource</cite>.</p>
 <div class="section" id="simple-client-example">
@@ -154,7 +152,7 @@ other authentication schema can easily be added using http filters.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
 <li><a class="reference external" href="#">Authentication</a><ul>
 <li><a class="reference external" href="#basic-authentication">Basic authentication</a></li>
@@ -166,20 +164,14 @@ other authentication schema can easily be added using http filters.</p>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="pool.html"
-                                  title="previous chapter">Reuses connections</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="client.html"
-                                  title="next chapter">Command Line</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/doc/authentication.txt"
+              <li><a href="sources/authentication.txt"
                      rel="nofollow">Show Source</a></li>
             </ul>
           <div id="searchbox" style="display: none">
             <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
+              <form class="search" action="search.html" method="get">
                 <input type="text" name="q" size="18" />
                 <input type="submit" value="Go" />
                 <input type="hidden" name="check_keywords" value="yes" />
