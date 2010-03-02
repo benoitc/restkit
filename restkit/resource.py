@@ -218,15 +218,14 @@ class Resource(object):
                 
     
         uri = self._make_uri(self.uri, path, **params)
+        
         try:
             resp = self.do_request(uri, method=method, payload=payload, 
                                 headers=headers)
         except ParserError:
             raise
         except Exception, e:
-            raise RequestError(str(e))
-        except:
-            raise RequestError("unkown error")
+            raise RequestError(e)
 
         if resp.status_int >= 400:
             if resp.status_int == 404:

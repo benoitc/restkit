@@ -210,6 +210,8 @@ class HttpConnection(object):
     def parse_url(self, url):
         """ parse url and get host/port"""
         self.uri = urlparse.urlparse(url)
+        if self.uri.scheme not in ('http', 'https'):
+            raise InvalidUrl("None valid url")
         
         host = self.uri.netloc
         i = host.rfind(':')

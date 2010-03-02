@@ -6,29 +6,14 @@
 """
 exception classes.
 """
-from restkit.util import deprecated_property
-                    
+            
 class ResourceError(Exception):
     """ default error class """
     def __init__(self, msg=None, http_code=None, response=None):
         self.msg = msg or ''
-        self.status = http_code
+        self.status_int = http_code
         self.response = response
         Exception.__init__(self)
-        
-    def _status_int__get(self):
-        """
-        The status as an integer
-        """
-        return self.status
-    def _status_int__set(self, http_code):
-        self.status = http_code
-    status_int = property(_status_int__get, _status_int__set, 
-        doc=_status_int__get.__doc__)
-        
-    status_code = deprecated_property(
-        status_int, 'status_code', 'use .status_int instead',
-        warning=False)
         
     def _get_message(self):
         return self.msg
