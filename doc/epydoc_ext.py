@@ -47,7 +47,7 @@ def api_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
             
     if not name:
         return [nodes.literal(rawtext, text)], []
-    return [nodes.reference(rawtext, name, refuri="../%s" % uri, **options)], []
+    return [nodes.reference(rawtext, name, refuri="%s" % uri, **options)], []
 
 
 def setup(app):

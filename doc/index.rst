@@ -39,10 +39,10 @@ but you can do more like building object mapping HTTP resources, ....
 .. toctree::
    :maxdepth: 2
    
-   doc/resource
-   doc/pool
-   doc/authentication
-   doc/client
+   resource
+   pool
+   authentication
+   client
 
 
 Features
