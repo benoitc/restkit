@@ -354,8 +354,8 @@ class HttpConnection(object):
                 # send request
                 sock.sendlines(s, req_headers)
                 
-                log.info('%s %s\n\n' % (self.method, self.url))
-                log.debug("Headers: [%s]" % "".join(req_headers))
+                log.info('%s %s' % (self.method, self.url))
+                log.debug("Headers: [%s]" % str(req_headers))
                 
                 if body is not None:
                     if hasattr(body, 'read'):
@@ -416,7 +416,8 @@ class HttpConnection(object):
                 i = self.parser.filter_headers(headers, buf)
                 if i != -1:
                     break
-        log.debug("Start response")
+        
+        log.debug("Start response: %s" % str(self.parser.status_line))
         log.debug("Response headers: [%s]" % str(headers))
         
         if (not self.parser.content_len and not self.parser.is_chunked):
