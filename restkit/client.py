@@ -392,7 +392,9 @@ class HttpConnection(object):
         if not new_uri.netloc: # we got a relative url
             absolute_uri = "%s://%s" % (self.uri.scheme, self.uri.netloc)
             location = urlparse.urljoin(absolute_uri, location)
-            
+          
+        log.debug("Redirect to %s" % location)
+          
         self.final_url = location
         self.response_body.read() 
         self.nb_redirections -= 1
@@ -443,6 +445,7 @@ class HttpConnection(object):
             self.response_body = tee.TeeInput(self.socket, self.parser, 
                                         buf[i:], maybe_close=self.maybe_close)
 
+        
         # apply on response filters
         for af in self.response_filters:
             af.on_response(self)
@@ -460,7 +463,8 @@ class HttpConnection(object):
                 # only 'GET' is possible with this status
                 # according the rfc
                 return self.do_redirect()
-                
+        
+        log.debug("return response")        
         self.final_url = self.parser.headers_dict.get('Location', 
                     self.final_url)
         return self.response_class(self)
