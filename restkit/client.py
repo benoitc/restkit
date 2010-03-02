@@ -360,6 +360,7 @@ class HttpConnection(object):
                 
                 if body is not None:
                     if hasattr(body, 'read'):
+                        if hasattr(body, 'seek'): body.seek(0)
                         sock.sendfile(s, body, chunked)
                     elif isinstance(body, basestring):
                         sock.sendfile(s, StringIO.StringIO(
