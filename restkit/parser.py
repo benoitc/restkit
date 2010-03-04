@@ -94,9 +94,9 @@ class Parser(object):
                 
         try:
             if self.type == 'response':
-                version, self.status = status_line.split(" ", 1)
+                version, self.status = status_line.split(None, 1)
             else:
-                method, path, version = status_line.split(" ")
+                method, path, version = status_line.split(None, 2)
         except ValueError:
             raise BadStatusLine(line)
         
@@ -113,7 +113,7 @@ class Parser(object):
         if self.type == 'response':
             try:
                 try:
-                    self.status_int, self.reason = self.status.split(" ", 1)
+                    self.status_int, self.reason = self.status.split(None, 1)
                 except ValueError:
                     self.status_int =  self.status
                 self.status_int = int(self.status_int)

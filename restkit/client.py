@@ -436,9 +436,6 @@ class HttpConnection(object):
                 i = self.parser.filter_headers(headers, buf)
                 if i != -1:
                     break
-                    
-        if not self.parser.status_line:
-            raise BadStatusLine()
             
         log.debug("Start response: %s" % str(self.parser.status_line))
         log.debug("Response headers: [%s]" % str(self.parser.headers))
