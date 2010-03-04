@@ -10,6 +10,9 @@ from restkit.errors import BadStatusLine, ParserError
 from restkit.util import normalize_name
 
 class Parser(object):
+    """ HTTP Parser compatible 1.0 & 1.1
+    This parser can parse HTTP requests and response.
+    """
 
     def __init__(self, ptype='response', should_close=False):
         self.status_line = ""
@@ -34,10 +37,12 @@ class Parser(object):
         
     @classmethod
     def parse_response(cls, should_close=False):
+        """ Return parser object for response"""
         return cls(should_close=should_close)
         
     @classmethod
     def parse_request(cls):
+        """ return parser object for requests """
         return cls(ptype='request')
         
     def filter_headers(self, headers, buf):
