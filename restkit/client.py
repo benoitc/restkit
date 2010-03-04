@@ -380,9 +380,12 @@ class HttpConnection(object):
                             errno.ECONNREFUSED) or tries <= 0:
                     self.clean_connections()
                     raise
+                if e[0] == errno.EPIPE:
+                    self.clean_connections()
             except:
                 if tries <= 0:
                     raise
+                
             tries -= 1
             
       
