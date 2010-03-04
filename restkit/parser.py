@@ -71,7 +71,7 @@ class Parser(object):
         _headers = {}
         hname = ""
         for line in lines:
-            if line.startswith("\t"):
+            if line.startswith("\t") and hname:
                 headers[hname] += line.strip()
             else:
                 try:
@@ -98,7 +98,7 @@ class Parser(object):
             else:
                 method, path, version = status_line.split(" ")
         except ValueError:
-            return
+            raise BadStatusLine(line)
         
         version = version.strip()
         self.raw_version = version

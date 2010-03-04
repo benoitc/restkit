@@ -3,7 +3,7 @@
 News
 ====
 
-1.2 / Coming (last head)
+1.2 / 2010-03-05
 ------------------------
 
 - Improve pool management

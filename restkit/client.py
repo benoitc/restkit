@@ -14,7 +14,8 @@ import StringIO
 import urlparse
 
 from restkit import __version__
-from restkit.errors import RequestError, InvalidUrl, RedirectLimit
+from restkit.errors import RequestError, InvalidUrl, RedirectLimit,\
+BadStatusLine
 from restkit.parser import Parser
 from restkit import sock
 from restkit import tee
@@ -435,9 +436,12 @@ class HttpConnection(object):
                 i = self.parser.filter_headers(headers, buf)
                 if i != -1:
                     break
-        
+                    
+        if not self.parser.status_line:
+            raise BadStatusLine()
+            
         log.debug("Start response: %s" % str(self.parser.status_line))
-        log.debug("Response headers: [%s]" % str(headers))
+        log.debug("Response headers: [%s]" % str(self.parser.headers))
         
         if (not self.parser.content_len and not self.parser.is_chunked):
             response_body = StringIO.StringIO(buf[i:])
