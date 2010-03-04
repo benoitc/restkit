@@ -387,7 +387,8 @@ class HttpConnection(object):
             except:
                 if tries <= 0:
                     raise
-                
+                # we don't know what happend. 
+                self.clean_connections()
             tries -= 1
             
       
