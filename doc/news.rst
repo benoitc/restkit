@@ -3,10 +3,11 @@
 News
 ====
 
-1.2 / Coming
-------------
+1.2 / Coming (last head)
+------------------------
 
 - Improve pool management
+- Make HTTP parsing faster (30%).
 
 
 1.1.3 / 2010-03-04
