@@ -8,12 +8,9 @@ Threadsafe Pool class
 """
 
 import collections
-import logging
 import threading
 
 from restkit import sock
-
-log = logging.getLogger(__name__)
 
 class PoolInterface(object):
     """ abstract class from which all connection 
@@ -39,9 +36,7 @@ class _Host(object):
     def __init__(self, addr):
         object.__init__(self)
         self._addr = addr
-        self.pool = collections.deque()
-        self._lock = threading.Lock()
-    
+        self.pool = collections.deque()    
 
 class ConnectionPool(PoolInterface):
     def __init__(self, max_connections=4):

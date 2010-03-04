@@ -5,13 +5,24 @@
 
 from __future__ import with_statement
 
-import eventlet
+import collections
 from eventlet import queue
 from eventlet.timeout import Timeout
 
 from restkit.pool import PoolInterface
 from restkit import sock
 
+class _Host(object):
+    
+    def __init__(self, address):
+        self._addr = address
+        self.pool = queue.LightQueue(0)
+        self.free_connections = collections.deque()
+        self.nb_connections = 0
+        
+    def waiting(self):
+        return max(0, self.pool.getting() - self.pool.putting())    
+    
 class EventletPool(PoolInterface):
     """
     Eventlet pool to manage connections. after a specific timeout the
@@ -44,24 +55,30 @@ class EventletPool(PoolInterface):
         """ Get connection for (Host, Port) address 
         :param address: tuple (Host, address)
         """
-        connections = self.hosts.get(address)
-        if hasattr(connections, 'get'):
-            try:
-                socket = connections.get(False)
-                self.hosts[address] = connections
-                del self.sockets[socket.fileno()]
-                return socket
-            except queue.Empty:
-                pass
-        return None
+        
+        host = self.hosts.get(address)
+        if not host:
+            return None
+        if host.free_connections:
+            return host.free_connections.popleft()
+        if host.nb_connections < self.max_connections:
+            host.nb_connections += 1
+            return None
+        socket = host.pool.get()
+        self.hosts[address] = host
+        return socket
                 
-    def monitor_socket(self, fn):
+    def _monitor_socket(self, fn):
         """ function used to monitor the socket """
         with Timeout(self.timeout, False):
             if fn in self.sockets:
                 socket = self.sockets[fn]
                 sock.close(socket)
                 del self.sockets[fn]
+                
+    def monitor_socket(self, socket):
+         self.sockets[socket.fileno()] = socket
+         eventlet.spawn(self.monitor_socket, socket.fileno())
         
     def put(self, address, socket):
         """ release socket in the pool 
@@ -69,31 +86,37 @@ class EventletPool(PoolInterface):
         :param address: tuple (Host, address)
         :param socket: a socket object 
         """
-        connections = self.hosts.get(address)
-        if not connections: 
-            connections = queue.LightQueue(None)
-        
-        # do we have already enough connections opened ?
-        if connections.qsize() > self.max_connections:
-            sock.close(socket)
-            return
+        host = self.hosts.get(address)
+        if not host:
+            host = _Host(address)
             
-        connections.put(socket, False)
-        self.sockets[socket.fileno()] = socket
-        eventlet.spawn(self.monitor_socket, socket.fileno())
-        self.hosts[address] = connections
+        if host.nb_connections > self.max_connections:
+            sock.close(socket)
+            host.nb_connections -= 1
         
-    def clear(self, address):
+        elif host.waiting():
+            host.pool.put(socket)
+            self.monitor_socket(socket)
+        else:
+            host.free_connections.append(socket)
+            self.monitor_socket(socket)
+        self.hosts[address] = host
+     
+        
+    def clean(self, address):
         """ close all sockets in the pool for this address 
         
         :param address: tuple (Host, address)
         """
-        connections = self.hosts.get(address)
-        while True:
-            try:
-                socket = connections.get(False)
+        host = self.hosts.get(address)
+        if not host:
+            return
+        if host.free_connections:
+            while host.free_connections:
+                socket = host.free_connections.popleft()
                 sock.close(socket)
-                socket.close()
-            except queue.Empty:
-                break
-        
+            while host.nb_connections:
+                socket = host.pool.get()
+                sock.close(socket)
+                host.nb_connections -= 1
+        self.hosts[address] = host
