@@ -45,7 +45,7 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
         
 def recv(skt, length, buf=None):
     if buf is not None:
-        if len(buf) > length:
+        if len(buf) >= length:
             return buf
         else:
             length = length - len(buf)
