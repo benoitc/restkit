@@ -68,7 +68,7 @@ class Parser(object):
         _headers = {}
         hname = ""
         for line in lines:
-            if line == "\t":
+            if line.startswith("\t"):
                 headers[hname] += line.strip()
             else:
                 try:
