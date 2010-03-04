@@ -46,6 +46,7 @@ class ConnectionPool(PoolInterface):
         return None
         
     def put(self, address, socket):
+        if not socket: return
         connections = self.hosts.get(address)
         if not connections: 
             connections = collections.deque()
