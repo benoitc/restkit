@@ -82,12 +82,11 @@ class Resource(object):
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
         
-    def add_authorization(self, obj_auth):
-        self.transport.add_filter(obj_auth)
-        
     def add_filter(self, f):
         """ add an htt filter """
-        self.transport.add_filter(f)
+        filters = self.client_opts.get('filters', [])
+        filters.append(f)
+        self.client_opts['filters'] = filters
 
     add_authorization = util.deprecated_property(
         add_filter, 'add_authorization', 'use add_filter() instead',
@@ -95,9 +94,11 @@ class Resource(object):
         
     def remmove_filter(self, f):
         """ remove an http filter """
-        self.transport.remmove_filter(f)
+        filters = self.client_opts.get('filters', [])
+        for i, f1 in enumerate(filters):
+            if f == f1: del filters[i]
+        self.client_opts['filters'] = filters
     
-
     def clone(self):
         """if you want to add a path to resource uri, you can do:
 
