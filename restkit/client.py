@@ -137,6 +137,8 @@ class HttpConnection(object):
         self.filters = filters or []
         self.request_filters = []
         self.response_filters = []
+        self.cert_file = cert_file
+        self.key_file = key_file
 
         for f in self.filters:
             self._add_filter(f)

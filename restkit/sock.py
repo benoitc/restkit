@@ -3,7 +3,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-import array
+import ctypes
 import socket
 
 CHUNK_SIZE = (16 * 1024)
@@ -43,9 +43,15 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
     raise socket.error, msg
     
         
-def recv(sock, length, buf=None):
-    tmp_buf = array.array("c", '\0' * length)
-    l = sock.recv_into(tmp_buf, length)
+def recv(skt, length, buf=None):
+    if buf is not None:
+        if len(buf) > length:
+            return buf
+        else:
+            length = length - len(buf)
+    
+    tmp_buf = ctypes.create_string_buffer(length)
+    l = skt.recv_into(tmp_buf, length)
     if not buf:
         return tmp_buf[:l]
         
