@@ -9,6 +9,7 @@ import gzip
 import logging
 import os
 import socket
+import time
 import StringIO
 import urlparse
 
@@ -390,6 +391,7 @@ class HttpConnection(object):
                     raise
                 # we don't know what happend. 
                 self.clean_connections()
+            time.sleep(0.2)
             tries -= 1
             
       
