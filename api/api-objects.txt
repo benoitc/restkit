@@ -70,9 +70,9 @@ restkit.sock.MAX_BODY	restkit.sock-module.html#MAX_BODY
 restkit.sock.connect	restkit.sock-module.html#connect
 restkit.sock.CHUNK_SIZE	restkit.sock-module.html#CHUNK_SIZE
 restkit.sock.close	restkit.sock-module.html#close
+restkit.sock.send_chunk	restkit.sock-module.html#send_chunk
 restkit.sock._GLOBAL_DEFAULT_TIMEOUT	restkit.sock-module.html#_GLOBAL_DEFAULT_TIMEOUT
 restkit.sock.recv	restkit.sock-module.html#recv
-restkit.sock.send_chunk	restkit.sock-module.html#send_chunk
 restkit.tee	restkit.tee-module.html
 restkit.tee.recv	restkit.sock-module.html#recv
 restkit.tee.__package__	restkit.tee-module.html#__package__
