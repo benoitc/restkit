@@ -44,18 +44,11 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
     
         
 def recv(skt, length, buf=None):
-    if buf is not None:
-        if len(buf) >= length:
-            return buf
-        else:
-            length = length - len(buf)
-    
-    tmp_buf = ctypes.create_string_buffer(length)
-    l = skt.recv_into(tmp_buf, length)
+    tmp_buf = skt.recv(length)
     if not buf:
-        return tmp_buf[:l]
-        
-    return buf + tmp_buf[:l]
+        return tmp_buf
+    
+    return buf + tmp_buf
     
 def close(sock):
     try:

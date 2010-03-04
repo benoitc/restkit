@@ -440,7 +440,7 @@ class HttpConnection(object):
         log.debug("Response headers: [%s]" % str(headers))
         
         if (not self.parser.content_len and not self.parser.is_chunked):
-            response_body = StringIO.StringIO("".join(buf[i:]))
+            response_body = StringIO.StringIO(buf[i:])
             if self.parser.should_close:
                 # http 1.0 or something like it. 
                 # we try to get missing body
@@ -451,7 +451,7 @@ class HttpConnection(object):
                     except socket.error:
                         break
                     if not chunk: break
-                    response_body.write("".join(chunk))
+                    response_body.write(chunk)
                 self.maybe_close()
                     
             response_body.seek(0)
