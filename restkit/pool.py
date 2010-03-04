@@ -59,12 +59,10 @@ class ConnectionPool(PoolInterface):
         try:
             host = self.hosts.get(address)
             if host:
-                
-                socket = self._get_connection(host)
-                log.debug("Got from pool [%s]" % str(address))
-                self.hosts[address] = host
-                return socket
-            log.info("don't get from pool %s" % str(self.hosts))
+                if len(host.pool) == self.max_connections:
+                    socket =  host.pool.popleft()
+                    self.hosts[address] = host
+                    return socket
             return None
         finally:
             self._lock.release()
@@ -75,42 +73,22 @@ class ConnectionPool(PoolInterface):
             host = self.hosts.get(address)
             if not host:
                 host = _Host(address)
-                self.hosts[address] = host
-            self._add_connection(host, socket)
-            log.info("put sock in pool (%s)" % str(len(host.pool)))    
-            self.hosts[address] = host
-        finally:
-            self._lock.release()
-            
-    def _add_connection(self, host, socket):
-        host._lock.acquire()
-        try:
+                
             if len(host.pool) > self.max_connections:
                 sock.close(socket)
                 return
-            host.pool.append(socket)
+            host.pool.append(socket) 
+            self.hosts[address] = host
         finally:
-            host._lock.release()
-
-    def _get_connection(self, host):
-        host._lock.acquire()
-        try:
-            if len(host.pool) > 0:
-                return host.pool.popleft()
-            return None
-        finally:
-            host._lock.release()
+            self._lock.release()
 
     def clean(self, address):
         self._lock.acquire()
         try:
             host = self.hosts.get(address)
-            if not host:
-                return
-            while True:
-                socket = self._get_connection(host)
-                if not socket:
-                    break
+            if not host: return
+            while host.pool:
+                socket = host.pool.popleft()
                 sock.close(socket)
             self.hosts[address] = host
         finally:
