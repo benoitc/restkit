@@ -100,8 +100,7 @@ class HttpConnection(object):
     def __init__(self, timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
             filters=None, follow_redirect=False, force_follow_redirect=False, 
             max_follow_redirect=MAX_FOLLOW_REDIRECTS, key_file=None, 
-            cert_file=None, pool_instance=None, socket=None,
-            response_class=None):
+            cert_file=None, pool_instance=None, response_class=None):
             
         """ HttpConnection constructor
         
@@ -117,10 +116,7 @@ class HttpConnection(object):
         :param cert_file: the cert file to use with ssl
         :param pool_instance: a pool instance inherited from 
         `restkit.pool.PoolInterface`
-        :param socket: eventually you can pass your own socket object to 
-        the client.
         """
-        self.socket = socket
         self.timeout = timeout
         self.headers = []
         self.req_headers = []
@@ -181,7 +177,7 @@ class HttpConnection(object):
     def make_connection(self):
         """ initate a connection if needed or reuse a socket"""
         addr = (self.host, self.port)
-        s = self.socket or None
+        s = None
         
         # if we defined a pool use it
         if self.connections is not None:
@@ -194,22 +190,18 @@ class HttpConnection(object):
                                 self.key_file, self.cert_file)
             else:
                 s = sock.connect(addr, self.timeout)
-                
-        self.socket = s
         return s
         
-    def clean_connections(self):
-        self.socket = None
+    def clean_connections(self, socket):
+        sock.close(socket) 
         if hasattr(self.connections,'clean'):
             self.connections.clean((self.host, self.port))
         
-    def maybe_close(self):
-        if not self.socket: return
+    def maybe_close(self, socket):
         if self.parser.should_close:
-            sock.close(self.socket) 
+            sock.close(socket) 
         else: # release the socket in the pool
-            self.connections.put((self.host, self.port), self.socket)
-        self.socket = None
+            self.connections.put((self.host, self.port), socket)
         
     def parse_url(self, url):
         """ parse url and get host/port"""
@@ -375,29 +367,28 @@ class HttpConnection(object):
                     if chunked: # final chunk
                         sock.send_chunk(s, "")
                         
-                return self.start_response()
+                return self.start_response(s)
             except socket.gaierror, e:
-                self.clean_connections()
+                self.clean_connections(s)
                 raise
             except socket.error, e:
-                self.socket = None
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, errno.EPIPE,
                             errno.ECONNREFUSED) or tries <= 0:
-                    self.clean_connections()
+                    self.clean_connections(s)
                     raise
                 if e[0] == errno.EPIPE:
                     log.debug("Got EPIPE")
-                    self.clean_connections()
+                    self.clean_connections(s)
             except:
                 if tries <= 0:
                     raise
                 # we don't know what happend. 
-                self.clean_connections()
+                self.clean_connections(s)
             time.sleep(0.2)
             tries -= 1
             
       
-    def do_redirect(self):
+    def do_redirect(self, sock):
         """ follow redirections if needed"""
         if self.nb_redirections <= 0:
             raise RedirectLimit("Redirection limit is reached")
@@ -416,21 +407,21 @@ class HttpConnection(object):
         self.final_url = location
         self.response_body.read() 
         self.nb_redirections -= 1
-        self.maybe_close()
+        self.maybe_close(sock)
         return self.request(location, self.method, self.body,
                         self.headers)
                         
-    def start_response(self):
+    def start_response(self, socket):
         """
         Get headers, set Body object and return HttpResponse
         """
         # read headers
         headers = []
-        buf = sock.recv(self.socket, sock.CHUNK_SIZE)
+        buf = sock.recv(socket, sock.CHUNK_SIZE)
         i = self.parser.filter_headers(headers, buf)
         if i == -1 and buf:
             while True:
-                data = sock.recv(self.socket, sock.CHUNK_SIZE)
+                data = sock.recv(socket, sock.CHUNK_SIZE)
                 if not data: break
                 buf += data
                 i = self.parser.filter_headers(headers, buf)
@@ -448,12 +439,12 @@ class HttpConnection(object):
                 log.debug("No content len an not chunked transfer, get body")
                 while True:
                     try:
-                        chunk = sock.recv(self.socket, sock.CHUNK_SIZE)
+                        chunk = sock.recv(socket, sock.CHUNK_SIZE)
                     except socket.error:
                         break
                     if not chunk: break
                     response_body.write(chunk)
-                self.maybe_close()
+                self.maybe_close(socket)
                     
             response_body.seek(0)
             self.response_body = response_body
@@ -461,7 +452,7 @@ class HttpConnection(object):
             self.response_body = StringIO.StringIO()
             self.maybe_close()
         else:
-            self.response_body = tee.TeeInput(self.socket, self.parser, 
+            self.response_body = tee.TeeInput(socket, self.parser, 
                                         buf[i:], maybe_close=self.maybe_close)
         
         # apply on response filters
@@ -475,12 +466,12 @@ class HttpConnection(object):
                     if self.method not in ('GET', 'HEAD') and \
                         hasattr(self.body, 'seek'):
                             self.body.seek(0)
-                    return self.do_redirect()
+                    return self.do_redirect(socket)
             elif self.parser.status_int == 303 and self.method in ('GET', 
                     'HEAD'):
                 # only 'GET' is possible with this status
                 # according the rfc
-                return self.do_redirect()
+                return self.do_redirect(socket)
         
                
         self.final_url = self.parser.headers_dict.get('Location', 
