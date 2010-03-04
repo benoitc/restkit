@@ -379,6 +379,7 @@ class HttpConnection(object):
                 self.clean_connections()
                 raise
             except socket.error, e:
+                self.socket = None
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, errno.EPIPE,
                             errno.ECONNREFUSED) or tries <= 0:
                     self.clean_connections()
