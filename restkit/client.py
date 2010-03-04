@@ -383,6 +383,7 @@ class HttpConnection(object):
                     self.clean_connections()
                     raise
                 if e[0] == errno.EPIPE:
+                    log.debug("Got EPIPE")
                     self.clean_connections()
             except:
                 if tries <= 0:
