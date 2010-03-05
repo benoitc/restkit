@@ -53,11 +53,10 @@ class ConnectionPool(PoolInterface):
         self._lock.acquire()
         try:
             host = self.hosts.get(address)
-            if host:
-                if len(host.pool) == self.max_connections:
-                    socket =  host.pool.popleft()
-                    self.hosts[address] = host
-                    return socket
+            if host and host.pool:
+                socket =  host.pool.popleft()
+                self.hosts[address] = host
+                return socket
             return None
         finally:
             self._lock.release()
