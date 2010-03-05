@@ -362,11 +362,10 @@ class HttpConnection(object):
                 self.req_headers = req_headers = self._req_headers()
                 
                 # send request
-                sock.sendlines(self.socket, req_headers)
-                
                 log.info('Start request: %s %s' % (self.method, self.url))
                 log.debug("Request headers: [%s]" % str(req_headers))
                 
+                sock.sendlines(self.socket, req_headers)
                 if self.body is not None:
                     if hasattr(self.body, 'read'):
                         if hasattr(self.body, 'seek'): self.body.seek(0)
