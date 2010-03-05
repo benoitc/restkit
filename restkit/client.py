@@ -450,7 +450,7 @@ class HttpConnection(object):
             self.response_body = response_body
         elif self.method == "HEAD":
             self.response_body = StringIO.StringIO()
-            self.maybe_close()
+            self.maybe_close(sock)
         else:
             self.response_body = tee.TeeInput(socket, self.parser, 
                                         buf[i:], maybe_close=self.maybe_close)
