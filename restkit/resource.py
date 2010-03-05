@@ -40,6 +40,7 @@ class Resource(object):
     encode_keys = True
     safe = "/:"
     pool_class = pool.ConnectionPool
+    keepalive = True
     max_connections = 4
     basic_auth_url = True
     
@@ -55,7 +56,7 @@ class Resource(object):
         """
 
         pool_instance = client_opts.get('pool_instance')
-        if not pool_instance:
+        if not pool_instance and self.keepalive:
             pool = self.pool_class(max_connections=self.max_connections)
             client_opts['pool_instance'] = pool
             
