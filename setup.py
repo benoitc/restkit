@@ -44,7 +44,11 @@ setup(
     entry_points = {
         'console_scripts': [
             'restcli = restkit.console:main',
-        ]
+        ],
+        'paste.app_factory': [
+            'proxy = restkit.ext.wsgi_proxy:make_proxy',
+            'host_proxy = restkit.ext.wsgi_proxy:make_host_proxy',
+        ],
     },
 
     test_suite = 'nose.collector',
