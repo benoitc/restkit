@@ -31,7 +31,7 @@ def test_001(req):
 @with_webob
 def test_002(req):
     req.path_info = '/json'
-    req.environ['HTTP_CONTENT_TYPE'] = 'application/json'
+    req.environ['CONTENT_TYPE'] = 'application/json'
     req.method = 'POST'
     req.body = 'test post'
     proxy = wsgi_proxy.Proxy(allowed_methods=['POST'])
@@ -46,7 +46,7 @@ def test_002(req):
 @with_webob
 def test_003(req):
     req.path_info = '/json'
-    req.environ['HTTP_CONTENT_TYPE'] = 'application/json'
+    req.environ['CONTENT_TYPE'] = 'application/json'
     req.method = 'PUT'
     req.body = 'test post'
     proxy = wsgi_proxy.Proxy(allowed_methods=['PUT'])

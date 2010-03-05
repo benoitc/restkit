@@ -63,10 +63,14 @@ class Proxy(object):
 
         new_headers = {}
         for k, v in environ.items():
-            if k.startswith('HTTP_') and k not in ('HTTP_CONNECTION', 'PROXY_CONNECTION'):
-                splited = k.split('_')[1:]
-                k = '-'.join([part.title() for part in splited])
+            if k.startswith('HTTP_'):
+                k = k[5:].replace('_', '-').title()
                 new_headers[k] = v
+
+        for k, v in (('CONTENT_TYPE', None), ('CONTENT_LENGTH', '0')):
+            v = environ.get(k, None)
+            if v is not None:
+                new_headers[k.replace('_', '-').title()] = v
 
         response = request(uri, method,
                            body=body, headers=new_headers,
