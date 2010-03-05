@@ -110,6 +110,10 @@ class Resource(object):
         """
         obj = self.__class__(self.uri, headers=self._headers, 
                         **self.client_opts)
+             
+        for attr in ('charset', 'encode_keys', 'safe', 'pool_class',
+                'keepalive', 'max_connections', 'basic_auth_url'):
+            setattr(obj, attr, getattr(self, attr))           
         return obj
    
     def __call__(self, path):
@@ -121,7 +125,11 @@ class Resource(object):
         """
 
         new_uri = self._make_uri(self.uri, path)
-        return type(self)(new_uri, headers=self._headers, **self.client_opts)
+        obj = type(self)(new_uri, headers=self._headers, **self.client_opts)
+        for attr in ('charset', 'encode_keys', 'safe', 'pool_class',
+                'keepalive', 'max_connections', 'basic_auth_url'):
+            setattr(obj, attr, getattr(self, attr))
+        return obj
  
     def get(self, path=None, headers=None, **params):
         """ HTTP GET         
