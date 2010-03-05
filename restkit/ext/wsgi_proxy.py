@@ -5,33 +5,7 @@ from restkit import request
 from restkit import ResourceNotFound
 from restkit.sock import CHUNK_SIZE
 
-ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
-
-class IterResponse(object):
-    """An iterator who take care of Content-Length header to iter over the
-    response body"""
-
-    def __init__(self, response):
-        self.response = response
-        self.length = int(self.response.headers['content-length'])
-        self.read = 0
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        if self.read >= self.length:
-            raise StopIteration
-        elif self.read + CHUNK_SIZE > self.length:
-            size = self.length - self.read
-            self.read = self.length
-            return self.response.body_file.read(size)
-        else:
-            self.read += CHUNK_SIZE
-            return self.response.body_file.read(CHUNK_SIZE)
-
-    def close(self):
-        pass
+ALLOWED_METHODS = ['GET', 'HEAD']
 
 class Proxy(object):
     """A proxy wich redirect the request to SERVER_NAME:SERVER_PORT and send HTTP_HOST header"""
@@ -101,7 +75,7 @@ class Proxy(object):
         start_response(response.status, response.http_client.parser.headers)
 
         if 'content-length' in response:
-            return IterResponse(response)
+            return response.body_file
         else:
             return [response.body]
 

@@ -145,7 +145,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         elif path == "/json":
             content_type = self.headers.get('content-type', 'text/plain')
             if content_type != "application/json":
-                self.error_Response("bad type")
+                self.error_Response("bad type: %s" % content_type)
             else:
                 extra_headers.append(('Content-type', content_type))
                 content_length = int(self.headers.get('Content-length', 0))
