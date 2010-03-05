@@ -7,7 +7,7 @@ import ctypes
 import socket
 
 CHUNK_SIZE = (16 * 1024)
-MAX_BODY = 1024 * (80 + 32)
+MAX_BODY = 1024 * 112
 
 try:
     import ssl # python 2.6

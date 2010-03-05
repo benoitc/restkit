@@ -42,7 +42,6 @@ class TeeInput(object):
     @property
     def len(self):
         if self._len: return self._len
-        
         if self._is_socket:
             pos = self.tmp.tell()
             while True:
@@ -166,13 +165,13 @@ class TeeInput(object):
         else:
             return int(os.fstat(self.tmp.fileno())[6])
             
-    def _ensure_length(self, buf, length):
-        if not buf or not self._len:
-            return buf
+    def _ensure_length(self, dest, length):
+        if not dest or not self._len:
+            return dest
         while True:
-            if len(buf) >= length: 
+            if len(dest) >= length: 
                 break
-            data = self._tee(length - len(buf))
+            data = self._tee(length - len(dest))
             if not data: break
-            buf += data
-        return buf
+            dest += data
+        return dest
