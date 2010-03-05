@@ -7,6 +7,29 @@ from restkit.sock import CHUNK_SIZE
 
 ALLOWED_METHODS = ['GET', 'HEAD']
 
+BLOCK_SIZE = 4096 * 16
+
+class IterResponse(object):
+
+    def __init__(self, response):
+        self.response = response
+        self._len = int(self.response.headers['content-length'])
+        self._read = 0
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        size = BLOCK_SIZE
+        if self._read >= self._len:
+            raise StopIteration
+        elif self._read + size > self._len:
+            size = self._len - self._read
+            self._read = self._len
+        else:
+            self._read += size
+        return self.response.body_file.read(size)
+
 class Proxy(object):
     """A proxy wich redirect the request to SERVER_NAME:SERVER_PORT and send HTTP_HOST header"""
 
@@ -79,7 +102,7 @@ class Proxy(object):
         start_response(response.status, response.http_client.parser.headers)
 
         if 'content-length' in response:
-            return response.body_file
+            return IterResponse(response)
         else:
             return [response.body]
 
