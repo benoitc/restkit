@@ -112,7 +112,7 @@ class SimpleProxy(object):
                 sock._ssl_wrap_socket(p_sock, None, None)
                 
                 # update socket
-                req.sock = p_sock
+                req.socket = p_sock
                 req.host = proxy_host
         else:
             proxy = os.environ.get('http_proxy')

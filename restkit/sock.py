@@ -50,9 +50,10 @@ def recv(skt, length, buf=None):
     
     return buf + tmp_buf
     
-def close(sock):
+def close(skt):
+    if not skt: return
     try:
-        sock.close()
+        skt.close()
     except socket.error:
         pass  
         

@@ -155,7 +155,7 @@ class TeeInput(object):
 
         if self.parser.body_eof():
             if callable(self.maybe_close):
-                self.maybe_close(self.socket)
+                self.maybe_close()
             
             del self.buf
             self._is_socket = False
