@@ -48,6 +48,7 @@ setup(
         'paste.app_factory': [
             'proxy = restkit.ext.wsgi_proxy:make_proxy',
             'host_proxy = restkit.ext.wsgi_proxy:make_host_proxy',
+            'couchdb_proxy = restkit.ext.wsgi_proxy:make_couchdb_proxy',
         ],
     },
 
