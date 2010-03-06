@@ -79,18 +79,20 @@ class TeeInput(object):
                 buf.write(chunk)
             return buf.getvalue()
         else:
+            dest = StringIO()
             diff = self._tmp_size() - self.tmp.tell()
             if not diff:
-                dest = StringIO(self._tee(length))
+                dest.write(self._tee(length))
                 return self._ensure_length(dest, length)
             else:
                 l = min(diff, length)
-                dest = StringIO(self.tmp.read(l))
+                dest.write(self.tmp.read(l))
                 return self._ensure_length(dest, length)
                 
     def readline(self, size=-1):
         if not self._is_socket:
             return self.tmp.readline(size)
+    
         
         orig_size = self._tmp_size()
         if self.tmp.tell() == orig_size:
