@@ -5,6 +5,7 @@
 # See the NOTICE for more information.
 
 import os
+from StringIO import StringIO
 import tempfile
 
 dirname = os.path.dirname(__file__)
@@ -17,12 +18,13 @@ from _server_test import HOST, PORT, run_server_test
 run_server_test()
 
 def data_source(fname):
+    buf = StringIO()
     with open(fname) as handle:
         lines = []
         for line in handle:
             line = line.rstrip("\n").replace("\\r\\n", "\r\n")
-            lines.append(line)
-        return "".join(lines)
+            buf.write(line)
+        return buf
 
 class request(object):
     def __init__(self, name):
@@ -61,7 +63,7 @@ class client_request(object):
                 pool_instance = ConnectionPool()
             else:
                 pool_instance = None
-            cli = HttpConnection(pool_instance=None)
+            cli = HttpConnection(pool_instance=None, timeout=0.5)
             func(self.url, cli)
         run.func_name = func.func_name
         return run

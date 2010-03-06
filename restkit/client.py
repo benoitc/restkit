@@ -10,7 +10,7 @@ import logging
 import os
 import socket
 import time
-import StringIO
+from StringIO import StringIO
 import urlparse
 
 from restkit import __version__
@@ -117,7 +117,7 @@ class HttpConnection(object):
         :param pool_instance: a pool instance inherited from 
         `restkit.pool.PoolInterface`
         """
-        self.socket = None
+        self._sock = None
         self.timeout = timeout
         self.headers = []
         self.req_headers = []
@@ -129,7 +129,7 @@ class HttpConnection(object):
         self.force_follow_redirect = force_follow_redirect
         self.method = 'GET'
         self.body = None
-        self.response_body = StringIO.StringIO()
+        self.response_body = StringIO()
         self.final_url = None
         
         # build filter lists
@@ -193,17 +193,15 @@ class HttpConnection(object):
         return s
         
     def clean_connections(self):
-        sock.close(self.socket) 
+        sock.close(self._sock) 
         if hasattr(self.connections,'clean'):
             self.connections.clean((self.host, self.port))
-        self.socket = None
         
-    def maybe_close(self):
-        if self.parser.should_close:
-            sock.close(self.socket) 
-        else: # release the socket in the pool
-            self.connections.put((self.host, self.port), self.socket)
-        self.socket = None
+    def release_connection(self, address, socket):
+        if not self.connections:
+            sock.close(socket)
+        else:
+            self.connections.put(address, self._sock)
         
     def parse_url(self, url):
         """ parse url and get host/port"""
@@ -242,7 +240,7 @@ class HttpConnection(object):
         :param headers: dict or list of tupple, http headers
         """
         self.parser = Parser.parse_response(should_close=self.should_close)
-        self.socket = None
+        self._sock = None
         self.url = url
         self.final_url = url
         self.parse_url(url)
@@ -352,7 +350,7 @@ class HttpConnection(object):
         while True:
             try:
                 # get socket
-                self.socket = self.make_connection()
+                self._sock = self.make_connection()
                 
                 # apply on request filters
                 for bf in self.request_filters:
@@ -365,19 +363,19 @@ class HttpConnection(object):
                 log.info('Start request: %s %s' % (self.method, self.url))
                 log.debug("Request headers: [%s]" % str(req_headers))
                 
-                sock.sendlines(self.socket, req_headers)
+                sock.sendlines(self._sock, req_headers)
                 if self.body is not None:
                     if hasattr(self.body, 'read'):
                         if hasattr(self.body, 'seek'): self.body.seek(0)
-                        sock.sendfile(self.socket, self.body, self.chunked)
+                        sock.sendfile(self._sock, self.body, self.chunked)
                     elif isinstance(self.body, basestring):
-                        sock.sendfile(self.socket, StringIO.StringIO(
+                        sock.sendfile(self._sock, StringIO(
                                 util.to_bytestring(self.body)), self.chunked)
                     else:
-                        sock.sendlines(self.socket, self.body, self.chunked)
+                        sock.sendlines(self._sock, self.body, self.chunked)
                         
                     if self.chunked: # final chunk
-                        sock.send_chunk(self.socket, "")
+                        sock.send_chunk(self._sock, "")
                         
                 return self.start_response()
             except socket.gaierror, e:
@@ -419,7 +417,7 @@ class HttpConnection(object):
         self.final_url = location
         self.response_body.read() 
         self.nb_redirections -= 1
-        self.maybe_close()
+        sock.close(self._sock)
         return self.request(location, self.method, self.body, self.headers)
                         
     def start_response(self):
@@ -428,43 +426,47 @@ class HttpConnection(object):
         """
         # read headers
         headers = []
-        buf = sock.recv(self.socket, sock.CHUNK_SIZE)
-        i = self.parser.filter_headers(headers, buf)
-        if i == -1 and buf:
+        buf = StringIO()
+        data = self._sock.recv(sock.CHUNK_SIZE)
+        buf.write(data)
+        buf2 = self.parser.filter_headers(headers, buf)
+        if not buf2:
             while True:
-                data = sock.recv(self.socket, sock.CHUNK_SIZE)
-                if not data: break
-                buf += data
-                i = self.parser.filter_headers(headers, buf)
-                if i != -1:
+                data = self._sock.recv(sock.CHUNK_SIZE)
+                if not data:
+                    break
+                buf.write(data)
+                buf2 = self.parser.filter_headers(headers, buf)
+                if buf2: 
                     break
             
         log.debug("Start response: %s" % str(self.parser.status_line))
         log.debug("Response headers: [%s]" % str(self.parser.headers))
         
         if (not self.parser.content_len and not self.parser.is_chunked):
-            response_body = StringIO.StringIO(buf[i:])
             if self.parser.should_close:
                 # http 1.0 or something like it. 
                 # we try to get missing body
                 log.debug("No content len an not chunked transfer, get body")
                 while True:
                     try:
-                        chunk = sock.recv(self.socket, sock.CHUNK_SIZE)
+                        chunk = self._sock.recv(sock.CHUNK_SIZE)
                     except socket.error:
                         break
-                    if not chunk: break
-                    response_body.write(chunk)
-                self.maybe_close()
-                    
-            response_body.seek(0)
-            self.response_body = response_body
+                    if not chunk: 
+                        break
+                    buf2.write(chunk)
+                sock.close(self._sock)
+            buf2.seek(0)
+            self.response_body = buf2
+            
         elif self.method == "HEAD":
-            self.response_body = StringIO.StringIO()
-            self.maybe_close()
+            self.response_body = StringIO()
+            sock.close(self._sock)
         else:
-            self.response_body = tee.TeeInput(self.socket, self.parser, buf[i:], 
-                                        maybe_close=lambda: self.maybe_close())
+            self.response_body = tee.TeeInput(self._sock, self.parser, buf2, 
+                        maybe_close=lambda: self.release_connection(
+                                                    self.uri.netloc, self._sock))
         
         # apply on response filters
         for af in self.response_filters:

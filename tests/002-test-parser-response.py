@@ -9,8 +9,8 @@ import t
 @t.response("001.http")
 def test_001(buf, p):
     headers = []
-    i = p.filter_headers(headers, buf)
-    t.ne(i, -1)
+    buf2 = p.filter_headers(headers, buf)
+    t.ne(buf2, False)
     t.eq(p.version, (1,1))
     t.eq(p.status, "301 Moved Permanently")
     t.eq(p.status_int, 301)
@@ -24,15 +24,15 @@ def test_001(buf, p):
         ('Location', 'http://www.google.com/'),
         ('Server', 'gws'),
     ])
-    body, tr = p.filter_body(buf[i:]) 
+    body, tr = p.filter_body(buf2)
     t.eq(p.content_len,len(body))
     t.eq(p.body_eof(), True)
 
 @t.response("002.http")
 def test_002(buf, p):
     headers = []
-    i = p.filter_headers(headers, buf)
-    t.ne(i, -1)
+    buf2 = p.filter_headers(headers, buf)
+    t.ne(buf2, False)
     t.eq(p.status_int, 200)
     t.eq(p.reason, 'OK')
     t.eq(sorted(p.headers), [
@@ -44,32 +44,32 @@ def test_002(buf, p):
         
     ])
     
-    body, tr = p.filter_body(buf[i:]) 
+    body, tr = p.filter_body(buf2)
     t.eq(p.body_eof(), True)
 
 @t.response("003.http")
 def test_003(buf, p):
     headers = []
-    i = p.filter_headers(headers, buf)
-    t.ne(i, -1)    
+    buf2 = p.filter_headers(headers, buf)
+    t.ne(buf2, False)    
     t.eq(p.status_int, 404)
-    body, tr = p.filter_body(buf[i:]) 
+    body, tr = p.filter_body(buf2)
     t.eq(body,"")
     t.eq(p.body_eof(), True)
     
 @t.response("004.http")
 def test_004(buf, p):
     headers = []
-    i = p.filter_headers(headers, buf)
-    t.ne(i, -1)    
+    buf2 = p.filter_headers(headers, buf)
+    t.ne(buf2, False)    
     t.eq(p.status_int, 301)
     t.eq(p.reason, "")
     
 @t.response("005.http")
 def test_005(buf, p):
     headers = []
-    i = p.filter_headers(headers, buf)
-    t.ne(i, -1)    
+    buf2 = p.filter_headers(headers, buf)
+    t.ne(buf2, False)    
     t.eq(p.status_int, 200)
     t.eq(sorted(p.headers), [
         ('Content-Type', 'text/plain'),
@@ -79,9 +79,8 @@ def test_005(buf, p):
     t.eq(p._chunk_eof, False)
     t.ne(p.body_eof(), True)
     body = ""
-    buf = buf[i:]
     while not p.body_eof():
-        chunk, buf = p.filter_body(buf)
+        chunk, buf2 = p.filter_body(buf2)
         print chunk
         if chunk:
             body += chunk
@@ -92,20 +91,20 @@ def test_005(buf, p):
 @t.response("006.http")
 def test_006(buf, p):
     headers = []
-    i = p.filter_headers(headers, buf)
-    t.ne(i, -1)    
+    buf2 = p.filter_headers(headers, buf)
+    t.ne(buf2, False)    
     t.eq(p.status_int, 200)
-    body, tr = p.filter_body(buf[i:]) 
+    body, tr = p.filter_body(buf2)
     t.eq(body,"these headers are from http://news.ycombinator.com/")
     t.eq(p.body_eof(), True)
     
 @t.response("007.http")
 def test_007(buf, p):
     headers = []
-    i = p.filter_headers(headers, buf)
-    t.ne(i, -1)    
+    buf2 = p.filter_headers(headers, buf)
+    t.ne(buf2, False)    
     t.eq(p.status_int, 200)
-    body, tr = p.filter_body(buf[i:]) 
+    body, tr = p.filter_body(buf2)
     t.eq(body,"hello world")
     t.eq(len(body), int(p.content_len))
     t.eq(p.body_eof(), True)

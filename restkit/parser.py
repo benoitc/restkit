@@ -3,7 +3,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-
+from StringIO import StringIO
 import urlparse
 
 from restkit.errors import BadStatusLine, ParserError
@@ -51,14 +51,16 @@ class Parser(object):
         if parsing isn't done. headers dict is updated
         with new headers.
         """
-        i = buf.find("\r\n\r\n")
+        line = buf.getvalue()
+        i = line.find("\r\n\r\n")
         if i != -1:
-            r = buf[:i]
+            r = line[:i]
             pos = i+4
-            return self.finalize_headers(headers, r, pos)
-        return -1
+            buf2 = StringIO(line[pos:])
+            return self.finalize_headers(headers, r, buf2)
+        return False
         
-    def finalize_headers(self, headers, headers_str, pos):
+    def finalize_headers(self, headers, headers_str, buf2):
         """ parse the headers """
         lines = headers_str.split("\r\n")
                 
@@ -86,7 +88,7 @@ class Parser(object):
         if self.type == 'request':
             (_, _, self.path, self.query_string, self.fragment) = \
                 urlparse.urlsplit(self.raw_path)
-        return pos
+        return buf2
     
     def _first_line(self, line):
         """ parse first line """
@@ -173,11 +175,14 @@ class Parser(object):
             return True
         return False
         
-    def read_chunk(self, data):
+    def read_chunk(self, buf):
+        line = buf.getvalue()
+        buf2 = StringIO()
+        
         if not self.start_offset:
-            i = data.find("\r\n")
+            i = line.find("\r\n")
             if i != -1:
-                chunk = data[:i].strip().split(";", 1)
+                chunk = line[:i].strip().split(";", 1)
                 chunk_size = int(chunk.pop(0), 16)
                 self.start_offset = i+2
                 self.chunk_size = chunk_size
@@ -185,44 +190,47 @@ class Parser(object):
         if self.start_offset:
             if self.chunk_size == 0:
                 self._chunk_eof = True
-                ret = '', data[:self.start_offset]
-                return ret
+                buf2.write(line[:self.start_offset])
+                return '', buf2
             else:
-                chunk = data[self.start_offset:self.start_offset+self.chunk_size]
+                chunk = line[self.start_offset:self.start_offset+self.chunk_size]
                 end_offset = self.start_offset + self.chunk_size + 2
                 # we wait CRLF else return None
-                if len(data) >= end_offset:
-                    ret = chunk, data[end_offset:]
+                if buf.len >= end_offset:
+                    buf2.write(line[end_offset:])
                     self.chunk_size = 0
-                    return ret
-        return '', data
+                    return chunk, buf2
+        return '', buf
         
-    def trailing_header(self, data):
-        i = data.find("\r\n\r\n")
+    def trailing_header(self, buf):
+        line = buf.getvalue()
+        i = line.find("\r\n\r\n")
         return (i != -1)
         
-    def filter_body(self, data):
+    def filter_body(self, buf):
         """\
         Filter body and return a tuple: (body_chunk, new_buffer)
         Both can be None, and new_buffer is always None if its empty.
         """
-        dlen = len(data)
+        dlen = buf.len
         chunk = ''
+
         if self.is_chunked:
             try:
-                chunk, data = self.read_chunk(data)
+                chunk, buf2 = self.read_chunk(buf)
             except Exception, e:
                 raise ParserError("chunked decoding error [%s]" % str(e))
             
             if not chunk:
-                return '', data
+                return '', buf
         else:
+            buf2 = StringIO()
             if self._content_len > 0:
                 nr = min(dlen, self._content_len)
-                chunk = data[:nr]
+                chunk = buf.getvalue()[:nr]
                 self._content_len -= nr
-                data = ""
                 
         self.start_offset = 0
-        return (chunk, data)
+        buf2.seek(0, 2)
+        return (chunk, buf2)
     

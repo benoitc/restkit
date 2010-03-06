@@ -42,14 +42,6 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
                 sock.close()
     raise socket.error, msg
     
-        
-def recv(skt, length, buf=None):
-    tmp_buf = skt.recv(length)
-    if not buf:
-        return tmp_buf
-    
-    return buf + tmp_buf
-    
 def close(skt):
     if not skt: return
     try:
