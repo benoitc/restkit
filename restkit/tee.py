@@ -174,7 +174,7 @@ class TeeInput(object):
             if callable(self.maybe_close):
                 self.maybe_close()
             
-            del self.buf
+            self.buf = StringIO()
             self._is_socket = False
 
     def _tmp_size(self):
