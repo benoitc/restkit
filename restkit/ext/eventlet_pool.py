@@ -6,6 +6,7 @@
 from __future__ import with_statement
 
 import collections
+import eventlet
 from eventlet import queue
 from eventlet.timeout import Timeout
 

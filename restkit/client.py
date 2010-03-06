@@ -3,7 +3,6 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-import ctypes
 import errno
 import gzip
 import logging
@@ -14,8 +13,7 @@ from StringIO import StringIO
 import urlparse
 
 from restkit import __version__
-from restkit.errors import RequestError, InvalidUrl, RedirectLimit,\
-BadStatusLine
+from restkit.errors import RequestError, InvalidUrl, RedirectLimit
 from restkit.parser import Parser
 from restkit import sock
 from restkit import tee
@@ -219,7 +217,7 @@ class HttpConnection(object):
                 raise InvalidUrl("nonnumeric port: '%s'" % host[i+1:])
             host = host[:i]
         else:
-            # default por
+            # default port
             if self.uri.scheme == "https":
                 port = 443
             else:
@@ -266,8 +264,8 @@ class HttpConnection(object):
 
         # normalize headers
         for name, value in headers:
-            name = util.normalize_name(name)
-            if name == "User-Agenr":
+            name = name.title()
+            if name == "User-Agent":
                 ua = value
             elif name == "Content-Length":
                 content_len = str(value)
@@ -334,11 +332,13 @@ class HttpConnection(object):
                         self.uri.query, self.uri.fragment))
            
         # build final request headers
+
         req_headers = []   
         req_headers.append("%s %s %s\r\n" % (self.method, req_path, httpver))
         req_headers.append("Host: %s\r\n" % self.host_hdr)
         req_headers.append("User-Agent: %s\r\n" % self.ua)
         req_headers.append("Accept-Encoding: %s\r\n" % self.accept_encoding)
+        
         for name, value in self.headers:
             req_headers.append("%s: %s\r\n" % (name, value))
         req_headers.append("\r\n")

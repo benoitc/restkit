@@ -13,9 +13,6 @@ except ImportError:
 from restkit.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
 Token
 
-    
-from restkit import util
-
 def validate_consumer(consumer):
     """ validate a consumer agains oauth2.Consumer object """
     if not isinstance(consumer, Consumer):
@@ -136,7 +133,6 @@ class OAuthFilter(object):
         else:
             oauth_headers = oauth_req.to_header()
             for k, v in list(oauth_headers.items()):
-                k = util.normalize_name(k)
                 if not isinstance(v, basestring):
                     v = str(v)
-                req.headers.append((k, v))
+                req.headers.append((k.title(), v))

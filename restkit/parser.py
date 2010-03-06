@@ -7,7 +7,6 @@ from StringIO import StringIO
 import urlparse
 
 from restkit.errors import BadStatusLine, ParserError
-from restkit.util import normalize_name
 
 class Parser(object):
     """ HTTP Parser compatible 1.0 & 1.1
@@ -128,7 +127,7 @@ class Parser(object):
     def _parse_headerl(self, hdrs, line):
         """ parse header line"""
         name, value = line.split(":", 1)
-        name = normalize_name(name.strip())
+        name = name.strip().title()
         value = value.rsplit("\r\n",1)[0].strip()
         if name in hdrs:
             hdrs[name] = "%s, %s" % (hdrs[name], value)

@@ -4,13 +4,12 @@
 # See the NOTICE for more information.
 
 import urlparse
-from restkit import ConnectionPool, request, ResourceNotFound
-from restkit.sock import CHUNK_SIZE
+from restkit import ConnectionPool, request
+from restkit.sock import MAX_BODY
 
 ALLOWED_METHODS = ['GET', 'HEAD']
 
 BLOCK_SIZE = 4096 * 16
-
 
 class ResponseIter(object):
     
@@ -98,7 +97,11 @@ class Proxy(object):
                            body=body, headers=new_headers,
                            pool_instance=self.pool)
 
-        start_response(response.status, response.http_client.parser.headers)
+        start_response(response.status, response.headerslist)
+
+        if 'content-length' in response and \
+                int(response['content-length']) <= MAX_BODY:
+            return [response.body]
 
         return ResponseIter(response)
 

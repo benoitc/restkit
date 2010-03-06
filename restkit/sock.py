@@ -3,7 +3,6 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-import ctypes
 import socket
 
 CHUNK_SIZE = (16 * 1024)
