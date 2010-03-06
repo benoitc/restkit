@@ -64,6 +64,9 @@ object --+
 </pre>
 
 <hr />
+<p>HTTP Parser compatible 1.0 &amp; 1.1 This parser can parse HTTP 
+  requests and response.</p>
+
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -128,10 +131,27 @@ object --+
           <td><span class="summary-sig"><a name="finalize_headers"></a><span class="summary-sig-name">finalize_headers</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">headers</span>,
         <span class="summary-sig-arg">headers_str</span>,
-        <span class="summary-sig-arg">pos</span>)</span><br />
+        <span class="summary-sig-arg">buf2</span>)</span><br />
       parse the headers</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.parser-pysrc.html#Parser.finalize_headers">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_parse_version"></a><span class="summary-sig-name">_parse_version</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">version</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.parser-pysrc.html#Parser._parse_version">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -200,7 +220,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="read_chunk"></a><span class="summary-sig-name">read_chunk</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">data</span>)</span></td>
+        <span class="summary-sig-arg">buf</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.parser-pysrc.html#Parser.read_chunk">source&nbsp;code</a></span>
             
@@ -217,7 +237,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="trailing_header"></a><span class="summary-sig-name">trailing_header</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">data</span>)</span></td>
+        <span class="summary-sig-arg">buf</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.parser-pysrc.html#Parser.trailing_header">source&nbsp;code</a></span>
             
@@ -234,7 +254,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="filter_body"></a><span class="summary-sig-name">filter_body</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">data</span>)</span><br />
+        <span class="summary-sig-arg">buf</span>)</span><br />
       Filter body and return a tuple: (body_chunk, new_buffer) Both can be 
       None, and new_buffer is always None if its empty.</td>
           <td align="right" valign="top">
@@ -289,7 +309,8 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="parse_response"></a><span class="summary-sig-name">parse_response</span>(<span class="summary-sig-arg">cls</span>,
-        <span class="summary-sig-arg">should_close</span>=<span class="summary-sig-default">False</span>)</span></td>
+        <span class="summary-sig-arg">should_close</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Return parser object for response</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.parser-pysrc.html#Parser.parse_response">source&nbsp;code</a></span>
             
@@ -305,7 +326,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="parse_request"></a><span class="summary-sig-name">parse_request</span>(<span class="summary-sig-arg">cls</span>)</span></td>
+          <td><span class="summary-sig"><a name="parse_request"></a><span class="summary-sig-name">parse_request</span>(<span class="summary-sig-arg">cls</span>)</span><br />
+      return parser object for requests</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.parser-pysrc.html#Parser.parse_request">source&nbsp;code</a></span>
             
@@ -522,7 +544,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar  4 19:54:19 2010
+    Generated by Epydoc 3.0.1 on Sat Mar  6 22:14:33 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
