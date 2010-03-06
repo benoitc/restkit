@@ -14,9 +14,11 @@ import os
 from StringIO import StringIO
 import tempfile
 
-from restkit.sock import MAX_BODY, CHUNK_SIZE
+from restkit import sock
 
 class TeeInput(object):
+    
+    CHUNK_SIZE = sock.CHUNK_SIZE
     
     def __init__(self, socket, parser, buf, maybe_close=None):
         self.buf = StringIO()
@@ -26,7 +28,7 @@ class TeeInput(object):
         self._is_socket = True
         self._len = parser.content_len
         
-        if self._len and self._len < MAX_BODY:
+        if self._len and self._len < sock.MAX_BODY:
             self.tmp = StringIO()
         else:
             self.tmp = tempfile.TemporaryFile()
@@ -47,7 +49,7 @@ class TeeInput(object):
         if self._is_socket:
             self.tmp.seek(0, 2)
             while True:
-                if not self._tee(CHUNK_SIZE):
+                if not self._tee(self.CHUNK_SIZE):
                     break
         self._len = self._tmp_size()
         return self._len
@@ -57,7 +59,7 @@ class TeeInput(object):
         if self._is_socket:
             self.tmp.seek(0, 2)
             while True:
-                if not self._tee(CHUNK_SIZE):
+                if not self._tee(self.CHUNK_SIZE):
                     break
         self.tmp.seek(offset, whence)
 
@@ -73,7 +75,7 @@ class TeeInput(object):
             buf = StringIO()
             buf.write(self.tmp.read())
             while True:
-                chunk = self._tee(CHUNK_SIZE)
+                chunk = self._tee(self.CHUNK_SIZE)
                 if not chunk: 
                     break
                 buf.write(chunk)
@@ -91,29 +93,31 @@ class TeeInput(object):
                 
     def readline(self, size=-1):
         if not self._is_socket:
-            return self.tmp.readline(size)
-    
+            return self.tmp.readline()
         
         orig_size = self._tmp_size()
         if self.tmp.tell() == orig_size:
-            if not self._tee(CHUNK_SIZE):
+            if not self._tee(self.CHUNK_SIZE):
                 return ''
             self.tmp.seek(orig_size)
         
         # now we can get line
         line = self.tmp.readline()
-        i = line.find("\n")
-        if i == -1:
-            while True:
-                orig_size = self.tmp.tell()
-                if not self._tee(CHUNK_SIZE):
-                    break
-                self.tmp.seek(orig_size)
-                line += self.tmp.readline()
-                i = line.find("\n")
-                if i != -1: 
-                    break                    
-        return line
+        if line.find("\n") >=0:
+            return line
+
+        buf = StringIO()
+        buf.write(line)
+        while True:
+            orig_size = self.tmp.tell()
+            data = self._tee(self.CHUNK_SIZE)
+            if not data:
+                break
+            self.tmp.seek(orig_size)
+            buf.write(self.tmp.readline())
+            if data.find("\n") >= 0:
+                break
+        return buf.getvalue()
        
     def readlines(self, sizehint=0):
         total = 0

@@ -1,34 +1,31 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -
+#
+# This file is part of restkit released under the MIT license. 
+# See the NOTICE for more information.
+
 import urlparse
-from restkit import ConnectionPool
-from restkit import request
-from restkit import ResourceNotFound
+from restkit import ConnectionPool, request, ResourceNotFound
 from restkit.sock import CHUNK_SIZE
 
 ALLOWED_METHODS = ['GET', 'HEAD']
 
 BLOCK_SIZE = 4096 * 16
 
-class IterResponse(object):
 
+class ResponseIter(object):
+    
     def __init__(self, response):
-        self.response = response
-        self._len = int(self.response.headers['content-length'])
-        self._read = 0
-
-    def __iter__(self):
-        return self
+        response.CHUNK_SIZE = BLOCK_SIZE
+        self.body = response.body_file
 
     def next(self):
-        size = BLOCK_SIZE
-        if self._read >= self._len:
+        data = self.body.read(BLOCK_SIZE)
+        if not data:
             raise StopIteration
-        elif self._read + size > self._len:
-            size = self._len - self._read
-            self._read = self._len
-        else:
-            self._read += size
-        return self.response.body_file.read(size)
+        return data
+        
+    def __iter__(self):
+        return self
 
 class Proxy(object):
     """A proxy wich redirect the request to SERVER_NAME:SERVER_PORT and send HTTP_HOST header"""
@@ -101,10 +98,7 @@ class Proxy(object):
 
         start_response(response.status, response.http_client.parser.headers)
 
-        if 'content-length' in response:
-            return IterResponse(response)
-        else:
-            return [response.body]
+        return ResponseIter(response)
 
 class TransparentProxy(Proxy):
     """A proxy based on HTTP_HOST environ variable"""

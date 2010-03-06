@@ -53,10 +53,12 @@ class ConnectionPool(PoolInterface):
         self._lock.acquire()
         try:
             host = self.hosts.get(address)
-            if host and host.pool:
-                socket =  host.pool.popleft()
-                self.hosts[address] = host
-                return socket
+            if not host:
+                return None
+                
+            if host.pool:
+                return host.pool.popleft()
+                
             return None
         finally:
             self._lock.release()
@@ -72,7 +74,6 @@ class ConnectionPool(PoolInterface):
                 sock.close(socket)
                 return
             host.pool.append(socket) 
-            self.hosts[address] = host
         finally:
             self._lock.release()
 
@@ -84,6 +85,5 @@ class ConnectionPool(PoolInterface):
             while host.pool:
                 socket = host.pool.popleft()
                 sock.close(socket)
-            self.hosts[address] = host
         finally:
             self._lock.release()
