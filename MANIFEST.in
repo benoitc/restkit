@@ -2,6 +2,11 @@ include NOTICE
 include LICENSE
 include README.rst
 include TODO.txt
+include THANKS
 include distribute_setup.py
+include bootstrap.py
+include buildout.cfg
+recursive-include debian *
+recursive-include examples *
 recursive-include tests *
 recursive-include doc *
