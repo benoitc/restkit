@@ -6,8 +6,8 @@ News
 1.2 / 2010-03-06
 ------------------------
 
-- Added GEvent Support
-- Added wsgi_proxy using webob and restkit
+- Added `GEvent <pool.html>`_ Support
+- Added `wsgi_proxy <wsgi_proxy.html>`_ using webob and restkit
 - Improved pool management
 - Make HTTP parsing faster.
 - Fix TeeInput

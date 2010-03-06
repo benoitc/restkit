@@ -33,4 +33,4 @@ And then launch your application::
   gunicorn -w 12 couchdbproxy::application
 
 
-And access to your couchdb at `http://127.0.0.1:8000$ 
+And access to your couchdb at `http://127.0.0.1:8000` .
