@@ -98,8 +98,6 @@
 
 <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
   <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
-  <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;SERVER_NAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;127.0.0.1&#39;</span>
-  <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;SERVER_PORT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;5984&#39;</span>
 
   <span class="c"># do smth like adding oauth headers ..</span>
   <span class="n">resp</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">proxy</span><span class="p">)</span>

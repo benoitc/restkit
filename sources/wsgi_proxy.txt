@@ -17,8 +17,6 @@ We will do here a simple proxy for `CouchDB <http://couchdb.apache.org>`_. We us
 
   def application(environ, start_response):
     req = Request(environ)
-    req.environ['SERVER_NAME'] = '127.0.0.1'
-    req.environ['SERVER_PORT'] = '5984'
 
     # do smth like adding oauth headers ..
     resp = req.get_response(proxy)
