@@ -3,11 +3,14 @@
 News
 ====
 
-1.2 / 2010-03-05
+1.2 / 2010-03-06
 ------------------------
 
-- Improve pool management
-- Make HTTP parsing faster (30%).
+- Added GEvent Support
+- Added wsgi_proxy using webob and restkit
+- Improved pool management
+- Make HTTP parsing faster.
+- Fix TeeInput
 
 
 1.1.3 / 2010-03-04

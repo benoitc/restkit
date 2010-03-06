@@ -3,12 +3,10 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from __future__ import with_statement
 
 import collections
-import eventlet
-from eventlet import queue
-from eventlet.timeout import Timeout
+from gevent import spawn, Timeout
+from gevent import queue
 
 from restkit.pool import PoolInterface
 from restkit import sock
@@ -17,27 +15,25 @@ class _Host(object):
     
     def __init__(self, address):
         self._addr = address
-        self.pool = queue.LightQueue(0)
+        self.pool = queue.Queue(0)
         self.free_connections = collections.deque()
         self.nb_connections = 0
         
     def waiting(self):
-        return max(0, self.pool.getting() - self.pool.putting())    
+        return max(0, len(self.pool.getters) - len(self.pool.putters))    
     
-class EventletPool(PoolInterface):
+class GeventPool(PoolInterface):
     """
     Eventlet pool to manage connections. after a specific timeout the
     sockets are closes. Default timeout is 300s.
     
-    To use restkit with eventlet::
+    To use restkit with Gevent::
     
-        >>> import eventlet
-        >>> eventlet.monkey_patch(all=False, socket=True)
-        >>> from restkit import request
-        >>> from restkit.ext.eventlet_pool import EventletPool
-        >>> pool = EventletPool(max_connections=5)
+        >>> from restkit import *
+        >>> from gevent import monkey; monkey.patch_socket()
+        >>> from restkit.ext.gevent_pool import GeventPool
+        >>> pool = GeventPool(max_connections=5)
         >>> r = request('http://friendpaste.com', pool_instance=pool)
-        
     """
     
     def __init__(self, max_connections=4, timeout=300):
@@ -52,6 +48,10 @@ class EventletPool(PoolInterface):
         self.timeout = 60
         self.hosts = {}
         self.sockets = {}
+        
+    def _remove_socket(self, socket):
+        if socket.fileno() in self.sockets:
+            del self.sockets[socket.fileno()]
                 
     def get(self, address):
         """ Get connection for (Host, Port) address 
@@ -63,13 +63,13 @@ class EventletPool(PoolInterface):
             return None
         if host.free_connections:
             socket = host.free_connections.popleft()
-            eventlet.spawn(self._remove_socket, socket)
-            return socket
+            spawn(self._remove_socket, socket)
+            
         if host.nb_connections < self.max_connections:
             host.nb_connections += 1
             return None
         socket = host.pool.get()
-        eventlet.spawn(self._remove_socket, socket)
+        spawn(self._remove_socket, socket)
         return socket
                 
     def _monitor_socket(self, fn):
@@ -82,7 +82,7 @@ class EventletPool(PoolInterface):
                 
     def monitor_socket(self, socket):
          self.sockets[socket.fileno()] = socket
-         eventlet.spawn(self._monitor_socket, socket.fileno())
+         spawn(self._monitor_socket, socket.fileno())
         
     def put(self, address, socket):
         """ release socket in the pool 
@@ -122,3 +122,4 @@ class EventletPool(PoolInterface):
                 socket = host.pool.get()
                 sock.close(socket)
                 host.nb_connections -= 1
+        self.hosts[address] = host
