@@ -43,6 +43,7 @@ but you can do more like building object mapping HTTP resources, ....
    pool
    authentication
    client
+   wsgi_proxy
 
 
 Features
