@@ -31,13 +31,6 @@ LOG_LEVELS = {
     "debug": logging.DEBUG
 }
 
-class NullHandler(logging.Handler):
-    def emit(self, record):
-        pass
-        
-h = NullHandler()
-logging.getLogger('restkit').addHandler(h)
-
 def set_logging(level, handler=None):
     """
     Set level of logging, and choose where to display/save logs 
@@ -54,7 +47,6 @@ def set_logging(level, handler=None):
     
     handler.setFormatter(logging.Formatter(format, datefmt))
     logger.addHandler(handler)
-
     
 def request(url, method='GET', body=None, headers=None, pool_instance=None, 
         follow_redirect=False, filters=None, key_file=None, cert_file=None):

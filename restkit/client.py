@@ -10,6 +10,7 @@ import os
 import socket
 import time
 from StringIO import StringIO
+import types
 import urlparse
 
 from restkit import __version__
@@ -278,7 +279,7 @@ class HttpConnection(object):
                     chunked = True
                 normalized_headers.append((name, value))
             else:
-                if not isinstance(value, basestring):
+                if not isinstance(value, types.StringTypes):
                     value = str(value)
                 normalized_headers.append((name, value))
         
@@ -296,7 +297,7 @@ class HttpConnection(object):
                         content_len = str(body.len)
                     except AttributeError:
                         pass
-                elif isinstance(body, basestring):
+                elif isinstance(body, types.StringTypes):
                     body = util.to_bytestring(body)
                     content_len = len(body)
             
@@ -332,19 +333,16 @@ class HttpConnection(object):
                         self.uri.query, self.uri.fragment))
            
         # build final request headers
-
-        req_headers = []   
-        req_headers.append("%s %s %s\r\n" % (self.method, req_path, httpver))
-        req_headers.append("Host: %s\r\n" % self.host_hdr)
-        req_headers.append("User-Agent: %s\r\n" % self.ua)
-        req_headers.append("Accept-Encoding: %s\r\n" % self.accept_encoding)
-        
-        for name, value in self.headers:
-            req_headers.append("%s: %s\r\n" % (name, value))
-        req_headers.append("\r\n")
-        self.req_headers = req_headers
+        req_headers = [
+            "%s %s %s\r\n" % (self.method, req_path, httpver),
+            "Host: %s\r\n" % self.host_hdr,
+            "User-Agent: %s\r\n" % self.ua,
+            "Accept-Encoding: %s\r\n" % self.accept_encoding
+        ]
+        req_headers.extend(["%s:%s\r\n" % (k, v) for k, v in self.headers])
+        req_headers.append('\r\n')
         return req_headers
-        
+               
     def do_send(self):
         tries = 2
         while True:
@@ -363,14 +361,14 @@ class HttpConnection(object):
                 log.info('Start request: %s %s' % (self.method, self.url))
                 log.debug("Request headers: [%s]" % str(req_headers))
                 
-                sock.sendlines(self._sock, req_headers)
+                self._sock.sendall("".join(req_headers))
+                
                 if self.body is not None:
                     if hasattr(self.body, 'read'):
                         if hasattr(self.body, 'seek'): self.body.seek(0)
                         sock.sendfile(self._sock, self.body, self.chunked)
-                    elif isinstance(self.body, basestring):
-                        sock.sendfile(self._sock, StringIO(
-                                util.to_bytestring(self.body)), self.chunked)
+                    elif isinstance(self.body, types.StringTypes):
+                        sock.send(self._sock, self.body, self.chunked)
                     else:
                         sock.sendlines(self._sock, self.body, self.chunked)
                         

@@ -55,7 +55,8 @@ class Parser(object):
         if i != -1:
             r = line[:i]
             pos = i+4
-            buf2 = StringIO(line[pos:])
+            buf2 = StringIO()
+            buf2.write(line[pos:])
             return self.finalize_headers(headers, r, buf2)
         return False
         
@@ -84,45 +85,40 @@ class Parser(object):
         headers.extend(list(_headers.items()))
         self.headers = headers
         self._content_len = int(_headers.get('Content-Length',0))
+        
         if self.type == 'request':
             (_, _, self.path, self.query_string, self.fragment) = \
                 urlparse.urlsplit(self.raw_path)
+        
         return buf2
+    
+    def _parse_version(self, version):
+        self.raw_version = version.strip()
+        try:
+            major, minor = self.raw_version.split("HTTP/")[1].split(".")
+            self.version = (int(major), int(minor))
+        except IndexError:
+            self.version = (1, 0)
     
     def _first_line(self, line):
         """ parse first line """
-        self.status_line = status_line = line.strip()
-                
+        self.status_line = status_line = line.strip()  
         try:
             if self.type == 'response':
                 version, self.status = status_line.split(None, 1)
-            else:
-                method, path, version = status_line.split(None, 2)
-        except ValueError:
-            raise BadStatusLine(line)
-        
-        version = version.strip()
-        self.raw_version = version
-        try:
-            major, minor = version.split("HTTP/")[1].split(".")
-            version = (int(major), int(minor))
-        except IndexError:
-            version = (1, 0)
-
-        self.version = version
-        
-        if self.type == 'response':
-            try:
+                self._parse_version(version)
                 try:
                     self.status_int, self.reason = self.status.split(None, 1)
                 except ValueError:
                     self.status_int =  self.status
                 self.status_int = int(self.status_int)
-            except ValueError:
-                raise BadStatusLine("can't find status code")
-        else:    
-            self.method = method.upper()
-            self.raw_path = path
+            else:
+                method, path, version = status_line.split(None, 2)
+                self._parse_version(version)
+                self.method = method.upper()
+                self.raw_path = path
+        except ValueError:
+            raise BadStatusLine(line)
         
     def _parse_headerl(self, hdrs, line):
         """ parse header line"""

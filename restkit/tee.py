@@ -160,7 +160,7 @@ class TeeInput(object):
 
             data = self._sock.recv(length)
             buf2.write(data)
-                
+        
         self._finalize()
         return ""
         
