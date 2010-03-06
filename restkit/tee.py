@@ -47,10 +47,12 @@ class TeeInput(object):
         if self._len: return self._len
         
         if self._is_socket:
+            pos = self.tmp.tell()
             self.tmp.seek(0, 2)
             while True:
                 if not self._tee(self.CHUNK_SIZE):
                     break
+            self.tmp.seek(pos)
         self._len = self._tmp_size()
         return self._len
         
