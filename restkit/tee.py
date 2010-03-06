@@ -181,7 +181,7 @@ class TeeInput(object):
         while True:
             if dest.len >= length: 
                 break
-            data = self._tee(length - len(dest))
+            data = self._tee(length - dest.len)
             if not data: 
                 break
             dest.write(data)
