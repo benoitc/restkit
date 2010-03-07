@@ -54,7 +54,7 @@ Features
 - Map HTTP resources to Python objects
 - **Read** and **Send** on the fly
 - Reuses connections
-- `Eventlet <http://eventlet.net>`_ and `Gevent <http://gevent.net>`_ support
+- `Eventlet <http://www.eventlet.net>`_ and `Gevent <http://www.gevent.org>`_ support
 - Support `Chunked transfer encoding`_ in both ways.
 - Support `Basic Authentification`_ and `OAuth`_.
 - Multipart forms and url-encoded forms
