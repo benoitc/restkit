@@ -101,7 +101,7 @@
 <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
     <span class="k">if</span> <span class="s">&#39;RAW_URI&#39;</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-        <span class="c"># gunicorn so we use real path non encoded</span>
+        <span class="c"># gunicorn so we can use real path non encoded</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;RAW_URI&#39;</span><span class="p">])</span>
         <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">path</span>
 
