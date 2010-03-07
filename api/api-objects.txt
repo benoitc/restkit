@@ -13,6 +13,7 @@ restkit.console	restkit.console-module.html
 restkit.console.request	restkit-module.html#request
 restkit.console.__usage__	restkit.console-module.html#__usage__
 restkit.console.__package__	restkit.console-module.html#__package__
+restkit.console.set_logging	restkit-module.html#set_logging
 restkit.console.main	restkit.console-module.html#main
 restkit.console.options	restkit.console-module.html#options
 restkit.errors	restkit.errors-module.html
