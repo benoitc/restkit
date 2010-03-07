@@ -20,7 +20,7 @@ We will do here a simple proxy for `CouchDB <http://couchdb.apache.org>`_. We us
   def application(environ, start_response):
       req = Request(environ)
       if 'RAW_URI' in req.environ: 
-          # gunicorn so we use real path non encoded
+          # gunicorn so we can use real path non encoded
           u = urlparse.urlparse(req.environ['RAW_URI'])
           req.environ['PATH_INFO'] = u.path
 
