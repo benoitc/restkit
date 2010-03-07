@@ -93,7 +93,8 @@ def main():
                         f.write(block)
         else:
             if opts.server_response:
-                print "\n\033[0m\033[95mServer response from %s:\n\033[0m" % resp.final_url
+                print "\n\033[0m\033[95mServer response from %s:\n\033[0m" % (
+                                                                resp.final_url)
                 for k, v in resp.headerslist:
                     print "\033[94m%s\033[0m: %s" % (k, v)
                 print "\033[0m"
