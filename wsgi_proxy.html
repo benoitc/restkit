@@ -88,7 +88,9 @@
 <p>Restkit version 1.2 introduced a WSGI proxy extension written by <a class="reference external" href="http://www.gawel.org/">gawel</a> .This extension proxy WSGI requests to a remote server.</p>
 <p>Here is a quick example. You can read full post <a class="reference external" href="http://www.gawel.org/weblog/en/2010/03/using_restkit_proxy_in_your_wsgi_app">here</a> .</p>
 <p>We will do here a simple proxy for <a class="reference external" href="http://couchdb.apache.org">CouchDB</a>. We use <a class="reference external" href="http://pythonpaste.org/webob/">webob</a> and <a class="reference external" href="http://gunicorn.org">gunicorn</a> to launch it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">webob</span> <span class="kn">import</span> <span class="n">Request</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urlparse</span>
+
+<span class="kn">from</span> <span class="nn">webob</span> <span class="kn">import</span> <span class="n">Request</span>
 <span class="kn">from</span> <span class="nn">restkit.pool</span> <span class="kn">import</span> <span class="n">ConnectionPool</span>
 <span class="kn">from</span> <span class="nn">restkit.ext.wsgi_proxy</span> <span class="kn">import</span> <span class="n">HostProxy</span>
 
@@ -97,18 +99,22 @@
 
 
 <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
-  <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;RAW_URI&#39;</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="c"># gunicorn so we use real path non encoded</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;RAW_URI&#39;</span><span class="p">])</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">path</span>
 
-  <span class="c"># do smth like adding oauth headers ..</span>
-  <span class="n">resp</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">proxy</span><span class="p">)</span>
+    <span class="c"># do smth like adding oauth headers ..</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">proxy</span><span class="p">)</span>
 
-  <span class="c"># rewrite response</span>
-  <span class="c"># do auth ...</span>
-  <span class="k">return</span> <span class="n">resp</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+    <span class="c"># rewrite response</span>
+    <span class="c"># do auth ...</span>
+    <span class="k">return</span> <span class="n">resp</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>And then launch your application:</p>
-<div class="highlight-python"><pre>gunicorn -w 12 couchdbproxy::application</pre>
+<div class="highlight-python"><pre>gunicorn -w 12 couchdbproxy:application</pre>
 </div>
 <p>And access to your couchdb at <cite>http://127.0.0.1:8000</cite> .</p>
 </div>
