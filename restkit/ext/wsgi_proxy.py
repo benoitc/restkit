@@ -61,15 +61,6 @@ class Proxy(object):
             start_response('403 Forbidden', ())
             return ['']
 
-        if method in ('POST', 'PUT'):
-            if 'CONTENT_LENGTH' in environ:
-                content_length = int(environ['CONTENT_LENGTH'])
-                body = environ['wsgi.input'].read(content_length)
-            else:
-                body = environ['wsgi.input'].read()
-        else:
-            body=None
-
         if self.strip_script_name:
             path_info = ''
         else:
@@ -94,7 +85,7 @@ class Proxy(object):
                 new_headers[k.replace('_', '-').title()] = v
 
         response = request(uri, method,
-                           body=body, headers=new_headers,
+                           body=environ['wsgi.input'], headers=new_headers,
                            pool_instance=self.pool)
 
         start_response(response.status, response.headerslist)
