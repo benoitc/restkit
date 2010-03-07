@@ -41,14 +41,14 @@ Quick snippet with iteration::
   r = request("http://e-engura.com/images/logo.gif")
   fd, fname = tempfile.mkstemp(suffix='.gif')
   with os.fdopen(fd, "wb") as f:
-    for block in r.body_file:
-      f.write(block)
+      for block in r.body_file:
+          f.write(block)
       
 Or if you just want to read::
 
   with os.fdopen(fd, "wb") as f:
-    while True:
-      f.write(r.body_file.read(1024))
-
-  
-  
+      while True:
+          data = r.body_file.read(1024)
+          if not data:
+              break
+          f.write(data)
