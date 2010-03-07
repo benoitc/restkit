@@ -42,6 +42,7 @@ but you can do more like building object mapping HTTP resources, ....
    resource
    pool
    authentication
+   streaming
    client
    wsgi_proxy
 
