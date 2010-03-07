@@ -112,7 +112,7 @@
 </div>
 <div class="section" id="stream-from">
 <h2>Stream from<a class="headerlink" href="#stream-from" title="Permalink to this headline">¶</a></h2>
-<p>Each requests return a <a href="#id1"><span class="problematic" id="id2">:api:`restkit.client.HttpResponse`_</span></a> object. If you want to receive the content in a streaming fashion you just have to use the <cite>body_file</cite> member of the response. You can <cite>iter</cite> on it or just use as a file-like object (read, readline, readlines, ...). Big upload are saved as a temporary file in the filesystem, while upload &lt;= 1Mo are in memory. You can reuse the response at any moment.</p>
+<p>Each requests return a <a class="reference external" href="api/restkit.client.HttpResponse-class.html">HttpResponse</a> object. If you want to receive the content in a streaming fashion you just have to use the <cite>body_file</cite> member of the response. You can <cite>iter</cite> on it or just use as a file-like object (read, readline, readlines, ...). Big upload are saved as a temporary file in the filesystem, while upload &lt;= 1Mo are in memory. You can reuse the response at any moment.</p>
 <p>Quick snippet with iteration:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
