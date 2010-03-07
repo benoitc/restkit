@@ -84,7 +84,7 @@ def main():
                         
         if opts.output:
             with open(opts.output, 'wb') as f:
-                if opts.log_level:
+                if opts.server_response:
                     f.write("Server response from %s:\n" % resp.final_url)
                     for k, v in resp.headerslist:
                         f.write( "%s: %s" % (k, v))
@@ -92,7 +92,7 @@ def main():
                     for block in resp.body_file:
                         f.write(block)
         else:
-            if opts.log_level:
+            if opts.server_response:
                 print "\n\033[0m\033[95mServer response from %s:\n\033[0m" % resp.final_url
                 for k, v in resp.headerslist:
                     print "\033[94m%s\033[0m: %s" % (k, v)
