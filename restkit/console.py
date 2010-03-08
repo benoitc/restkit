@@ -65,15 +65,20 @@ common_indent = {
     'text/html': indent_xml,
     'text/xml': indent_xml,
     'application/xhtml+xml': indent_xml,
+    'application/xml': indent_xml,
+    'image/svg+xml': indent_xml,
+    'application/rss+xml': indent_xml,
+    'application/atom+xml': indent_xml,
+    'application/xsl+xml': indent_xml,
+    'application/xslt+xml': indent_xml
 }
-
 
 def indent(mimetype, data):
     if mimetype in common_indent:
         return common_indent[mimetype](data)
     return data
     
-def prettify(response):
+def prettify(response, cli=True):
     if not pygments or not 'content-type' in response.headers:
         return response.body
         
@@ -102,6 +107,10 @@ def options():
         op.make_option('-H', '--header', action='append', dest='headers',
                 help='http string header in the form of Key:Value. '+
                 'For example: "Accept: application/json" '),
+        op.make_option('-X', '--request', action='store', dest='method',
+                help='http request method', default='GET'),
+        op.make_option('--follow-redirect', action='store_false', 
+                dest='follow_redirect', default=False),
         op.make_option('-S', '--server-response', action='store_true', 
                 default=False, dest='server_response', 
                 help='print server response'),
@@ -114,8 +123,7 @@ def options():
                 metavar='FILE', help='the name of the file to read from'),
         op.make_option('-o', '--output', action='store', dest='output',
                 help='the name of the file to write to'),
-        op.make_option('--follow-redirect', action='store_false', 
-                dest='follow_redirect', default=True)
+        
     ]
 
 def main():
@@ -149,24 +157,20 @@ def main():
             except ValueError:
                 pass
 
+
     try:
-        if args_len == 3:
-            resp = request(args[0], method=args[1], body=body,
-                        headers=headers, follow_redirect=opts.follow_redirect)
-        elif len(args) == 2:
-            if args[1] == "-":
+        if len(args) == 2:
+            if args[1] == "-" and not opts.input:
                 body = sys.stdin.read()
                 headers.append(("Content-Length", str(len(body))))
-        
-            resp = request(args[0], method=args[1], body=body,
-                        headers=headers, follow_redirect=opts.follow_redirect)
+
+        if not opts.method and opts.input:
+            method = 'POST'
         else:
-            if opts.input:
-                method = 'POST'
-            else:
-                method='GET'
-            resp = request(args[0], method=method, body=body,
-                        headers=headers, follow_redirect=opts.follow_redirect)
+            method=opts.method.upper()
+            
+        resp = request(args[0], method=method, body=body,
+                    headers=headers, follow_redirect=opts.follow_redirect)
                         
         if opts.output:
             with open(opts.output, 'wb') as f:
