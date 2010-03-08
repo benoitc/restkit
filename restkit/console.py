@@ -8,9 +8,93 @@ import os
 import optparse as op
 import sys
 
+# import pygments if here
+try:
+    import pygments
+    from pygments.lexers import get_lexer_for_mimetype
+    from pygments.formatters import TerminalFormatter
+except ImportError:
+    pygments = False
+    
+# import json   
+try:
+    import simplejson as json
+except ImportError:
+    try:
+        import json
+    except ImportError:
+        json = False
+
 from restkit import __version__, request, set_logging
+from restkit.util import popen3, locate_program
 
 __usage__ = "'%prog [options] url [METHOD] [filename]'"
+
+
+pretties = {
+    'application/json': 'text/javascript',
+    'text/plain': 'text/javascript'
+}
+
+def external(cmd, data):
+    try:
+        (child_stdin, child_stdout, child_stderr) = popen3(cmd)
+        err = child_stderr.read()
+        if err:
+            return data
+        return child_stdout.read()
+    except:
+        return data
+        
+def indent_xml(data):
+    tidy_cmd = locate_program("tidy")
+    if tidy_cmd:
+        cmd = " ".join([tidy_cmd, '-qi', '-wrap', '70', '-utf8', data])
+        return external(cmd, data)
+    return data
+    
+def indent_json(data):
+    if not json:
+        return data
+    info = json.loads(data)
+    return json.dumps(info, indent=2, sort_keys=True)
+
+
+common_indent = {
+    'application/json': indent_json,
+    'text/html': indent_xml,
+    'text/xml': indent_xml,
+    'application/xhtml+xml': indent_xml,
+}
+
+
+def indent(mimetype, data):
+    if mimetype in common_indent:
+        return common_indent[mimetype](data)
+    return data
+    
+def prettify(response):
+    if not pygments or not 'content-type' in response.headers:
+        return response.body
+        
+    ctype = response.headers['content-type']
+    try:
+        mimetype, encoding = ctype.split(";")
+    except ValueError:
+        mimetype = ctype.split(";")[0]
+        
+    # indent body
+    body = indent(mimetype, response.body)
+    
+    # get pygments mimetype
+    mimetype = pretties.get(mimetype, mimetype)
+    
+    try:
+        lexer = get_lexer_for_mimetype(mimetype)
+        body = pygments.highlight(body, lexer, TerminalFormatter())
+        return body
+    except:
+        return response.body
 
 def options():
     """ build command lines options """
@@ -21,6 +105,8 @@ def options():
         op.make_option('-S', '--server-response', action='store_true', 
                 default=False, dest='server_response', 
                 help='print server response'),
+        op.make_option('-p', '--prettify', dest="prettify", action='store_true', 
+                    default=False, help="Prettify display"),
         op.make_option('--log-level', dest="log_level",
                 help="Log level below which to silence messages. [info]",
                 default="info"),
@@ -99,7 +185,10 @@ def main():
                     print "\033[94m%s\033[0m: %s" % (k, v)
                 print "\033[0m"
             else:
-                print resp.body
+                if opts.prettify:
+                    print prettify(resp)
+                else:
+                    print resp.body
         
     except Exception, e:
         sys.stderr.write("An error happened: %s" % str(e))
