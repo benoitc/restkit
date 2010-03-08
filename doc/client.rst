@@ -3,6 +3,9 @@ Command Line
 
 Restkit integrate a simple HTTP client in command line named `restcli` allowing  you to perform requests.
 
+.. image:: _static/screenshot_client.png
+   :width: 90%
+
 Usage::
 
   $ restcli --help
