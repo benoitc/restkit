@@ -6,19 +6,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Command Line &mdash; restkit v1.2.0 documentation</title>
+    <title>Command Line &mdash; restkit v1.2.1 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '#',
-        VERSION:     '1.2.0',
+        VERSION:     '1.2.1',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v1.2.0 documentation" href="index.html" />
+    <link rel="top" title="restkit v1.2.1 documentation" href="index.html" />
     <link rel="next" title="wsgi_proxy" href="wsgi_proxy.html" />
     <link rel="prev" title="Stream you content" href="streaming.html" />
 
@@ -87,6 +87,7 @@
   <div class="section" id="command-line">
 <h1>Command Line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h1>
 <p>Restkit integrate a simple HTTP client in command line named <cite>restcli</cite> allowing  you to perform requests.</p>
+<img alt="images/screenshot_client.png" src="images/screenshot_client.png" style="width: 90%;" />
 <p>Usage:</p>
 <div class="highlight-python"><pre>$ restcli --help
 Usage: 'restcli [options] url [METHOD] [filename]'
@@ -95,14 +96,22 @@ Options:
   -H HEADERS, --header=HEADERS
                         http string header in the form of Key:Value. For
                         example: "Accept: application/json"
+  -X METHOD, --request=METHOD
+                        http request method
+  --follow-redirect
+  -S, --server-response
+                        print server response
+  -p, --prettify        Prettify display
+  --log-level=LOG_LEVEL
+                        Log level below which to silence messages. [info]
   -i FILE, --input=FILE
                         the name of the file to read from
   -o OUTPUT, --output=OUTPUT
                         the name of the file to write to
-  --follow-redirect
   --version             show program's version number and exit
   -h, --help            show this help message and exit</pre>
 </div>
+<p>To have better prettyfication, make sure you have <a class="reference external" href="http://pygments.org">pygments</a> <a class="reference external" href="http://tidy.sourceforge.net/">tidy</a> and <a class="reference external" href="http://code.google.com/p/simplejson/">simplejson</a> (or python2.6) installed. They may be already installed on your machine.</p>
 </div>
 
 
