@@ -27,4 +27,5 @@ Usage::
     --version             show program's version number and exit
     -h, --help            show this help message and exit
 
+To have better prettyfication, make sure you have `pygments <http://pygments.org>`_ `tidy <http://tidy.sourceforge.net/>`_ and `simplejson <http://code.google.com/p/simplejson/>`_ (or python2.6) installed. They may be already installed on your machine.
   
