@@ -3,7 +3,10 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from StringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 import urlparse
 
 from restkit.errors import BadStatusLine, ParserError
@@ -191,7 +194,7 @@ class Parser(object):
                 chunk = line[self.start_offset:self.start_offset+self.chunk_size]
                 end_offset = self.start_offset + self.chunk_size + 2
                 # we wait CRLF else return None
-                if buf.len >= end_offset:
+                if len(buf.getvalue()) >= end_offset:
                     buf2.write(line[end_offset:])
                     self.chunk_size = 0
                     return chunk, buf2
@@ -207,7 +210,7 @@ class Parser(object):
         Filter body and return a tuple: (body_chunk, new_buffer)
         Both can be None, and new_buffer is always None if its empty.
         """
-        dlen = buf.len
+        dlen = len(buf.getvalue())
         chunk = ''
 
         if self.is_chunked:

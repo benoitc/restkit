@@ -9,7 +9,10 @@ import logging
 import os
 import socket
 import time
-from StringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 import types
 import urlparse
 
@@ -292,9 +295,9 @@ class HttpConnection(object):
                     except IOError:
                         pass
                     content_len = str(os.fstat(body.fileno())[6])
-                elif hasattr(body, 'len'):
+                elif hasattr(body, 'getvalue'):
                     try:
-                        content_len = str(body.len)
+                        content_len = str(len(body.getvalue()))
                     except AttributeError:
                         pass
                 elif isinstance(body, types.StringTypes):
