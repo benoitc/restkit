@@ -101,29 +101,75 @@ def prettify(response, cli=True):
     except:
         return response.body
 
+def as_bool(value):
+    if value.lower() in ('true', '1'):
+        return True
+    return False
+
+def update_defaults(defaults):
+    config = os.path.expanduser('~/.restcli')
+    if os.path.isfile(config):
+        for line in open(config):
+            key, value = line.split('=', 1)
+            key = key.lower().strip()
+            key = key.replace('-', '_')
+            if key.startswith('header'):
+                key = 'headers'
+            value = value.strip()
+            if key in defaults:
+                default = defaults[key]
+                if default in (True, False):
+                    value = as_bool(value)
+                elif isinstance(default, list):
+                    default.append(value)
+                    value = default
+                defaults[key] = value
+
 def options():
     """ build command lines options """
+
+    defaults = dict(
+            headers=[],
+            request='GET',
+            follow_redirect=False,
+            server_response=False,
+            prettify=False,
+            log_level='info',
+            input=None,
+            output=None,
+            )
+    update_defaults(defaults)
+
+    def opt_args(option, *help):
+        help = ' '.join(help)
+        help = help.strip()
+        default = defaults.get(option)
+        if default is not None:
+            help += ' Default to %r.' % default
+        return dict(default=defaults.get(option), help=help)
+
     return [
         op.make_option('-H', '--header', action='append', dest='headers',
-                help='http string header in the form of Key:Value. '+
-                'For example: "Accept: application/json" '),
+                **opt_args('headers',
+                           'HTTP string header in the form of Key:Value. ',
+                           'For example: "Accept: application/json".')),
         op.make_option('-X', '--request', action='store', dest='method',
-                help='http request method', default='GET'),
-        op.make_option('--follow-redirect', action='store_false', 
-                dest='follow_redirect', default=False),
-        op.make_option('-S', '--server-response', action='store_true', 
-                default=False, dest='server_response', 
-                help='print server response'),
-        op.make_option('-p', '--prettify', dest="prettify", action='store_true', 
-                    default=False, help="Prettify display"),
+                       **opt_args('request', 'HTTP request method.')),
+        op.make_option('--follow-redirect', action='store_false',
+                       dest='follow_redirect', **opt_args('follow_redirect')),
+        op.make_option('-S', '--server-response', action='store_true',
+                       dest='server_response',
+                       **opt_args('server_response', 'Print server response.')),
+        op.make_option('-p', '--prettify', dest="prettify", action='store_true',
+                       **opt_args('prettify', "Prettify display.")),
         op.make_option('--log-level', dest="log_level",
-                help="Log level below which to silence messages. [info]",
-                default="info"),
-        op.make_option('-i', '--input', action='store', dest='input', 
-                metavar='FILE', help='the name of the file to read from'),
+                       **opt_args('log_level',
+                                  "Log level below which to silence messages.")),
+        op.make_option('-i', '--input', action='store', dest='input',
+                       metavar='FILE',
+                       **opt_args('input', 'The name of the file to read from.')),
         op.make_option('-o', '--output', action='store', dest='output',
-                help='the name of the file to write to'),
-        
+                       **opt_args('output', 'The name of the file to write to.')),
     ]
 
 def main():
@@ -172,7 +218,7 @@ def main():
         resp = request(args[0], method=method, body=body,
                     headers=headers, follow_redirect=opts.follow_redirect)
                         
-        if opts.output:
+        if opts.output and opts.output != '-':
             with open(opts.output, 'wb') as f:
                 if opts.server_response:
                     f.write("Server response from %s:\n" % resp.final_url)
@@ -183,11 +229,23 @@ def main():
                         f.write(block)
         else:
             if opts.server_response:
-                print "\n\033[0m\033[95mServer response from %s:\n\033[0m" % (
-                                                                resp.final_url)
-                for k, v in resp.headerslist:
-                    print "\033[94m%s\033[0m: %s" % (k, v)
-                print "\033[0m"
+                if opts.prettify:
+                    print "\n\033[0m\033[95mServer response from %s:\n\033[0m" % (
+                                                                    resp.final_url)
+                    for k, v in resp.headerslist:
+                        print "\033[94m%s\033[0m: %s" % (k, v)
+                    print "\033[0m"
+                else:
+                    print "Server response from %s:\n" % (resp.final_url)
+                    for k, v in resp.headerslist:
+                        print "%s: %s" % (k, v)
+                    print ""
+
+                if opts.output == '-':
+                    if opts.prettify:
+                        print prettify(resp)
+                    else:
+                        print resp.body
             else:
                 if opts.prettify:
                     print prettify(resp)
