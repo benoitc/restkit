@@ -18,6 +18,7 @@ except ImportError:
 import tempfile
 
 from restkit import sock
+from restkit.errors import UnexpectedEOF
 
 class TeeInput(object):
     
@@ -136,6 +137,13 @@ class TeeInput(object):
             line = self.readline()
         return lines
     
+    def close(self):
+        if callable(self.maybe_close):
+            self.maybe_close()
+        
+        self.buf = StringIO()
+        self._is_socket = False
+    
     def next(self):
         r = self.readline()
         if not r:
@@ -162,8 +170,17 @@ class TeeInput(object):
 
             if self.parser.body_eof():
                 break
+                
+            if not self._is_socket:
+                if self.parser.is_chunked:
+                    data = buf2.getvalue()
+                    if data.find("\r\n") >= 0:
+                        continue
+                raise UnexpectedEOF("remote closed the connection")
 
             data = self._sock.recv(length)
+            if not data:
+                self._is_socket = False
             buf2.write(data)
         
         self._finalize()
@@ -174,11 +191,7 @@ class TeeInput(object):
         if any."""
 
         if self.parser.body_eof():
-            if callable(self.maybe_close):
-                self.maybe_close()
-            
-            self.buf = StringIO()
-            self._is_socket = False
+            self.close()
 
     def _tmp_size(self):
         if hasattr(self.tmp, 'fileno'):

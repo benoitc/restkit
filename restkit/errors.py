@@ -80,3 +80,6 @@ class BadStatusLine(Exception):
 class ParserError(Exception):
     """ Generic exception returned by the parser """
     pass
+    
+class UnexpectedEOF(object):
+    """ exception raised when remote closed the connection """
