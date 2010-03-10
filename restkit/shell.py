@@ -36,6 +36,8 @@ class Response(BaseResponse):
         if self.content_length < 200 and skip_body:
             skip_body = False
         return BaseResponse.__str__(self, skip_body=skip_body)
+    def __call__(self):
+        print self
 
 
 class Request(BaseRequest):
@@ -71,6 +73,9 @@ class Request(BaseRequest):
         if self.content_length < 200 and skip_body:
             skip_body = False
         return BaseRequest.__str__(self, skip_body=skip_body)
+
+    def __call__(self):
+        print self
 
 
 class ContentTypes(object):
@@ -144,11 +149,13 @@ class ShellClient(object):
             req.body_file = stream
         req.headers = headers
         req.set_url(self.url)
-        ns.update(ctypes=ctypes,
-                  Request=lambda: Request.blank(self.url),
-                  req=req,
+        ns.update(
+                  Request=Request,
+                  Response=Response,
                   Stream=Stream,
+                  req=req,
                   stream=stream,
+                  ctypes=ctypes,
                   )
         if json:
             ns['JSON'] = JSON
