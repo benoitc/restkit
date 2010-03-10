@@ -342,7 +342,7 @@ class HttpConnection(object):
             "User-Agent: %s\r\n" % self.ua,
             "Accept-Encoding: %s\r\n" % self.accept_encoding
         ]
-        req_headers.extend(["%s:%s\r\n" % (k, v) for k, v in self.headers])
+        req_headers.extend(["%s: %s\r\n" % (k, v) for k, v in self.headers])
         req_headers.append('\r\n')
         return req_headers
                
