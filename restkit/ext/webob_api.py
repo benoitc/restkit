@@ -69,7 +69,7 @@ class Request(BaseRequest):
     __call__ = get_response
 
     def set_url(self, url_or_path):
-        path = url_or_path.strip('/')
+        path = url_or_path.lstrip('/')
         if '?' in path:
             path, self.query_string = path.split('?', 1)
         if path.startswith('http'):
