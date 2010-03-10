@@ -170,19 +170,26 @@ def options():
                        **opt_args('input', 'The name of the file to read from.')),
         op.make_option('-o', '--output', action='store', dest='output',
                        **opt_args('output', 'The name of the file to write to.')),
+        op.make_option('--shell', action='store_true', dest='shell',
+                       help='Open a shell session'),
     ]
 
 def main():
     """ function to manage restkit command line """
     parser = op.OptionParser(usage=__usage__, option_list=options(),
                     version="%prog " + __version__)
- 
+
     opts, args = parser.parse_args()
     args_len = len(args)
-    
+
+    if opts.shell:
+        from restkit import shell
+        shell.main(options=opts, *args)
+        return
+
     if args_len < 1:
         return parser.error('incorrect number of arguments')
-        
+
     set_logging(opts.log_level)
 
     body = None
