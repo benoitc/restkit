@@ -8,21 +8,12 @@ except ImportError:
 
 from restkit import __version__, request, set_logging
 from restkit.console import common_indent, json
-from restkit.ext.webob_api import Request, Response
+from restkit.ext.webob_api import Request as BaseRequest
+from webob import Response as BaseResponse
 from StringIO import StringIO
 import IPython
-import urllib
-import urlparse
 
-class Shell(IPShellEmbed):
-    def __init__(self, kwargs):
-        argv = [
-                 '-prompt_in1','\C_Blue\#) \C_Greenrestcli\$ ',
-               ]
-        IPShellEmbed.__init__(self,argv,banner='restkit shell %s' % __version__,
-                              exit_msg=None,rc_override=None,
-                              user_ns=kwargs)
-
+StringIOClass = StringIO().__class__
 
 class Stream(StringIO):
     def __repr__(self):
@@ -40,16 +31,54 @@ class JSON(Stream):
         return '<JSON(%s)>' % self.__value
 
 
-class Container(object):
+class Response(BaseResponse):
+    def __str__(self, skip_body=True):
+        if self.content_length < 200 and skip_body:
+            skip_body = False
+        return BaseResponse.__str__(self, skip_body=skip_body)
+
+
+class Request(BaseRequest):
+    ResponseClass = Response
+    def get_response(self, *args, **kwargs):
+        url = self.url
+        stream = None
+        for a in args:
+            if isinstance(a, StringIOClass):
+                stream = a
+                a.seek(0)
+                continue
+            elif isinstance(a, basestring):
+                if a.startswith('http'):
+                    url = a
+                elif a.startswith('/'):
+                    url = a
+
+        self.set_url(url)
+
+        if stream:
+            self.body_file = stream
+            self.content_length = stream.len
+        if self.method == 'GET' and kwargs:
+            for k, v in kwargs.items():
+                self.GET[k] = v
+        elif self.method == 'POST' and kwargs:
+            for k, v in kwargs.items():
+                self.GET[k] = v
+        return BaseRequest.get_response(self)
+
+    def __str__(self, skip_body=True):
+        if self.content_length < 200 and skip_body:
+            skip_body = False
+        return BaseRequest.__str__(self, skip_body=skip_body)
+
+
+class ContentTypes(object):
     _values = {}
     def __repr__(self):
         return '<%s(%s)>' % (self.__class__.__name__, sorted(self._values))
     def __str__(self):
         return '\n'.join(['%-20.20s: %s' % h for h in sorted(self._value.items())])
-
-
-class ContentTypes(Container):
-    pass
 
 
 ctypes = ContentTypes()
@@ -63,6 +92,16 @@ del k, attr
 class API(property):
     def __get__(self, *args):
         return IPython.ipapi.get() or __IPYTHON__.api
+
+
+class Shell(IPShellEmbed):
+    def __init__(self, kwargs):
+        argv = [
+                 '-prompt_in1','\C_Blue\#) \C_Greenrestcli\$ ',
+               ]
+        IPShellEmbed.__init__(self,argv,banner='restkit shell %s' % __version__,
+                              exit_msg=None,rc_override=None,
+                              user_ns=kwargs)
 
 
 class ShellClient(object):
@@ -104,9 +143,8 @@ class ShellClient(object):
         if stream:
             req.body_file = stream
         req.headers = headers
-        req.new_url = self.url
+        req.set_url(self.url)
         ns.update(ctypes=ctypes,
-                  Response=Response,
                   Request=lambda: Request.blank(self.url),
                   req=req,
                   Stream=Stream,
@@ -118,7 +156,7 @@ class ShellClient(object):
     def request_meth(self, k):
         def req(*args, **kwargs):
             resp = self.request(k.upper(), *args, **kwargs)
-            self.api.to_user_ns(dict(resp=resp, req=resp.req))
+            self.api.to_user_ns(dict(resp=resp))
             print resp
             return resp
         req.func_name = k
@@ -140,7 +178,7 @@ class ShellClient(object):
                 req = Request.blank('/')
                 del req.content_type
         req.method = meth
-        req.new_url = self.url
+        req.set_url(self.url)
         resp = req.get_response(*args, **kwargs)
         self.url = req.url
         return resp
