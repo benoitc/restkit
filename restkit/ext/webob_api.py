@@ -4,7 +4,7 @@ try:
     from webob import Request as BaseRequest
 except ImportError:
     raise ImportError('WebOb (http://pypi.python.org/pypi/WebOb) is required')
-from cStringIO import StringIO
+from StringIO import StringIO
 from restkit.ext.wsgi_proxy import Proxy
 from restkit import request
 import urlparse

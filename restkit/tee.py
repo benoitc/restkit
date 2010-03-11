@@ -203,7 +203,7 @@ class TeeInput(object):
         if not len(dest.getvalue()) or not self._len:
             return dest.getvalue()
         while True:
-            if dest.len >= length: 
+            if len(dest.getvalue() >= length): 
                 break
             data = self._tee(length - len(dest.getvalue()))
             if not data: 

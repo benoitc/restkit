@@ -13,8 +13,6 @@ from webob import Response as BaseResponse
 from StringIO import StringIO
 import IPython
 
-StringIOClass = StringIO().__class__
-
 class Stream(StringIO):
     def __repr__(self):
         return '<Stream(%s)>' % self.len
@@ -46,7 +44,7 @@ class Request(BaseRequest):
         url = self.url
         stream = None
         for a in args:
-            if isinstance(a, StringIOClass):
+            if isinstance(a, Stream):
                 stream = a
                 a.seek(0)
                 continue
