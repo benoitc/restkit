@@ -459,15 +459,16 @@ class HttpConnection(object):
                     buf2.write(chunk)
                 sock.close(self._sock)
             buf2.seek(0)
-            self.response_body = buf2
-            
+            self.response_body = tee.TeeInput(self._sock, self.parser, 
+                                        buf2)
         elif self.method == "HEAD":
-            self.response_body = StringIO()
+            self.response_body = tee.TeeInput(self._sock, self.parser, 
+                                        StringIO())
             sock.close(self._sock)
         else:
             self.response_body = tee.TeeInput(self._sock, self.parser, buf2, 
                         maybe_close=lambda: self.release_connection(
-                                                    self.uri.netloc, self._sock))
+                                                self.uri.netloc, self._sock))
         
         # apply on response filters
         for af in self.response_filters:
