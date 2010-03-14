@@ -4,7 +4,13 @@ import sys
 try:
     from IPython.Shell import IPShellEmbed
 except ImportError:
-    raise ImportError('IPython (http://pypi.python.org/pypi/ipython) is required')
+    raise ImportError('IPython (http://pypi.python.org/pypi/ipython) ' +\
+                    'is required.')
+                    
+try:
+    import webob
+except ImportError:
+    raise ImportError('webob (http://pythonpaste.org/webob/) is required.')
 
 from restkit import __version__, request, set_logging
 from restkit.console import common_indent, json
@@ -81,7 +87,8 @@ class ContentTypes(object):
     def __repr__(self):
         return '<%s(%s)>' % (self.__class__.__name__, sorted(self._values))
     def __str__(self):
-        return '\n'.join(['%-20.20s: %s' % h for h in sorted(self._value.items())])
+        return '\n'.join(['%-20.20s: %s' % h for h in \
+                                            sorted(self._value.items())])
 
 
 ctypes = ContentTypes()

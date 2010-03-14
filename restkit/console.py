@@ -182,9 +182,13 @@ def main():
     opts, args = parser.parse_args()
     args_len = len(args)
 
-    if opts.shell:
-        from restkit import shell
-        shell.main(options=opts, *args)
+    if opts.shell:     
+        try:
+            from restkit import shell
+            shell.main(options=opts, *args)
+        except Exception, e:
+            print >>sys.stderr, str(e)
+            sys.exit(1)
         return
 
     if args_len < 1:
