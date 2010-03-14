@@ -11,6 +11,12 @@ ALLOWED_METHODS = ['GET', 'HEAD']
 
 BLOCK_SIZE = 4096 * 16
 
+WEBOB_ERROR = ("Content-Length is set to -1. This usually mean that WebOb has "
+        "already parsed the content body. You should set the Content-Length "
+        "header to the correct value before forwarding your request to the "
+        "proxy: ``req.content_length = str(len(req.body));`` "
+        "req.get_response(proxy)")
+
 class ResponseIter(object):
 
     def __init__(self, response):
@@ -83,6 +89,9 @@ class Proxy(object):
             v = environ.get(k, None)
             if v is not None:
                 new_headers[k.replace('_', '-').title()] = v
+
+        if new_headers.get('Content-Length', '0') == '-1':
+            raise ValueError(WEBOB_ERROR)
 
         response = request(uri, method,
                            body=environ['wsgi.input'], headers=new_headers,
