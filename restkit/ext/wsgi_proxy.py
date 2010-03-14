@@ -7,7 +7,7 @@ import urlparse
 from restkit import ConnectionPool, request
 from restkit.sock import MAX_BODY
 
-ALLOWED_METHODS = ['GET', 'HEAD']
+ALLOWED_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
 
 BLOCK_SIZE = 4096 * 16
 
@@ -96,6 +96,7 @@ class Proxy(object):
         response = request(uri, method,
                            body=environ['wsgi.input'], headers=new_headers,
                            pool_instance=self.pool)
+                           
 
         start_response(response.status, response.headerslist)
 
