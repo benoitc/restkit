@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 import urlparse
@@ -12,7 +12,7 @@ ALLOWED_METHODS = ['GET', 'HEAD']
 BLOCK_SIZE = 4096 * 16
 
 class ResponseIter(object):
-    
+
     def __init__(self, response):
         response.CHUNK_SIZE = BLOCK_SIZE
         self.body = response.body_file
@@ -22,15 +22,15 @@ class ResponseIter(object):
         if not data:
             raise StopIteration
         return data
-        
+
     def __iter__(self):
         return self
 
 class Proxy(object):
-    """A proxy wich redirect the request to SERVER_NAME:SERVER_PORT 
+    """A proxy wich redirect the request to SERVER_NAME:SERVER_PORT
     and send HTTP_HOST header"""
 
-    def __init__(self, pool=None, allowed_methods=ALLOWED_METHODS, 
+    def __init__(self, pool=None, allowed_methods=ALLOWED_METHODS,
             strip_script_name=True, **kwargs):
         self.pool = pool or ConnectionPool(**kwargs)
         self.allowed_methods = allowed_methods
@@ -128,12 +128,12 @@ class HostProxy(Proxy):
 
 class CouchdbProxy(HostProxy):
     """A proxy to redirect all request to CouchDB database"""
-    def __init__(self, db_name='', uri='http://127.0.0.1:5984', 
+    def __init__(self, db_name='', uri='http://127.0.0.1:5984',
             allowed_methods=['GET'], **kwargs):
         uri = uri.rstrip('/')
         if db_name:
             uri += '/' + db_name.strip('/')
-        super(CouchdbProxy, self).__init__(uri, allowed_methods=allowed_methods, 
+        super(CouchdbProxy, self).__init__(uri, allowed_methods=allowed_methods,
                                         **kwargs)
 
 def get_config(local_config):
@@ -161,7 +161,7 @@ def make_host_proxy(global_config, uri=None, **local_config):
     print 'Running HostProxy on %s with %s' % (uri, config)
     return HostProxy(uri, **config)
 
-def make_couchdb_proxy(global_config, db_name='', uri='http://127.0.0.1:5984', 
+def make_couchdb_proxy(global_config, db_name='', uri='http://127.0.0.1:5984',
             **local_config):
     """CouchdbProxy entry_point"""
     uri = uri.rstrip('/')
