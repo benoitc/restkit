@@ -1,0 +1,17 @@
+syntax: glob
+
+bin
+dist
+eggs
+parts
+var/
+develop-eggs
+docs/_build/
+docs/modules/
+.installed.cfg
+*.egg-info
+*.swp
+*.pyc
+*.pyo
+*.log
+
