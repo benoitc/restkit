@@ -171,7 +171,7 @@ def options():
         op.make_option('-o', '--output', action='store', dest='output',
                        **opt_args('output', 'The name of the file to write to.')),
         op.make_option('--shell', action='store_true', dest='shell',
-                       help='Open a shell session'),
+                       help='Open a IPython shell'),
     ]
 
 def main():

@@ -32,7 +32,11 @@ class TeeInput(object):
         self._is_socket = True
         self._len = parser.content_len
         
-        if self._len and self._len < sock.MAX_BODY:
+        if  (not self.parser.content_len and not self.parser.is_chunked):
+            self.tmp = buf
+        elif (self.parser.method == "HEAD"):
+            self.tmp = StringIO()
+        elif self._len and self._len < sock.MAX_BODY:
             self.tmp = StringIO()
         else:
             self.tmp = tempfile.TemporaryFile()
@@ -203,7 +207,7 @@ class TeeInput(object):
         if not len(dest.getvalue()) or not self._len:
             return dest.getvalue()
         while True:
-            if len(dest.getvalue() >= length): 
+            if len(dest.getvalue()) >= length: 
                 break
             data = self._tee(length - len(dest.getvalue()))
             if not data: 
