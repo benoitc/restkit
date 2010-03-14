@@ -39,7 +39,7 @@ def test_002(req):
     body = resp.body
     assert resp.content_length == 9, str(resp)
 
-    proxy = wsgi_proxy.Proxy()
+    proxy = wsgi_proxy.Proxy(allowed_methods=['GET'])
     resp = req.get_response(proxy)
     assert resp.status.startswith('403'), resp.status
 
@@ -54,7 +54,7 @@ def test_003(req):
     body = resp.body
     assert resp.content_length == 9, str(resp)
 
-    proxy = wsgi_proxy.Proxy()
+    proxy = wsgi_proxy.Proxy(allowed_methods=['GET'])
     resp = req.get_response(proxy)
     assert resp.status.startswith('403'), resp.status
 
@@ -76,7 +76,7 @@ def test_005(req):
     body = resp.body
     assert resp.content_type == 'text/plain', str(resp)
 
-    proxy = wsgi_proxy.Proxy()
+    proxy = wsgi_proxy.Proxy(allowed_methods=['GET'])
     resp = req.get_response(proxy)
     assert resp.status.startswith('403'), resp.status
 
