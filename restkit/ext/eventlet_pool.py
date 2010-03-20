@@ -3,8 +3,6 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from __future__ import with_statement
-
 import collections
 import eventlet
 from eventlet import queue
@@ -74,15 +72,14 @@ class EventletPool(PoolInterface):
                 
     def _monitor_socket(self, fn):
         """ function used to monitor the socket """
-        with Timeout(self.timeout, False):
-            if fn in self.sockets:
-                socket = self.sockets[fn]
-                sock.close(socket)
-                del self.sockets[fn]
+        if fn in self.sockets:
+            socket = self.sockets[fn]
+            sock.close(socket)
+            del self.sockets[fn]
                 
     def monitor_socket(self, socket):
          self.sockets[socket.fileno()] = socket
-         eventlet.spawn(self._monitor_socket, socket.fileno())
+         eventlet.spawn_later(self.timeout, self._monitor_socket, socket.fileno())
         
     def put(self, address, socket):
         """ release socket in the pool 
