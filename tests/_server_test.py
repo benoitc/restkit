@@ -24,6 +24,11 @@ import tempfile
 import threading
 import unittest
 import urlparse
+
+try:
+    from urlparse import parse_qsl, parse_qs
+except ImportError:
+    from cgi import parse_qsl, parse_qs
 import urllib
 from restkit.util import to_bytestring
 from restkit.parser import Parser
@@ -42,7 +47,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.parsed_uri = urlparse.urlparse(urllib.unquote(self.path))
         self.query = {}
-        for k, v in cgi.parse_qsl(self.parsed_uri[4]):
+        for k, v in parse_qsl(self.parsed_uri[4]):
             self.query[k] = v.decode('utf-8')
         path = self.parsed_uri[2]
 
@@ -117,7 +122,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         self.parsed_uri = urlparse.urlparse(self.path)
         self.query = {}
-        for k, v in cgi.parse_qsl(self.parsed_uri[4]):
+        for k, v in parse_qsl(self.parsed_uri[4]):
             self.query[k] = v.decode('utf-8')
         path = self.parsed_uri[2]
         extra_headers = []
@@ -173,7 +178,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             extra_headers.append(('Content-type', content_type))
             content_length = int(self.headers.get('Content-length', 0))
             body = self.rfile.read(content_length)
-            form = urlparse.parse_qs(body)
+            form = parse_qs(body)
             if form['a'] == ["a"] and form["b"] == ["b"]:
                 self._respond(200, extra_headers, "ok")
             else:
