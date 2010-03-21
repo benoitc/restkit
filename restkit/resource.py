@@ -8,14 +8,7 @@
 restkit.resource
 ~~~~~~~~~~~~~~~~
 
-This module provide a common interface for all HTTP equest. 
-
-    >>> from restkit import Resource
-    >>> res = Resource('http://friendpaste.com')
-    >>> res.get('/5rOqE9XTz7lccLgZoQS4IP',headers={'Accept': 'application/json'}).body
-    u'{"snippet": "hi!", "title": "", "id": "5rOqE9XTz7lccLgZoQS4IP", "language": "text", "revision": "386233396230"}'
-    >>> res.status
-    200
+This module provide a common interface for all HTTP request. 
 """
 
 import cgi
