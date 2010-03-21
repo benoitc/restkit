@@ -29,12 +29,12 @@ class EventletPool(PoolInterface):
     
     To use restkit with eventlet::
     
-        >>> import eventlet
-        >>> eventlet.monkey_patch(all=False, socket=True)
-        >>> from restkit import request
-        >>> from restkit.ext.eventlet_pool import EventletPool
-        >>> pool = EventletPool(max_connections=5)
-        >>> r = request('http://friendpaste.com', pool_instance=pool)
+        import eventlet
+        eventlet.monkey_patch(all=False, socket=True)
+        from restkit import request
+        from restkit.ext.eventlet_pool import EventletPool
+        pool = EventletPool(max_connections=5)
+        r = request('http://friendpaste.com', pool_instance=pool)
         
     """
     

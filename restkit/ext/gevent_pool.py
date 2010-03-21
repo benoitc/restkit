@@ -28,11 +28,11 @@ class GeventPool(PoolInterface):
     
     To use restkit with Gevent::
     
-        >>> from restkit import *
-        >>> from gevent import monkey; monkey.patch_socket()
-        >>> from restkit.ext.gevent_pool import GeventPool
-        >>> pool = GeventPool(max_connections=5)
-        >>> r = request('http://friendpaste.com', pool_instance=pool)
+        from restkit import *
+        from gevent import monkey; monkey.patch_socket()
+        from restkit.ext.gevent_pool import GeventPool
+        pool = GeventPool(max_connections=5)
+        r = request('http://friendpaste.com', pool_instance=pool)
     """
     
     def __init__(self, max_connections=4, timeout=300):
