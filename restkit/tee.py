@@ -34,8 +34,8 @@ class TeeInput(object):
         
         if not self.parser.content_len and not self.parser.is_chunked:
             self.tmp = buf
-        elif self.parser.method == "HEAD":
-            self.tmp = StringIO()
+            self._len = len(buf.getvalue())
+            self._is_socket = False
         elif self._len and self._len < sock.MAX_BODY:
             self.tmp = StringIO()
         else:

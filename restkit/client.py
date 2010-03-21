@@ -444,7 +444,12 @@ class HttpConnection(object):
         log.debug("Start response: %s" % str(self.parser.status_line))
         log.debug("Response headers: [%s]" % str(self.parser.headers))
         
-        if (not self.parser.content_len and not self.parser.is_chunked):
+        if self.method == "HEAD":
+            self.response_body = tee.TeeInput(self._sock, self.parser, 
+                                            StringIO())
+            self.response_body._is_socket = False
+            sock.close(self._sock)
+        elif (not self.parser.content_len and not self.parser.is_chunked):
             if self.parser.should_close:
                 # http 1.0 or something like it. 
                 # we try to get missing body
@@ -461,10 +466,6 @@ class HttpConnection(object):
             buf2.seek(0)
             self.response_body = tee.TeeInput(self._sock, self.parser, 
                                         buf2)
-        elif self.method == "HEAD":
-            self.response_body = tee.TeeInput(self._sock, self.parser, 
-                                        StringIO())
-            sock.close(self._sock)
         else:
             self.response_body = tee.TeeInput(self._sock, self.parser, buf2, 
                         maybe_close=lambda: self.release_connection(
