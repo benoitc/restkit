@@ -1,11 +1,17 @@
 wsgi_proxy
 ----------
 
-Restkit version 1.2 introduced a WSGI proxy extension written by `gawel <http://www.gawel.org/>`_ .This extension proxy WSGI requests to a remote server.
+Restkit version 1.2 introduced a WSGI proxy extension written by `Gael
+Pasgrimaud <http://www.gawel.org/>`_ .This extension proxy WSGI requests to a
+remote server.
 
-Here is a quick example. You can read full post `here <http://www.gawel.org/weblog/en/2010/03/using_restkit_proxy_in_your_wsgi_app>`_ .
+Here is a quick example. You can read full post `here
+<http://www.gawel.org/weblog/en/2010/03/using_restkit_proxy_in_your_wsgi_app>`_
+.
 
-We will do here a simple proxy for `CouchDB <http://couchdb.apache.org>`_. We use `webob <http://pythonpaste.org/webob/>`_ and `gunicorn <http://gunicorn.org>`_ to launch it::
+We will do here a simple proxy for `CouchDB <http://couchdb.apache.org>`_. We
+use `webob <http://pythonpaste.org/webob/>`_ and `gunicorn
+<http://gunicorn.org>`_ to launch it::
 
   import urlparse
 
@@ -38,3 +44,4 @@ And then launch your application::
 
 
 And access to your couchdb at `http://127.0.0.1:8000` .
+
