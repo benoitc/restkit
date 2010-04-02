@@ -4,35 +4,40 @@ restkit shell
 restkit come with a IPython based shell to help you to debug your http apps. Just run::
 
     $ restkit --shell http://benoitc.github.com/restkit/
-    restkit shell
-    =============
 
-    HTTP Methods
-    ------------
+restkit shell
+=============
 
-      >>> delete([req|url|path_info])                                 # send a HTTP delete
-      >>> get([req|url|path_info], **query_string)                    # send a HTTP get
-      >>> head([req|url|path_info], **query_string)                   # send a HTTP head
-      >>> post([req|url|path_info], [Stream()|**query_string_body])   # send a HTTP post
-      >>> put([req|url|path_info], stream)                            # send a HTTP put
+HTTP Methods
+------------
 
-    Helpers
-    -------
+    >>> delete([req|url|path_info])                                 # send a HTTP delete
+    >>> get([req|url|path_info], **query_string)                    # send a HTTP get
+    >>> head([req|url|path_info], **query_string)                   # send a HTTP head
+    >>> post([req|url|path_info], [Stream()|**query_string_body])   # send a HTTP post
+    >>> put([req|url|path_info], stream)                            # send a HTTP put
 
-      >>> req    # request to play with. By default http methods will use this one
-      <Request at 0x18fdb70 GET http://benoitc.github.com/restkit/>
 
-      >>> stream # Stream() instance if you specified a -i in command line
-      None
+Helpers
+-------
 
-      >>> ctypes # Content-Types helper with headers properties
-      <ContentTypes(['application_atom_xml', 'application_json',
-      'application_rss_xml', 'application_xhtml_xml', 'application_xml',
-      'application_xsl_xml', 'application_xslt_xml', 'image_svg_xml',
-      'text_html', 'text_xml'])>
+::
+
+    >>> req    # request to play with. By default http methods will use this one
+    <Request at 0x18fdb70 GET http://benoitc.github.com/restkit/>
+
+    >>> stream # Stream() instance if you specified a -i in command line
+    None
+
+    >>> ctypes # Content-Types helper with headers properties
+    <ContentTypes(['application_atom_xml', 'application_json',
+    'application_rss_xml', 'application_xhtml_xml', 'application_xml',
+    'application_xsl_xml', 'application_xslt_xml', 'image_svg_xml',
+    'text_html', 'text_xml'])>
 
     restkit shell 1.2.1
     1) restcli$    
+
 
 Here is a sample session::
 
@@ -70,7 +75,7 @@ Here is a sample session::
     </body>
     </html>
 
-             4) <Response at 0x1933330 405 Not Allowed>
+    4) <Response at 0x1933330 405 Not Allowed>
     5) restcli$ resp.status
              5) '405 Not Allowed'
     6) restcli$ req.path_info = '/restkit/api/index.html'
@@ -99,7 +104,7 @@ Here is a sample session::
     </body>
     </html>
 
-             8) <Response at 0x1930410 301 Moved Permanently>
+    8) <Response at 0x1930410 301 Moved Permanently>
     9) restcli$ resp.location
-             9) 'http://benoitc.github.com/restkit/'
+    9) 'http://benoitc.github.com/restkit/'
 
