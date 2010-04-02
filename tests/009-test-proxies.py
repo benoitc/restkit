@@ -80,4 +80,33 @@ def test_005(req):
     resp = req.get_response(proxy)
     assert resp.status.startswith('403'), resp.status
 
+@with_webob
+def test_006(req):
+    req.path_info = '/redirect'
+    req.method = 'GET'
+    proxy = wsgi_proxy.Proxy(allowed_methods=['GET'])
+    resp = req.get_response(proxy)
+    body = resp.body
+    assert resp.location == '/complete_redirect', str(resp)
+
+@with_webob
+def test_007(req):
+    req.path_info = '/redirect_to_url'
+    req.method = 'GET'
+    proxy = wsgi_proxy.Proxy(allowed_methods=['GET'])
+    resp = req.get_response(proxy)
+    body = resp.body
+    assert resp.location == '/complete_redirect', str(resp)
+
+@with_webob
+def test_008(req):
+    req.path_info = '/redirect_to_url'
+    req.script_name = '/name'
+    req.method = 'GET'
+    proxy = wsgi_proxy.Proxy(allowed_methods=['GET'], strip_script_name=True)
+    resp = req.get_response(proxy)
+    body = resp.body
+    assert resp.location == '/name/complete_redirect', str(resp)
+
+
 

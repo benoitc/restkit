@@ -104,13 +104,19 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 else:
                     self._respond(403, extra_headers, "niet!")
         elif path == "/redirect":
-            extra_headers = [('Content-type', 'text/plain'), 
+            extra_headers = [('Content-type', 'text/plain'),
                 ('Location', '/complete_redirect')]
             self._respond(301, extra_headers, "")
-            
+
         elif path == "/complete_redirect":
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "ok")
+
+        elif path == "/redirect_to_url":
+            extra_headers = [('Content-type', 'text/plain'),
+                ('Location', 'http://localhost:%s/complete_redirect' % PORT)]
+            self._respond(301, extra_headers, "")
+
         elif path == "/pool":
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "ok")
