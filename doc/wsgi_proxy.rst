@@ -40,7 +40,7 @@ use `webob <http://pythonpaste.org/webob/>`_ and `gunicorn
     
 And then launch your application::
 
-  gunicorn -w 12 couchdbproxy:application
+  gunicorn -w 12 -a "egg:gunicorn#eventlet" couchdbproxy:application
 
 
 And access to your couchdb at `http://127.0.0.1:8000` .
