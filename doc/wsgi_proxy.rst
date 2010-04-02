@@ -45,3 +45,31 @@ And then launch your application::
 
 And access to your couchdb at `http://127.0.0.1:8000` .
 
+You can also use a Paste configuration::
+
+    [app:proxy]
+    use = egg:restkit#host_proxy
+    uri = http://www.example.com/example_db
+    strip_script_name = false
+    allowed_methods = get
+
+Here is a more advanced example to show how to use the Proxy class to build a
+distributed proxy. `/a/db` will proxify `http://a.mypool.org/db`::
+
+  import urlparse
+
+  from webob import Request
+  from restkit.pool import ConnectionPool
+  from restkit.ext.wsgi_proxy import Proxy
+
+  pool = ConnectionPool(max_connections=10)
+  proxy = Proxy(pool=pool, strip_script_name=True)
+
+
+  def application(environ, start_response):
+      req = Request(environ).copy()
+      req.path_info_pop()
+      req.environ['SERVER_NAME'] = '%s.mypool.org:80' % req.script_name.strip('/')
+      resp = req.get_response(Proxy)
+      return resp(environ, start_response)
+
