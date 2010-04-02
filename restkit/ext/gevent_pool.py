@@ -4,7 +4,7 @@
 # See the NOTICE for more information.
 
 import collections
-from gevent import spawn, Timeout
+from gevent import spawn, spawn_later
 from gevent import queue
 
 from restkit.pool import PoolInterface

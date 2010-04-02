@@ -6,7 +6,6 @@
 import collections
 import eventlet
 from eventlet import queue
-from eventlet.timeout import Timeout
 
 from restkit.pool import PoolInterface
 from restkit import sock
@@ -79,7 +78,7 @@ class EventletPool(PoolInterface):
                 
     def monitor_socket(self, socket):
          self.sockets[socket.fileno()] = socket
-         eventlet.spawn_later(self.timeout, self._monitor_socket, socket.fileno())
+         eventlet.spawn_after(self.timeout, self._monitor_socket, socket.fileno())
         
     def put(self, address, socket):
         """ release socket in the pool 
