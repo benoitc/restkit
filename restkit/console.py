@@ -182,9 +182,9 @@ def main():
     opts, args = parser.parse_args()
     args_len = len(args)
 
-    if opts.shell:     
+    if opts.shell:
         try:
-            from restkit import shell
+            from restkit.ext import ipython_shell as shell
             shell.main(options=opts, *args)
         except Exception, e:
             print >>sys.stderr, str(e)
