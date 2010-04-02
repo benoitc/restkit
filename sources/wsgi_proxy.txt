@@ -47,11 +47,11 @@ And access to your couchdb at `http://127.0.0.1:8000` .
 
 You can also use a Paste configuration::
 
-    [app:proxy]
-    use = egg:restkit#host_proxy
-    uri = http://www.example.com/example_db
-    strip_script_name = false
-    allowed_methods = get
+  [app:proxy]
+  use = egg:restkit#host_proxy
+  uri = http://www.example.com/example_db
+  strip_script_name = false
+  allowed_methods = get
 
 Here is a more advanced example to show how to use the Proxy class to build a
 distributed proxy. `/a/db` will proxify `http://a.mypool.org/db`::
