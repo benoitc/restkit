@@ -87,36 +87,43 @@
   <div class="section" id="restkit-shell">
 <h1>restkit shell<a class="headerlink" href="#restkit-shell" title="Permalink to this headline">¶</a></h1>
 <p>restkit come with a IPython based shell to help you to debug your http apps. Just run:</p>
-<div class="highlight-python"><pre>$ restkit --shell http://benoitc.github.com/restkit/
-restkit shell
-=============
+<div class="highlight-python"><pre>$ restkit --shell http://benoitc.github.com/restkit/</pre>
+</div>
+<div class="section" id="id1">
+<h2>restkit shell<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<div class="section" id="http-methods">
+<h1>HTTP Methods<a class="headerlink" href="#http-methods" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>::</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">delete</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">])</span>                                 <span class="c"># send a HTTP delete</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">],</span> <span class="o">**</span><span class="n">query_string</span><span class="p">)</span>                    <span class="c"># send a HTTP get</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">head</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">],</span> <span class="o">**</span><span class="n">query_string</span><span class="p">)</span>                   <span class="c"># send a HTTP head</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">],</span> <span class="p">[</span><span class="n">Stream</span><span class="p">()</span><span class="o">|**</span><span class="n">query_string_body</span><span class="p">])</span>   <span class="c"># send a HTTP post</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">put</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">],</span> <span class="n">stream</span><span class="p">)</span>                            <span class="c"># send a HTTP put</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="helpers">
+<h1>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">req</span>    <span class="c"># request to play with. By default http methods will use this one</span>
+<span class="go">&lt;Request at 0x18fdb70 GET http://benoitc.github.com/restkit/&gt;</span>
 
-HTTP Methods
-------------
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="c"># Stream() instance if you specified a -i in command line</span>
+<span class="go">None</span>
 
-  &gt;&gt;&gt; delete([req|url|path_info])                                 # send a HTTP delete
-  &gt;&gt;&gt; get([req|url|path_info], **query_string)                    # send a HTTP get
-  &gt;&gt;&gt; head([req|url|path_info], **query_string)                   # send a HTTP head
-  &gt;&gt;&gt; post([req|url|path_info], [Stream()|**query_string_body])   # send a HTTP post
-  &gt;&gt;&gt; put([req|url|path_info], stream)                            # send a HTTP put
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ctypes</span> <span class="c"># Content-Types helper with headers properties</span>
+<span class="go">&lt;ContentTypes([&#39;application_atom_xml&#39;, &#39;application_json&#39;,</span>
+<span class="go">&#39;application_rss_xml&#39;, &#39;application_xhtml_xml&#39;, &#39;application_xml&#39;,</span>
+<span class="go">&#39;application_xsl_xml&#39;, &#39;application_xslt_xml&#39;, &#39;image_svg_xml&#39;,</span>
+<span class="go">&#39;text_html&#39;, &#39;text_xml&#39;])&gt;</span>
 
-Helpers
--------
-
-  &gt;&gt;&gt; req    # request to play with. By default http methods will use this one
-  &lt;Request at 0x18fdb70 GET http://benoitc.github.com/restkit/&gt;
-
-  &gt;&gt;&gt; stream # Stream() instance if you specified a -i in command line
-  None
-
-  &gt;&gt;&gt; ctypes # Content-Types helper with headers properties
-  &lt;ContentTypes(['application_atom_xml', 'application_json',
-  'application_rss_xml', 'application_xhtml_xml', 'application_xml',
-  'application_xsl_xml', 'application_xslt_xml', 'image_svg_xml',
-  'text_html', 'text_xml'])&gt;
-
-restkit shell 1.2.1
-1) restcli$</pre>
+<span class="go">restkit shell 1.2.1</span>
+<span class="go">1) restcli$</span>
+</pre></div>
 </div>
 <p>Here is a sample session:</p>
 <div class="highlight-python"><pre>1) restcli$ req
@@ -153,7 +160,7 @@ Server: nginx/0.7.61
 &lt;/body&gt;
 &lt;/html&gt;
 
-         4) &lt;Response at 0x1933330 405 Not Allowed&gt;
+4) &lt;Response at 0x1933330 405 Not Allowed&gt;
 5) restcli$ resp.status
          5) '405 Not Allowed'
 6) restcli$ req.path_info = '/restkit/api/index.html'
@@ -182,9 +189,9 @@ Location: http://benoitc.github.com/restkit/
 &lt;/body&gt;
 &lt;/html&gt;
 
-         8) &lt;Response at 0x1930410 301 Moved Permanently&gt;
+8) &lt;Response at 0x1930410 301 Moved Permanently&gt;
 9) restcli$ resp.location
-         9) 'http://benoitc.github.com/restkit/'</pre>
+9) 'http://benoitc.github.com/restkit/'</pre>
 </div>
 </div>
 
@@ -194,6 +201,16 @@ Location: http://benoitc.github.com/restkit/
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">restkit shell</a><ul>
+<li><a class="reference external" href="#id1">restkit shell</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#http-methods">HTTP Methods</a></li>
+<li><a class="reference external" href="#helpers">Helpers</a></li>
+</ul>
+
             <h4>Previous topic</h4>
             <p class="topless"><a href="client.html"
                                   title="previous chapter">Command Line</a></p>
