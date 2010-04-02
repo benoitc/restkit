@@ -55,6 +55,24 @@
 </b></center><br />
 <h1 class="epydoc">Class Hierarchy</h1>
 <ul class="nomargin-top">
+    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>:
+      <em class="summary">Allow embedding an IPython shell into a running program.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Shell-class.html">restkit.ext.ipython_shell.Shell</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">StringIO.StringIO</strong>:
+      <em class="summary">class StringIO([buffer])</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Stream-class.html">restkit.ext.ipython_shell.Stream</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.JSON-class.html">restkit.ext.ipython_shell.JSON</a></strong>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
     <li> <strong class="uidlink">object</strong>:
       <em class="summary">The most base type</em>
     <ul>
@@ -62,6 +80,14 @@
     <ul>
     <li> <strong class="uidlink"><a href="webob.request.Request-class.html">webob.request.Request</a></strong>:
       <em class="summary">The default request implementation</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.webob_api.Request-class.html">restkit.ext.webob_api.Request</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Request-class.html">restkit.ext.ipython_shell.Request</a></strong>
+    </li>
+    </ul>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
@@ -150,6 +176,14 @@
     <ul>
     <li> <strong class="uidlink"><a href="webob.request.Request-class.html">webob.request.Request</a></strong>:
       <em class="summary">The default request implementation</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.webob_api.Request-class.html">restkit.ext.webob_api.Request</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Request-class.html">restkit.ext.ipython_shell.Request</a></strong>
+    </li>
+    </ul>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
@@ -160,6 +194,8 @@
     </li>
     <li> <strong class="uidlink"><a href="restkit.oauth2.Consumer-class.html">restkit.oauth2.Consumer</a></strong>:
       <em class="summary">A consumer of OAuth-protected services.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.ContentTypes-class.html">restkit.ext.ipython_shell.ContentTypes</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.client.HttpConnection-class.html">restkit.client.HttpConnection</a></strong>:
       <em class="summary">Http Connection object.</em>
@@ -212,6 +248,9 @@
     <li> <strong class="uidlink"><a href="webob.response.Response-class.html">webob.response.Response</a></strong>:
       <em class="summary">Represents a WSGI response</em>
     <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Response-class.html">restkit.ext.ipython_shell.Response</a></strong>:
+      <em class="summary">Represents a WSGI response</em>
+    </li>
     <li> <strong class="uidlink">webob.exc.WSGIHTTPException</strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.ext.webob_helper.WebobResourceError-class.html">restkit.ext.webob_helper.WebobResourceError</a></strong>:
@@ -226,6 +265,8 @@
     <li> <strong class="uidlink"><a href="restkit.oauth2.Server-class.html">restkit.oauth2.Server</a></strong>:
       <em class="summary">A skeletal implementation of a service provider, providing 
         protected resources to requests from authorized consumers.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.ShellClient-class.html">restkit.ext.ipython_shell.ShellClient</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.oauth2.SignatureMethod-class.html">restkit.oauth2.SignatureMethod</a></strong>:
       <em class="summary">A way of signing requests.</em>
@@ -245,22 +286,42 @@
       <em class="summary">An OAuth credential used to request authorization or a protected 
         resource.</em>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.UnexpectedEOF-class.html">restkit.errors.UnexpectedEOF</a></strong>:
+      <em class="summary">exception raised when remote closed the connection</em>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.ext.eventlet_pool._Host-class.html" onclick="show_private();">restkit.ext.eventlet_pool._Host</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.ext.gevent_pool._Host-class.html" onclick="show_private();">restkit.ext.gevent_pool._Host</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.pool._Host-class.html" onclick="show_private();">restkit.pool._Host</a></strong>:
       <em class="summary">An host entry</em>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.ext.gevent_pool._Host-class.html" onclick="show_private();">restkit.ext.gevent_pool._Host</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.util.deprecated_property-class.html">restkit.util.deprecated_property</a></strong>:
       <em class="summary">Wraps a decorator, with a deprecation warning or error</em>
     </li>
     <li> <strong class="uidlink">dict</strong>:
-      <em class="summary">dict() -&gt; new empty dictionary.</em>
+      <em class="summary">dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+    (key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+    d = {}
+    for k, v in iterable:
+        d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+    in the keyword argument list.</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.oauth2.Request-class.html">restkit.oauth2.Request</a></strong>:
       <em class="summary">The parameters and information for an HTTP request, suitable for 
         authorizing with OAuth credentials.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">property</strong>:
+      <em class="summary">property(fget=None, fset=None, fdel=None, doc=None) -&gt; property attribute</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.API-class.html">restkit.ext.ipython_shell.API</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.ext.webob_api.Method-class.html">restkit.ext.webob_api.Method</a></strong>
     </li>
     </ul>
     </li>
@@ -293,7 +354,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Mar  8 08:52:44 2010
+    Generated by Epydoc 3.0.1 on Fri Apr  2 16:03:29 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

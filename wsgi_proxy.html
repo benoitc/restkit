@@ -6,20 +6,20 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>wsgi_proxy &mdash; restkit v1.2.1 documentation</title>
+    <title>wsgi_proxy &mdash; restkit v1.3.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '#',
-        VERSION:     '1.2.1',
+        VERSION:     '1.3.0',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v1.2.1 documentation" href="index.html" />
-    <link rel="prev" title="Command Line" href="client.html" />
+    <link rel="top" title="restkit v1.3.0 documentation" href="index.html" />
+    <link rel="prev" title="restkit shell" href="shell.html" />
 
   <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
   
@@ -85,9 +85,13 @@
             
   <div class="section" id="wsgi-proxy">
 <h1>wsgi_proxy<a class="headerlink" href="#wsgi-proxy" title="Permalink to this headline">¶</a></h1>
-<p>Restkit version 1.2 introduced a WSGI proxy extension written by <a class="reference external" href="http://www.gawel.org/">gawel</a> .This extension proxy WSGI requests to a remote server.</p>
-<p>Here is a quick example. You can read full post <a class="reference external" href="http://www.gawel.org/weblog/en/2010/03/using_restkit_proxy_in_your_wsgi_app">here</a> .</p>
-<p>We will do here a simple proxy for <a class="reference external" href="http://couchdb.apache.org">CouchDB</a>. We use <a class="reference external" href="http://pythonpaste.org/webob/">webob</a> and <a class="reference external" href="http://gunicorn.org">gunicorn</a> to launch it:</p>
+<p>Restkit version 1.2 introduced a WSGI proxy extension written by <a class="reference external" href="http://www.gawel.org/">Gael
+Pasgrimaud</a> .This extension proxy WSGI requests to a
+remote server.</p>
+<p>Here is a quick example. You can read full post <a class="reference external" href="http://www.gawel.org/weblog/en/2010/03/using_restkit_proxy_in_your_wsgi_app">here</a>
+.</p>
+<p>We will do here a simple proxy for <a class="reference external" href="http://couchdb.apache.org">CouchDB</a>. We
+use <a class="reference external" href="http://pythonpaste.org/webob/">webob</a> and <a class="reference external" href="http://gunicorn.org">gunicorn</a> to launch it:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urlparse</span>
 
 <span class="kn">from</span> <span class="nn">webob</span> <span class="kn">import</span> <span class="n">Request</span>
@@ -114,9 +118,36 @@
 </pre></div>
 </div>
 <p>And then launch your application:</p>
-<div class="highlight-python"><pre>gunicorn -w 12 couchdbproxy:application</pre>
+<div class="highlight-python"><pre>gunicorn -w 12 -a "egg:gunicorn#eventlet" couchdbproxy:application</pre>
 </div>
 <p>And access to your couchdb at <cite>http://127.0.0.1:8000</cite> .</p>
+<p>You can also use a Paste configuration:</p>
+<div class="highlight-python"><pre>[app:proxy]
+use = egg:restkit#host_proxy
+uri = http://www.example.com/example_db
+strip_script_name = false
+allowed_methods = get</pre>
+</div>
+<p>Here is a more advanced example to show how to use the Proxy class to build a
+distributed proxy. <cite>/a/db</cite> will proxify <cite>http://a.mypool.org/db</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urlparse</span>
+
+<span class="kn">from</span> <span class="nn">webob</span> <span class="kn">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">restkit.pool</span> <span class="kn">import</span> <span class="n">ConnectionPool</span>
+<span class="kn">from</span> <span class="nn">restkit.ext.wsgi_proxy</span> <span class="kn">import</span> <span class="n">Proxy</span>
+
+<span class="n">pool</span> <span class="o">=</span> <span class="n">ConnectionPool</span><span class="p">(</span><span class="n">max_connections</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">proxy</span> <span class="o">=</span> <span class="n">Proxy</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">,</span> <span class="n">strip_script_name</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">path_info_pop</span><span class="p">()</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;SERVER_NAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.mypool.org:80&#39;</span> <span class="o">%</span> <span class="n">req</span><span class="o">.</span><span class="n">script_name</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">Proxy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resp</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 
 
@@ -126,8 +157,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
-            <p class="topless"><a href="client.html"
-                                  title="previous chapter">Command Line</a></p>
+            <p class="topless"><a href="shell.html"
+                                  title="previous chapter">restkit shell</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="sources/wsgi_proxy.txt"

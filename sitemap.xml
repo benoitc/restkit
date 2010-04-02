@@ -6,857 +6,952 @@
                       http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://benoitc.github.com/restkit/</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/.buildinfo</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/</loc>
-  <lastmod>2010-03-08T07:52:46Z</lastmod>
+  <lastmod>2010-04-02T14:03:30Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/api-objects.txt</loc>
-  <lastmod>2010-03-08T07:52:46Z</lastmod>
+  <lastmod>2010-04-02T14:03:30Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/class-tree.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/crarr.png</loc>
-  <lastmod>2010-03-08T07:52:44Z</lastmod>
+  <lastmod>2010-04-02T14:03:28Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/epydoc.css</loc>
-  <lastmod>2010-03-08T07:52:44Z</lastmod>
+  <lastmod>2010-04-02T14:03:28Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/epydoc.js</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/frames.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/help.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/identifier-index.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/index.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/module-tree.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/redirect.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.client-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.client-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.client.HttpConnection-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.client.HttpResponse-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.console-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.console-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.BadStatusLine-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.InvalidUrl-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.ParserError-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.ProxyError-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.RedirectLimit-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.RequestError-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.RequestFailed-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.ResourceError-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.ResourceNotFound-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.ResponseError-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.errors.Unauthorized-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.errors.UnexpectedEOF-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.eventlet_pool-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.eventlet_pool-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.eventlet_pool.EventletPool-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.eventlet_pool._Host-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.gevent_pool-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.gevent_pool-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.gevent_pool.GeventPool-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.gevent_pool._Host-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell-module.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell-pysrc.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell.API-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell.ContentTypes-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell.JSON-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell.Request-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell.Response-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell.Shell-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell.ShellClient-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.ipython_shell.Stream-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.webob_api-module.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.webob_api-pysrc.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.webob_api.Method-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/restkit.ext.webob_api.Request-class.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.webob_helper-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.webob_helper-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.webob_helper.WebobResourceError-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.wsgi_proxy-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.wsgi_proxy-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.wsgi_proxy.CouchdbProxy-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.wsgi_proxy.HostProxy-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.wsgi_proxy.Proxy-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.wsgi_proxy.ResponseIter-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.ext.wsgi_proxy.TransparentProxy-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.filters-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.filters-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.filters.BasicAuth-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.filters.ProxyError-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.filters.SimpleProxy-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.forms-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.forms-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.forms.BoundaryItem-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.forms.MultipartForm-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.Consumer-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.Error-class.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.MissingSignature-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.Request-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.Server-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.SignatureMethod-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.SignatureMethod_HMAC_SHA1-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.SignatureMethod_PLAINTEXT-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.Token-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.filter-module.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.filter-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.oauth2.filter.OAuthFilter-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.parser-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.parser-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.parser.Parser-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.pool-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.pool-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.pool.ConnectionPool-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.pool.PoolInterface-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.pool._Host-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.resource-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.resource-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.resource.Resource-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.sock-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.sock-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.tee-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.tee-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.tee.TeeInput-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.util-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.util-pysrc.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/restkit.util.deprecated_property-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-everything.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.client-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.console-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.errors-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.ext-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.ext.eventlet_pool-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.ext.gevent_pool-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/toc-restkit.ext.ipython_shell-module.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/api/toc-restkit.ext.webob_api-module.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.ext.webob_helper-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.ext.wsgi_proxy-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.filters-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.forms-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.oauth2-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.oauth2.filter-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.parser-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.pool-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.resource-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.sock-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.tee-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc-restkit.util-module.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/toc.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/webob.request.Request-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/api/webob.response.Response-class.html</loc>
-  <lastmod>2010-03-08T07:52:49Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/authentication.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/client.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/genindex.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/images/</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/images/screenshot_client.png</loc>
-  <lastmod>2010-03-08T07:45:42Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/index.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/installation.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/news.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/objects.inv</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/pool.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/resource.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/search.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/searchindex.js</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/shell.html</loc>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/authentication.txt</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/client.txt</loc>
-  <lastmod>2010-03-08T07:52:37Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/index.txt</loc>
-  <lastmod>2010-03-07T16:30:52Z</lastmod>
+  <lastmod>2010-04-02T13:03:06Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/installation.txt</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/news.txt</loc>
-  <lastmod>2010-03-08T07:40:12Z</lastmod>
+  <lastmod>2010-04-02T13:48:07Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/pool.txt</loc>
-  <lastmod>2010-03-06T21:12:50Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/resource.txt</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
+  <priority>0.5000</priority>
+ </url>
+ <url>
+  <loc>http://benoitc.github.com/restkit/sources/shell.txt</loc>
+  <lastmod>2010-04-02T13:03:06Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/streaming.txt</loc>
-  <lastmod>2010-03-07T16:33:41Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/sources/wsgi_proxy.txt</loc>
-  <lastmod>2010-03-07T01:01:15Z</lastmod>
+  <lastmod>2010-04-02T13:48:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/basic.css</loc>
-  <lastmod>2010-03-06T21:13:55Z</lastmod>
+  <lastmod>2010-04-02T14:03:15Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_diagonals-thick_75_f3d8d8_40x40.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_dots-small_65_a6a6a6_2x2.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_flat_0_333333_40x100.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_flat_65_ffffff_40x100.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_flat_75_ffffff_40x100.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_glass_55_fbf8ee_1x400.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_highlight-hard_100_eeeeee_1x100.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_highlight-hard_100_f6f6f6_1x100.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-bg_highlight-soft_15_cc0000_1x100.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-icons_004276_256x240.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-icons_cc0000_256x240.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/images/ui-icons_ffffff_256x240.png</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/blitzer/jquery-ui-custom.css</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/doctools.js</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/file.png</loc>
-  <lastmod>2010-03-06T21:13:55Z</lastmod>
+  <lastmod>2010-04-02T14:03:15Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/jquery.js</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/minus.png</loc>
-  <lastmod>2010-03-06T21:13:55Z</lastmod>
+  <lastmod>2010-04-02T14:03:15Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/plus.png</loc>
-  <lastmod>2010-03-06T21:13:55Z</lastmod>
+  <lastmod>2010-04-02T14:03:15Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/pygments.css</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/restkit.css</loc>
-  <lastmod>2010-03-05T17:26:40Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/screenshot_client.png</loc>
-  <lastmod>2010-03-08T07:45:42Z</lastmod>
+  <lastmod>2010-04-02T13:02:05Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/static/searchtools.js</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/streaming.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
  <url>
   <loc>http://benoitc.github.com/restkit/wsgi_proxy.html</loc>
-  <lastmod>2010-03-08T07:52:48Z</lastmod>
+  <lastmod>2010-04-02T14:03:32Z</lastmod>
   <priority>0.5000</priority>
  </url>
 </urlset>

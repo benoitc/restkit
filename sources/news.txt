@@ -3,6 +3,14 @@
 News
 ====
 
+1.3 / 2010-04-02
+----------------
+
+- Added IPython shell extension (`restkit --shell`)
+- fix Python 2.5 compatibility
+- fix Eventlet and Gevent spools extensions
+- By default accept all methods in proxy
+
 1.2.1 / 2010-03-08
 ------------------
 

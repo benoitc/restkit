@@ -136,8 +136,9 @@ restkit.util.encode" class="py-name" href="#" onclick="return doclink('link-12',
 <a name="SimpleProxy.on_request"></a><div id="SimpleProxy.on_request-def"><a name="L76"></a><tt class="py-lineno"> 76</tt> <a class="py-toggle" href="#" id="SimpleProxy.on_request-toggle" onclick="return toggle('SimpleProxy.on_request');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.filters.SimpleProxy-class.html#on_request">on_request</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">req</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="SimpleProxy.on_request-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="SimpleProxy.on_request-expanded"><a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">proxy_auth</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name" targets="Function restkit.filters._get_proxy_auth()=restkit.filters-module.html#_get_proxy_auth"><a title="restkit.filters._get_proxy_auth" class="py-name" href="#" onclick="return doclink('link-14', '_get_proxy_auth', 'link-14');">_get_proxy_auth</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">req</tt><tt class="py-op">.</tt><tt class="py-name">uri</tt><tt class="py-op">.</tt><tt class="py-name">scheme</tt> <tt class="py-op">==</tt> <tt class="py-string">"https"</tt><tt class="py-op">:</tt> </tt>
-<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt class="py-name">proxy</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">environ</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method restkit.ext.eventlet_pool.EventletPool.get()=restkit.ext.eventlet_pool.EventletPool-class.html#get,Method restkit.ext.gevent_pool.GeventPool.get()=restkit.ext.gevent_pool.GeventPool-class.html#get,Method restkit.pool.ConnectionPool.get()=restkit.pool.ConnectionPool-class.html#get,Method restkit.pool.PoolInterface.get()=restkit.pool.PoolInterface-class.html#get,Method restkit.resource.Resource.get()=restkit.resource.Resource-class.html#get"><a title="restkit.ext.eventlet_pool.EventletPool.get
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt class="py-name">proxy</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">environ</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method restkit.ext.eventlet_pool.EventletPool.get()=restkit.ext.eventlet_pool.EventletPool-class.html#get,Method restkit.ext.gevent_pool.GeventPool.get()=restkit.ext.gevent_pool.GeventPool-class.html#get,Variable restkit.ext.webob_api.Request.get=restkit.ext.webob_api.Request-class.html#get,Method restkit.pool.ConnectionPool.get()=restkit.pool.ConnectionPool-class.html#get,Method restkit.pool.PoolInterface.get()=restkit.pool.PoolInterface-class.html#get,Method restkit.resource.Resource.get()=restkit.resource.Resource-class.html#get"><a title="restkit.ext.eventlet_pool.EventletPool.get
 restkit.ext.gevent_pool.GeventPool.get
+restkit.ext.webob_api.Request.get
 restkit.pool.ConnectionPool.get
 restkit.pool.PoolInterface.get
 restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-15', 'get', 'link-15');">get</a></tt><tt class="py-op">(</tt><tt class="py-string">'https_proxy'</tt><tt class="py-op">)</tt> </tt>
@@ -184,6 +185,7 @@ restkit.filters.ProxyError" class="py-name" href="#" onclick="return doclink('li
 <a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
 <a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">            <tt class="py-name">proxy</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">environ</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="restkit.ext.eventlet_pool.EventletPool.get
 restkit.ext.gevent_pool.GeventPool.get
+restkit.ext.webob_api.Request.get
 restkit.pool.ConnectionPool.get
 restkit.pool.PoolInterface.get
 restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-36', 'get', 'link-15');">get</a></tt><tt class="py-op">(</tt><tt class="py-string">'http_proxy'</tt><tt class="py-op">)</tt> </tt>
@@ -201,23 +203,27 @@ restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink(
 <a name="_get_proxy_auth"></a><div id="_get_proxy_auth-def"><a name="L130"></a><tt class="py-lineno">130</tt> <a class="py-toggle" href="#" id="_get_proxy_auth-toggle" onclick="return toggle('_get_proxy_auth');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.filters-module.html#_get_proxy_auth">_get_proxy_auth</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="_get_proxy_auth-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_proxy_auth-expanded"><a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">    <tt class="py-name">proxy_username</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">environ</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="restkit.ext.eventlet_pool.EventletPool.get
 restkit.ext.gevent_pool.GeventPool.get
+restkit.ext.webob_api.Request.get
 restkit.pool.ConnectionPool.get
 restkit.pool.PoolInterface.get
 restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-38', 'get', 'link-15');">get</a></tt><tt class="py-op">(</tt><tt class="py-string">'proxy-username'</tt><tt class="py-op">)</tt> </tt>
 <a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">proxy_username</tt><tt class="py-op">:</tt> </tt>
 <a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-name">proxy_username</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">environ</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="restkit.ext.eventlet_pool.EventletPool.get
 restkit.ext.gevent_pool.GeventPool.get
+restkit.ext.webob_api.Request.get
 restkit.pool.ConnectionPool.get
 restkit.pool.PoolInterface.get
 restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-39', 'get', 'link-15');">get</a></tt><tt class="py-op">(</tt><tt class="py-string">'proxy_username'</tt><tt class="py-op">)</tt> </tt>
 <a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">    <tt class="py-name">proxy_password</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">environ</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="restkit.ext.eventlet_pool.EventletPool.get
 restkit.ext.gevent_pool.GeventPool.get
+restkit.ext.webob_api.Request.get
 restkit.pool.ConnectionPool.get
 restkit.pool.PoolInterface.get
 restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-40', 'get', 'link-15');">get</a></tt><tt class="py-op">(</tt><tt class="py-string">'proxy-password'</tt><tt class="py-op">)</tt> </tt>
 <a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">proxy_password</tt><tt class="py-op">:</tt> </tt>
 <a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-name">proxy_password</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">environ</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="restkit.ext.eventlet_pool.EventletPool.get
 restkit.ext.gevent_pool.GeventPool.get
+restkit.ext.webob_api.Request.get
 restkit.pool.ConnectionPool.get
 restkit.pool.PoolInterface.get
 restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-41', 'get', 'link-15');">get</a></tt><tt class="py-op">(</tt><tt class="py-string">'proxy_password'</tt><tt class="py-op">)</tt> </tt>
@@ -260,7 +266,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Mar  8 08:52:46 2010
+    Generated by Epydoc 3.0.1 on Fri Apr  2 16:03:29 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
