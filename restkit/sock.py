@@ -42,7 +42,7 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
     raise socket.error, msg
     
 def close(skt):
-    if not skt: return
+    if not skt or not hasattr(skt, "close"): return
     try:
         skt.close()
     except socket.error:
