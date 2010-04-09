@@ -3,6 +3,11 @@
 News
 ====
 
+1.3.1 / 2010-04-09
+------------------
+
+- Fixed Python 2.5 compatibility for ssl connections
+
 1.3 / 2010-04-02
 ----------------
 
