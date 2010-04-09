@@ -89,7 +89,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="restkit.ext.ipython_shell.ShellClient-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">url</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">url</span>=<span class="summary-sig-default">'/'</span>,
         <span class="summary-sig-arg">options</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
       x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
@@ -228,11 +228,17 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="restkit.ext.ipython_shell.ShellClient-class.html#methods" class="summary-name">methods</a> = <code title="{'delete': '[req|url|path_info]',
- 'get': '[req|url|path_info], **query_string',
- 'head': '[req|url|path_info], **query_string',
- 'post': '[req|url|path_info], [Stream()|**query_string_body]',
- 'put': '[req|url|path_info], stream'}"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">delete</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">[req|url|path_info]</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">get</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">[req|url|p</code><code class="variable-ellipsis">...</code></code>
+        <a name="api"></a><span class="summary-name">api</span> = <code title="API()">API()</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="restkit.ext.ipython_shell.ShellClient-class.html#methods" class="summary-name">methods</a> = <code title="dict(get= '[req|url|path_info], **query_string', post= '[req|url|path_\
+info], [Stream()|**query_string_body]', head= '[req|url|path_info], **\
+query_string', put= '[req|url|path_info], stream', delete= '[req|url|p\
+ath_info]')">dict(get= '[req|url|path_info], **query_string', pos<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 </table>
@@ -253,13 +259,6 @@ object --+
     </table>
   </td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="api"></a><span class="summary-name">api</span>
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -294,7 +293,7 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">url</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">url</span>=<span class="sig-default">'/'</span>,
         <span class="sig-arg">options</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**kwargs</span>)</span>
     <br /><em class="fname">(Constructor)</em>
@@ -369,11 +368,10 @@ object --+
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">delete</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">[req|url|path_info]</code><code class="variable-quote">'</code><code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">get</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">[req|url|path_info], **query_string</code><code class="variable-quote">'</code><code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">head</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">[req|url|path_info], **query_string</code><code class="variable-quote">'</code><code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">post</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">[req|url|path_info], [Stream()|**query_string_body]</code><code class="variable-quote">'</code><code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">put</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">[req|url|path_info], stream</code><code class="variable-quote">'</code><code class="variable-group">}</code>
+dict(get= '[req|url|path_info], **query_string', post= '[req|url|path_<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+info], [Stream()|**query_string_body]', head= '[req|url|path_info], **<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+query_string', put= '[req|url|path_info], stream', delete= '[req|url|p<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ath_info]')
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -406,7 +404,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr  2 16:13:57 2010
+    Generated by Epydoc 3.0.1 on Fri Apr  9 09:12:48 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

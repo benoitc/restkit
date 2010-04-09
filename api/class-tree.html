@@ -55,23 +55,12 @@
 </b></center><br />
 <h1 class="epydoc">Class Hierarchy</h1>
 <ul class="nomargin-top">
-    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>:
-      <em class="summary">Allow embedding an IPython shell into a running program.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Shell-class.html">restkit.ext.ipython_shell.Shell</a></strong>
+    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>
     </li>
-    </ul>
+    <li> <strong class="uidlink">webob.Response</strong>
     </li>
     <li> <strong class="uidlink">StringIO.StringIO</strong>:
       <em class="summary">class StringIO([buffer])</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Stream-class.html">restkit.ext.ipython_shell.Stream</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.JSON-class.html">restkit.ext.ipython_shell.JSON</a></strong>
-    </li>
-    </ul>
-    </li>
-    </ul>
     </li>
     <li> <strong class="uidlink">object</strong>:
       <em class="summary">The most base type</em>
@@ -82,10 +71,6 @@
       <em class="summary">The default request implementation</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.ext.webob_api.Request-class.html">restkit.ext.webob_api.Request</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Request-class.html">restkit.ext.ipython_shell.Request</a></strong>
-    </li>
-    </ul>
     </li>
     </ul>
     </li>
@@ -178,10 +163,6 @@
       <em class="summary">The default request implementation</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.ext.webob_api.Request-class.html">restkit.ext.webob_api.Request</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Request-class.html">restkit.ext.ipython_shell.Request</a></strong>
-    </li>
-    </ul>
     </li>
     </ul>
     </li>
@@ -216,12 +197,6 @@
     <ul>
     <li> <strong class="uidlink"><a href="restkit.pool.ConnectionPool-class.html">restkit.pool.ConnectionPool</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.ext.eventlet_pool.EventletPool-class.html">restkit.ext.eventlet_pool.EventletPool</a></strong>:
-      <em class="summary">Eventlet pool to manage connections.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.ext.gevent_pool.GeventPool-class.html">restkit.ext.gevent_pool.GeventPool</a></strong>:
-      <em class="summary">Eventlet pool to manage connections.</em>
-    </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="restkit.ext.wsgi_proxy.Proxy-class.html">restkit.ext.wsgi_proxy.Proxy</a></strong>:
@@ -248,9 +223,6 @@
     <li> <strong class="uidlink"><a href="webob.response.Response-class.html">webob.response.Response</a></strong>:
       <em class="summary">Represents a WSGI response</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.ext.ipython_shell.Response-class.html">restkit.ext.ipython_shell.Response</a></strong>:
-      <em class="summary">Represents a WSGI response</em>
-    </li>
     <li> <strong class="uidlink">webob.exc.WSGIHTTPException</strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.ext.webob_helper.WebobResourceError-class.html">restkit.ext.webob_helper.WebobResourceError</a></strong>:
@@ -291,24 +263,18 @@
     </li>
     <li> <strong class="uidlink"><a href="restkit.ext.gevent_pool._Host-class.html" onclick="show_private();">restkit.ext.gevent_pool._Host</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.ext.eventlet_pool._Host-class.html" onclick="show_private();">restkit.ext.eventlet_pool._Host</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.pool._Host-class.html" onclick="show_private();">restkit.pool._Host</a></strong>:
       <em class="summary">An host entry</em>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.ext.eventlet_pool._Host-class.html" onclick="show_private();">restkit.ext.eventlet_pool._Host</a></strong>
+    <li> <strong class="uidlink">socket._socketobject</strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.util.deprecated_property-class.html">restkit.util.deprecated_property</a></strong>:
       <em class="summary">Wraps a decorator, with a deprecation warning or error</em>
     </li>
     <li> <strong class="uidlink">dict</strong>:
-      <em class="summary">dict() -&gt; new empty dictionary
-dict(mapping) -&gt; new dictionary initialized from a mapping object's
-    (key, value) pairs
-dict(iterable) -&gt; new dictionary initialized as if via:
-    d = {}
-    for k, v in iterable:
-        d[k] = v
-dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
-    in the keyword argument list.</em>
+      <em class="summary">dict() -&gt; new empty dictionary.</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.oauth2.Request-class.html">restkit.oauth2.Request</a></strong>:
       <em class="summary">The parameters and information for an HTTP request, suitable for 
@@ -354,7 +320,7 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr  2 16:13:56 2010
+    Generated by Epydoc 3.0.1 on Fri Apr  9 09:12:47 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

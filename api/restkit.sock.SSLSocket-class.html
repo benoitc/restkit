@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>restkit.ext.gevent_pool.GeventPool</title>
+  <title>restkit.sock.SSLSocket</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,9 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="restkit-module.html">Package&nbsp;restkit</a> ::
-        <a href="restkit.ext-module.html">Package&nbsp;ext</a> ::
-        <a href="restkit.ext.gevent_pool-module.html">Module&nbsp;gevent_pool</a> ::
-        Class&nbsp;GeventPool
+        <a href="restkit.sock-module.html">Module&nbsp;sock</a> ::
+        Class&nbsp;SSLSocket
       </span>
     </td>
     <td>
@@ -50,34 +49,23 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="restkit.ext.gevent_pool.GeventPool-class.html"
+            >]&nbsp;|&nbsp;<a href="restkit.sock.SSLSocket-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class GeventPool</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class SSLSocket</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-        object --+    
-                 |    
-<a href="restkit.pool.PoolInterface-class.html">pool.PoolInterface</a> --+
-                     |
-                    <strong class="uidshort">GeventPool</strong>
+          object --+    
+                   |    
+socket._socketobject --+
+                       |
+                      <strong class="uidshort">SSLSocket</strong>
 </pre>
 
 <hr />
-<p>Eventlet pool to manage connections. after a specific timeout the 
-  sockets are closes. Default timeout is 300s.</p>
-  <p>To use restkit with Gevent:</p>
-<pre class="literalblock">
-   from restkit import *
-   from gevent import monkey; monkey.patch_socket()
-   from restkit.ext.gevent_pool import GeventPool
-   pool = GeventPool(max_connections=5)
-   r = request('http://friendpaste.com', pool_instance=pool)
-</pre>
-
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -101,29 +89,13 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.ext.gevent_pool.GeventPool-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">max_connections</span>=<span class="summary-sig-default">4</span>,
-        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">300</span>)</span><br />
-      Initialize EventletPool</td>
+          <td><span class="summary-sig"><a href="restkit.sock.SSLSocket-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">sock</span>,
+        <span class="summary-sig-arg">keyfile</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">certfile</span>=<span class="summary-sig-default">None</span>)</span><br />
+      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.__init__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_remove_socket"></a><span class="summary-sig-name">_remove_socket</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">socket</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool._remove_socket">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -137,30 +109,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.ext.gevent_pool.GeventPool-class.html#get" class="summary-sig-name">get</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">address</span>)</span><br />
-      Get connection for (Host, Port) address :param address: tuple (Host, 
-      address)</td>
+          <td><span class="summary-sig"><a name="read"></a><span class="summary-sig-name">read</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">len</span>=<span class="summary-sig-default">1024</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.get">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_monitor_socket"></a><span class="summary-sig-name">_monitor_socket</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">fn</span>)</span><br />
-      function used to monitor the socket</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool._monitor_socket">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.read">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -174,10 +126,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="monitor_socket"></a><span class="summary-sig-name">monitor_socket</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">socket</span>)</span></td>
+          <td><span class="summary-sig"><a name="write"></a><span class="summary-sig-name">write</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">data</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.monitor_socket">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.write">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -191,12 +143,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.ext.gevent_pool.GeventPool-class.html#put" class="summary-sig-name">put</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">address</span>,
-        <span class="summary-sig-arg">socket</span>)</span><br />
-      release socket in the pool</td>
+          <td><span class="summary-sig"><a name="send"></a><span class="summary-sig-name">send</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">data</span>,
+        <span class="summary-sig-arg">flags</span>=<span class="summary-sig-default">0</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.put">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.send">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -210,11 +161,45 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.ext.gevent_pool.GeventPool-class.html#clean" class="summary-sig-name">clean</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">address</span>)</span><br />
-      close all sockets in the pool for this address</td>
+          <td><span class="summary-sig"><a name="sendall"></a><span class="summary-sig-name">sendall</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">data</span>,
+        <span class="summary-sig-arg">flags</span>=<span class="summary-sig-default">0</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.clean">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.sendall">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="recv"></a><span class="summary-sig-name">recv</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">buflen</span>=<span class="summary-sig-default">1024</span>,
+        <span class="summary-sig-arg">flags</span>=<span class="summary-sig-default">0</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.recv">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="restkit.sock.SSLSocket-class.html#close" class="summary-sig-name">close</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.close">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -224,8 +209,10 @@
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.pool.PoolInterface-class.html">pool.PoolInterface</a></code></b>:
-      <code><a href="restkit.pool.PoolInterface-class.html#clear">clear</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>socket._socketobject</code></b>:
+      <code>accept</code>,
+      <code>dup</code>,
+      <code>makefile</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
@@ -240,6 +227,34 @@
       <code>__sizeof__</code>,
       <code>__str__</code>,
       <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>socket._socketobject</code></b>:
+      <code>__doc__</code>,
+      <code>family</code>,
+      <code>proto</code>,
+      <code>type</code>
       </p>
     </td>
   </tr>
@@ -295,94 +310,45 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">max_connections</span>=<span class="sig-default">4</span>,
-        <span class="sig-arg">timeout</span>=<span class="sig-default">300</span>)</span>
+        <span class="sig-arg">sock</span>,
+        <span class="sig-arg">keyfile</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">certfile</span>=<span class="sig-default">None</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Initialize EventletPool</p>
-  <p>:param max_connexions: int, number max of connections in the pool. 
-  Default is 4 :param timeout: int, number max of second a connection is 
-  kept alive. Default is 300s.</p>
+  <p>x.__init__(...) initializes x; see x.__class__.__doc__ for 
+  signature</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="get"></a>
+<a name="close"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">address</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">close</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.get">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.sock-pysrc.html#SSLSocket.close">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Get connection for (Host, Port) address :param address: tuple (Host, 
-  address)</p>
+  
   <dl class="fields">
     <dt>Overrides:
-        <a href="restkit.pool.PoolInterface-class.html#get">pool.PoolInterface.get</a>
+        socket._socketobject.close
     </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="put"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">put</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">address</span>,
-        <span class="sig-arg">socket</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.put">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>release socket in the pool</p>
-  <p>:param address: tuple (Host, address) :param socket: a socket 
-  object</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="restkit.pool.PoolInterface-class.html#put">pool.PoolInterface.put</a>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="clean"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">clean</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">address</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.ext.gevent_pool-pysrc.html#GeventPool.clean">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>close all sockets in the pool for this address</p>
-  <p>:param address: tuple (Host, address)</p>
-  <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
