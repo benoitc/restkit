@@ -51,7 +51,7 @@ Simple client example:
   request_token_url = "http://twitter.com/oauth/request_token"
 
   # Create our filter.
-  auth = OAuthfilter(('*', consumer))
+  auth = oauth.OAuthFilter(('*', consumer))
 
   # The request.
   resp = request(request_token_url, filters=[auth])
@@ -65,7 +65,7 @@ If you want to add OAuth  to your `TwitterSearch` resource::
     secret="your-twitter-consumer-secret")
     
   # Create our filter.
-  client = OAuthfilter(('*', consumer))
+  client = oauth.OAuthfilter(('*', consumer))
     
   s = TwitterSearch(filters=[client])
 
