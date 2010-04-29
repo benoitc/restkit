@@ -17,7 +17,8 @@ import types
 import urlparse
 
 from restkit import __version__
-from restkit.errors import RequestError, InvalidUrl, RedirectLimit
+from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
+BadStatusLine
 from restkit.parser import Parser
 from restkit import sock
 from restkit import tee
@@ -361,8 +362,8 @@ class HttpConnection(object):
                 self.req_headers = req_headers = self._req_headers()
                 
                 # send request
-                log.info('Start request: %s %s' % (self.method, self.url))
-                log.debug("Request headers: [%s]" % str(req_headers))
+                log.info('Start request: %s %s', self.method, self.url)
+                log.debug("Request headers: [%s]", req_headers)
                 
                 self._sock.sendall("".join(req_headers))
                 
@@ -440,9 +441,12 @@ class HttpConnection(object):
                 buf2 = self.parser.filter_headers(headers, buf)
                 if buf2: 
                     break
+                    
+        if not self.parser.status_line:
+            raise BadStatusLine()
             
-        log.debug("Start response: %s" % str(self.parser.status_line))
-        log.debug("Response headers: [%s]" % str(self.parser.headers))
+        log.debug("Start response: %s", self.parser.status_line)
+        log.debug("Response headers: [%s]", self.parser.headers)
         
         if self.method == "HEAD":
             self.response_body = tee.TeeInput(self._sock, self.parser, 
