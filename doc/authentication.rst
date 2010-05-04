@@ -40,7 +40,7 @@ Simple client example:
 
 ::
 
-  from restkit import OAuthfilter, request
+  from restkit import OAuthFilter, request
   import restkit.oauth2 as oauth
 
   # Create your consumer with the proper key/secret.
