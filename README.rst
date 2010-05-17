@@ -134,7 +134,7 @@ Simple client example:
 
 ::
 
-  from restkit import OAuthfilter, request
+  from restkit import OAuthFilter, request
   import restkit.oauth2 as oauth
 
   # Create your consumer with the proper key/secret.
@@ -145,7 +145,7 @@ Simple client example:
   request_token_url = "http://twitter.com/oauth/request_token"
 
   # Create our filter.
-  auth = OAuthfilter(('*', consumer))
+  auth = OAuthFilter(('*', consumer))
 
   # The request.
   resp = request(request_token_url, filters=[auth])
@@ -159,7 +159,7 @@ If you want to add OAuth  to your `TwitterSearch` resource::
     secret="your-twitter-consumer-secret")
     
   # Create our filter.
-  client = OAuthfilter(('*', consumer))
+  client = OAuthFilter(('*', consumer))
     
   s = TwitterSearch(filters=[client])
 
