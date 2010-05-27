@@ -151,6 +151,7 @@ class TeeInput(object):
     def next(self):
         r = self.readline()
         if not r:
+            self.seek(0)
             raise StopIteration
         return r
     __next__ = next
