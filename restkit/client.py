@@ -23,6 +23,7 @@ from restkit.parser import Parser
 from restkit import sock
 from restkit import tee
 from restkit import util
+from restkit import http
 
 MAX_FOLLOW_REDIRECTS = 5
 
@@ -400,12 +401,11 @@ class HttpConnection(object):
             tries -= 1
             
       
-    def do_redirect(self):
+    def do_redirect(self, response, location):
         """ follow redirections if needed"""
         if self.nb_redirections <= 0:
             raise RedirectLimit("Redirection limit is reached")
             
-        location = self.parser.headers_dict.get('Location')
         if not location:
             raise RequestError('no Location header')
         
@@ -417,7 +417,7 @@ class HttpConnection(object):
         log.debug("Redirect to %s" % location)
           
         self.final_url = location
-        self.response_body.read() 
+        response.body.read() 
         self.nb_redirections -= 1
         sock.close(self._sock)
         return self.request(location, self.method, self.body, self.headers)
@@ -427,75 +427,41 @@ class HttpConnection(object):
         Get headers, set Body object and return HttpResponse
         """
         # read headers
-        headers = []
-        buf = StringIO()
-        data = self._sock.recv(sock.CHUNK_SIZE)
-        buf.write(data)
-        buf2 = self.parser.filter_headers(headers, buf)
-        if not buf2:
-            while True:
-                data = self._sock.recv(sock.CHUNK_SIZE)
-                if not data:
-                    break
-                buf.write(data)
-                buf2 = self.parser.filter_headers(headers, buf)
-                if buf2: 
-                    break
-                    
-        if not self.parser.status_line:
-            raise BadStatusLine()
-            
-        log.debug("Start response: %s", self.parser.status_line)
-        log.debug("Response headers: [%s]", self.parser.headers)
-        
-        if self.method == "HEAD":
-            self.response_body = tee.TeeInput(self._sock, self.parser, 
-                                            StringIO())
-            self.response_body._is_socket = False
-            sock.close(self._sock)
-        elif (not self.parser.content_len and not self.parser.is_chunked):
-            if self.parser.should_close:
-                # http 1.0 or something like it. 
-                # we try to get missing body
-                log.debug("No content len an not chunked transfer, get body")
-                while True:
-                    try:
-                        chunk = self._sock.recv(sock.CHUNK_SIZE)
-                    except socket.error:
-                        break
-                    if not chunk: 
-                        break
-                    buf2.write(chunk)
-                sock.close(self._sock)
-            buf2.seek(0)
-            self.response_body = tee.TeeInput(self._sock, self.parser, 
-                                        buf2)
-        else:
-            self.response_body = tee.TeeInput(self._sock, self.parser, buf2, 
-                        maybe_close=lambda: self.release_connection(
-                                                self.uri.netloc, self._sock))
-        
-        # apply on response filters
-        for af in self.response_filters:
-            af.on_response(self)
+        parser = http.ResponseParser(self._sock)
+        resp = parser.next()
 
+        log.debug("Start response: %s", resp.status)
+        log.debug("Response headers: [%s]", resp.headers)
+        
+        location = None
+        for hdr_name, hdr_value in resp.headers:
+            if hdr_name.lower() == "location":
+                location = hdr_value
+                break
+        
         if self.follow_redirect:
-            if self.parser.status_int in (301, 302, 307):
+            if resp.status_int in (301, 302, 307):
                 if self.method in ('GET', 'HEAD') or \
                                 self.force_follow_redirect:
                     if self.method not in ('GET', 'HEAD') and \
                         hasattr(self.body, 'seek'):
                             self.body.seek(0)
-                    return self.do_redirect()
-            elif self.parser.status_int == 303 and self.method in ('GET', 
+                    return self.do_redirect(resp, location)
+            elif resp.status_int == 303 and self.method in ('GET', 
                     'HEAD'):
                 # only 'GET' is possible with this status
                 # according the rfc
-                return self.do_redirect()
+                return self.do_redirect(resp, location)
+
         
+        # apply on response filters
+        for af in self.response_filters:
+            af.on_response(self)
+            
+            
                
-        self.final_url = self.parser.headers_dict.get('Location', 
-                    self.final_url)
+        self.final_url = location or self.final_url
+        return resp
         log.debug("Return response: %s" % self.final_url) 
         return self.response_class(self)
         
