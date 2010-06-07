@@ -121,7 +121,7 @@ class LengthReader(object):
 
         if size == 0 or self.length <= 0:
             return ""
-        if size < 0 or size is None:
+        if size < 0 or size is None or size > self.length:
             size = self.length
         
         buf = StringIO()
