@@ -147,6 +147,7 @@ class EOFReader(object):
             raise ValueError("Size must be positive.")
         if size == 0 or self.finished:
             return ""
+
         
         data = self.unreader.read()
         while data:
@@ -157,7 +158,8 @@ class EOFReader(object):
 
         if not data:
             self.finished = True
-
+            return self.buf.getvalue()
+            
         data = self.buf.getvalue()
         ret, rest = data[:size], data[size:]
         self.buf.truncate(0)

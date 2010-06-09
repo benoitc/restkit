@@ -10,10 +10,7 @@ from restkit.ext import wsgi_proxy
 def with_webob(func):
     print func
     def wrapper(*args, **kwargs):
-        try:
-            from webob import Request
-        except ImportError:
-            pass
+        from webob import Request
         req = Request.blank('/')
         req.environ['SERVER_NAME'] = '%s:%s' % (HOST, PORT)
         return func(req)

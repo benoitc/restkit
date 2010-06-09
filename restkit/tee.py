@@ -17,44 +17,39 @@ except ImportError:
     from StringIO import StringIO
 import tempfile
 
-from restkit import sock
+
+from restkit.http.body import ChunkedReader, LengthReader, EOFReader
 from restkit.errors import UnexpectedEOF
+from restkit import sock
 
 class TeeInput(object):
     
     CHUNK_SIZE = sock.CHUNK_SIZE
     
-    def __init__(self, socket, parser, buf, maybe_close=None):
+    def __init__(self, response, release_connection = None):
         self.buf = StringIO()
-        self.parser = parser
-        self._sock = socket
-        self.maybe_close = maybe_close
-        self._is_socket = True
-        self._len = parser.content_len
+        self.response = response
+        self.release_connection = release_connection
+        self._len = None
+        self._clen = 0
+        self.eof = False
         
-        if not self.parser.content_len and not self.parser.is_chunked:
-            self.tmp = buf
-            self._len = len(buf.getvalue())
-            self._is_socket = False
-        elif self._len and self._len < sock.MAX_BODY:
-            self.tmp = StringIO()
+        # set temporary body
+        if isinstance(response.body.reader, LengthReader):
+            self._len = response.body.reader.length 
+            if (response.body.reader.length <= sock.MAX_BODY):
+                self.tmp = StringIO()
+            else:
+                self.tmp = tempfile.TemporaryFile()
         else:
             self.tmp = tempfile.TemporaryFile()
-        
-        if len(buf.getvalue()) > 0:
-            chunk, self.buf = parser.filter_body(buf)
-            if chunk:
-                self.tmp.write(chunk)
-                self.tmp.flush()
-            self._finalize()
-            self.tmp.seek(0)
-            del buf
-                    
+                       
     @property
     def len(self):
-        if self._len: return self._len
+        if self._len is not None: 
+            return self._len
         
-        if self._is_socket:
+        if not self.eof:
             pos = self.tmp.tell()
             self.tmp.seek(0, 2)
             while True:
@@ -63,14 +58,25 @@ class TeeInput(object):
             self.tmp.seek(pos)
         self._len = self._tmp_size()
         return self._len
+    __len__ = len
         
     def seek(self, offset, whence=0):
         """ naive implementation of seek """
-        if self._is_socket:
-            self.tmp.seek(0, 2)
+        current_size = self._tmp_size()
+        diff = 0
+        if whence == 0:
+            diff = offset - current_size                     
+        elif whence == 2:
+            diff = (self.tmp.tell() + offset) - current_size     
+        elif whence == 3 and not self.eof:
+            # we read until the end
             while True:
+                self.tmp.seek(0, 2)
                 if not self._tee(self.CHUNK_SIZE):
                     break
+                    
+        if not self.eof and diff > 0:
+            self._ensure_length(StringIO(), diff)
         self.tmp.seek(offset, whence)
 
     def flush(self):
@@ -78,7 +84,7 @@ class TeeInput(object):
         
     def read(self, length=-1):
         """ read """
-        if not self._is_socket:
+        if self.eof:
             return self.tmp.read(length)
             
         if length < 0:
@@ -102,7 +108,7 @@ class TeeInput(object):
                 return self._ensure_length(dest, length)
                 
     def readline(self, size=-1):
-        if not self._is_socket:
+        if self.eof:
             return self.tmp.readline()
         
         orig_size = self._tmp_size()
@@ -142,16 +148,14 @@ class TeeInput(object):
         return lines
     
     def close(self):
-        if callable(self.maybe_close):
-            self.maybe_close()
-        
-        self.buf = StringIO()
-        self._is_socket = False
+        if not self.eof:
+            # we didn't read until the end
+            self._close_unreader()
+        return self.tmp.close()
     
     def next(self):
         r = self.readline()
         if not r:
-            self.seek(0)
             raise StopIteration
         return r
     __next__ = next
@@ -163,40 +167,37 @@ class TeeInput(object):
         """ fetch partial body"""
         buf2 = self.buf
         buf2.seek(0, 2) 
-        while True:
-            chunk, buf2 = self.parser.filter_body(buf2)
-            if chunk:
-                self.tmp.write(chunk)
-                self.tmp.flush()
-                self.tmp.seek(0, 2)
-                self.buf = StringIO()
-                self.buf.write(buf2.getvalue())
-                return chunk
-
-            if self.parser.body_eof():
-                break
+        chunk = self.response.body.read(length)
+        if chunk:
+            self.tmp.write(chunk)
+            self.tmp.flush()
+            self.tmp.seek(0, 2)
+            self._clen += len(chunk)
+            
+            # do we need to close the socket
+            if self._len is not None and self._clen >= self._len:
+                self._finalize()
+            return chunk
                 
-            if not self._is_socket:
-                if self.parser.is_chunked:
-                    data = buf2.getvalue()
-                    if data.find("\r\n") >= 0:
-                        continue
-                raise UnexpectedEOF("remote closed the connection")
-
-            data = self._sock.recv(length)
-            if not data:
-                self._is_socket = False
-            buf2.write(data)
-        
         self._finalize()
         return ""
         
+    def _close_unreader(self):
+        if self.response.should_close():
+            self.response.unreader.close()
+        elif callable(self.release_connection):
+            if not self.eof:
+                # read remaining data
+                while True:
+                    if not self.response.body.read(self.CHUNK_SIZE):
+                        break          
+            self.release_connection()
+            
     def _finalize(self):
         """ here we wil fetch final trailers
         if any."""
-
-        if self.parser.body_eof():
-            self.close()
+        self.eof = True
+        self._close_unreader()
 
     def _tmp_size(self):
         if hasattr(self.tmp, 'fileno'):
@@ -205,13 +206,7 @@ class TeeInput(object):
             return len(self.tmp.getvalue())
             
     def _ensure_length(self, dest, length):
-        if not len(dest.getvalue()) or not self._len:
-            return dest.getvalue()
-        while True:
-            if len(dest.getvalue()) >= length: 
-                break
+        if len(dest.getvalue()) < length:
             data = self._tee(length - len(dest.getvalue()))
-            if not data: 
-                break
             dest.write(data)
         return dest.getvalue()

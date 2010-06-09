@@ -4,6 +4,7 @@
 # See the NOTICE for more information.
 
 import os
+import socket
 
 try:
     from cStringIO import StringIO
@@ -52,6 +53,9 @@ class Unreader(object):
     def unread(self, data):
         self.buf.seek(0, os.SEEK_END)
         self.buf.write(data)
+        
+    def close(self):
+        return None
 
 class SocketUnreader(Unreader):
     def __init__(self, sock, max_chunk=8192):
@@ -61,6 +65,12 @@ class SocketUnreader(Unreader):
     
     def chunk(self):
         return self.sock.recv(self.mxchunk)
+        
+    def close(self):
+        try:
+            self.sock.close()
+        except socket.error:
+            pass
 
 class IterUnreader(Unreader):
     def __init__(self, iterable):

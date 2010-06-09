@@ -37,25 +37,25 @@ class HttpResponse(object):
     charset = "utf8"
     unicode_errors = 'strict'
     
-    def __init__(self, http_client):
-        self.http_client = http_client
-        self.status = self.http_client.parser.status
-        self.status_int = self.http_client.parser.status_int
-        self.version = self.http_client.parser.version
-        self.headerslist = self.http_client.parser.headers
-        self.final_url = self.http_client.final_url
+    def __init__(self, response, body, final_url):
+        self.response = response
+        self.status = response.status
+        self.status_int = response.status_int
+        self.version = response.version
+        self.headerslist = response.headers
+        self.final_url = final_url
         
         headers = {}
-        for key, value in self.http_client.parser.headers:
+        for key, value in response.headers:
             headers[key.lower()] = value
         self.headers = headers
         
         encoding = headers.get('content-encoding', None)
         if encoding in ('gzip', 'deflate'):
-            self._body = gzip.GzipFile(fileobj=self.http_client.response_body)
+            self._body = gzip.GzipFile(fileobj=body)
         else:
-            self._body = self.http_client.response_body
-        self._body_eof = False
+            self._body = body
+
             
     def __getitem__(self, key):
         try:
@@ -74,12 +74,8 @@ class HttpResponse(object):
     @property
     def body(self):
         """ body in bytestring """
-        if self._body_eof:
-            self._body.seek(0)
-        self._body_eof = True
-        ret = self._body.read()
         self._body.seek(0)
-        return ret
+        return self._body.read()
         
     @property
     def body_file(self):
@@ -203,9 +199,8 @@ class HttpConnection(object):
         
     def release_connection(self, address, socket):
         if not self.connections:
-            sock.close(socket)
-        else:
-            self.connections.put(address, self._sock)
+            return
+        self.connections.put(address, self._sock)
         
     def parse_url(self, url):
         """ parse url and get host/port"""
@@ -457,12 +452,14 @@ class HttpConnection(object):
         # apply on response filters
         for af in self.response_filters:
             af.on_response(self)
-            
-            
-               
+
         self.final_url = location or self.final_url
-        return resp
-        log.debug("Return response: %s" % self.final_url) 
-        return self.response_class(self)
+        log.debug("Return response: %s" % self.final_url)
+        
+        body = tee.TeeInput(resp, 
+            release_connection = lambda:self.release_connection(
+            self.uri.netloc, self._sock))
+            
+        return self.response_class(resp, body, self.final_url)
         
         
