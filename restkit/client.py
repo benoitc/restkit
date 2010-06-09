@@ -456,9 +456,12 @@ class HttpConnection(object):
         self.final_url = location or self.final_url
         log.debug("Return response: %s" % self.final_url)
         
-        body = tee.TeeInput(resp, 
-            release_connection = lambda:self.release_connection(
-            self.uri.netloc, self._sock))
+        if self.method == "HEAD":
+            body = StringIO()
+        else:
+            body = tee.TeeInput(resp, 
+                release_connection = lambda:self.release_connection(
+                self.uri.netloc, self._sock))
             
         return self.response_class(resp, body, self.final_url)
         
