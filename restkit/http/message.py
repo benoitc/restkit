@@ -93,8 +93,8 @@ class Message(object):
             if curr.find(":") < 0:
                 raise InvalidHeader(curr.strip())
             name, value = curr.split(":", 1)
-            name = name.rstrip(" \t").upper()
-            if self.hdrre.search(name):
+            name = name.rstrip(" \t")
+            if self.hdrre.search(name.upper()):
                 raise InvalidHeaderName(name)
             name, value = name.strip(), [value.lstrip()]
             
