@@ -113,13 +113,12 @@ class LengthReader(object):
     def read(self, size):
         if not isinstance(size, (int, long)):
             raise TypeError("size must be an integral type")
-        if size < 0:
-            raise ValueError("Size must be positive.")
             
         size = min(self.length, size)
+        if size < 0:
+            raise ValueError("Size must be positive.")
         if size == 0:
-            return ""
-        
+            return ""       
 
         buf = StringIO()
         data = self.unreader.read()
