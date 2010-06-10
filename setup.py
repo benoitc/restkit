@@ -9,6 +9,14 @@ import sys
 
 if not hasattr(sys, 'version_info') or sys.version_info < (2, 5, 0, 'final'):
     raise SystemExit("Restkit requires Python 2.5 or later.")
+    
+extras = {}
+try:
+    import ssl
+except ImportError:
+    sys.stderr.write("Warning: On python 2.5x, https support requires "
+                + " ssl module (http://pypi.python.org/pypi/ssl) "
+                + "to be intalled.")
 
 from setuptools import setup, find_packages
 

@@ -10,69 +10,19 @@ MAX_BODY = 1024 * 112
 
 try:
     import ssl # python 2.6
-    _ssl_wrap_socket = ssl.wrap_socket
+    have_ssl = True
 except ImportError:
-    class SSLSocket(socket.socket):
-        
-        def __init__(self, sock, keyfile=None, certfile=None):
-            socket.socket.__init__(self, _sock=sock._sock)
-            self.send = lambda data, flags=0: SSLSocket.send(self, data, flags)
-            self.recv = lambda buflen=1024, flags=0: SSLSocket.recv(self, 
-                                                                buflen, flags)
-            
-            if certfile and not keyfile:
-                keyfile=certfile
-                
-            self.keyfile = keyfile
-            self.certfile = certfile
-            self._ssl_sock = socket.ssl(sock, keyfile, certfile)
-            
-        def read(self, len=1024):
-            return self._ssl_sock.read(len)
-            
-        def write(self, data):
-            return self._ssl_sock.write(data)
-
-        def send(self, data, flags=0):
-            if flags != 0:
-                raise ValueError(
-                    "non-zero flags not allowed in calls to send() on %s" %
-                    self.__class__)
-            return self._ssl_sock.write(data)
-            
-        def sendall(self, data, flags=0):
-            if flags != 0:
-                raise ValueError(
-                    "non-zero flags not allowed in calls to send() on %s" %
-                    self.__class__)
-            amount = len(data)
-            count = 0
-            while (count < amount):
-                v = self.send(data[count:])
-                count += v
-            return amount
-                    
-        def recv(self, buflen=1024, flags=0):
-            if flags != 0:
-                raise ValueError(
-                    "non-zero flags not allowed in calls to send() on %s" %
-                    self.__class__)
-            return self.read(buflen)
-            
-        def close(self):
-            self._sslobj = None
-            socket.socket.close(self)
-            
-    def _ssl_wrap_socket(sock, key_file, cert_file):
-        return SSLSocket(sock, key_file, cert_file)
+    have_ssl = False
         
 if not hasattr(socket, '_GLOBAL_DEFAULT_TIMEOUT'): # python < 2.6
     _GLOBAL_DEFAULT_TIMEOUT = object()
 else:
     _GLOBAL_DEFAULT_TIMEOUT = socket._GLOBAL_DEFAULT_TIMEOUT
+    
+_allowed_ssl_args = ('keyfile', 'certfile', 'cert_reqs', 'ssl_version', 
+                    'ca_certs', 'suppress_ragged_eofs')
 
-def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False, 
-        key_file=None, cert_file=None):
+def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, **ssl_args):
     msg = "getaddrinfo returns an empty list"
     host, port = address
     for res in socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM):
@@ -83,8 +33,15 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, ssl=False,
             if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
                 sock.settimeout(timeout)
             sock.connect(sa)
-            if ssl:
-                return _ssl_wrap_socket(sock, key_file, cert_file)
+            if ssl_args:
+                if not have_ssl:
+                    raise ValueError("https isn't supported.  On python 2.5x,"
+                                + " https support requires ssl module "
+                                + "(http://pypi.python.org/pypi/ssl) "
+                                + "to be intalled.")
+                if arg not in _allowed_ssl_args:
+                    raise TypeError('connect() got an unexpected keyword argument %r' % arg)   
+                return ssl.wrap_socket(sock, **ssl_args)
             return sock
         except socket.error, msg:
             if sock is not None:

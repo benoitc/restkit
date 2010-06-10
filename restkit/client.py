@@ -99,8 +99,9 @@ class HttpConnection(object):
     
     def __init__(self, timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
             filters=None, follow_redirect=False, force_follow_redirect=False, 
-            max_follow_redirect=MAX_FOLLOW_REDIRECTS, key_file=None, 
-            cert_file=None, pool_instance=None, response_class=None):
+            max_follow_redirect=MAX_FOLLOW_REDIRECTS, 
+            pool_instance=None, response_class=None,
+            **ssl_args):
             
         """ HttpConnection constructor
         
@@ -112,10 +113,10 @@ class HttpConnection(object):
         the location.
         :param max_follow_redirect: max number of redirection. If max is reached
         the RedirectLimit exception is raised.
-        :param key_file: the key fle to use with ssl
-        :param cert_file: the cert file to use with ssl
         :param pool_instance: a pool instance inherited from 
         `restkit.pool.PoolInterface`
+        :param ssl_args: ssl arguments. See http://docs.python.org/library/ssl.html
+        for more information.
         """
         self._sock = None
         self.timeout = timeout
@@ -136,8 +137,8 @@ class HttpConnection(object):
         self.filters = filters or []
         self.request_filters = []
         self.response_filters = []
-        self.cert_file = cert_file
-        self.key_file = key_file
+        self.ssl_args = ssl_args
+       
 
         for f in self.filters:
             self._add_filter(f)
@@ -186,8 +187,7 @@ class HttpConnection(object):
         if not s:
             # pool is empty or we don't use a pool
             if self.uri.scheme == "https":
-                s = sock.connect(addr, self.timeout, True, 
-                                self.key_file, self.cert_file)
+                s = sock.connect(addr, self.timeout, **self.ssl_args)
             else:
                 s = sock.connect(addr, self.timeout)
         return s
