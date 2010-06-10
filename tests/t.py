@@ -12,7 +12,8 @@ import tempfile
 
 dirname = os.path.dirname(__file__)
 
-from restkit.parser import Parser
+from restkit.http.parser import RequestParser
+
 from restkit.client import HttpConnection
 from restkit.resource import Resource
 
@@ -22,7 +23,6 @@ run_server_test()
 def data_source(fname):
     buf = StringIO()
     with open(fname) as handle:
-        lines = []
         for line in handle:
             line = line.rstrip("\n").replace("\\r\\n", "\r\n")
             buf.write(line)
@@ -35,21 +35,43 @@ class request(object):
     def __call__(self, func):
         def run():
             src = data_source(self.fname)
-            func(src, Parser.parse_request())
-        run.func_name = func.func_name
-        return run
-      
-class response(object):
-    def __init__(self, name):
-        self.fname = os.path.join(dirname, "responses", name)
-        
-    def __call__(self, func):
-        def run():
-            src = data_source(self.fname)
-            func(src, Parser.parse_response())
+            func(src, RequestParser(src))
         run.func_name = func.func_name
         return run
         
+        
+class FakeSocket(object):
+    
+    def __init__(self, data):
+        self.tmp = tempfile.TemporaryFile()
+        if data:
+            self.tmp.write(data.getvalue())
+            self.tmp.flush()
+            self.tmp.seek(0)
+
+    def fileno(self):
+        return self.tmp.fileno()
+        
+    def len(self):
+        return self.tmp.len
+        
+    def recv(self, length=None):
+        return self.tmp.read()
+        
+    def recv_into(self, buf, length):
+        tmp_buffer = self.tmp.read(length)
+        v = len(tmp_buffer)
+        for i, c in enumerate(tmp_buffer):
+            buf[i] = c
+        return v
+        
+    def send(self, data):
+        self.tmp.write(data)
+        self.tmp.flush()
+        
+    def seek(self, offset, whence=0):
+        self.tmp.seek(offset, whence)
+                
 class client_request(object):
     
     def __init__(self, path, pool=False):
