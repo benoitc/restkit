@@ -20,7 +20,8 @@ else:
     _GLOBAL_DEFAULT_TIMEOUT = socket._GLOBAL_DEFAULT_TIMEOUT
     
 _allowed_ssl_args = ('keyfile', 'certfile', 'cert_reqs', 'ssl_version', 
-                    'ca_certs', 'suppress_ragged_eofs')
+                    'ca_certs', 'do_handshake_on_connect',
+                    'suppress_ragged_eofs')
 
 def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, **ssl_args):
     msg = "getaddrinfo returns an empty list"
