@@ -3,6 +3,12 @@
 News
 ====
 
+2.0 / 2010-06-10
+----------------
+
+- Added full ssl support in restkit. It needs `ssl <http://pypi.python.org/pypi/ssl>`_ module on Python 2.5x
+- New HTTP parser.
+
 1.3.1 / 2010-04-09
 ------------------
 
