@@ -19,7 +19,6 @@ import urlparse
 from restkit import __version__
 from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
 BadStatusLine
-from restkit.parser import Parser
 from restkit import sock
 from restkit import tee
 from restkit import util
@@ -238,7 +237,6 @@ class HttpConnection(object):
         :param body: the body, could be a string, an iterator or a file-like object
         :param headers: dict or list of tupple, http headers
         """
-        self.parser = Parser.parse_response(should_close=self.should_close)
         self._sock = None
         self.url = url
         self.final_url = url
