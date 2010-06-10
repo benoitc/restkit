@@ -39,8 +39,10 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, **ssl_args):
                                 + " https support requires ssl module "
                                 + "(http://pypi.python.org/pypi/ssl) "
                                 + "to be intalled.")
-                if arg not in _allowed_ssl_args:
-                    raise TypeError('connect() got an unexpected keyword argument %r' % arg)   
+                                
+                for arg in ssl_args:
+                    if arg not in _allowed_ssl_args:
+                        raise TypeError('connect() got an unexpected keyword argument %r' % arg)   
                 return ssl.wrap_socket(sock, **ssl_args)
             return sock
         except socket.error, msg:
