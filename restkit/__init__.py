@@ -49,7 +49,7 @@ def set_logging(level, handler=None):
     logger.addHandler(handler)
     
 def request(url, method='GET', body=None, headers=None, pool_instance=None, 
-        follow_redirect=False, filters=None, key_file=None, cert_file=None):
+        follow_redirect=False, filters=None, **ssl_args):
     """ Quick shortcut method to pass a request
     
     :param url: str, url string
@@ -63,8 +63,8 @@ def request(url, method='GET', body=None, headers=None, pool_instance=None,
     the location.
     :param filters: list, list of http filters. see the doc of http filters 
     for more info
-    :param key_file: the key fle to use with ssl
-    :param cert_file: the cert file to use with ssl
+    :param ssl_args: ssl arguments. See http://docs.python.org/library/ssl.html
+    for more information.
     
     """
     # detect credentials from url
@@ -77,7 +77,6 @@ def request(url, method='GET', body=None, headers=None, pool_instance=None,
         filters.append(BasicAuth(u.username, password))
     
     http_client = HttpConnection(follow_redirect=follow_redirect,
-            filters=filters, key_file=key_file, cert_file=cert_file,
-            pool_instance=pool_instance)
+            filters=filters, pool_instance=pool_instance, **ssl_args)
     return http_client.request(url, method=method, body=body, 
         headers=headers)
