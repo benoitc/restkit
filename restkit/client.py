@@ -19,6 +19,7 @@ import urlparse
 from restkit import __version__
 from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
 BadStatusLine
+from restkit.filters import Filters
 from restkit import sock
 from restkit import tee
 from restkit import util
@@ -133,15 +134,9 @@ class HttpConnection(object):
         self.final_url = None
         
         # build filter lists
-        self.filters = filters or []
-        self.request_filters = []
-        self.response_filters = []
+        self.filters = Filters(filters)
         self.ssl_args = ssl_args
        
-
-        for f in self.filters:
-            self._add_filter(f)
-                
         if not pool_instance:
             self.should_close = True
             self.connections = None
@@ -151,30 +146,7 @@ class HttpConnection(object):
             
         if response_class is not None:
             self.response_class = response_class
-        
-    def add_filter(self, f):
-        self.filters.append(f)
-        self._add_filter(f)
-            
-    def _add_filter(self, f):
-        if hasattr(f, 'on_request'):
-            self.request_filters.append(f)
-            
-        if hasattr(f, 'on_response'):
-            self.response_filters.append(f)
-            
-    def remove_filter(self, f):
-        for i, f1 in enumerate(self.filters):
-            if f == f1: del self.filters[i]
-            
-        if hasattr(f, 'on_request'):
-            for i, f1 in enumerate(self.request_filters):
-                if f == f1: del self.request_filters[i]
-                
-        if hasattr(f, 'on_response'):
-            for i, f1 in enumerate(self.response_filters):
-                if f == f1: del self.response_filters[i]   
-        
+         
     def make_connection(self):
         """ initate a connection if needed or reuse a socket"""
         addr = (self.host, self.port)
@@ -349,8 +321,7 @@ class HttpConnection(object):
                 self._sock = self.make_connection()
                 
                 # apply on request filters
-                for bf in self.request_filters:
-                    bf.on_request(self)
+                self.filters.apply("on_request", self)
                 
                 # build request headers
                 self.req_headers = req_headers = self._req_headers()
@@ -448,8 +419,7 @@ class HttpConnection(object):
 
         
         # apply on response filters
-        for af in self.response_filters:
-            af.on_response(self)
+        self.filters.apply("on_response", self)
 
         self.final_url = location or self.final_url
         log.debug("Return response: %s" % self.final_url)

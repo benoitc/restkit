@@ -79,7 +79,7 @@ class Resource(object):
     def add_filter(self, f):
         """ add an htt filter """
         filters = self.client_opts.get('filters', [])
-        filters.append(f)
+        filters.add(f)
         self.client_opts['filters'] = filters
 
     add_authorization = util.deprecated_property(
@@ -89,8 +89,7 @@ class Resource(object):
     def remmove_filter(self, f):
         """ remove an http filter """
         filters = self.client_opts.get('filters', [])
-        for i, f1 in enumerate(filters):
-            if f == f1: del filters[i]
+        filters.remove(f)
         self.client_opts['filters'] = filters
     
     def clone(self):

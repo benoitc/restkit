@@ -25,26 +25,14 @@ ex::
             
 """
 
-import base64
 import os
 import urlparse
 
-
 from restkit.errors import InvalidUrl
-from restkit.parser import Parser
+from restkit import http
 from restkit import sock
 from restkit import util
 from restkit import __version__
-
-class BasicAuth(object):
-    """ Simple filter to manage basic authentification"""
-    
-    def __init__(self, username, password):
-        self.credentials = (username, password)
-    
-    def on_request(self, req):
-        encode = base64.b64encode("%s:%s" % self.credentials)
-        req.headers.append(('Authorization', 'Basic %s' %  encode))
         
 class ProxyError(Exception):
     pass
@@ -93,20 +81,10 @@ class SimpleProxy(object):
                 sock.send(p_sock, proxy_pieces)
             
                 # wait header
-                p = Parser.parse_response()
-                headers = []
-                buf = ""
-                buf = sock.recv(p_sock, util.CHUNK_SIZE)
-                i = self.parser.filter_headers(headers, buf)
-                if i == -1 and buf:
-                    while True:
-                        data = sock.recv(p_sock, util.CHUNK_SIZE)
-                        if not data: break
-                        buf += data
-                        i = self.parser.filter_headers(headers, buf)
-                        if i != -1: break
-                        
-                if p.status_int != 200:
+                parser = http.ResponseParser(p_sock)
+                resp = parser.next()
+ 
+                if resp.status_int != 200:
                     raise ProxyError('Error status=%s' % p.status)
                     
                 sock._ssl_wrap_socket(p_sock, None, None)
@@ -140,4 +118,3 @@ def _get_proxy_auth():
         return 'Basic %s\r\n' % (user_auth.strip())
     else:
         return ''
-   

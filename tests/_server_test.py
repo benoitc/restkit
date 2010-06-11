@@ -31,7 +31,6 @@ except ImportError:
     from cgi import parse_qsl, parse_qs
 import urllib
 from restkit.util import to_bytestring
-from restkit.parser import Parser
 
 HOST = socket.getfqdn('127.0.0.1')
 PORT = (os.getpid() % 31000) + 1024
