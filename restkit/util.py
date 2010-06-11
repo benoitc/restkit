@@ -24,6 +24,28 @@ def http_date(timestamp=None):
             hh, mm, ss)
     return s
 
+def parse_netloc(uri):
+    host = uri.netloc
+    port = None
+    i = host.rfind(':')
+    j = host.rfind(']')         # ipv6 addresses have [...]
+    if i > j:
+        try:
+            port = int(host[i+1:])
+        except ValueError:
+            raise InvalidUrl("nonnumeric port: '%s'" % host[i+1:])
+        host = host[:i]
+    else:
+        # default port
+        if uri.scheme == "https":
+            port = 443
+        else:
+            port = 80
+            
+    if host and host[0] == '[' and host[-1] == ']':
+        host = host[1:-1]
+    return (host, port)
+
 def to_bytestring(s):
     if not isinstance(s, basestring):
         raise TypeError("value should be a str or unicode")

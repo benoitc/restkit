@@ -179,25 +179,7 @@ class HttpConnection(object):
         if self.uri.scheme not in ('http', 'https'):
             raise InvalidUrl("None valid url")
         
-        host = self.uri.netloc
-        i = host.rfind(':')
-        j = host.rfind(']')         # ipv6 addresses have [...]
-        if i > j:
-            try:
-                port = int(host[i+1:])
-            except ValueError:
-                raise InvalidUrl("nonnumeric port: '%s'" % host[i+1:])
-            host = host[:i]
-        else:
-            # default port
-            if self.uri.scheme == "https":
-                port = 443
-            else:
-                port = 80
-                
-        if host and host[0] == '[' and host[-1] == ']':
-            host = host[1:-1]
-            
+        host, port = util.parse_netloc(self.uri)
         self.host = host
         self.port = port
         

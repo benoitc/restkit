@@ -42,24 +42,7 @@ class SimpleProxy(object):
     This filter find proxy from environment and if it exists it
     connect to the proxy and modify connection headers.
     """
-    
-    def _host_port(self, proxy_uri):
-        proxy_host = proxy_uri.netloc
-        i = proxy_host.rfind(':')
-        j = proxy_host.rfind(']')         
-        if i > j:
-            try:
-                proxy_port = int(proxy_host[i+1:])
-            except ValueError:
-                raise InvalidUrl("nonnumeric port: '%s'" % proxy_host[i+1:])
-            proxy_host = proxy_host[:i]
-        else:
-            proxy_port = 80
 
-        if proxy_host and proxy_host[0] == '[' and proxy_host[-1] == ']':
-            proxy_host = proxy_host[1:-1]
-            
-        return proxy_host, proxy_port
     
     def on_request(self, req):
         proxy_auth = _get_proxy_auth()
@@ -73,7 +56,7 @@ class SimpleProxy(object):
                 proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, 
                                         user_agent)
                 proxy_uri = urlparse.urlparse(proxy)
-                proxy_host, proxy_port = self._host_port(proxy_uri)
+                proxy_host, proxy_port = util.parse_netloc(proxy_uri)
                 # Connect to the proxy server, 
                 # very simple recv and error checking
                 
