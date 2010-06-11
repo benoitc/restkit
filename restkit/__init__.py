@@ -14,8 +14,7 @@ RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceErro
     from restkit.client import HttpConnection, HttpResponse
     from restkit.resource import Resource
     from restkit.pool import ConnectionPool
-    from restkit.filters import BasicAuth, SimpleProxy
-    from restkit.oauth2.filter import OAuthFilter
+    from restkit.filters import BasicAuth, SimpleProxy, OAuthFilter
 except ImportError:
     import traceback
     traceback.print_exc()
