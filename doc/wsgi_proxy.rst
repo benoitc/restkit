@@ -16,10 +16,10 @@ use `webob <http://pythonpaste.org/webob/>`_ and `gunicorn
   import urlparse
 
   from webob import Request
-  from restkit.pool import ConnectionPool
+  from restkit.pool.simple import SimplePool
   from restkit.ext.wsgi_proxy import HostProxy
 
-  pool = ConnectionPool(max_connections=10)
+  pool = SimplePool(keepalive=10)
   proxy = HostProxy("http://127.0.0.1:5984", pool=pool)
 
 
@@ -59,10 +59,10 @@ distributed proxy. `/a/db` will proxify `http://a.mypool.org/db`::
   import urlparse
 
   from webob import Request
-  from restkit.pool import ConnectionPool
+  from restkit.pool.simple import SimplePool
   from restkit.ext.wsgi_proxy import Proxy
 
-  pool = ConnectionPool(max_connections=10)
+  pool = SimplePool(keepalive=10)
   proxy = Proxy(pool=pool, strip_script_name=True)
 
 
