@@ -13,7 +13,7 @@ try:
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceError
     from restkit.client import HttpConnection, HttpResponse
     from restkit.resource import Resource
-    from restkit.pool import ConnectionPool
+    from restkit.pool.simple import SimplePool
     from restkit.filters import BasicAuth, SimpleProxy, OAuthFilter
 except ImportError:
     import traceback

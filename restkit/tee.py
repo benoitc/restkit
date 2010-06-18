@@ -20,7 +20,7 @@ import tempfile
 
 from restkit.http.body import ChunkedReader, LengthReader, EOFReader
 from restkit.errors import UnexpectedEOF
-from restkit import sock
+from restkit.util import sock
 
 class TeeInput(object):
     

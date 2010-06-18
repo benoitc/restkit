@@ -10,7 +10,7 @@ try:
 except ImportError:
     from cgi import parse_qsl
     
-from restkit.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
+from restkit.util.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
 Token
 
 def validate_consumer(consumer):

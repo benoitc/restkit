@@ -18,11 +18,10 @@ import urlparse
 
 from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
 ParserError, RequestError
-from restkit.forms import MultipartForm, multipart_form_encode, form_encode
 from restkit.client import HttpConnection
 from restkit.filters import BasicAuth
 from restkit import util
-from restkit import pool
+from restkit.pool.simple import SimplePool
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
@@ -32,9 +31,8 @@ class Resource(object):
     charset = 'utf-8'
     encode_keys = True
     safe = "/:"
-    pool_class = pool.ConnectionPool
+    pool_class = SimplePool
     keepalive = True
-    max_connections = 4
     basic_auth_url = True
     
     def __init__(self, uri, headers=None, **client_opts):
@@ -50,7 +48,7 @@ class Resource(object):
 
         pool_instance = client_opts.get('pool_instance')
         if not pool_instance and self.keepalive:
-            pool = self.pool_class(max_connections=self.max_connections)
+            pool = self.pool_class()
             client_opts['pool_instance'] = pool
             
         if self.basic_auth_url:
@@ -187,38 +185,7 @@ class Resource(object):
         :param params: Optionnal parameterss added to the request
         """
         
-        headers = headers or {}
-        headers.update(self._headers.copy())
-
-        
-        self._body_parts = []
-        if payload is not None:
-            if isinstance(payload, dict):
-                ctype = headers.get('Content-Type')
-                if ctype is not None and \
-                        ctype.startswith("multipart/form-data"):
-                    type_, opts = cgi.parse_header(ctype)
-                    boundary = opts.get('boundary', uuid.uuid4().hex)
-                    payload, headers = multipart_form_encode(payload, 
-                                                headers, boundary)
-                else:
-                    ctype = "application/x-www-form-urlencoded; charset=utf-8"
-                    headers['Content-Type'] = ctype
-                    payload = form_encode(payload)
-                    headers['Content-Length'] = len(payload)
-            elif isinstance(payload, MultipartForm):
-                ctype = "multipart/form-data; boundary=%s" % payload.boundary
-                headers['Content-Type'] = ctype
-                headers['Content-Length'] = str(payload.get_size())
-
-            if 'Content-Type' not in headers:
-                ctype = 'application/octet-stream'
-                if hasattr(payload, 'name'):
-                    ctype = mimetypes.guess_type(payload.name)[0]
-
-                headers['Content-Type'] = ctype
-                
-    
+        headers = headers or []
         uri = self._make_uri(self.uri, path, **params)
         
         try:

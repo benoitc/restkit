@@ -6,6 +6,7 @@
 import errno
 import gzip
 import logging
+import mimetypes
 import os
 import socket
 import time
@@ -20,7 +21,8 @@ from restkit import __version__
 from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
 BadStatusLine
 from restkit.filters import Filters
-from restkit import sock
+from restkit.forms import MultipartForm, multipart_form_encode, form_encode
+from restkit.util import sock
 from restkit import tee
 from restkit import util
 from restkit import http
@@ -139,9 +141,9 @@ class HttpConnection(object):
        
         if not pool_instance:
             self.should_close = True
-            self.connections = None
+            self.pool = None
         else:
-            self.connections = pool_instance
+            self.pool = pool_instance
             self.should_close = False
             
         if response_class is not None:
@@ -152,8 +154,8 @@ class HttpConnection(object):
         addr = (self.host, self.port)
         s = None
         # if we defined a pool use it
-        if self.connections is not None:
-            s = self.connections.get(addr)
+        if self.pool is not None:
+            s = self.pool.get(addr)
             
         if not s:
             # pool is empty or we don't use a pool
@@ -165,13 +167,13 @@ class HttpConnection(object):
         
     def clean_connections(self):
         sock.close(self._sock) 
-        if hasattr(self.connections,'clean'):
-            self.connections.clean((self.host, self.port))
+        if hasattr(self.pool,'clear'):
+            self.pool.clear_host((self.host, self.port))
         
     def release_connection(self, address, socket):
-        if not self.connections:
+        if not self.pool:
             return
-        self.connections.put(address, self._sock)
+        self.pool.put(address, self._sock)
         
     def parse_url(self, url):
         """ parse url and get host/port"""
@@ -182,6 +184,62 @@ class HttpConnection(object):
         host, port = util.parse_netloc(self.uri)
         self.host = host
         self.port = port
+        
+    def set_body(self, body, content_type=None, content_length=None, 
+            chunked=False):
+        """ set HTTP body and manage form if needed """
+        if not body:
+            self.headers.append(('Content-Type', content_type))
+            if self.method in ('POST', 'PUT'):
+                self.headers.append(("Content-Length", "0"))
+            return
+        
+        # set content lengh if needed
+        if isinstance(body, dict):
+            if content_type is not None and \
+                    content_type.startswith("multipart/form-data"):
+                type_, opts = cgi.parse_header(content_type)
+                boundary = opts.get('boundary', uuid.uuid4().hex)
+                body, headers = multipart_form_encode(body, 
+                                            headers, boundary)
+            else:
+                content_type = "application/x-www-form-urlencoded; charset=utf-8"
+                body = form_encode(body)
+        elif hasattr(body, "boundary"):
+            content_type = "multipart/form-data; boundary=%s" % body.boundary
+            content_length = body.get_size()
+
+        if not content_type:
+            content_type = 'application/octet-stream'
+            if hasattr(body, 'name'):
+                content_type = mimetypes.guess_type(body.name)[0]
+            
+        if not content_length:
+            if hasattr(body, 'fileno'):
+                try:
+                    body.flush()
+                except IOError:
+                    pass
+                content_length = str(os.fstat(body.fileno())[6])
+            elif hasattr(body, 'getvalue'):
+                try:
+                    content_length = str(len(body.getvalue()))
+                except AttributeError:
+                    pass
+            elif isinstance(body, types.StringTypes):
+                body = util.to_bytestring(body)
+                content_length = len(body)
+        
+        if content_length:
+            self.headers.append(("Content-Length", content_length))
+            self.headers.append(('Content-Type', content_type))
+            
+        elif not chunked:
+            raise RequestError("Can't determine content length and" +
+                    "Transfer-Encoding header is not chunked")
+            
+        self.body = body               
+        
         
     def request(self, url, method='GET', body=None, headers=None):
         """ make effective request 
@@ -196,7 +254,7 @@ class HttpConnection(object):
         self.final_url = url
         self.parse_url(url)
         self.method = method.upper()
-        
+        self.headers = []
         
         # headers are better as list
         headers = headers  or []
@@ -204,10 +262,10 @@ class HttpConnection(object):
             headers = list(headers.items())
             
         ua = USER_AGENT
-        normalized_headers = []
-        content_len = None
+        content_length = None
         accept_encoding = 'identity'
         chunked = False
+        content_type = None
         
         # default host
         try:
@@ -220,8 +278,10 @@ class HttpConnection(object):
             name = name.title()
             if name == "User-Agent":
                 ua = value
+            elif name == "Content-Type":
+                content_type = value
             elif name == "Content-Length":
-                content_len = str(value)
+                content_length = str(value)
             elif name == "Accept-Encoding":
                 accept_encoding = 'identity'
             elif name == "Host":
@@ -229,41 +289,15 @@ class HttpConnection(object):
             elif name == "Transfer-Encoding":
                 if value.lower() == "chunked":
                     chunked = True
-                normalized_headers.append((name, value))
+                self.headers.append((name, value))
             else:
                 if not isinstance(value, types.StringTypes):
                     value = str(value)
-                normalized_headers.append((name, value))
+                self.headers.append((name, value))
         
-        # set content lengh if needed
-        if body and body is not None:
-            if not content_len:
-                if hasattr(body, 'fileno'):
-                    try:
-                        body.flush()
-                    except IOError:
-                        pass
-                    content_len = str(os.fstat(body.fileno())[6])
-                elif hasattr(body, 'getvalue'):
-                    try:
-                        content_len = str(len(body.getvalue()))
-                    except AttributeError:
-                        pass
-                elif isinstance(body, types.StringTypes):
-                    body = util.to_bytestring(body)
-                    content_len = len(body)
-            
-            if content_len:
-                normalized_headers.append(("Content-Length", content_len))
-            elif not chunked:
-                raise RequestError("Can't determine content length and" +
-                        "Transfer-Encoding header is not chunked")
-                
-        if self.method in ('POST', 'PUT') and not body:
-            normalized_headers.append(("Content-Length", "0"))
-       
-        self.body = body
-        self.headers = normalized_headers
+        self.set_body(body, content_type=content_type, 
+            content_length=content_length, chunked=chunked)
+
         self.ua = ua
         self.chunked = chunked
         self.host_hdr = host

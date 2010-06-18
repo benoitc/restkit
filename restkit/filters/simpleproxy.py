@@ -30,8 +30,9 @@ import urlparse
 
 from restkit.errors import InvalidUrl
 from restkit import http
-from restkit import sock
 from restkit import util
+from restkit.util import sock
+
 from restkit import __version__
         
 class ProxyError(Exception):
@@ -42,7 +43,6 @@ class SimpleProxy(object):
     This filter find proxy from environment and if it exists it
     connect to the proxy and modify connection headers.
     """
-
     
     def on_request(self, req):
         proxy_auth = _get_proxy_auth()
@@ -60,7 +60,7 @@ class SimpleProxy(object):
                 # Connect to the proxy server, 
                 # very simple recv and error checking
                 
-                p_sock = sock.connect((proxy_host, int(proxy_port))   )          
+                p_sock = sock.connect((proxy_host, int(proxy_port)))          
                 sock.send(p_sock, proxy_pieces)
             
                 # wait header
