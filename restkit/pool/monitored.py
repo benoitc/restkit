@@ -33,6 +33,7 @@ class MonitoredHost(object):
         if self.nb_connections < self.keepalive and not self.waiting():
             sock.close(conn)
             return
+        self.nb_connections += 1
         self.do_put(conn)
         self.monitor(conn)
         

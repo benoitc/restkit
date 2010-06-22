@@ -21,7 +21,7 @@ class EventletHost(MonitoredHost):
 
     def monitor(self, conn):
         super(EventletHost, self).monitor(conn)
-        eventlet.spawn_after(self.timeout, self.expire, conn.fileno()
+        eventlet.spawn_after(self.timeout, self.expire, conn.fileno())
         
     def waiting(self):
         return max(0, self.pool.getting() - self.pool.putting())   

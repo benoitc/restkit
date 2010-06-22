@@ -21,7 +21,7 @@ class GeventHost(MonitoredHost):
 
     def monitor(self, conn):
         super(GeventHost, self).monitor(conn)
-        spawn_later(self.timeout, self.expire, conn.fileno()
+        spawn_later(self.timeout, self.expire, conn.fileno())
         
     def waiting(self):
         return max(0, len(self.pool.getters) - len(self.pool.putters))
