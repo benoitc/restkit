@@ -44,7 +44,7 @@ class SimpleProxy(object):
     connect to the proxy and modify connection headers.
     """
     
-    def on_request(self, req):
+    def on_connect(self, req):
         proxy_auth = _get_proxy_auth()
         if req.uri.scheme == "https":
             proxy = os.environ.get('https_proxy')
@@ -57,6 +57,15 @@ class SimpleProxy(object):
                                         user_agent)
                 proxy_uri = urlparse.urlparse(proxy)
                 proxy_host, proxy_port = util.parse_netloc(proxy_uri)
+                
+                if req.pool is not None:
+                    s = req.pool.get((proxy_host, proxy_port))
+                    if s:
+                        self._sock = s
+                        req.host = proxy_host
+                        req.port = proxy_port
+                        return
+                
                 # Connect to the proxy server, 
                 # very simple recv and error checking
                 
@@ -73,8 +82,9 @@ class SimpleProxy(object):
                 sock._ssl_wrap_socket(p_sock, None, None)
                 
                 # update socket
-                req.socket = p_sock
+                req._sock = p_sock
                 req.host = proxy_host
+                req.port = proxy_port
         else:
             proxy = os.environ.get('http_proxy')
             if proxy:
@@ -84,8 +94,10 @@ class SimpleProxy(object):
                     headers['Proxy-Authorization'] = proxy_auth.strip()
                     req.headers.append(('Proxy-Authorization', 
                              proxy_auth.strip()))
+                             
                 req.host = proxy_host
                 req.port = proxy_port
+                
             
      
 def _get_proxy_auth():

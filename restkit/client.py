@@ -166,6 +166,12 @@ class HttpConnection(object):
          
     def make_connection(self):
         """ initate a connection if needed or reuse a socket"""
+        
+        # apply on connect filters
+        self.filters.apply("on_connect", self)
+        if self._sock is not None:
+            return self._sock
+        
         addr = (self.host, self.port)
         s = None
         # if we defined a pool use it
