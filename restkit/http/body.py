@@ -199,7 +199,6 @@ class Body(object):
     def next(self):
         ret = self.readline()
         if not ret:
-            #self.close()
             raise StopIteration()
         return ret
 
@@ -227,7 +226,7 @@ class Body(object):
         while size > self.buf.tell():
             data = self.reader.read(1024)
             if not len(data):
-                #self.close()
+                self.close()
                 break
             self.buf.write(data)
 
@@ -246,6 +245,7 @@ class Body(object):
         while idx < 0:
             data = self.reader.read(1024)
             if not len(data):
+                self.close()
                 break
             self.buf.write(data)
             idx = self.buf.getvalue().find("\n")
@@ -307,6 +307,7 @@ class GzipBody(Body):
         while size > self.buf.tell():
             data = self.reader.read(1024)
             if not len(data):
+                self.close()
                 break
             data = self._decompress(data)
             self.buf.write(data)
@@ -326,6 +327,7 @@ class GzipBody(Body):
         while idx < 0:
             data = self.reader.read(1024)
             if not len(data):
+                self.close()
                 break
             data = self._decompress(data)
             self.buf.write(data)
