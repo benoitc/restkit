@@ -1,2 +1,2 @@
-from restkit.http.errors import InvalidRequestLine
+from restkit.errors import InvalidRequestLine
 request = InvalidRequestLine

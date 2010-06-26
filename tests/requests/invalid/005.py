@@ -1,2 +1,2 @@
-from restkit.http.errors import InvalidHeaderName
+from restkit.errors import InvalidHeaderName
 request = InvalidHeaderName

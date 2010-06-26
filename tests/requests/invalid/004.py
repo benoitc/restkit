@@ -1,2 +1,2 @@
-from restkit.http.errors import InvalidHTTPVersion
+from restkit.errors import InvalidHTTPVersion
 request = InvalidHTTPVersion

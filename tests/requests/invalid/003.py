@@ -1,2 +1,2 @@
-from restkit.http.errors import InvalidRequestMethod
+from restkit.errors import InvalidRequestMethod
 request = InvalidRequestMethod

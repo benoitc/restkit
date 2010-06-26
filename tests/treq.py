@@ -10,7 +10,7 @@ import os
 import random
 import urlparse
 
-from restkit.http.errors import ParseException
+from restkit.errors import ParseException
 from restkit.http.parser import RequestParser
 
 dirname = os.path.dirname(__file__)

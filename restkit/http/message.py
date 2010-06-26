@@ -12,7 +12,7 @@ except ImportError:
     from StringIO import StringIO
 
 from restkit.http.body import ChunkedReader, LengthReader, EOFReader, Body
-from restkit.http.errors import InvalidHeader, InvalidHeaderName, NoMoreData, \
+from restkit.errors import InvalidHeader, InvalidHeaderName, NoMoreData, \
 InvalidRequestLine, InvalidRequestMethod, InvalidHTTPVersion, InvalidHTTPStatus
 
 class Message(object):

@@ -10,7 +10,7 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from restkit.http.errors import NoMoreData, ChunkMissingTerminator, \
+from restkit.errors import NoMoreData, ChunkMissingTerminator, \
 InvalidChunkSize
 
 class ChunkedReader(object):

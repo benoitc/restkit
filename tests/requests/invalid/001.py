@@ -1,2 +1,2 @@
-from restkit.http.errors import NoMoreData
+from restkit.errors import NoMoreData
 request = NoMoreData
