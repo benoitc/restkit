@@ -22,7 +22,7 @@ class ResponseIter(object):
 
     def __init__(self, response):
         response.CHUNK_SIZE = BLOCK_SIZE
-        self.body = response.body_file
+        self.body = response.body_stream()
 
     def next(self):
         data = self.body.read(BLOCK_SIZE)
@@ -149,18 +149,7 @@ class HostProxy(Proxy):
     def extract_uri(self, environ):
         environ['HTTP_HOST'] = self.net_loc
         return self.uri
-
-
-class CouchdbProxy(HostProxy):
-    """A proxy to redirect all request to CouchDB database"""
-    def __init__(self, db_name='', uri='http://127.0.0.1:5984',
-            allowed_methods=['GET'], **kwargs):
-        uri = uri.rstrip('/')
-        if db_name:
-            uri += '/' + db_name.strip('/')
-        super(CouchdbProxy, self).__init__(uri, allowed_methods=allowed_methods,
-                                        **kwargs)
-
+        
 def get_config(local_config):
     """parse paste config"""
     config = {}
@@ -185,12 +174,4 @@ def make_host_proxy(global_config, uri=None, **local_config):
     config = get_config(local_config)
     print 'Running HostProxy on %s with %s' % (uri, config)
     return HostProxy(uri, **config)
-
-def make_couchdb_proxy(global_config, db_name='', uri='http://127.0.0.1:5984',
-            **local_config):
-    """CouchdbProxy entry_point"""
-    uri = uri.rstrip('/')
-    config = get_config(local_config)
-    print 'Running CouchdbProxy on %s/%s with %s' % (uri, db_name, config)
-    return CouchdbProxy(db_name=db_name, uri=uri, **config)
 

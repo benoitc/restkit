@@ -51,7 +51,6 @@ class HttpResponse(object):
         for key, value in response.headers:
             headers[key.lower()] = value
         self.headers = headers
-        
         self.closed = False
             
     def __getitem__(self, key):
@@ -457,6 +456,8 @@ class HttpConnection(object):
 
         self.final_url = location or self.final_url
         log.debug("Return response: %s" % self.final_url)
+        if self.method == "HEAD":
+            resp.body = StringIO()
 
         return self.response_class(resp, self.final_url)
         

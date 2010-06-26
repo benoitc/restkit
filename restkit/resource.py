@@ -102,7 +102,7 @@ class Resource(object):
                         **self.client_opts)
              
         for attr in ('charset', 'encode_keys', 'safe', 'pool_class',
-                'keepalive', 'max_connections', 'basic_auth_url'):
+                'keepalive', 'basic_auth_url'):
             setattr(obj, attr, getattr(self, attr))           
         return obj
    
@@ -202,12 +202,12 @@ class Resource(object):
 
         if resp.status_int >= 400:
             if resp.status_int == 404:
-                raise ResourceNotFound(resp.body, http_code=404, response=resp)
+                raise ResourceNotFound(resp.body_string(), http_code=404, response=resp)
             elif resp.status_int in (401, 403):
-                raise Unauthorized(resp.body, http_code=resp.status_int,
+                raise Unauthorized(resp.body_string(), http_code=resp.status_int,
                         response=resp)
             else:
-                raise RequestFailed(resp.body, http_code=resp.status_int,
+                raise RequestFailed(resp.body_string(), http_code=resp.status_int,
                     response=resp)
 
         return resp

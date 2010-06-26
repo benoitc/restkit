@@ -79,7 +79,7 @@ This is a relatively long body, that we send to the client..."""
 @t.client_request("/")
 def test_001(u, c):
     r = c.request(u)
-    t.eq(r.body, "welcome")
+    t.eq(r.body_string(), "welcome")
     
 @t.client_request("/unicode")
 def test_002(u, c):
@@ -89,7 +89,7 @@ def test_002(u, c):
 @t.client_request("/éàù")
 def test_003(u, c):
     r = c.request(u)
-    t.eq(r.body, "ok")
+    t.eq(r.body_string(), "ok")
     t.eq(r.status_int, 200)
 
 @t.client_request("/json")
@@ -109,7 +109,7 @@ def test_005(u, c):
 def test_006(u, c):
     r = c.request(u)
     t.eq(r.status_int, 200)
-    t.eq(r.body, "ok")
+    t.eq(r.body_string(), "ok")
     
 
 @t.client_request('http://e-engura.com/images/logo.gif')
@@ -144,26 +144,26 @@ def test_009(u, c):
 
     complete_url = "%s/complete_redirect" % u.rsplit("/", 1)[0]
     t.eq(r.status_int, 200)
-    t.eq(r.body, "ok")
+    t.eq(r.body_string(), "ok")
     t.eq(r.final_url, complete_url)
     
 
 @t.client_request('/')
 def test_010(u, c):
     r = c.request(u, 'POST', body="test")
-    t.eq(r.body, "test")
+    t.eq(r.body_string(), "test")
     
 
 @t.client_request('/bytestring')
 def test_011(u, c):
     r = c.request(u, 'POST', body="éàù@")
-    t.eq(r.body, "éàù@")
+    t.eq(r.body_string(), "éàù@")
     
 
 @t.client_request('/unicode')
 def test_012(u, c):
     r = c.request(u, 'POST', body=u"éàù@")
-    t.eq(r.body, "éàù@")
+    t.eq(r.body_string(), "éàù@")
            
 
 @t.client_request('/json')
@@ -210,7 +210,7 @@ def test_017(u, c):
     r = c.request(u, 'POST', body=LONG_BODY_PART)
     t.eq(r.status_int, 200)
     t.eq(int(r['content-length']), len(LONG_BODY_PART))
-    t.eq(r.body, LONG_BODY_PART)
+    t.eq(r.body_string(), LONG_BODY_PART)
        
 
 
@@ -221,7 +221,7 @@ def test_0018():
 @t.client_request('/')
 def test_019(u, c):
     r = c.request(u, 'PUT', body="test")
-    t.eq(r.body, "test")
+    t.eq(r.body_string(), "test")
     
     
 @t.client_request('/auth')
@@ -246,7 +246,7 @@ def test_021(u, c):
     r = c.request(u, 'POST', body=lines, 
             headers=[("Content-Length", "14")])
     t.eq(r.status_int, 200)
-    t.eq(r.body, 'line 1\n line2\n')
+    t.eq(r.body_string(), 'line 1\n line2\n')
      
 @t.client_request('/chunked')
 def test_022(u, c):
@@ -254,7 +254,7 @@ def test_022(u, c):
     r = c.request(u, 'POST', body=lines, 
             headers=[("Transfer-Encoding", "chunked")])
     t.eq(r.status_int, 200)
-    t.eq(r.body, '7\r\nline 1\n\r\n7\r\n line2\n\r\n0\r\n\r\n')
+    t.eq(r.body_string(), '7\r\nline 1\n\r\n7\r\n line2\n\r\n0\r\n\r\n')
     
 
 

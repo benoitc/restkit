@@ -30,18 +30,18 @@ def test_001():
 def test_002(res):
     r = res.get()
     t.eq(r.status_int, 200)
-    t.eq(r.body, "welcome")
+    t.eq(r.body_string(), "welcome")
 
 @t.resource_request()
 def test_003(res):
     r = res.get('/unicode')
-    t.eq(r.body, "éàù@")
+    t.eq(r.body_string(), "éàù@")
 
 @t.resource_request()
 def test_003(res):
     r = res.get('/éàù')
     t.eq(r.status_int, 200)
-    t.eq(r.body, "ok")
+    t.eq(r.body_string(), "ok")
 
 @t.resource_request()
 def test_003(res):
@@ -71,17 +71,17 @@ def test_006(res):
 @t.resource_request()
 def test_007(res):
     r = res.post(payload="test")
-    t.eq(r.body, "test")
+    t.eq(r.body_string(), "test")
 
 @t.resource_request()
 def test_008(res):
     r = res.post('/bytestring', payload="éàù@")
-    t.eq(r.body, "éàù@")
+    t.eq(r.body_string(), "éàù@")
 
 @t.resource_request()
 def test_009(res):
     r = res.post('/unicode', payload=u"éàù@")
-    t.eq(r.body, "éàù@")
+    t.eq(r.body_string(), "éàù@")
     r = res.post('/unicode', payload=u"éàù@")
     t.eq(r.unicode_body, u"éàù@")
 
@@ -114,7 +114,7 @@ def test_013(res):
 @t.resource_request()
 def test_014(res):
     r = res.put(payload="test")
-    t.eq(r.body, 'test')
+    t.eq(r.body_string(), 'test')
 
 @t.resource_request()
 def test_015(res):
