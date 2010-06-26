@@ -41,14 +41,15 @@ class ChunkedReader(object):
         self.buf.write(rest)
         return ret
     
-    def parse_trailers(self, unreader, data):
+    def parse_trailers(self, unreader, data, eof=False):
         buf = StringIO()
         buf.write(data)
         
         idx = buf.getvalue().find("\r\n\r\n")
         done = buf.getvalue()[:2] == "\r\n"
+
         while idx < 0 and not done:
-            self.get_data(unreader, buf)
+            self.get_data(unreader, buf)  
             idx = buf.getvalue().find("\r\n\r\n")
             done = buf.getvalue()[:2] == "\r\n"
         if done:
@@ -95,7 +96,10 @@ class ChunkedReader(object):
             raise InvalidChunkSize(chunk_size)
 
         if chunk_size == 0:
-            self.parse_trailers(unreader, rest_chunk)
+            try:
+                self.parse_trailers(unreader, rest_chunk)
+            except NoMoreData:
+                pass
             return (0, None)
         return (chunk_size, rest_chunk)
 

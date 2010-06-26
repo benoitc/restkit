@@ -217,7 +217,7 @@ class Response(Message):
         if matchs is None:
             raise InvalidHTTPStatus(bits[1])
         
-        self.status = matchs.group(0)
+        self.status = bits[1]
         self.status_int = int(matchs.group(1))
         self.reason = matchs.group(2)
         

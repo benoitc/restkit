@@ -11,7 +11,7 @@ import random
 import urlparse
 
 from restkit.errors import ParseException
-from restkit.http.parser import RequestParser
+from restkit.http.parser import RequestParser, ResponseParser
 
 dirname = os.path.dirname(__file__)
 random.seed()
@@ -35,11 +35,17 @@ def uri(data):
     ret["fragment"] = parts.fragment or None
     return ret
 
-def load_py(fname):
+def load_request_py(fname):
     config = globals().copy()
     config["uri"] = uri
     execfile(fname, config)
     return config["request"]
+    
+def load_response_py(fname):
+    config = globals().copy()
+    config["uri"] = uri
+    execfile(fname, config)
+    return config["response"]
 
 class request(object):
     def __init__(self, fname, expect):
@@ -316,3 +322,18 @@ class badrequest(object):
                 raise TypeError("Invalid error result: %s: %s" % (exp, inst))
         t.eq(len(cases), 0)
 
+class response(request):
+    
+    def check(self, sender, sizer, matcher):
+        cases = self.expect[:]
+        p = ResponseParser(sender())
+        for resp in p:
+            self.same(resp, sizer, matcher, cases.pop(0))
+        t.eq(len(cases), 0)
+
+    def same(self, resp, sizer, matcher, exp):
+        t.eq(resp.status, exp["status"])
+        t.eq(resp.version, exp["version"])
+        t.eq(resp.headers, exp["headers"])
+        matcher(resp, exp["body"], sizer)
+        t.eq(resp.trailers, exp.get("trailers", []))
