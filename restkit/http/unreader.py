@@ -75,8 +75,7 @@ class SocketUnreader(Unreader):
         try:
             self.sock.close()
         except socket.error:
-            pass
-     
+            pass 
 
 class IterUnreader(Unreader):
     def __init__(self, iterable, release_fun=None):

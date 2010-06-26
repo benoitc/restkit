@@ -49,7 +49,7 @@ class oauth_request(object):
         
     def __call__(self, func):
         def run():
-            o = OAuthFilter(('*', self.consumer))
+            o = OAuthFilter('*', self.consumer)
             func(o, self.url, urllib.urlencode(self.body))
         run.func_name = func.func_name
         return run
