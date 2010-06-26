@@ -51,12 +51,12 @@ setup(
     packages = find_packages(exclude=['tests']),
     entry_points = {
         'console_scripts': [
-            'restcli = restkit.console:main',
+            'restcli = restkit.contrib.console:main',
         ],
         'paste.app_factory': [
-            'proxy = restkit.ext.wsgi_proxy:make_proxy',
-            'host_proxy = restkit.ext.wsgi_proxy:make_host_proxy',
-            'couchdb_proxy = restkit.ext.wsgi_proxy:make_couchdb_proxy',
+            'proxy = restkit.contrib.wsgi_proxy:make_proxy',
+            'host_proxy = restkit.contrib.wsgi_proxy:make_host_proxy',
+            'couchdb_proxy = restkit.contrib.wsgi_proxy:make_couchdb_proxy',
         ],
     },
 

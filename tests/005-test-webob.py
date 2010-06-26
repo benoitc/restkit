@@ -6,7 +6,7 @@
 import unittest
 
 import webob.exc
-from restkit.ext.webob_helper import wrap_exceptions
+from restkit.contrib.webob_helper import wrap_exceptions
 
 
 wrap_exceptions()

@@ -1,11 +1,16 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -
+#
+# This file is part of restkit released under the MIT license. 
+# See the NOTICE for more information.
+
 try:
     from webob import Response as BaseResponse
     from webob import Request as BaseRequest
 except ImportError:
     raise ImportError('WebOb (http://pypi.python.org/pypi/WebOb) is required')
 from StringIO import StringIO
-from restkit.ext.wsgi_proxy import Proxy
+from restkit.contrib.wsgi_proxy import Proxy
 from restkit import request
 import urlparse
 import urllib

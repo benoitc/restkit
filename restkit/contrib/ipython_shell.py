@@ -1,4 +1,9 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -
+#
+# This file is part of restkit released under the MIT license. 
+# See the NOTICE for more information.
+
 import sys
 
 try:
@@ -14,7 +19,7 @@ except ImportError:
 
 from restkit import __version__, request, set_logging
 from restkit.console import common_indent, json
-from restkit.ext.webob_api import Request as BaseRequest
+from restkit.contrib.webob_api import Request as BaseRequest
 from webob import Response as BaseResponse
 from StringIO import StringIO
 import IPython

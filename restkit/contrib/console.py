@@ -184,7 +184,7 @@ def main():
 
     if opts.shell:
         try:
-            from restkit.ext import ipython_shell as shell
+            from restkit.contrib import ipython_shell as shell
             shell.main(options=opts, *args)
         except Exception, e:
             print >>sys.stderr, str(e)

@@ -5,7 +5,7 @@
 
 import t
 from _server_test import HOST, PORT
-from restkit.ext import wsgi_proxy
+from restkit.contrib import wsgi_proxy
 
 def with_webob(func):
     print func
