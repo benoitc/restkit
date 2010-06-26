@@ -15,6 +15,7 @@ InvalidChunkSize
 
 class ChunkedReader(object):
     def __init__(self, req, unreader):
+        self.unreader = unreader
         self.req = req
         self.parser = self.parse_chunked(unreader)
         self.buf = StringIO()

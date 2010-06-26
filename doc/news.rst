@@ -3,11 +3,22 @@
 News
 ====
 
-2.0 / 2010-06-10
+2.0 / 2010-06-28
 ----------------
 
+- Complete refactoring of pool. Now handle more concurrent connections (priotity to read)
+- Oauth2 filter has been simplfied, see example
 - Added full ssl support in restkit. It needs `ssl <http://pypi.python.org/pypi/ssl>`_ module on Python 2.5x
 - New HTTP parser.
+- Added close method to response object to make sure the socket is correctly released.
+- Improved default http client, so form objects can be directly handled.
+- Improved request function
+
+
+Breaking changes:
+- Default HttpResponse isn't any more persistent. You have to save it to reuse it. 
+- Resource arguments refactored
+- Complete refactoring of filters. Now they have to be declared when you create a resource or http client. 
 
 1.3.1 / 2010-04-09
 ------------------
