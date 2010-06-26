@@ -130,8 +130,9 @@ def test_008(u, c):
     t.eq(r.status_int, 200)
     fd, fname = tempfile.mkstemp(suffix='.gif')
     f = os.fdopen(fd, "wb")
-    for block in r.body_file:
-        f.write(block)
+    with r.body_stream() as body:
+        for block in body:
+            f.write(block)
     f.close()
     t.eq(imghdr.what(fname), 'gif')
     

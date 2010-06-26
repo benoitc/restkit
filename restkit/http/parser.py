@@ -9,12 +9,12 @@ from restkit.http.message import Request, Response
 from restkit.http.unreader import SocketUnreader, IterUnreader
 
 class Parser(object):
-    def __init__(self, mesg_class, source):
+    def __init__(self, mesg_class, source, release_source=None):
         self.mesg_class = mesg_class
         if isinstance(source, socket.socket):
-            self.unreader = SocketUnreader(source)
+            self.unreader = SocketUnreader(source, release_fun=release_source)
         else:
-            self.unreader = IterUnreader(source)
+            self.unreader = IterUnreader(source, release_fun=release_source)
         self.mesg = None
 
     def __iter__(self):

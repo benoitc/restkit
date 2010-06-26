@@ -22,6 +22,7 @@ class Message(object):
         self.headers = []
         self.trailers = []
         self.body = None
+        self.encoding = None
 
         self.hdrre = re.compile("[\x00-\x1F\x7F()<>@,;:\[\]={} \t\\\\\"]")
 
@@ -118,13 +119,15 @@ class Message(object):
                     clength = None
             elif name.upper() == "TRANSFER-ENCODING":
                 chunked = value.lower() == "chunked"
+            elif name.upper() == "CONTENT-ENCODING":
+                self.encoding = value.lower()
         
         if chunked:
             self.body = Body(ChunkedReader(self, self.unreader))
         elif clength is not None:
-            self.body = Body(LengthReader(self.unreader, clength))
+            self.body = Body(LengthReader(self, self.unreader, clength))
         else:
-            self.body = Body(EOFReader(self.unreader))
+            self.body = Body(EOFReader(self, self.unreader))
 
     def should_close(self):
         for (h, v) in self.headers:
@@ -185,7 +188,7 @@ class Request(Message):
     def set_body_reader(self):
         super(Request, self).set_body_reader()
         if isinstance(self.body.reader, EOFReader):
-            self.body = Body(LengthReader(self.unreader, 0))
+            self.body = Body(LengthReader(self, self.unreader, 0))
 
 class Response(Message):
     
@@ -217,5 +220,10 @@ class Response(Message):
         self.status = matchs.group(0)
         self.status_int = int(matchs.group(1))
         self.reason = matchs.group(2)
+        
+    def set_body_reader(self):
+        super(Response, self).set_body_reader()
+        if self.encoding == "gzip":
+            self.body = GzipBody(self.body.reader)
         
         

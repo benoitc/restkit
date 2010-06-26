@@ -19,7 +19,7 @@ import urlparse
 
 from restkit import __version__
 from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
-BadStatusLine
+BadStatusLine, AlreadyRead
 from restkit.filters import Filters
 from restkit.forms import MultipartForm, multipart_form_encode, form_encode
 from restkit.util import sock
@@ -39,7 +39,7 @@ class HttpResponse(object):
     charset = "utf8"
     unicode_errors = 'strict'
     
-    def __init__(self, response, body, final_url):
+    def __init__(self, response, final_url):
         self.response = response
         self.status = response.status
         self.status_int = response.status_int
@@ -52,37 +52,48 @@ class HttpResponse(object):
             headers[key.lower()] = value
         self.headers = headers
         
-        encoding = headers.get('content-encoding', None)
-        if encoding in ('gzip', 'deflate'):
-            self._body = gzip.GzipFile(fileobj=body)
-        else:
-            self._body = body
-
+        self.closed = False
             
     def __getitem__(self, key):
         try:
             return getattr(self, key)
         except AttributeError:
             pass
-        return self.headers[key]
+        return self.headers[key.lower()]
     
     def __contains__(self, key):
-        return (key in self.headers)
+        return (key.lower() in self.headers)
 
     def __iter__(self):
         for item in list(self.headers.items()):
             yield item
+            
+    def body_string(self):
+        """ body in bytestring """
+        if self.closed:
+            raise AlreadyRead("The response have already been read")
+        body = self.response.body.read()
+        self.close()
+        return body
+        
+    def body_stream(self):
+        if self.closed:
+            raise AlreadyRead("The response have already been read")
+        return self.response.body
+        
+    def close(self):
+        self.response.body.close()
           
+    # TODO: deprecate following methods
     @property
     def body(self):
         """ body in bytestring """
-        self._body.seek(0)
-        return self._body.read()
+        return self.body_string()
         
     @property
     def body_file(self):
         """ return body as a file like object"""
-        return self._body
+        return self.body_stream()
         
     @property
     def unicode_body(self):
@@ -90,7 +101,12 @@ class HttpResponse(object):
         if not self.charset:
             raise AttributeError(
             "You cannot access HttpResponse.unicode_body unless charset is set")
-        return self.body.decode(self.charset, self.unicode_errors)
+        body = self.body
+        return body.decode(self.charset, self.unicode_errors)
+        
+    
+        
+        
 
 class HttpConnection(object):
     """ Http Connection object. """
@@ -407,7 +423,9 @@ class HttpConnection(object):
         Get headers, set Body object and return HttpResponse
         """
         # read headers
-        parser = http.ResponseParser(self._sock)
+        parser = http.ResponseParser(self._sock, 
+                        release_source = lambda:self.release_connection(
+                        self.uri.netloc, self._sock))
         resp = parser.next()
 
         log.debug("Start response: %s", resp.status)
@@ -439,14 +457,7 @@ class HttpConnection(object):
 
         self.final_url = location or self.final_url
         log.debug("Return response: %s" % self.final_url)
-        
-        if self.method == "HEAD":
-            body = StringIO()
-        else:
-            body = tee.TeeInput(resp, 
-                release_connection = lambda:self.release_connection(
-                self.uri.netloc, self._sock))
-            
-        return self.response_class(resp, body, self.final_url)
+
+        return self.response_class(resp, self.final_url)
         
         

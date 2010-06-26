@@ -83,3 +83,6 @@ class ParserError(Exception):
     
 class UnexpectedEOF(object):
     """ exception raised when remote closed the connection """
+    
+class AlreadyRead(object):
+    """ raised when a response have already been read """

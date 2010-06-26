@@ -15,8 +15,9 @@ except ImportError:
 # a given type of data source.
 
 class Unreader(object):
-    def __init__(self):
+    def __init__(self, release_fun=None):
         self.buf = StringIO()
+        self.release_fun = release_fun
     
     def chunk(self):
         raise NotImplementedError()
@@ -57,9 +58,13 @@ class Unreader(object):
     def close(self):
         return None
 
+    def release(self):
+        if callable(self.release_fun):
+            self.release_fun()  
+
 class SocketUnreader(Unreader):
-    def __init__(self, sock, max_chunk=8192):
-        super(SocketUnreader, self).__init__()
+    def __init__(self, sock, release_fun=None, max_chunk=8192):
+        super(SocketUnreader, self).__init__(release_fun=release_fun)
         self.sock = sock
         self.mxchunk = max_chunk
     
@@ -71,12 +76,13 @@ class SocketUnreader(Unreader):
             self.sock.close()
         except socket.error:
             pass
+     
 
 class IterUnreader(Unreader):
-    def __init__(self, iterable):
-        super(IterUnreader, self).__init__()
+    def __init__(self, iterable, release_fun=None):
+        super(IterUnreader, self).__init__(release_fun=release_fun)
         self.iter = iter(iterable)
-
+        
     def chunk(self):
         if not self.iter:
             return ""
@@ -85,3 +91,5 @@ class IterUnreader(Unreader):
         except StopIteration:
             self.iter = None
             return ""
+        
+        

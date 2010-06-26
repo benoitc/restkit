@@ -106,7 +106,8 @@ class ChunkedReader(object):
         buf.write(data)
 
 class LengthReader(object):
-    def __init__(self, unreader, length):
+    def __init__(self, req, unreader, length):
+        self.req = req
         self.unreader = unreader
         self.length = length
     
@@ -135,7 +136,8 @@ class LengthReader(object):
         return ret
 
 class EOFReader(object):
-    def __init__(self, unreader):
+    def __init__(self, req, unreader):
+        self.req = req
         self.unreader = unreader
         self.buf = StringIO()
         self.finished = False
@@ -169,14 +171,35 @@ class EOFReader(object):
 class Body(object):
     def __init__(self, reader):
         self.reader = reader
+        self.req = reader.req
         self.buf = StringIO()
+        self.closed = False
+        
+    def close(self):
+       """ Close the socket if needed """
+       if self.req.should_close():
+           self.req.unreader.close()
+       elif not self.closed:
+           # release connection
+           self.req.unreader.release()
     
+       self.closed = True
+            
+    def __enter__(self):
+        return self
+        
+    def __exit__(self, exc_type, exc_val, traceback):
+        if exc_type is None:
+            """ close on exit and release connection if needed """
+            self.close()
+
     def __iter__(self):
         return self
     
     def next(self):
         ret = self.readline()
         if not ret:
+            #self.close()
             raise StopIteration()
         return ret
 
@@ -204,6 +227,7 @@ class Body(object):
         while size > self.buf.tell():
             data = self.reader.read(1024)
             if not len(data):
+                #self.close()
                 break
             self.buf.write(data)
 
@@ -258,4 +282,74 @@ class Body(object):
                 line, data = data[:pos+1], data[pos+1:]
                 ret.append(line)
         return ret
+        
+        
+class GzipBody(Body):
+    def __init__(self, reader):
+        Body.__init__(self, reader)
+        self._d = zlib.decompressobj(16+zlib.MAX_WBITS)
+        
+    def _decompress(self, data):
+        return self._d.decompress(data) 
+        
+    def read(self, size=None):
+        size = self.getsize(size)
+        if size == 0:
+            return ""
 
+        if size < self.buf.tell():
+            data = self.buf.getvalue()
+            ret, rest = data[:size], data[size:]
+            self.buf.truncate(0)
+            self.buf.write(rest)
+            return ret
+
+        while size > self.buf.tell():
+            data = self.reader.read(1024)
+            if not len(data):
+                break
+            data = self._decompress(data)
+            self.buf.write(data)
+
+        data = self.buf.getvalue()
+        ret, rest = data[:size], data[size:]
+        self.buf.truncate(0)
+        self.buf.write(rest)
+        return ret
+    
+    def readline(self, size=None):
+        size = self.getsize(size)
+        if size == 0:
+            return ""
+        
+        idx = self.buf.getvalue().find("\n")
+        while idx < 0:
+            data = self.reader.read(1024)
+            if not len(data):
+                break
+            data = self._decompress(data)
+            self.buf.write(data)
+            idx = self.buf.getvalue().find("\n")
+            if size < self.buf.tell():
+                break
+        
+        # If we didn't find it, and we got here, we've
+        # exceeded size or run out of data.
+        if idx < 0:
+            rlen = min(size, self.buf.tell())
+        else:
+            rlen = idx + 1
+
+            # If rlen is beyond our size threshold, trim back
+            if rlen > size:
+                rlen = size
+        
+        data = self.buf.getvalue()
+        ret, rest = data[:rlen], data[rlen:]
+        
+        self.buf.truncate(0)
+        self.buf.write(rest)
+        return ret
+        
+        
+    

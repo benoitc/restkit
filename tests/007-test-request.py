@@ -74,8 +74,9 @@ def test_002():
     u = "http://%s:%s" % (HOST, PORT)
     r = request(u, 'POST', body=LONG_BODY_PART)
     t.eq(r.status_int, 200)
-    t.eq(len(r.body), len(LONG_BODY_PART))
-    t.eq(r.body, LONG_BODY_PART)
+    body = r.body_string()
+    t.eq(len(body), len(LONG_BODY_PART))
+    t.eq(body, LONG_BODY_PART)
     
 def test_003():
      u = "http://test:test@%s:%s/auth" % (HOST, PORT)

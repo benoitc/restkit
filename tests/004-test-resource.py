@@ -82,6 +82,7 @@ def test_008(res):
 def test_009(res):
     r = res.post('/unicode', payload=u"éàù@")
     t.eq(r.body, "éàù@")
+    r = res.post('/unicode', payload=u"éàù@")
     t.eq(r.unicode_body, u"éàù@")
 
 @t.resource_request()
