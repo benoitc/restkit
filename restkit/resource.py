@@ -74,22 +74,12 @@ class Resource(object):
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
         
-    def add_filter(self, f):
-        """ add an htt filter """
-        filters = self.client_opts.get('filters', [])
-        filters.add(f)
-        self.client_opts['filters'] = filters
-
-    add_authorization = util.deprecated_property(
-        add_filter, 'add_authorization', 'use add_filter() instead',
-        warning=False)
+    def _set_default_attrs(self, obj):
+        for attr_name in ('charset', 'encode_keys', 'pool_class',
+                'keepalive', 'basic_auth_url'):
+            setattr(obj, attr_name, getattr(self, attr_name))
+        return obj
         
-    def remmove_filter(self, f):
-        """ remove an http filter """
-        filters = self.client_opts.get('filters', [])
-        filters.remove(f)
-        self.client_opts['filters'] = filters
-    
     def clone(self):
         """if you want to add a path to resource uri, you can do:
 
@@ -100,11 +90,7 @@ class Resource(object):
         """
         obj = self.__class__(self.uri, headers=self._headers, 
                         **self.client_opts)
-             
-        for attr in ('charset', 'encode_keys', 'safe', 'pool_class',
-                'keepalive', 'basic_auth_url'):
-            setattr(obj, attr, getattr(self, attr))           
-        return obj
+        return self._set_default_attrs(obj)
    
     def __call__(self, path):
         """if you want to add a path to resource uri, you can do:
@@ -116,10 +102,7 @@ class Resource(object):
 
         new_uri = self._make_uri(self.uri, path)
         obj = type(self)(new_uri, headers=self._headers, **self.client_opts)
-        for attr in ('charset', 'encode_keys', 'safe', 'pool_class',
-                'keepalive', 'max_connections', 'basic_auth_url'):
-            setattr(obj, attr, getattr(self, attr))
-        return obj
+        return self._set_default_attrs(obj)
  
     def get(self, path=None, headers=None, **params):
         """ HTTP GET         
