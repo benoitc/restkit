@@ -11,7 +11,7 @@ __version__ =  ".".join(map(str, version_info))
 try:
     from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceError
-    from restkit.client import HttpConnection, HttpResponse
+    from restkit.client import HttpConnection, HttpResponse, MAX_FOLLOW_REDIRECTS
     from restkit.resource import Resource
     from restkit.pool.simple import SimplePool
     from restkit.filters import BasicAuth, SimpleProxy, OAuthFilter
@@ -47,8 +47,12 @@ def set_logging(level, handler=None):
     handler.setFormatter(logging.Formatter(format, datefmt))
     logger.addHandler(handler)
     
-def request(url, method='GET', body=None, headers=None, pool_instance=None, 
-        follow_redirect=False, filters=None, **ssl_args):
+from restkit.util.sock import _GLOBAL_DEFAULT_TIMEOUT
+    
+def request(url, method='GET', body=None, headers=None,  
+        timeout=_GLOBAL_DEFAULT_TIMEOUT, filters=None, follow_redirect=False, 
+        force_follow_redirect=False, max_follow_redirect=MAX_FOLLOW_REDIRECTS,
+        pool_instance=None, response_class=None, **ssl_args):
     """ Quick shortcut method to pass a request
     
     :param url: str, url string
@@ -75,7 +79,14 @@ def request(url, method='GET', body=None, headers=None, pool_instance=None,
             u.path, u.params, u.query, u.fragment))
         filters.append(BasicAuth(u.username, password))
     
-    http_client = HttpConnection(follow_redirect=follow_redirect,
-            filters=filters, pool_instance=pool_instance, **ssl_args)
+    http_client = HttpConnection(
+            timeout=timeout, 
+            filters=filters,
+            follow_redirect=follow_redirect, 
+            force_follow_redirect=force_follow_redirect,
+            max_follow_redirect=max_follow_redirect,
+            pool_instance=pool_instance, 
+            response_class=response_class,
+            **ssl_args)
     return http_client.request(url, method=method, body=body, 
         headers=headers)
