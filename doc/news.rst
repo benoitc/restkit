@@ -17,6 +17,7 @@ News
 
 Breaking changes:
 - **Default HttpResponse isn't any more persistent**. You have to save it to reuse it. a Persistent response will be provided in restkit 2.1 .
+- Reprecate HttpResponse body, unicode_body and body_file properties. They are replaced  by body_string and body_stream methods.
 - Resource arguments refactored
 - Complete refactoring of filters. Now they have to be declared when you create a resource or http client. An on_connect method can be used in filter now. This method is used before the connection happen, it's useful for proxy support for example. 
 - Oauth2 filter has been simplfied, see `example <auth.html>`_ 
