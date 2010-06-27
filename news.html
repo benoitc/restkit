@@ -95,7 +95,8 @@
 <li>Improved default http client, so form objects can be directly handled.</li>
 <li>Improved request function</li>
 </ul>
-<p>Breaking changes:</p>
+<div class="section" id="breaking-changes">
+<h3>Breaking changes:<a class="headerlink" href="#breaking-changes" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><strong>Default HttpResponse isn&#8217;t any more persistent</strong>. You have to save it to reuse it. a Persistent response will be provided in restkit 2.1 .</li>
 <li>Reprecate HttpResponse body, unicode_body and body_file properties. They are replaced  by body_string and body_stream methods.</li>
@@ -103,6 +104,7 @@
 <li>Complete refactoring of filters. Now they have to be declared when you create a resource or http client. An on_connect method can be used in filter now. This method is used before the connection happen, it&#8217;s useful for proxy support for example.</li>
 <li>Oauth2 filter has been simplfied, see <a class="reference external" href="auth.html">example</a></li>
 </ul>
+</div>
 </div>
 <div class="section" id="id3">
 <h2>1.3.1 / 2010-04-09<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
@@ -177,7 +179,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">News</a><ul>
-<li><a class="reference internal" href="#id2">2.0 / 2010-06-28</a></li>
+<li><a class="reference internal" href="#id2">2.0 / 2010-06-28</a><ul>
+<li><a class="reference internal" href="#breaking-changes">Breaking changes:</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#id3">1.3.1 / 2010-04-09</a></li>
 <li><a class="reference internal" href="#id4">1.3 / 2010-04-02</a></li>
 <li><a class="reference internal" href="#id5">1.2.1 / 2010-03-08</a></li>
