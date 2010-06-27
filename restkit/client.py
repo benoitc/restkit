@@ -26,6 +26,7 @@ from restkit.forms import multipart_form_encode, form_encode
 from restkit.util import sock
 from restkit import tee
 from restkit import util
+from restkit.util.misc import deprecated_property
 from restkit import http
 
 MAX_FOLLOW_REDIRECTS = 5
@@ -68,32 +69,43 @@ class HttpResponse(object):
         for item in list(self.headers.items()):
             yield item
             
-    def body_string(self):
-        """ body in bytestring """
+    def body_string(self, charset=None, unicode_errors="strict"):
+        """ return body string, by default in bytestring """
         if self.closed:
             raise AlreadyRead("The response have already been read")
         body = self.response.body.read()
+        if charset is not None:
+            body = body.decode(charset, unicode_errors)
         self.close()
         return body
         
     def body_stream(self):
+        """ return full body stream """
         if self.closed:
             raise AlreadyRead("The response have already been read")
         return self.response.body
         
     def close(self):
+        """ release the socket """
         self.response.body.close()
           
-    # TODO: deprecate following methods
     @property
     def body(self):
         """ body in bytestring """
         return self.body_string()
         
+    body = deprecated_property(
+            body, 'body', 'use body_string() instead',
+            warning=True)
+        
     @property
     def body_file(self):
         """ return body as a file like object"""
         return self.body_stream()
+        
+    body_file = deprecated_property(
+            body_file, 'body_file', 'use body_stream() instead',
+            warning=True)   
         
     @property
     def unicode_body(self):
@@ -103,10 +115,10 @@ class HttpResponse(object):
             "You cannot access HttpResponse.unicode_body unless charset is set")
         body = self.body
         return body.decode(self.charset, self.unicode_errors)
-        
-    
-        
-        
+            
+    unicode_body = deprecated_property(
+            unicode_body, 'unicode_body', 'replaced by body_string()',
+            warning=True)
 
 class HttpConnection(object):
     """ Http Connection object. """

@@ -63,7 +63,7 @@ def test_001(o, u, b):
 def test_002(o, u, b):
     r = request(u, "POST", filters=[o])
     t.eq(r.status_int, 200)
-    f = dict(parse_qsl(r.body))
+    f = dict(parse_qsl(r.body_string()))
     t.isin('oauth_token', f)
     t.isin('oauth_token_secret', f)
     

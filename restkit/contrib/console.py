@@ -80,7 +80,7 @@ def indent(mimetype, data):
     
 def prettify(response, cli=True):
     if not pygments or not 'content-type' in response.headers:
-        return response.body
+        return response.body_string()
         
     ctype = response.headers['content-type']
     try:
@@ -89,7 +89,7 @@ def prettify(response, cli=True):
         mimetype = ctype.split(";")[0]
         
     # indent body
-    body = indent(mimetype, response.body)
+    body = indent(mimetype, response.body_string())
     
     # get pygments mimetype
     mimetype = pretties.get(mimetype, mimetype)
@@ -99,7 +99,7 @@ def prettify(response, cli=True):
         body = pygments.highlight(body, lexer, TerminalFormatter())
         return body
     except:
-        return response.body
+        return body
 
 def as_bool(value):
     if value.lower() in ('true', '1'):
@@ -236,8 +236,9 @@ def main():
                     for k, v in resp.headerslist:
                         f.write( "%s: %s" % (k, v))
                 else:
-                    for block in resp.body_file:
-                        f.write(block)
+                    with resp.body_stream() as body:
+                        for block in body:
+                            f.write(block)
         else:
             if opts.server_response:
                 if opts.prettify:
@@ -256,12 +257,12 @@ def main():
                     if opts.prettify:
                         print prettify(resp)
                     else:
-                        print resp.body
+                        print resp.body_string()
             else:
                 if opts.prettify:
                     print prettify(resp)
                 else:
-                    print resp.body
+                    print resp.body_string()
         
     except Exception, e:
         sys.stderr.write("An error happened: %s" % str(e))

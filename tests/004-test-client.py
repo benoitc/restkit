@@ -84,7 +84,7 @@ def test_001(u, c):
 @t.client_request("/unicode")
 def test_002(u, c):
     r = c.request(u)
-    t.eq(r.unicode_body, u"éàù@")
+    t.eq(r.body_string(charset="utf-8"), u"éàù@")
     
 @t.client_request("/éàù")
 def test_003(u, c):
@@ -119,7 +119,7 @@ def test_007(u, c):
     t.eq(r.status_int, 200)
     fd, fname = tempfile.mkstemp(suffix='.gif')
     f = os.fdopen(fd, "wb")
-    f.write(r.body)
+    f.write(r.body_string())
     f.close()
     t.eq(imghdr.what(fname), 'gif')
     
@@ -202,7 +202,7 @@ def test_016(u, c):
         l = int(os.fstat(f.fileno())[6])
         r = c.request(u, 'POST', body=f)
         t.eq(r.status_int, 200)
-        t.eq(int(r.body), l)
+        t.eq(int(r.body_string()), l)
     
 
 @t.client_request('/large')

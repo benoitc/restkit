@@ -68,7 +68,7 @@ def test_001():
     u = "http://%s:%s" % (HOST, PORT)
     r = request(u)
     t.eq(r.status_int, 200)
-    t.eq(r.body, "welcome")
+    t.eq(r.body_string(), "welcome")
     
 def test_002():
     u = "http://%s:%s" % (HOST, PORT)
