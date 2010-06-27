@@ -6,7 +6,7 @@ News
 2.0 / 2010-06-28
 ----------------
 
-- Complete refactoring of pool. Now handle more concurrent connections (priotity to read)
+- Complete refactoring of pool. Now handle more concurrent connections (priority to read)
 
 - Added full ssl support in restkit. It needs `ssl <http://pypi.python.org/pypi/ssl>`_ module on Python 2.5x
 - New HTTP parser.
