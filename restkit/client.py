@@ -75,7 +75,10 @@ class HttpResponse(object):
             raise AlreadyRead("The response have already been read")
         body = self.response.body.read()
         if charset is not None:
-            body = body.decode(charset, unicode_errors)
+            try:
+                body = body.decode(charset, unicode_errors)
+            except UnicodeDecodeError:
+                pass
         self.close()
         return body
         
@@ -113,7 +116,7 @@ class HttpResponse(object):
         if not self.charset:
             raise AttributeError(
             "You cannot access HttpResponse.unicode_body unless charset is set")
-        body = self.body
+        body = self.body_string()
         return body.decode(self.charset, self.unicode_errors)
             
     unicode_body = deprecated_property(
