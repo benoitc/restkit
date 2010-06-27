@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>wsgi_proxy &mdash; restkit v2.0.0 documentation</title>
+    <link rel="stylesheet" href="static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <link rel="top" title="restkit v2.0.0 documentation" href="index.html" />
+    <link rel="prev" title="restkit shell" href="shell.html" />
+
+  <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
+  
+  <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
+  <link rel="stylesheet" href="static/blitzer/jquery-ui-custom.css"
+   type="text/css" />
+  <link rel="stylesheet" href="static/restkit.css"
+   type="text/css" />
+  
+   
+   
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAlwR2WqkJqSQkp3ltvd0NQxTdZZbkdkYaSGUN67ZRlKqnJX74gRQ-NQUM6HVgKkUT9t2gAa363uI1NA" type="text/javascript"></script>
+  
+  <script>
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+  </script
+  
+  <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+  </head>
+  <body>
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="index.html">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <div id="menu">
+    <div id="cse">
+      <form action="http://www.google.com/cse" id="cse-search-box">
+          <input type="hidden" name="cx" value="005434981105004447958:7wnbzt3zexa" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="25" />
+          <input type="submit" name="sa" value="Search" />
+      </form>
+      <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+    </div>
+    <ul id="actions">
+      <li><a href="index.html">Usage</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="api/index.html">Api</a></li>
+      <li><a href="news.html">News</a></li>
+    
+    </ul>
+
+  </div>
+  
+
+</div>
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="wsgi-proxy">
+<h1>wsgi_proxy<a class="headerlink" href="#wsgi-proxy" title="Permalink to this headline">¶</a></h1>
+<p>Restkit version 1.2 introduced a WSGI proxy extension written by <a class="reference external" href="http://www.gawel.org/">Gael
+Pasgrimaud</a> .This extension proxy WSGI requests to a
+remote server.</p>
+<p>Here is a quick example. You can read full post <a class="reference external" href="http://www.gawel.org/weblog/en/2010/03/using_restkit_proxy_in_your_wsgi_app">here</a>
+.</p>
+<p>We will do here a simple proxy for <a class="reference external" href="http://couchdb.apache.org">CouchDB</a>. We
+use <a class="reference external" href="http://pythonpaste.org/webob/">webob</a> and <a class="reference external" href="http://gunicorn.org">gunicorn</a> to launch it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urlparse</span>
+
+<span class="kn">from</span> <span class="nn">webob</span> <span class="kn">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">restkit.pool.simple</span> <span class="kn">import</span> <span class="n">SimplePool</span>
+<span class="kn">from</span> <span class="nn">restkit.ext.wsgi_proxy</span> <span class="kn">import</span> <span class="n">HostProxy</span>
+
+<span class="n">pool</span> <span class="o">=</span> <span class="n">SimplePool</span><span class="p">(</span><span class="n">keepalive</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">proxy</span> <span class="o">=</span> <span class="n">HostProxy</span><span class="p">(</span><span class="s">&quot;http://127.0.0.1:5984&quot;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;RAW_URI&#39;</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="c"># gunicorn so we can use real path non encoded</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;RAW_URI&#39;</span><span class="p">])</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">path</span>
+
+    <span class="c"># do smth like adding oauth headers ..</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">proxy</span><span class="p">)</span>
+
+    <span class="c"># rewrite response</span>
+    <span class="c"># do auth ...</span>
+    <span class="k">return</span> <span class="n">resp</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And then launch your application:</p>
+<div class="highlight-python"><pre>gunicorn -w 12 -a "egg:gunicorn#eventlet" couchdbproxy:application</pre>
+</div>
+<p>And access to your couchdb at <cite>http://127.0.0.1:8000</cite> .</p>
+<p>You can also use a Paste configuration:</p>
+<div class="highlight-python"><pre>[app:proxy]
+use = egg:restkit#host_proxy
+uri = http://www.example.com/example_db
+strip_script_name = false
+allowed_methods = get</pre>
+</div>
+<p>Here is a more advanced example to show how to use the Proxy class to build a
+distributed proxy. <cite>/a/db</cite> will proxify <cite>http://a.mypool.org/db</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urlparse</span>
+
+<span class="kn">from</span> <span class="nn">webob</span> <span class="kn">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">restkit.pool.simple</span> <span class="kn">import</span> <span class="n">SimplePool</span>
+<span class="kn">from</span> <span class="nn">restkit.ext.wsgi_proxy</span> <span class="kn">import</span> <span class="n">Proxy</span>
+
+<span class="n">pool</span> <span class="o">=</span> <span class="n">SimplePool</span><span class="p">(</span><span class="n">keepalive</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">proxy</span> <span class="o">=</span> <span class="n">Proxy</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">,</span> <span class="n">strip_script_name</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">path_info_pop</span><span class="p">()</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;SERVER_NAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.mypool.org:80&#39;</span> <span class="o">%</span> <span class="n">req</span><span class="o">.</span><span class="n">script_name</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">Proxy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resp</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="shell.html"
+                        title="previous chapter">restkit shell</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/wsgi_proxy.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </div>
+  <div id="apibox"></div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+
+
+  </body>
+</html>

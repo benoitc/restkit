@@ -1,0 +1,177 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Build resource object &mdash; restkit v2.0.0 documentation</title>
+    <link rel="stylesheet" href="static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <link rel="top" title="restkit v2.0.0 documentation" href="index.html" />
+    <link rel="next" title="Reuses connections" href="pool.html" />
+    <link rel="prev" title="Welcome to RESTKit’s documentation!" href="index.html" />
+
+  <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
+  
+  <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
+  <link rel="stylesheet" href="static/blitzer/jquery-ui-custom.css"
+   type="text/css" />
+  <link rel="stylesheet" href="static/restkit.css"
+   type="text/css" />
+  
+   
+   
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAlwR2WqkJqSQkp3ltvd0NQxTdZZbkdkYaSGUN67ZRlKqnJX74gRQ-NQUM6HVgKkUT9t2gAa363uI1NA" type="text/javascript"></script>
+  
+  <script>
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+  </script
+  
+  <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+  </head>
+  <body>
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="index.html">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <div id="menu">
+    <div id="cse">
+      <form action="http://www.google.com/cse" id="cse-search-box">
+          <input type="hidden" name="cx" value="005434981105004447958:7wnbzt3zexa" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="25" />
+          <input type="submit" name="sa" value="Search" />
+      </form>
+      <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+    </div>
+    <ul id="actions">
+      <li><a href="index.html">Usage</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="api/index.html">Api</a></li>
+      <li><a href="news.html">News</a></li>
+    
+    </ul>
+
+  </div>
+  
+
+</div>
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="build-resource-object">
+<h1>Build resource object<a class="headerlink" href="#build-resource-object" title="Permalink to this headline">¶</a></h1>
+<p>Building a resource object is easy using <a class="reference external" href="api/restkit.resource.Resource-class.html">Resource</a> class. You just need too inherit this object and add your methods. <a class="reference external" href="http://www.couchdbkit.org">Couchdbkit</a> is using restkit to access to <a class="reference external" href="http://couchdb.apache.org">CouchDB</a>. A resource object is an Python object associated to an URI. You can use <cite>get</cite>, <cite>post</cite>, <cite>put</cite>, <cite>delete</cite> or  <cite>head</cite> method just like you do a request.</p>
+<div class="section" id="create-a-simple-twitter-search-resource">
+<h2>Create a simple Twitter Search resource<a class="headerlink" href="#create-a-simple-twitter-search-resource" title="Permalink to this headline">¶</a></h2>
+<p>We use <a class="reference external" href="http://code.google.com/p/simplejson/">simplejson</a> to handle deserialisation of data.</p>
+<p>Here is the snippet:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">json</span> <span class="c"># py2.6 only</span>
+
+<span class="k">class</span> <span class="nc">TwitterSearch</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">pool_instance</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">search_url</span> <span class="o">=</span> <span class="s">&quot;http://search.twitter.com&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TwitterSearch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">search_url</span><span class="p">,</span> <span class="n">follow_redirect</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                        <span class="n">max_follow_redirect</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                        <span class="n">pool_instance</span><span class="o">=</span><span class="n">pool_instance</span><span class="p">,</span>
+                                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;search.json&#39;</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">TwitterSearch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">TwitterSearch</span><span class="p">()</span>
+    <span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&quot;gunicorn&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Build resource object</a><ul>
+<li><a class="reference internal" href="#create-a-simple-twitter-search-resource">Create a simple Twitter Search resource</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to RESTKit&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pool.html"
+                        title="next chapter">Reuses connections</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/resource.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </div>
+  <div id="apibox"></div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+
+
+  </body>
+</html>

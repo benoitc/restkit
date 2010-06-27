@@ -1,0 +1,222 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>News &mdash; restkit v2.0.0 documentation</title>
+    <link rel="stylesheet" href="static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <link rel="top" title="restkit v2.0.0 documentation" href="index.html" />
+
+  <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
+  
+  <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
+  <link rel="stylesheet" href="static/blitzer/jquery-ui-custom.css"
+   type="text/css" />
+  <link rel="stylesheet" href="static/restkit.css"
+   type="text/css" />
+  
+   
+   
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAlwR2WqkJqSQkp3ltvd0NQxTdZZbkdkYaSGUN67ZRlKqnJX74gRQ-NQUM6HVgKkUT9t2gAa363uI1NA" type="text/javascript"></script>
+  
+  <script>
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+  </script
+  
+  <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+  </head>
+  <body>
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="index.html">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <div id="menu">
+    <div id="cse">
+      <form action="http://www.google.com/cse" id="cse-search-box">
+          <input type="hidden" name="cx" value="005434981105004447958:7wnbzt3zexa" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="25" />
+          <input type="submit" name="sa" value="Search" />
+      </form>
+      <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+    </div>
+    <ul id="actions">
+      <li><a href="index.html">Usage</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="api/index.html">Api</a></li>
+      <li><a href="#">News</a></li>
+    
+    </ul>
+
+  </div>
+  
+
+</div>
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="news">
+<span id="id1"></span><h1>News<a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>2.0 / 2010-06-28<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Complete refactoring of pool. Now handle more concurrent connections (priotity to read)</li>
+<li>Added full ssl support in restkit. It needs <a class="reference external" href="http://pypi.python.org/pypi/ssl">ssl</a> module on Python 2.5x</li>
+<li>New HTTP parser.</li>
+<li>Added close method to response object to make sure the socket is correctly released.</li>
+<li>Improved default http client, so form objects can be directly handled.</li>
+<li>Improved request function</li>
+</ul>
+<p>Breaking changes:
+- <strong>Default HttpResponse isn&#8217;t any more persistent</strong>. You have to save it to reuse it. a Persistent response will be provided in restkit 2.1 .
+- Reprecate HttpResponse body, unicode_body and body_file properties. They are replaced  by body_string and body_stream methods.
+- Resource arguments refactored
+- Complete refactoring of filters. Now they have to be declared when you create a resource or http client. An on_connect method can be used in filter now. This method is used before the connection happen, it&#8217;s useful for proxy support for example.
+- Oauth2 filter has been simplfied, see <a class="reference external" href="auth.html">example</a></p>
+</div>
+<div class="section" id="id3">
+<h2>1.3.1 / 2010-04-09<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed Python 2.5 compatibility for ssl connections</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>1.3 / 2010-04-02<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added IPython shell extension (<cite>restkit &#8211;shell</cite>)</li>
+<li>fix Python 2.5 compatibility</li>
+<li>fix Eventlet and Gevent spools extensions</li>
+<li>By default accept all methods in proxy</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>1.2.1 / 2010-03-08<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Improve console client</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>1.2 / 2010-03-06<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added <a class="reference external" href="pool.html">GEvent</a> Support</li>
+<li>Added <a class="reference external" href="wsgi_proxy.html">wsgi_proxy</a> using webob and restkit</li>
+<li>Improved pool management</li>
+<li>Make HTTP parsing faster.</li>
+<li>Fix TeeInput</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h2>1.1.3 / 2010-03-04<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fix ssl connections</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2>1.1.2 / 2010-03-02<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>More logging information</li>
+<li>Fix retry loop so an error is raised instead of returning None.</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h2>1.1 / 2010-03-01<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Improved HTTP Parser - Now buffered.</li>
+<li>Logging facility</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2>1.0 / 2010-02-28<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>New HTTP Parser and major refactoring</li>
+<li>Added OAuth support</li>
+<li>Added HTTP Filter</li>
+<li>Added support of chunked encoding</li>
+<li>Removed <cite>rest.RestClient</cite></li>
+<li>Add Connection pool working with Eventlet 0.9.6</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">News</a><ul>
+<li><a class="reference internal" href="#id2">2.0 / 2010-06-28</a></li>
+<li><a class="reference internal" href="#id3">1.3.1 / 2010-04-09</a></li>
+<li><a class="reference internal" href="#id4">1.3 / 2010-04-02</a></li>
+<li><a class="reference internal" href="#id5">1.2.1 / 2010-03-08</a></li>
+<li><a class="reference internal" href="#id6">1.2 / 2010-03-06</a></li>
+<li><a class="reference internal" href="#id7">1.1.3 / 2010-03-04</a></li>
+<li><a class="reference internal" href="#id8">1.1.2 / 2010-03-02</a></li>
+<li><a class="reference internal" href="#id9">1.1 / 2010-03-01</a></li>
+<li><a class="reference internal" href="#id10">1.0 / 2010-02-28</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/news.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </div>
+  <div id="apibox"></div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+
+
+  </body>
+</html>

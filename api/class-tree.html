@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class Hierarchy</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Trees&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">&nbsp;</td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="class-tree.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<center><b>
+ [ <a href="module-tree.html">Module Hierarchy</a>
+ | <a href="class-tree.html">Class Hierarchy</a> ]
+</b></center><br />
+<h1 class="epydoc">Class Hierarchy</h1>
+<ul class="nomargin-top">
+    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.util.rwlock.RWLock-class.html">restkit.util.rwlock.RWLock</a></strong>:
+      <em class="summary">Classic implementation of reader-writer lock with preference to writers.</em>
+    </li>
+    <li> <strong class="uidlink">webob.Response</strong>
+    </li>
+    <li> <strong class="uidlink">StringIO.StringIO</strong>:
+      <em class="summary">class StringIO([buffer])</em>
+    </li>
+    <li> <strong class="uidlink">object</strong>:
+      <em class="summary">The most base type</em>
+    <ul>
+    <li> <strong class="uidlink">webob.request.AdhocAttrMixin</strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="webob.request.Request-class.html">webob.request.Request</a></strong>:
+      <em class="summary">The default request implementation</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Request-class.html">restkit.contrib.webob_api.Request</a></strong>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.AlreadyRead-class.html">restkit.errors.AlreadyRead</a></strong>:
+      <em class="summary">raised when a response have already been read</em>
+    </li>
+    <li> <strong class="uidlink">exceptions.BaseException</strong>:
+      <em class="summary">Common base class for all exceptions</em>
+    <ul>
+    <li> <strong class="uidlink">exceptions.Exception</strong>:
+      <em class="summary">Common base class for all non-exit exceptions.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.errors.BadStatusLine-class.html">restkit.errors.BadStatusLine</a></strong>:
+      <em class="summary">Exception returned by the parser when the status line is invalid</em>
+    </li>
+    <li> <strong class="uidlink">webob.exc.HTTPException</strong>:
+      <em class="summary">Exception used on pre-Python-2.5, where new-style classes cannot be
+        used as an exception.</em>
+    <ul>
+    <li> <strong class="uidlink">webob.exc.WSGIHTTPException</strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html">restkit.contrib.webob_helper.WebobResourceError</a></strong>:
+      <em class="summary">Wrapper to return webob exceptions instead of restkit errors.</em>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.InvalidUrl-class.html">restkit.errors.InvalidUrl</a></strong>:
+      <em class="summary">Not a valid url for use with this software.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.ParseException-class.html">restkit.errors.ParseException</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.errors.ChunkMissingTerminator-class.html">restkit.errors.ChunkMissingTerminator</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.InvalidChunkSize-class.html">restkit.errors.InvalidChunkSize</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.InvalidHTTPStatus-class.html">restkit.errors.InvalidHTTPStatus</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.InvalidHTTPVersion-class.html">restkit.errors.InvalidHTTPVersion</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.InvalidHeader-class.html">restkit.errors.InvalidHeader</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.InvalidHeaderName-class.html">restkit.errors.InvalidHeaderName</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.InvalidRequestLine-class.html">restkit.errors.InvalidRequestLine</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.InvalidRequestMethod-class.html">restkit.errors.InvalidRequestMethod</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.NoMoreData-class.html">restkit.errors.NoMoreData</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.ParserError-class.html">restkit.errors.ParserError</a></strong>:
+      <em class="summary">Generic exception returned by the parser</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.ProxyError-class.html">restkit.errors.ProxyError</a></strong>:
+      <em class="summary">raised when proxy error happend</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.filters.simpleproxy.ProxyError-class.html">restkit.filters.simpleproxy.ProxyError</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.RedirectLimit-class.html">restkit.errors.RedirectLimit</a></strong>:
+      <em class="summary">Exception raised when the redirection limit is reached.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.RequestError-class.html">restkit.errors.RequestError</a></strong>:
+      <em class="summary">Exception raised when a request is malformed</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.ResourceError-class.html">restkit.errors.ResourceError</a></strong>:
+      <em class="summary">default error class</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.errors.RequestFailed-class.html">restkit.errors.RequestFailed</a></strong>:
+      <em class="summary">Exception raised when an unexpected HTTP error is received in 
+        response to a request.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.ResourceNotFound-class.html">restkit.errors.ResourceNotFound</a></strong>:
+      <em class="summary">Exception raised when no resource was found at the given url.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.Unauthorized-class.html">restkit.errors.Unauthorized</a></strong>:
+      <em class="summary">Exception raised when an authorization is required to access to the
+        resource specified.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.ResponseError-class.html">restkit.errors.ResponseError</a></strong>:
+      <em class="summary">Error raised while getting response or decompressing response 
+        stream</em>
+    </li>
+    <li> <strong class="uidlink">exceptions.StandardError</strong>:
+      <em class="summary">Base class for all standard Python exceptions that do not represent
+        interpreter exiting.</em>
+    <ul>
+    <li> <strong class="uidlink">exceptions.RuntimeError</strong>:
+      <em class="summary">Unspecified run-time error.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Error-class.html">restkit.util.oauth2.Error</a></strong>:
+      <em class="summary">Generic exception class.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.MissingSignature-class.html">restkit.util.oauth2.MissingSignature</a></strong>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.pool.base.BasePool-class.html">restkit.pool.base.BasePool</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.pool.monitored.MonitoredPool-class.html">restkit.pool.monitored.MonitoredPool</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.pool.reventlet.EventletPool-class.html">restkit.pool.reventlet.EventletPool</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.pool.simple.SimplePool-class.html">restkit.pool.simple.SimplePool</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">webob.request.BaseRequest</strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="webob.request.Request-class.html">webob.request.Request</a></strong>:
+      <em class="summary">The default request implementation</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Request-class.html">restkit.contrib.webob_api.Request</a></strong>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.filters.basicauth.BasicAuth-class.html">restkit.filters.basicauth.BasicAuth</a></strong>:
+      <em class="summary">Simple filter to manage basic authentification</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.body.Body-class.html">restkit.http.body.Body</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.http.body.GzipBody-class.html">restkit.http.body.GzipBody</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.forms.BoundaryItem-class.html">restkit.forms.BoundaryItem</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.body.ChunkedReader-class.html">restkit.http.body.ChunkedReader</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Consumer-class.html">restkit.util.oauth2.Consumer</a></strong>:
+      <em class="summary">A consumer of OAuth-protected services.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.ContentTypes-class.html">restkit.contrib.ipython_shell.ContentTypes</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.body.EOFReader-class.html">restkit.http.body.EOFReader</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.filters.Filters-class.html">restkit.filters.Filters</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.pool.simple.Host-class.html">restkit.pool.simple.Host</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.client.HttpConnection-class.html">restkit.client.HttpConnection</a></strong>:
+      <em class="summary">Http Connection object.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.client.HttpResponse-class.html">restkit.client.HttpResponse</a></strong>:
+      <em class="summary">Http Response object returned by HttpConnction</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.body.LengthReader-class.html">restkit.http.body.LengthReader</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.message.Message-class.html">restkit.http.message.Message</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.http.message.Request-class.html">restkit.http.message.Request</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.message.Response-class.html">restkit.http.message.Response</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.pool.monitored.MonitoredHost-class.html">restkit.pool.monitored.MonitoredHost</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.pool.reventlet.EventletHost-class.html">restkit.pool.reventlet.EventletHost</a></strong>:
+      <em class="summary">hash(x)</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.forms.MultipartForm-class.html">restkit.forms.MultipartForm</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.filters.oauth2.OAuthFilter-class.html">restkit.filters.oauth2.OAuthFilter</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.parser.Parser-class.html">restkit.http.parser.Parser</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.http.parser.RequestParser-class.html">restkit.http.parser.RequestParser</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.parser.ResponseParser-class.html">restkit.http.parser.ResponseParser</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.wsgi_proxy.Proxy-class.html">restkit.contrib.wsgi_proxy.Proxy</a></strong>:
+      <em class="summary">A proxy wich redirect the request to SERVER_NAME:SERVER_PORT and 
+        send HTTP_HOST header</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.wsgi_proxy.HostProxy-class.html">restkit.contrib.wsgi_proxy.HostProxy</a></strong>:
+      <em class="summary">A proxy to redirect all request to a specific uri</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.wsgi_proxy.TransparentProxy-class.html">restkit.contrib.wsgi_proxy.TransparentProxy</a></strong>:
+      <em class="summary">A proxy based on HTTP_HOST environ variable</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.resource.Resource-class.html">restkit.resource.Resource</a></strong>:
+      <em class="summary">A class that can be instantiated for access to a RESTful resource, 
+        including authentication.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="webob.response.Response-class.html">webob.response.Response</a></strong>:
+      <em class="summary">Represents a WSGI response</em>
+    <ul>
+    <li> <strong class="uidlink">webob.exc.WSGIHTTPException</strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html">restkit.contrib.webob_helper.WebobResourceError</a></strong>:
+      <em class="summary">Wrapper to return webob exceptions instead of restkit errors.</em>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.wsgi_proxy.ResponseIter-class.html">restkit.contrib.wsgi_proxy.ResponseIter</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Server-class.html">restkit.util.oauth2.Server</a></strong>:
+      <em class="summary">A skeletal implementation of a service provider, providing 
+        protected resources to requests from authorized consumers.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.ShellClient-class.html">restkit.contrib.ipython_shell.ShellClient</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.SignatureMethod-class.html">restkit.util.oauth2.SignatureMethod</a></strong>:
+      <em class="summary">A way of signing requests.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.SignatureMethod_HMAC_SHA1-class.html">restkit.util.oauth2.SignatureMethod_HMAC_SHA1</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.SignatureMethod_PLAINTEXT-class.html">restkit.util.oauth2.SignatureMethod_PLAINTEXT</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.filters.simpleproxy.SimpleProxy-class.html">restkit.filters.simpleproxy.SimpleProxy</a></strong>:
+      <em class="summary">Simple proxy filter.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.tee.TeeInput-class.html">restkit.tee.TeeInput</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Token-class.html">restkit.util.oauth2.Token</a></strong>:
+      <em class="summary">An OAuth credential used to request authorization or a protected 
+        resource.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.UnexpectedEOF-class.html">restkit.errors.UnexpectedEOF</a></strong>:
+      <em class="summary">exception raised when remote closed the connection</em>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.unreader.Unreader-class.html">restkit.http.unreader.Unreader</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.http.unreader.IterUnreader-class.html">restkit.http.unreader.IterUnreader</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.http.unreader.SocketUnreader-class.html">restkit.http.unreader.SocketUnreader</a></strong>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.util.misc.deprecated_property-class.html">restkit.util.misc.deprecated_property</a></strong>:
+      <em class="summary">Wraps a decorator, with a deprecation warning or error</em>
+    </li>
+    <li> <strong class="uidlink">dict</strong>:
+      <em class="summary">dict() -&gt; new empty dictionary.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Request-class.html">restkit.util.oauth2.Request</a></strong>:
+      <em class="summary">The parameters and information for an HTTP request, suitable for 
+        authorizing with OAuth credentials.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">property</strong>:
+      <em class="summary">property(fget=None, fset=None, fdel=None, doc=None) -&gt; property attribute</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Method-class.html">restkit.contrib.webob_api.Method</a></strong>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+</ul>
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Trees&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Jun 27 14:13:50 2010
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

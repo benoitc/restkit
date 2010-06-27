@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>restkit shell &mdash; restkit v2.0.0 documentation</title>
+    <link rel="stylesheet" href="static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <link rel="top" title="restkit v2.0.0 documentation" href="index.html" />
+    <link rel="next" title="wsgi_proxy" href="wsgi_proxy.html" />
+    <link rel="prev" title="Command Line" href="client.html" />
+
+  <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
+  
+  <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
+  <link rel="stylesheet" href="static/blitzer/jquery-ui-custom.css"
+   type="text/css" />
+  <link rel="stylesheet" href="static/restkit.css"
+   type="text/css" />
+  
+   
+   
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAlwR2WqkJqSQkp3ltvd0NQxTdZZbkdkYaSGUN67ZRlKqnJX74gRQ-NQUM6HVgKkUT9t2gAa363uI1NA" type="text/javascript"></script>
+  
+  <script>
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+  </script
+  
+  <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+  </head>
+  <body>
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="index.html">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <div id="menu">
+    <div id="cse">
+      <form action="http://www.google.com/cse" id="cse-search-box">
+          <input type="hidden" name="cx" value="005434981105004447958:7wnbzt3zexa" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="25" />
+          <input type="submit" name="sa" value="Search" />
+      </form>
+      <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+    </div>
+    <ul id="actions">
+      <li><a href="index.html">Usage</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="api/index.html">Api</a></li>
+      <li><a href="news.html">News</a></li>
+    
+    </ul>
+
+  </div>
+  
+
+</div>
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="restkit-shell">
+<h1>restkit shell<a class="headerlink" href="#restkit-shell" title="Permalink to this headline">¶</a></h1>
+<p>restkit come with a IPython based shell to help you to debug your http apps. Just run:</p>
+<div class="highlight-python"><pre>$ restkit --shell http://benoitc.github.com/restkit/</pre>
+</div>
+<div class="section" id="id1">
+<h2>restkit shell<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<div class="section" id="http-methods">
+<h1>HTTP Methods<a class="headerlink" href="#http-methods" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">delete</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">])</span>                                 <span class="c"># send a HTTP delete</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">],</span> <span class="o">**</span><span class="n">query_string</span><span class="p">)</span>                    <span class="c"># send a HTTP get</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">head</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">],</span> <span class="o">**</span><span class="n">query_string</span><span class="p">)</span>                   <span class="c"># send a HTTP head</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">],</span> <span class="p">[</span><span class="n">Stream</span><span class="p">()</span><span class="o">|**</span><span class="n">query_string_body</span><span class="p">])</span>   <span class="c"># send a HTTP post</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">put</span><span class="p">([</span><span class="n">req</span><span class="o">|</span><span class="n">url</span><span class="o">|</span><span class="n">path_info</span><span class="p">],</span> <span class="n">stream</span><span class="p">)</span>                            <span class="c"># send a HTTP put</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="helpers">
+<h1>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">req</span>    <span class="c"># request to play with. By default http methods will use this one</span>
+<span class="go">&lt;Request at 0x18fdb70 GET http://benoitc.github.com/restkit/&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="c"># Stream() instance if you specified a -i in command line</span>
+<span class="go">None</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ctypes</span> <span class="c"># Content-Types helper with headers properties</span>
+<span class="go">&lt;ContentTypes([&#39;application_atom_xml&#39;, &#39;application_json&#39;,</span>
+<span class="go">&#39;application_rss_xml&#39;, &#39;application_xhtml_xml&#39;, &#39;application_xml&#39;,</span>
+<span class="go">&#39;application_xsl_xml&#39;, &#39;application_xslt_xml&#39;, &#39;image_svg_xml&#39;,</span>
+<span class="go">&#39;text_html&#39;, &#39;text_xml&#39;])&gt;</span>
+
+<span class="go">restkit shell 1.2.1</span>
+<span class="go">1) restcli$</span>
+</pre></div>
+</div>
+<p>Here is a sample session:</p>
+<div class="highlight-python"><pre>1) restcli$ req
+----------&gt; req()
+GET /restkit/ HTTP/1.0
+Host: benoitc.github.com
+2) restcli$ get()
+200 OK
+Content-Length: 10476
+Accept-Ranges: bytes
+Expires: Sat, 03 Apr 2010 12:25:09 GMT
+Server: nginx/0.7.61
+Last-Modified: Mon, 08 Mar 2010 07:53:16 GMT
+Connection: keep-alive
+Cache-Control: max-age=86400
+Date: Fri, 02 Apr 2010 12:25:09 GMT
+Content-Type: text/html
+         2) &lt;Response at 0x19333b0 200 OK&gt;
+3) restcli$ resp.status
+         3) '200 OK'
+4) restcli$ put()
+405 Not Allowed
+Date: Fri, 02 Apr 2010 12:25:28 GMT
+Content-Length: 173
+Content-Type: text/html
+Connection: keep-alive
+Server: nginx/0.7.61
+
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;405 Not Allowed&lt;/title&gt;&lt;/head&gt;
+&lt;body bgcolor="white"&gt;
+&lt;center&gt;&lt;h1&gt;405 Not Allowed&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/0.7.61&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+4) &lt;Response at 0x1933330 405 Not Allowed&gt;
+5) restcli$ resp.status
+         5) '405 Not Allowed'
+6) restcli$ req.path_info = '/restkit/api/index.html'
+7) restcli$ get
+----------&gt; get()
+200 OK
+Content-Length: 10476
+Accept-Ranges: bytes
+Expires: Sat, 03 Apr 2010 12:26:18 GMT
+Server: nginx/0.7.61
+Last-Modified: Mon, 08 Mar 2010 07:53:16 GMT
+Connection: keep-alive
+Cache-Control: max-age=86400
+Date: Fri, 02 Apr 2010 12:26:18 GMT
+Content-Type: text/html
+         7) &lt;Response at 0x19300f0 200 OK&gt;
+8) restcli$ get('/restkit')
+301 Moved Permanently
+Location: http://benoitc.github.com/restkit/
+
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;301 Moved Permanently&lt;/title&gt;&lt;/head&gt;
+&lt;body bgcolor="white"&gt;
+&lt;center&gt;&lt;h1&gt;301 Moved Permanently&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/0.7.61&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+8) &lt;Response at 0x1930410 301 Moved Permanently&gt;
+9) restcli$ resp.location
+9) 'http://benoitc.github.com/restkit/'</pre>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">restkit shell</a><ul>
+<li><a class="reference internal" href="#id1">restkit shell</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#http-methods">HTTP Methods</a></li>
+<li><a class="reference internal" href="#helpers">Helpers</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="client.html"
+                        title="previous chapter">Command Line</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wsgi_proxy.html"
+                        title="next chapter">wsgi_proxy</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/shell.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </div>
+  <div id="apibox"></div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+
+
+  </body>
+</html>

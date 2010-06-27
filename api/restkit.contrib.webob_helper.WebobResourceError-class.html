@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>restkit.contrib.webob_helper.WebobResourceError</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="restkit-module.html">Package&nbsp;restkit</a> ::
+        <a href="restkit.contrib-module.html">Package&nbsp;contrib</a> ::
+        <a href="restkit.contrib.webob_helper-module.html">Module&nbsp;webob_helper</a> ::
+        Class&nbsp;WebobResourceError
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class WebobResourceError</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+                      object --+        
+                               |        
+         <a href="webob.response.Response-class.html">webob.response.Response</a> --+    
+                                   |    
+              object --+           |    
+                       |           |    
+exceptions.BaseException --+       |    
+                           |       |    
+        exceptions.Exception --+   |    
+                               |   |    
+         webob.exc.HTTPException --+    
+                                   |    
+         webob.exc.WSGIHTTPException --+
+                                       |
+                                      <strong class="uidshort">WebobResourceError</strong>
+</pre>
+
+<hr />
+<p>Wrapper to return webob exceptions instead of restkit errors. Usefull 
+  for those who want to build `WSGI &lt;http://wsgi.org/wsgi/&gt;`_ 
+  applications speaking directly to others via HTTP.</p>
+  <p>To do it place somewhere in your application the function 
+  `wrap_exceptions`:</p>
+<pre class="literalblock">
+   wrap_exceptions()
+</pre>
+  <p>It will automatically replace restkit errors by webob exceptions.</p>
+
+<!-- ==================== NESTED CLASSES ==================== -->
+<a name="section-NestedClasses"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Nested Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-NestedClasses"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b>:
+      <code><a href="webob.request.Request-class.html">RequestClass</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">msg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">http_code</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">response</span>=<span class="summary-sig-default">None</span>)</span><br />
+      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_status_int__get" class="summary-sig-name" onclick="show_private();">_status_int__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      The status as an integer</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._status_int__get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_status_int__set" class="summary-sig-name" onclick="show_private();">_status_int__set</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._status_int__set">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_get_message"></a><span class="summary-sig-name">_get_message</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._get_message">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_set_message"></a><span class="summary-sig-name">_set_message</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">msg</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._set_message">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.exc.WSGIHTTPException</code></b>:
+      <code>__call__</code>,
+      <code>generate_response</code>,
+      <code>html_body</code>,
+      <code>plain_body</code>
+      </p>
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.exc.WSGIHTTPException</code></b> (private):
+      <code>_make_body</code>
+      </p></div>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b>:
+      <code><a href="webob.response.Response-class.html#__repr__">__repr__</a></code>,
+      <code><a href="webob.response.Response-class.html#__str__">__str__</a></code>,
+      <code><a href="webob.response.Response-class.html#app_iter_range">app_iter_range</a></code>,
+      <code><a href="webob.response.Response-class.html#conditional_response_app">conditional_response_app</a></code>,
+      <code><a href="webob.response.Response-class.html#copy">copy</a></code>,
+      <code><a href="webob.response.Response-class.html#decode_content">decode_content</a></code>,
+      <code><a href="webob.response.Response-class.html#delete_cookie">delete_cookie</a></code>,
+      <code><a href="webob.response.Response-class.html#encode_content">encode_content</a></code>,
+      <code><a href="webob.response.Response-class.html#md5_etag">md5_etag</a></code>,
+      <code><a href="webob.response.Response-class.html#merge_cookies">merge_cookies</a></code>,
+      <code><a href="webob.response.Response-class.html#set_cookie">set_cookie</a></code>,
+      <code><a href="webob.response.Response-class.html#unset_cookie">unset_cookie</a></code>,
+      <code><a href="webob.response.Response-class.html#write">write</a></code>
+      </p>
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b> (private):
+      <code><a href="webob.response.Response-class.html#_abs_headerlist" onclick="show_private();">_abs_headerlist</a></code>,
+      <code><a href="webob.response.Response-class.html#_add_cookie" onclick="show_private();">_add_cookie</a></code>,
+      <code><a href="webob.response.Response-class.html#_app_iter__del" onclick="show_private();">_app_iter__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_app_iter__get" onclick="show_private();">_app_iter__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_app_iter__set" onclick="show_private();">_app_iter__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_body__del" onclick="show_private();">_body__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_body__get" onclick="show_private();">_body__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_body__set" onclick="show_private();">_body__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_body_file__del" onclick="show_private();">_body_file__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_body_file__get" onclick="show_private();">_body_file__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_cache_control__del" onclick="show_private();">_cache_control__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_cache_control__get" onclick="show_private();">_cache_control__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_cache_control__set" onclick="show_private();">_cache_control__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_cache_expires" onclick="show_private();">_cache_expires</a></code>,
+      <code><a href="webob.response.Response-class.html#_charset__del" onclick="show_private();">_charset__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_charset__get" onclick="show_private();">_charset__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_charset__set" onclick="show_private();">_charset__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_content_type__del" onclick="show_private();">_content_type__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_content_type__get" onclick="show_private();">_content_type__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_content_type__set" onclick="show_private();">_content_type__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_content_type_params__del" onclick="show_private();">_content_type_params__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_content_type_params__get" onclick="show_private();">_content_type_params__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_content_type_params__set" onclick="show_private();">_content_type_params__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_environ__del" onclick="show_private();">_environ__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_environ__get" onclick="show_private();">_environ__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_environ__set" onclick="show_private();">_environ__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_headerlist__del" onclick="show_private();">_headerlist__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_headerlist__get" onclick="show_private();">_headerlist__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_headerlist__set" onclick="show_private();">_headerlist__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_headers__get" onclick="show_private();">_headers__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_headers__set" onclick="show_private();">_headers__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_request__del" onclick="show_private();">_request__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_request__get" onclick="show_private();">_request__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_request__set" onclick="show_private();">_request__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_status__get" onclick="show_private();">_status__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_status__set" onclick="show_private();">_status__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_unicode_body__del" onclick="show_private();">_unicode_body__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_unicode_body__get" onclick="show_private();">_unicode_body__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_unicode_body__set" onclick="show_private();">_unicode_body__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_update_cache_control" onclick="show_private();">_update_cache_control</a></code>
+      </p></div>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.Exception</code></b>:
+      <code>__new__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
+      <code>__delattr__</code>,
+      <code>__getattribute__</code>,
+      <code>__getitem__</code>,
+      <code>__getslice__</code>,
+      <code>__reduce__</code>,
+      <code>__setattr__</code>,
+      <code>__setstate__</code>,
+      <code>__unicode__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__format__</code>,
+      <code>__hash__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.exc.WSGIHTTPException</code></b>:
+      <code>body_template_obj</code>,
+      <code>code</code>,
+      <code>empty_body</code>,
+      <code>explanation</code>,
+      <code>html_template_obj</code>,
+      <code>plain_template_obj</code>,
+      <code>title</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b>:
+      <code><a href="webob.response.Response-class.html#accept_ranges">accept_ranges</a></code>,
+      <code><a href="webob.response.Response-class.html#age">age</a></code>,
+      <code><a href="webob.response.Response-class.html#allow">allow</a></code>,
+      <code><a href="webob.response.Response-class.html#cache_expires">cache_expires</a></code>,
+      <code><a href="webob.response.Response-class.html#content_disposition">content_disposition</a></code>,
+      <code><a href="webob.response.Response-class.html#content_encoding">content_encoding</a></code>,
+      <code><a href="webob.response.Response-class.html#content_language">content_language</a></code>,
+      <code><a href="webob.response.Response-class.html#content_length">content_length</a></code>,
+      <code><a href="webob.response.Response-class.html#content_location">content_location</a></code>,
+      <code><a href="webob.response.Response-class.html#content_md5">content_md5</a></code>,
+      <code><a href="webob.response.Response-class.html#content_range">content_range</a></code>,
+      <code><a href="webob.response.Response-class.html#date">date</a></code>,
+      <code><a href="webob.response.Response-class.html#default_charset">default_charset</a></code>,
+      <code><a href="webob.response.Response-class.html#default_conditional_response">default_conditional_response</a></code>,
+      <code><a href="webob.response.Response-class.html#default_content_type">default_content_type</a></code>,
+      <code><a href="webob.response.Response-class.html#etag">etag</a></code>,
+      <code><a href="webob.response.Response-class.html#expires">expires</a></code>,
+      <code><a href="webob.response.Response-class.html#last_modified">last_modified</a></code>,
+      <code><a href="webob.response.Response-class.html#location">location</a></code>,
+      <code><a href="webob.response.Response-class.html#pragma">pragma</a></code>,
+      <code><a href="webob.response.Response-class.html#retry_after">retry_after</a></code>,
+      <code><a href="webob.response.Response-class.html#server">server</a></code>,
+      <code><a href="webob.response.Response-class.html#status_code">status_code</a></code>,
+      <code><a href="webob.response.Response-class.html#unicode_errors">unicode_errors</a></code>,
+      <code><a href="webob.response.Response-class.html#vary">vary</a></code>,
+      <code><a href="webob.response.Response-class.html#www_authenticate">www_authenticate</a></code>
+      </p>
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b> (private):
+      <code><a href="webob.response.Response-class.html#_cache_control_obj" onclick="show_private();">_cache_control_obj</a></code>,
+      <code><a href="webob.response.Response-class.html#_safe_methods" onclick="show_private();">_safe_methods</a></code>
+      </p></div>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="restkit.contrib.webob_helper.WebobResourceError-class.html#status_int" class="summary-name">status_int</a><br />
+      The status as an integer
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="restkit.contrib.webob_helper.WebobResourceError-class.html#message" class="summary-name">message</a>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.exc.WSGIHTTPException</code></b>:
+      <code>exception</code>,
+      <code>wsgi_response</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b>:
+      <code><a href="webob.response.Response-class.html#app_iter">app_iter</a></code>,
+      <code><a href="webob.response.Response-class.html#body">body</a></code>,
+      <code><a href="webob.response.Response-class.html#body_file">body_file</a></code>,
+      <code><a href="webob.response.Response-class.html#cache_control">cache_control</a></code>,
+      <code><a href="webob.response.Response-class.html#charset">charset</a></code>,
+      <code><a href="webob.response.Response-class.html#content_type">content_type</a></code>,
+      <code><a href="webob.response.Response-class.html#content_type_params">content_type_params</a></code>,
+      <code><a href="webob.response.Response-class.html#environ">environ</a></code>,
+      <code><a href="webob.response.Response-class.html#headerlist">headerlist</a></code>,
+      <code><a href="webob.response.Response-class.html#headers">headers</a></code>,
+      <code><a href="webob.response.Response-class.html#request">request</a></code>,
+      <code><a href="webob.response.Response-class.html#status">status</a></code>,
+      <code><a href="webob.response.Response-class.html#ubody">ubody</a></code>,
+      <code><a href="webob.response.Response-class.html#unicode_body">unicode_body</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
+      <code>args</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">msg</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">http_code</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">response</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x.__init__(...) initializes x; see x.__class__.__doc__ for 
+  signature</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_status_int__get"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_status_int__get</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._status_int__get">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>The status as an integer</p>
+  <dl class="fields">
+    <dt>Overrides:
+        webob.response.Response._status_int__get
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_status_int__set"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_status_int__set</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">value</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._status_int__set">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        webob.response.Response._status_int__set
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="status_int"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">status_int</h3>
+  <p>The status as an integer</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_status_int__get" class="summary-sig-name" onclick="show_private();">_status_int__get</a>(<span class="summary-sig-arg">self</span>)</span>
+        - The status as an integer
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_status_int__set" class="summary-sig-name" onclick="show_private();">_status_int__set</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="message"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">message</h3>
+  
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_get_message" class="summary-sig-name" onclick="show_private();">_get_message</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_set_message" class="summary-sig-name" onclick="show_private();">_set_message</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">msg</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Jun 27 14:13:50 2010
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

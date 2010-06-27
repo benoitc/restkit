@@ -1,0 +1,209 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to RESTKit’s documentation! &mdash; restkit v2.0.0 documentation</title>
+    <link rel="stylesheet" href="static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <link rel="top" title="restkit v2.0.0 documentation" href="#" />
+    <link rel="next" title="Build resource object" href="resource.html" />
+
+  <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
+  
+  <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
+  <link rel="stylesheet" href="static/blitzer/jquery-ui-custom.css"
+   type="text/css" />
+  <link rel="stylesheet" href="static/restkit.css"
+   type="text/css" />
+  
+   
+   
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAlwR2WqkJqSQkp3ltvd0NQxTdZZbkdkYaSGUN67ZRlKqnJX74gRQ-NQUM6HVgKkUT9t2gAa363uI1NA" type="text/javascript"></script>
+  
+  <script>
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+  </script
+  
+  <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+  </head>
+  <body>
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="#">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <div id="menu">
+    <div id="cse">
+      <form action="http://www.google.com/cse" id="cse-search-box">
+          <input type="hidden" name="cx" value="005434981105004447958:7wnbzt3zexa" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="25" />
+          <input type="submit" name="sa" value="Search" />
+      </form>
+      <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+    </div>
+    <ul id="actions">
+      <li><a href="#">Usage</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="api/index.html">Api</a></li>
+      <li><a href="news.html">News</a></li>
+    
+    </ul>
+
+  </div>
+  
+
+</div>
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-restkit-s-documentation">
+<h1>Welcome to RESTKit&#8217;s documentation!<a class="headerlink" href="#welcome-to-restkit-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Restkit is an HTTP resource kit for <a class="reference external" href="http://python.org">Python</a>. It allows you to easily access to HTTP resource and build objects around it. It&#8217;s the base of <a class="reference external" href="http://www.couchdbkit.org">couchdbkit</a> a Python <a class="reference external" href="http://couchdb.org">CouchDB</a> framework.</p>
+<p>You can simply use  <a class="reference external" href="api/restkit-module.html#request">request</a> function to do any HTTP requests.</p>
+<p>Usage example, get a friendpaste paste:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body</span>
+<span class="go">&#39;welcome to friendpaste&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="go">&#39;welcome to friendpaste&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">headers</span>
+<span class="go">{&#39;status&#39;: &#39;200 OK&#39;, &#39;transfer-encoding&#39;: &#39;chunked&#39;, &#39;set-cookie&#39;:</span>
+<span class="go">&#39;FRIENDPASTE_SID=b581975029d689119d3e89416e4c2f6480a65d96; expires=Sun,</span>
+<span class="go">14-Mar-2010 03:29:31 GMT; Max-Age=1209600; Path=/&#39;, &#39;server&#39;: &#39;nginx/0.7.62&#39;,</span>
+<span class="go">&#39;connection&#39;: &#39;keep-alive&#39;, &#39;date&#39;: &#39;Sun, 28 Feb 2010 03:29:31 GMT&#39;,</span>
+<span class="go">&#39;content-type&#39;: &#39;text/plain&#39;}</span>
+</pre></div>
+</div>
+<p>of from a resource:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body</span>
+<span class="go">&#39;welcome to friendpaste&#39;</span>
+</pre></div>
+</div>
+<p>but you can do more like building object mapping HTTP resources, ....</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="resource.html">Build resource object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="resource.html#create-a-simple-twitter-search-resource">Create a simple Twitter Search resource</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pool.html">Reuses connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#basic-authentication">Basic authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#oauth">OAuth</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Stream you content</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#stream-to">Stream to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#stream-from">Stream from</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Command Line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shell.html">restkit shell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shell.html#id1">restkit shell</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shell.html#http-methods">HTTP Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shell.html#helpers">Helpers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wsgi_proxy.html">wsgi_proxy</a></li>
+</ul>
+</div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Full compatible HTTP client for HTTP 1.0 and 1.1</li>
+<li>Use pure socket calls and its own HTTP parser (It&#8217;s not based on httplib or urllib2)</li>
+<li>Map HTTP resources to Python objects</li>
+<li><strong>Read</strong> and <strong>Send</strong> on the fly</li>
+<li>Reuses connections</li>
+<li><a class="reference external" href="http://www.eventlet.net">Eventlet</a> and <a class="reference external" href="http://www.gevent.org">Gevent</a> support</li>
+<li>Support <a class="reference external" href="http://en.wikipedia.org/wiki/Chunked_transfer_encoding">Chunked transfer encoding</a> in both ways.</li>
+<li>Support <a class="reference external" href="http://www.ietf.org/rfc/rfc2617.txt">Basic Authentification</a> and <a class="reference external" href="http://oauth.net/">OAuth</a>.</li>
+<li>Multipart forms and url-encoded forms</li>
+<li>Proxy handling</li>
+<li>HTTP Filters, you can hook requests in responses with your own callback</li>
+<li>Compatible with Python 2.x (&gt;= 2.5)</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to RESTKit&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="resource.html"
+                        title="next chapter">Build resource object</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </div>
+  <div id="apibox"></div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,206 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Authentication &mdash; restkit v2.0.0 documentation</title>
+    <link rel="stylesheet" href="static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <link rel="top" title="restkit v2.0.0 documentation" href="index.html" />
+    <link rel="next" title="Stream you content" href="streaming.html" />
+    <link rel="prev" title="Reuses connections" href="pool.html" />
+
+  <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
+  
+  <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
+  <link rel="stylesheet" href="static/blitzer/jquery-ui-custom.css"
+   type="text/css" />
+  <link rel="stylesheet" href="static/restkit.css"
+   type="text/css" />
+  
+   
+   
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAlwR2WqkJqSQkp3ltvd0NQxTdZZbkdkYaSGUN67ZRlKqnJX74gRQ-NQUM6HVgKkUT9t2gAa363uI1NA" type="text/javascript"></script>
+  
+  <script>
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+  </script
+  
+  <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+  </head>
+  <body>
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="index.html">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <div id="menu">
+    <div id="cse">
+      <form action="http://www.google.com/cse" id="cse-search-box">
+          <input type="hidden" name="cx" value="005434981105004447958:7wnbzt3zexa" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="25" />
+          <input type="submit" name="sa" value="Search" />
+      </form>
+      <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+    </div>
+    <ul id="actions">
+      <li><a href="index.html">Usage</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="api/index.html">Api</a></li>
+      <li><a href="news.html">News</a></li>
+    
+    </ul>
+
+  </div>
+  
+
+</div>
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="authentication">
+<h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
+<p>Restkit support for now <a class="reference external" href="http://www.ietf.org/rfc/rfc2617.txt">basic authentication</a>  and <a class="reference external" href="http://oauth.net/">OAuth</a>. But any
+other authentication schema can easily be added using http filters.</p>
+<div class="section" id="basic-authentication">
+<h2>Basic authentication<a class="headerlink" href="#basic-authentication" title="Permalink to this headline">¶</a></h2>
+<p>Basic authentication is managed by the object <a class="reference external" href="api/restkit.filters.BasicAuth-module.html">restkit.filters.BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="api/restkit-module.html#request">request</a> function and in <a class="reference external" href="api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
+<p>To use <cite>basic authentication</cite> in a <cite>Resource object</cite> you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">BasicAuth</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">BasicAuth</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&quot;http://friendpaste.com&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">auth</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Or simply use an authentication url:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&quot;http://username:password@friendpaste.com&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="oauth">
+<h2>OAuth<a class="headerlink" href="#oauth" title="Permalink to this headline">¶</a></h2>
+<p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use <a class="reference external" href="api/restkit-module.html#oauth2">oauth2</a> module in your applications).</p>
+<p>The OAuth filter <tt class="docutils literal"><span class="pre">restkit.oauth2.filter.OAuthFilter</span></tt> allow you to associate a consumer per resource (path). Initalize Oauth filter with:</p>
+<div class="highlight-python"><pre>path, consumer, token, signaturemethod)</pre>
+</div>
+<p><cite>token</cite> and <cite>method signature</cite> are optionnals. Consumer should be an instance of <tt class="docutils literal"><span class="pre">restkit.oauth2.Consumer</span></tt>, token an  instance of <tt class="docutils literal"><span class="pre">restkit.oauth2.Token</span></tt>  signature method an instance of <tt class="docutils literal"><span class="pre">oauth2.SignatureMethod</span></tt>  (<tt class="docutils literal"><span class="pre">restkit.oauth2.Token</span></tt> is only needed for three-legged requests.</p>
+<p>The filter is appleid if the path match. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.</p>
+<p>Example the rule <cite>/some/resource/*</cite> will match <cite>/some/resource/other</cite> and <cite>/some/resource/other2</cite>, while the rule <cite>/some/resource</cite> will only match the path <cite>/some/resource</cite>.</p>
+<div class="section" id="simple-client-example">
+<h3>Simple client example:<a class="headerlink" href="#simple-client-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">OAuthFilter</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">import</span> <span class="nn">restkit.oauth2</span> <span class="kn">as</span> <span class="nn">oauth</span>
+
+<span class="c"># Create your consumer with the proper key/secret.</span>
+<span class="n">consumer</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">Consumer</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s">&quot;your-twitter-consumer-key&quot;</span><span class="p">,</span>
+  <span class="n">secret</span><span class="o">=</span><span class="s">&quot;your-twitter-consumer-secret&quot;</span><span class="p">)</span>
+
+<span class="c"># Request token URL for Twitter.</span>
+<span class="n">request_token_url</span> <span class="o">=</span> <span class="s">&quot;http://twitter.com/oauth/request_token&quot;</span>
+
+<span class="c"># Create our filter.</span>
+<span class="n">auth</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">OAuthFilter</span><span class="p">(</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="n">consumer</span><span class="p">)</span>
+
+<span class="c"># The request.</span>
+<span class="n">resp</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">request_token_url</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">auth</span><span class="p">])</span>
+<span class="k">print</span> <span class="n">resp</span><span class="o">.</span><span class="n">body</span>
+</pre></div>
+</div>
+<p>If you want to add OAuth  to your <cite>TwitterSearch</cite> resource:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create your consumer with the proper key/secret.</span>
+<span class="n">consumer</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">Consumer</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s">&quot;your-twitter-consumer-key&quot;</span><span class="p">,</span>
+  <span class="n">secret</span><span class="o">=</span><span class="s">&quot;your-twitter-consumer-secret&quot;</span><span class="p">)</span>
+
+<span class="c"># Create our filter.</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">OAuthfilter</span><span class="p">(</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="n">consumer</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">TwitterSearch</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">client</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Authentication</a><ul>
+<li><a class="reference internal" href="#basic-authentication">Basic authentication</a></li>
+<li><a class="reference internal" href="#oauth">OAuth</a><ul>
+<li><a class="reference internal" href="#simple-client-example">Simple client example:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pool.html"
+                        title="previous chapter">Reuses connections</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="streaming.html"
+                        title="next chapter">Stream you content</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/authentication.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </div>
+  <div id="apibox"></div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+
+
+  </body>
+</html>
