@@ -11,9 +11,6 @@ restkit.resource
 This module provide a common interface for all HTTP request. 
 """
 
-import cgi
-import mimetypes
-import uuid
 import urlparse
 
 from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
@@ -100,7 +97,9 @@ class Resource(object):
             Resource("/path").get()
         """
 
-        new_uri = self._make_uri(self.uri, path)
+        new_uri = util.make_uri(self.uri, path, charset=self.charset, 
+                        safe=self.safe, encode_keys=self.encode_keys)
+                        
         obj = type(self)(new_uri, headers=self._headers, **self.client_opts)
         return self._set_default_attrs(obj)
  
@@ -169,7 +168,9 @@ class Resource(object):
         """
         
         headers = headers or []
-        uri = self._make_uri(self.uri, path, **params)
+        uri = util.make_uri(self.uri, path, charset=self.charset, 
+                        safe=self.safe, encode_keys=self.encode_keys,
+                        **params)
         
         try:
             resp = self.do_request(uri, method=method, payload=payload, 
@@ -199,43 +200,5 @@ class Resource(object):
         """
         to set a new uri absolute path
         """
-        self.uri = self._make_uri(self.uri, path)
-
-    def _make_uri(self, base, *path, **query):
-        """Assemble a uri based on a base, any number of path segments, 
-        and query string parameters.
-
-        """
-        base_trailing_slash = False
-        if base and base.endswith("/"):
-            base_trailing_slash = True
-            base = base[:-1]
-        retval = [base]
-
-        # build the path
-        _path = []
-        trailing_slash = False       
-        for s in path:
-            if s is not None and isinstance(s, basestring):
-                if len(s) > 1 and s.endswith('/'):
-                    trailing_slash = True
-                else:
-                    trailing_slash = False
-                _path.append(util.url_quote(s.strip('/'), self.charset, self.safe))
-                       
-        path_str =""
-        if _path:
-            path_str = "/".join([''] + _path)
-            if trailing_slash:
-                path_str = path_str + "/" 
-        elif base_trailing_slash:
-            path_str = path_str + "/" 
-            
-        if path_str:
-            retval.append(path_str)
-
-        params_str = util.url_encode(query, self.charset, self.encode_keys)
-        if params_str:
-            retval.extend(['?', params_str])
-
-        return ''.join(retval)
+        self.uri = util.make_uri(self.uri, path, charset=self.charset, 
+                        safe=self.safe, encode_keys=self.encode_keys)

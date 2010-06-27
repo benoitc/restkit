@@ -21,4 +21,18 @@ def test_001():
     qs = {'a': lambda : 1}
     t.eq(util.url_encode(qs), "a=1")
     
+def test_002():
+    t.eq(util.make_uri("http://localhost", "/"), "http://localhost/")
+    t.eq(util.make_uri("http://localhost/"), "http://localhost/")
+    t.eq(util.make_uri("http://localhost/", "/test/echo"), 
+        "http://localhost/test/echo")
+    t.eq(util.make_uri("http://localhost/", "/test/echo/"), 
+        "http://localhost/test/echo/")
+    t.eq(util.make_uri("http://localhost", "/test/echo/"),
+        "http://localhost/test/echo/")
+    t.eq(util.make_uri("http://localhost", "test/echo"), 
+        "http://localhost/test/echo")
+    t.eq(util.make_uri("http://localhost", "test/echo/"),
+        "http://localhost/test/echo/")
+    
     
