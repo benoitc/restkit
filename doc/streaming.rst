@@ -30,7 +30,9 @@ Sending will be chunked. If you want to send without TE: chunked, you need to ad
 Stream from
 -----------
 
-Each requests return a :api:`restkit.client.HttpResponse` object. If you want to receive the content in a streaming fashion you just have to use the `body_file` member of the response. You can `iter` on it or just use as a file-like object (read, readline, readlines, ...). Big upload are saved as a temporary file in the filesystem, while upload <= 1Mo are in memory. You can reuse the response at any moment.
+Each requests return a :api:`restkit.client.HttpResponse` object. If you want to receive the content in a streaming fashion you just have to use the `body_file` member of the response. You can `iter` on it or just use as a file-like object (read, readline, readlines, ...).
+
+**Attention**: Since 2.0, response.body are just streamed and aren't persistent. In previous version, the implementation may cause problem with memory or storage usage.
 
 Quick snippet with iteration::
 
@@ -40,15 +42,18 @@ Quick snippet with iteration::
   
   r = request("http://e-engura.com/images/logo.gif")
   fd, fname = tempfile.mkstemp(suffix='.gif')
-  with os.fdopen(fd, "wb") as f:
-      for block in r.body_file:
+  
+  with r.body_stream() as body:
+    with os.fdopen(fd, "wb") as f:
+      for block in body:
           f.write(block)
       
 Or if you just want to read::
 
-  with os.fdopen(fd, "wb") as f:
+  with r.body_stream() as body:
+    with os.fdopen(fd, "wb") as f:
       while True:
-          data = r.body_file.read(1024)
+          data = body.read(1024)
           if not data:
               break
           f.write(data)
