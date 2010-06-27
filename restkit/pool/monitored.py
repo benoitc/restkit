@@ -22,7 +22,7 @@ class MonitoredHost(object):
             self.nb_connections -= 1
             conn = self.do_get()
             try:
-                fno = conn.fileno()
+                _ = conn.fileno()
                 return conn
             except socket.error:
                 """ connection probably closed """

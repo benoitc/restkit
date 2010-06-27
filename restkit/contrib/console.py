@@ -26,7 +26,7 @@ except ImportError:
         json = False
 
 from restkit import __version__, request, set_logging
-from restkit.util import popen3, locate_program
+from restkit.util.misc import popen3, locate_program
 
 __usage__ = "'%prog [options] url [METHOD] [filename]'"
 

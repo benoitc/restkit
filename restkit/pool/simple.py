@@ -34,7 +34,7 @@ class Host(object):
         expires = time.time() + self.timeout
         self.connections.append((conn, expires))
         
-    def clear(len):
+    def clear(self, len):
         if len(self.connections):
             for conn, expire in len(self.connections):
                 sock.close(conn)

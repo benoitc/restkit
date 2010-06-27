@@ -3,8 +3,8 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+import cgi
 import errno
-import gzip
 import logging
 import mimetypes
 import os
@@ -16,12 +16,13 @@ except ImportError:
     from StringIO import StringIO
 import types
 import urlparse
+import uuid
 
 from restkit import __version__
 from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
-BadStatusLine, AlreadyRead
+AlreadyRead
 from restkit.filters import Filters
-from restkit.forms import MultipartForm, multipart_form_encode, form_encode
+from restkit.forms import multipart_form_encode, form_encode
 from restkit.util import sock
 from restkit import tee
 from restkit import util
@@ -221,8 +222,8 @@ class HttpConnection(object):
                     content_type.startswith("multipart/form-data"):
                 type_, opts = cgi.parse_header(content_type)
                 boundary = opts.get('boundary', uuid.uuid4().hex)
-                body, headers = multipart_form_encode(body, 
-                                            headers, boundary)
+                body, self.headers = multipart_form_encode(body, 
+                                            self.headers, boundary)
             else:
                 content_type = "application/x-www-form-urlencoded; charset=utf-8"
                 body = form_encode(body)

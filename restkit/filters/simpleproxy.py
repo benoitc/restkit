@@ -25,10 +25,10 @@ ex::
             
 """
 
+import base64
 import os
 import urlparse
 
-from restkit.errors import InvalidUrl
 from restkit import http
 from restkit import util
 from restkit.util import sock
@@ -77,7 +77,7 @@ class SimpleProxy(object):
                 resp = parser.next()
  
                 if resp.status_int != 200:
-                    raise ProxyError('Error status=%s' % p.status)
+                    raise ProxyError('Error status=%s' % resp.status)
                     
                 sock._ssl_wrap_socket(p_sock, None, None)
                 
@@ -91,7 +91,6 @@ class SimpleProxy(object):
                 proxy_uri = urlparse.urlparse(proxy)
                 proxy_host, proxy_port = self._host_port(proxy_uri)
                 if proxy_auth:
-                    headers['Proxy-Authorization'] = proxy_auth.strip()
                     req.headers.append(('Proxy-Authorization', 
                              proxy_auth.strip()))
                              

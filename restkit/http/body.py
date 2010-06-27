@@ -4,6 +4,7 @@
 # See the NOTICE for more information.
 
 import sys
+import zlib
 
 try:
     from cStringIO import StringIO

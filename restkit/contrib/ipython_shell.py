@@ -1,10 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -
 #
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-import sys
 
 try:
     from IPython.Shell import IPShellEmbed
@@ -17,7 +15,7 @@ try:
 except ImportError:
     raise ImportError('webob (http://pythonpaste.org/webob/) is required.')
 
-from restkit import __version__, request, set_logging
+from restkit import __version__
 from restkit.console import common_indent, json
 from restkit.contrib.webob_api import Request as BaseRequest
 from webob import Response as BaseResponse
