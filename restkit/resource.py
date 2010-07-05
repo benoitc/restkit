@@ -55,7 +55,7 @@ class Resource(object):
                 password = u.password or ""
                 
                 # add filters
-                filters = client_opts.get('filters', [])
+                filters = client_opts.get('filters') or []
                 filters.append(BasicAuth(u.username, password))
                 client_opts['filters'] = filters
                 
