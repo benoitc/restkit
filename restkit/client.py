@@ -169,7 +169,7 @@ class HttpConnection(object):
         
         # build filter lists
         self.filters = Filters(filters)
-        self.ssl_args = ssl_args
+        self.ssl_args = ssl_args or {}
        
         if not pool_instance:
             self.should_close = True
@@ -198,9 +198,9 @@ class HttpConnection(object):
         if not s:
             # pool is empty or we don't use a pool
             if self.uri.scheme == "https":
-                s = sock.connect(addr, self.timeout, **self.ssl_args)
+                s = sock.connect(addr, True, self.timeout, **self.ssl_args)
             else:
-                s = sock.connect(addr, self.timeout)
+                s = sock.connect(addr, False, self.timeout)
         return s
         
     def clean_connections(self):

@@ -23,7 +23,8 @@ _allowed_ssl_args = ('keyfile', 'certfile', 'server_side',
                     'cert_reqs', 'ssl_version', 'ca_certs', 
                     'do_handshake_on_connect', 'suppress_ragged_eofs')
 
-def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, **ssl_args):
+def connect(address, is_ssl, timeout=_GLOBAL_DEFAULT_TIMEOUT, **ssl_args):
+    ssl_args = ssl_args or {}
     msg = "getaddrinfo returns an empty list"
     host, port = address
     for res in socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM):
@@ -34,7 +35,7 @@ def connect(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, **ssl_args):
             if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
                 sock.settimeout(timeout)
             sock.connect(sa)
-            if ssl_args:
+            if is_ssl:
                 if not have_ssl:
                     raise ValueError("https isn't supported.  On python 2.5x,"
                                 + " https support requires ssl module "
