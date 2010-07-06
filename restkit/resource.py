@@ -10,7 +10,7 @@ restkit.resource
 
 This module provide a common interface for all HTTP request. 
 """
-
+from copy import copy
 import urlparse
 
 from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
@@ -48,6 +48,7 @@ class Resource(object):
             pool = self.pool_class()
             client_opts['pool_instance'] = pool
             
+        self.filters = client_opts.get('filters') or []
         if self.basic_auth_url:
             # detect credentials from url
             u = urlparse.urlparse(uri)
@@ -55,7 +56,7 @@ class Resource(object):
                 password = u.password or ""
                 
                 # add filters
-                filters = client_opts.get('filters') or []
+                filters = copy(self.filters)                
                 filters.append(BasicAuth(u.username, password))
                 client_opts['filters'] = filters
                 
@@ -85,8 +86,10 @@ class Resource(object):
             resr2 = res.clone()
         
         """
+        client_opts = self.client_opts.copy()
+        client_opts["filters"] = self.filters
         obj = self.__class__(self.uri, headers=self._headers, 
-                        **self.client_opts)
+                        **client_opts)
         return self._set_default_attrs(obj)
    
     def __call__(self, path):
@@ -97,10 +100,13 @@ class Resource(object):
             Resource("/path").get()
         """
 
+        client_opts = self.client_opts.copy()
+        client_opts["filters"] = self.filters
+        
         new_uri = util.make_uri(self.uri, path, charset=self.charset, 
                         safe=self.safe, encode_keys=self.encode_keys)
                         
-        obj = type(self)(new_uri, headers=self._headers, **self.client_opts)
+        obj = type(self)(new_uri, headers=self._headers, **client_opts)
         return self._set_default_attrs(obj)
  
     def get(self, path=None, headers=None, **params):
