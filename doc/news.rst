@@ -3,6 +3,13 @@
 News
 ====
 
+2.0.2 / 2010-07-07
+------------------
+
+- Fix HttpResponse.close() method
+- Make sure we use ssl when https scheme is used
+- Fix "__call__" and clone() methods from restkit.Resource object.
+
 2.0 / 2010-06-28
 ----------------
 

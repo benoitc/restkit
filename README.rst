@@ -28,8 +28,8 @@ Usage example, get friendpaste page::
 
   from restkit import request
   resp = request('http://friendpaste.com')
-  print resp.body
-  print resp.status_int_
+  print resp.body_string()
+  print resp.status_int
     
     
 Create a simple Twitter Search resource
@@ -69,12 +69,12 @@ Here is the snippet::
 Reuses connections
 ------------------
 
-Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a pool instance inheriting reskit.pool.PoolInterface. You can use our threadsafe pool in any application::
+Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a pool instance inheriting :api:`reskit.pool.PoolInterface`. You can use our threadsafe pool in any application::
 
 
-  from restkit import Resource, ConnectionPool
+  from restkit import Resource, SimplePool
   
-  pool = ConnectionPool(max_connections=5)
+  pool = SimplePool(keepalive=2)
   res = Resource('http://friendpaste.com', pool_instance=pool)
   
 or if you use Eventlet::
@@ -83,9 +83,9 @@ or if you use Eventlet::
   eventlet.monkey_patch(all=False, socket=True, select=True)
   
   from restkit import Resource
-  from restkit.ext.eventlet_pool import EventletPool
+  from restkit.pool.reventlet import EventletPool
   
-  pool = EventletPool(max_connections=5, timeout=300)
+  pool = EventletPool(keepalive=2, timeout=300)
   res = Resource('http://friendpaste.com', pool_instance=pool)
 
 
@@ -99,6 +99,7 @@ other authentication schema can easily be added using http filters.
 
 Basic authentication
 ++++++++++++++++++++
+
 
 To use `basic authentication` in a `Resource object` you can do::
 
@@ -117,15 +118,15 @@ Or simply use an authentication url::
 OAuth
 +++++
 
-Restkit OAuth is based on `simplegeo python-oauth2 module <http://github.com/simplegeo/python-oauth2>`_ So you don't need other installation to use OAuth (you can also simply use restkit.oauth2 module in your applications).
+Restkit OAuth is based on `simplegeo python-oauth2 module <http://github.com/simplegeo/python-oauth2>`_ So you don't need other installation to use OAuth (you can also simply use :api:`restkit.oauth2` module in your applications).
   
-The OAuth filter allow you to associate a consumer per resource (path). Initalize Oauth filter with a tuple or list of tuples::
+The OAuth filter :api:`restkit.oauth2.filter.OAuthFilter` allow you to associate a consumer per resource (path). Initalize Oauth filter with::
       
-          (path, consumer, token, signaturemethod) 
+          path, consumer, token, signaturemethod
           
-`token` and `method signature` are optionnals. Consumer should be an instance of `restkit.oauth2.Consumer`, token an  instance of `restkit.oauth2.Token`  signature method an instance of `oauth2.SignatureMethod`  (`restkit.oauth2.Token` is only needed for three-legged requests.
+`token` and `method signature` are optionnals. Consumer should be an instance of :api:`restkit.oauth2.Consumer`, token an  instance of :api:`restkit.oauth2.Token`  signature method an instance of :api:`oauth2.SignatureMethod`  (:api:`restkit.oauth2.Token` is only needed for three-legged requests.
 
-With a list of tupple, the filter will try to match the path with the rule. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.
+The filter is appleid if the path match. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.
 
 Example the rule `/some/resource/*` will match `/some/resource/other` and `/some/resource/other2`, while the rule `/some/resource` will only match the path `/some/resource`.
 
@@ -145,11 +146,11 @@ Simple client example:
   request_token_url = "http://twitter.com/oauth/request_token"
 
   # Create our filter.
-  auth = OAuthFilter(('*', consumer))
+  auth = oauth.OAuthFilter('*', consumer)
 
   # The request.
   resp = request(request_token_url, filters=[auth])
-  print resp.body
+  print resp.body_string()
   
 
 If you want to add OAuth  to your `TwitterSearch` resource::
@@ -159,7 +160,7 @@ If you want to add OAuth  to your `TwitterSearch` resource::
     secret="your-twitter-consumer-secret")
     
   # Create our filter.
-  client = OAuthFilter(('*', consumer))
+  client = oauth.OAuthfilter('*', consumer)
     
   s = TwitterSearch(filters=[client])
 

@@ -55,7 +55,7 @@ Simple client example:
 
   # The request.
   resp = request(request_token_url, filters=[auth])
-  print resp.body
+  print resp.body_string()
   
 
 If you want to add OAuth  to your `TwitterSearch` resource::
