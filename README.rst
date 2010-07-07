@@ -69,7 +69,7 @@ Here is the snippet::
 Reuses connections
 ------------------
 
-Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a pool instance inheriting :api:`reskit.pool.PoolInterface`. You can use our threadsafe pool in any application::
+Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a pool instance inheriting `reskit.pool.PoolInterface`. You can use our threadsafe pool in any application::
 
 
   from restkit import Resource, SimplePool
@@ -118,13 +118,13 @@ Or simply use an authentication url::
 OAuth
 +++++
 
-Restkit OAuth is based on `simplegeo python-oauth2 module <http://github.com/simplegeo/python-oauth2>`_ So you don't need other installation to use OAuth (you can also simply use :api:`restkit.oauth2` module in your applications).
+Restkit OAuth is based on `simplegeo python-oauth2 module <http://github.com/simplegeo/python-oauth2>`_ So you don't need other installation to use OAuth (you can also simply use `restkit.oauth2` module in your applications).
   
-The OAuth filter :api:`restkit.oauth2.filter.OAuthFilter` allow you to associate a consumer per resource (path). Initalize Oauth filter with::
+The OAuth filter `restkit.oauth2.filter.OAuthFilter` allow you to associate a consumer per resource (path). Initalize Oauth filter with::
       
           path, consumer, token, signaturemethod
           
-`token` and `method signature` are optionnals. Consumer should be an instance of :api:`restkit.oauth2.Consumer`, token an  instance of :api:`restkit.oauth2.Token`  signature method an instance of :api:`oauth2.SignatureMethod`  (:api:`restkit.oauth2.Token` is only needed for three-legged requests.
+`token` and `method signature` are optionnals. Consumer should be an instance of `restkit.oauth2.Consumer`, token an  instance of `restkit.oauth2.Token`  signature method an instance of `oauth2.SignatureMethod`  (`restkit.oauth2.Token` is only needed for three-legged requests.
 
 The filter is appleid if the path match. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.
 
