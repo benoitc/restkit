@@ -1,26 +1,8 @@
-"""
-The MIT License
+# -*- coding: utf-8 -
+#
+# This file is part of restkit released under the MIT license. 
+# See the NOTICE for more information.
 
-Copyright (c) 2007-2010 Leah Culver, Joe Stump, Mark Paschal, Vic Fryzel
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-"""
 
 import urllib
 import time
@@ -329,11 +311,31 @@ class Request(dict):
     def to_url(self):
         """Serialize as a URL for a GET request."""
         base_url = urlparse.urlparse(self.url)
-        query = parse_qs(base_url.query)
+        try:
+            query = base_url.query
+        except AttributeError:
+            # must be python <2.5
+            query = base_url[4]
+        query = parse_qs(query)
         for k, v in self.items():
             query.setdefault(k, []).append(v)
-        url = (base_url.scheme, base_url.netloc, base_url.path, base_url.params,
-               urllib.urlencode(query, True), base_url.fragment)
+        
+        try:
+            scheme = base_url.scheme
+            netloc = base_url.netloc
+            path = base_url.path
+            params = base_url.params
+            fragment = base_url.fragment
+        except AttributeError:
+            # must be python <2.5
+            scheme = base_url[0]
+            netloc = base_url[1]
+            path = base_url[2]
+            params = base_url[3]
+            fragment = base_url[5]
+        
+        url = (scheme, netloc, path, params,
+               urllib.urlencode(query, True), fragment)
         return urlparse.urlunparse(url)
 
     def get_parameter(self, parameter):
@@ -358,14 +360,17 @@ class Request(dict):
 
         # Include any query string parameters from the provided URL
         query = urlparse.urlparse(self.url)[4]
-        items.extend(self._split_url_string(query).items())
+        
+        url_items = self._split_url_string(query).items()
+        non_oauth_url_items = list([(k, v) for k, v in url_items  if not k.startswith('oauth_')])
+        items.extend(non_oauth_url_items)
 
         encoded_str = urllib.urlencode(sorted(items))
         # Encode signature parameters per Oauth Core 1.0 protocol
         # spec draft 7, section 3.6
         # (http://tools.ietf.org/html/draft-hammer-oauth-07#section-3.6)
         # Spaces must be encoded with "%20" instead of "+"
-        return encoded_str.replace('+', '%20')
+        return encoded_str.replace('+', '%20').replace('%7E', '~')
  
     def sign_request(self, signature_method, consumer, token):
         """Set the signature parameter to the result of sign."""
@@ -486,7 +491,6 @@ class Request(dict):
         for k, v in parameters.iteritems():
             parameters[k] = urllib.unquote(v[0])
         return parameters
-
 
 class Server(object):
     """A skeletal implementation of a service provider, providing protected
