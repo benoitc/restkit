@@ -3,6 +3,11 @@
 News
 ====
 
+2.0.3 / 2010-07-10
+------------------
+
+- Sync oauth module with python-oauth 1.2.1 and provide 3 legged auth example in doc.
+
 2.0.2 / 2010-07-07
 ------------------
 
