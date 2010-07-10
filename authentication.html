@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Authentication &mdash; restkit v2.0.2 documentation</title>
+    <title>Authentication &mdash; restkit v2.0.3 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.0.2',
+        VERSION:     '2.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.0.2 documentation" href="index.html" />
+    <link rel="top" title="restkit v2.0.3 documentation" href="index.html" />
     <link rel="next" title="Stream you content" href="streaming.html" />
     <link rel="prev" title="Reuses connections" href="pool.html" />
 
@@ -145,6 +145,82 @@ other authentication schema can easily be added using http filters.</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="twitter-three-legged-oauth-example">
+<h3>Twitter Three-legged OAuth Example:<a class="headerlink" href="#twitter-three-legged-oauth-example" title="Permalink to this headline">¶</a></h3>
+<p>Below is an example from <a class="reference external" href="http://github.com/simplegeo/python-oauth2">python-oauth2</a> of how one would go through a three-legged OAuth flow to gain access to protected resources on Twitter. This is a simple CLI script, but can be easily translated to a web application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urlparse</span>
+
+<span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">restkit.filters</span> <span class="kn">import</span> <span class="n">OAuthFilter</span>
+<span class="kn">import</span> <span class="nn">restkit.util.oauth2</span> <span class="kn">as</span> <span class="nn">oauth</span>
+
+<span class="n">consumer_key</span> <span class="o">=</span> <span class="s">&#39;my_key_from_twitter&#39;</span>
+<span class="n">consumer_secret</span> <span class="o">=</span> <span class="s">&#39;my_secret_from_twitter&#39;</span>
+
+<span class="n">request_token_url</span> <span class="o">=</span> <span class="s">&#39;http://twitter.com/oauth/request_token&#39;</span>
+<span class="n">access_token_url</span> <span class="o">=</span> <span class="s">&#39;http://twitter.com/oauth/access_token&#39;</span>
+<span class="n">authorize_url</span> <span class="o">=</span> <span class="s">&#39;http://twitter.com/oauth/authorize&#39;</span>
+
+<span class="n">consumer</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">Consumer</span><span class="p">(</span><span class="n">consumer_key</span><span class="p">,</span> <span class="n">consumer_secret</span><span class="p">)</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">OAuthFilter</span><span class="p">(</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="n">consumer</span><span class="p">)</span>
+
+<span class="c"># Step 1: Get a request token. This is a temporary token that is used for</span>
+<span class="c"># having the user authorize an access token and to sign the request to obtain</span>
+<span class="c"># said access token.</span>
+
+
+
+<span class="n">resp</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">request_token_url</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">auth</span><span class="p">])</span>
+<span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_int</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Invalid response </span><span class="si">%s</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+
+<span class="n">request_token</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">urlparse</span><span class="o">.</span><span class="n">parse_qsl</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">body_string</span><span class="p">()))</span>
+
+<span class="k">print</span> <span class="s">&quot;Request Token:&quot;</span>
+<span class="k">print</span> <span class="s">&quot;    - oauth_token        = </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">request_token</span><span class="p">[</span><span class="s">&#39;oauth_token&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;    - oauth_token_secret = </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">request_token</span><span class="p">[</span><span class="s">&#39;oauth_token_secret&#39;</span><span class="p">]</span>
+<span class="k">print</span>
+
+<span class="c"># Step 2: Redirect to the provider. Since this is a CLI script we do not</span>
+<span class="c"># redirect. In a web application you would redirect the user to the URL</span>
+<span class="c"># below.</span>
+
+<span class="k">print</span> <span class="s">&quot;Go to the following link in your browser:&quot;</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">?oauth_token=</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">authorize_url</span><span class="p">,</span> <span class="n">request_token</span><span class="p">[</span><span class="s">&#39;oauth_token&#39;</span><span class="p">])</span>
+<span class="k">print</span>
+
+<span class="c"># After the user has granted access to you, the consumer, the provider will</span>
+<span class="c"># redirect you to whatever URL you have told them to redirect to. You can</span>
+<span class="c"># usually define this in the oauth_callback argument as well.</span>
+<span class="n">accepted</span> <span class="o">=</span> <span class="s">&#39;n&#39;</span>
+<span class="k">while</span> <span class="n">accepted</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;n&#39;</span><span class="p">:</span>
+    <span class="n">accepted</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Have you authorized me? (y/n) &#39;</span><span class="p">)</span>
+<span class="n">oauth_verifier</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;What is the PIN? &#39;</span><span class="p">)</span>
+
+<span class="c"># Step 3: Once the consumer has redirected the user back to the oauth_callback</span>
+<span class="c"># URL you can request the access token the user has approved. You use the</span>
+<span class="c"># request token to sign this request. After this is done you throw away the</span>
+<span class="c"># request token and use the access token returned. You should store this</span>
+<span class="c"># access token somewhere safe, like a database, for future use.</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">Token</span><span class="p">(</span><span class="n">request_token</span><span class="p">[</span><span class="s">&#39;oauth_token&#39;</span><span class="p">],</span>
+    <span class="n">request_token</span><span class="p">[</span><span class="s">&#39;oauth_token_secret&#39;</span><span class="p">])</span>
+<span class="n">token</span><span class="o">.</span><span class="n">set_verifier</span><span class="p">(</span><span class="n">oauth_verifier</span><span class="p">)</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">OAuthFilter</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="n">consumer</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+
+<span class="n">resp</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">access_token_url</span><span class="p">,</span> <span class="s">&quot;POST&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">auth</span><span class="p">])</span>
+<span class="n">access_token</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">urlparse</span><span class="o">.</span><span class="n">parse_qsl</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">body_string</span><span class="p">()))</span>
+
+<span class="k">print</span> <span class="s">&quot;Access Token:&quot;</span>
+<span class="k">print</span> <span class="s">&quot;    - oauth_token        = </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">access_token</span><span class="p">[</span><span class="s">&#39;oauth_token&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;    - oauth_token_secret = </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">access_token</span><span class="p">[</span><span class="s">&#39;oauth_token_secret&#39;</span><span class="p">]</span>
+<span class="k">print</span>
+<span class="k">print</span> <span class="s">&quot;You may now access protected resources using the access tokens above.&quot;</span>
+<span class="k">print</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -160,6 +236,7 @@ other authentication schema can easily be added using http filters.</p>
 <li><a class="reference internal" href="#basic-authentication">Basic authentication</a></li>
 <li><a class="reference internal" href="#oauth">OAuth</a><ul>
 <li><a class="reference internal" href="#simple-client-example">Simple client example:</a></li>
+<li><a class="reference internal" href="#twitter-three-legged-oauth-example">Twitter Three-legged OAuth Example:</a></li>
 </ul>
 </li>
 </ul>
