@@ -321,7 +321,7 @@ class HttpConnection(object):
             elif name == "Content-Length":
                 content_length = str(value)
             elif name == "Accept-Encoding":
-                accept_encoding = 'identity'
+                accept_encoding = value
             elif name == "Host":
                 host = value
             elif name == "Transfer-Encoding":
