@@ -227,7 +227,8 @@ class HttpConnection(object):
             chunked=False):
         """ set HTTP body and manage form if needed """
         if not body:
-            self.headers.append(('Content-Type', content_type))
+            if content_type is not None:
+                self.headers.append(('Content-Type', content_type))
             if self.method in ('POST', 'PUT'):
                 self.headers.append(("Content-Length", "0"))
             return
@@ -270,7 +271,8 @@ class HttpConnection(object):
         
         if content_length:
             self.headers.append(("Content-Length", content_length))
-            self.headers.append(('Content-Type', content_type))
+            if content_type is not None:
+                self.headers.append(('Content-Type', content_type))
             
         elif not chunked:
             raise RequestError("Can't determine content length and" +
