@@ -9,9 +9,12 @@ exception classes.
             
 class ResourceError(Exception):
     """ default error class """
+    
+    status_int = None
+    
     def __init__(self, msg=None, http_code=None, response=None):
         self.msg = msg or ''
-        self.status_int = http_code
+        self.status_int = http_code or self.status_int
         self.response = response
         Exception.__init__(self)
         
@@ -34,6 +37,7 @@ class ResourceError(Exception):
 class ResourceNotFound(ResourceError):
     """Exception raised when no resource was found at the given url. 
     """
+    status_int = 404
 
 class Unauthorized(ResourceError):
     """Exception raised when an authorization is required to access to

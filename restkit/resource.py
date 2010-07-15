@@ -178,27 +178,22 @@ class Resource(object):
                         safe=self.safe, encode_keys=self.encode_keys,
                         **params)
         
-        try:
-            resp = self.do_request(uri, method=method, payload=payload, 
+        resp = self.do_request(uri, method=method, payload=payload, 
                                 headers=headers)
-        except ParserError:
-            raise
-        except Exception, e:
-            raise RequestError(e)
             
         if resp is None:
             # race condition
-            raise RequestError("unkown error")
+            raise ValueError("Unkown error: response object is None")
 
         if resp.status_int >= 400:
             if resp.status_int == 404:
-                raise ResourceNotFound(resp.body_string(), http_code=404, response=resp)
+                raise ResourceNotFound(resp.body_string(), response=resp)
             elif resp.status_int in (401, 403):
-                raise Unauthorized(resp.body_string(), http_code=resp.status_int,
-                        response=resp)
+                raise Unauthorized(resp.body_string(), 
+                                   http_code=resp.status_int, response=resp)
             else:
-                raise RequestFailed(resp.body_string(), http_code=resp.status_int,
-                    response=resp)
+                raise RequestFailed(resp.body_string(), 
+                                    http_code=resp.status_int, response=resp)
 
         return resp
 
