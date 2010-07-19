@@ -212,8 +212,6 @@ class HttpConnection(object):
         if not self.pool:
             sock.close(self._sock) 
             return
-        if address in self.pool._hosts:
-            print len(self.pool._hosts[address].connections)
         self.pool.put(address, self._sock)
         
     def parse_url(self, url):
