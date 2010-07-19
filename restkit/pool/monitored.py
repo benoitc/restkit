@@ -18,10 +18,10 @@ class MonitoredHost(object):
         self.init_pool()
 
     def get(self):
-        if len(self.connections) < self.keepalive:
+        if len(self.nb_connections) < self.keepalive:
             return None
             
-         while self.nb_connections:
+        while self.nb_connections:
             self.nb_connections -= 1
             conn = self.do_get()
             try:
@@ -33,7 +33,7 @@ class MonitoredHost(object):
         return None
         
     def put(self, conn):
-        if self.nb_connections < self.keepalive and not self.waiting():
+        if self.nb_connections > self.keepalive and self.waiting():
             sock.close(conn)
             return
         self.nb_connections += 1

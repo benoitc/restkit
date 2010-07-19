@@ -35,10 +35,10 @@ class Host(object):
         expires = time.time() + self.timeout
         self.connections.append((conn, expires))
         
-    def clear(self, len):
-        if len(self.connections):
-            for conn, expire in len(self.connections):
-                sock.close(conn)
+    def clear(self):
+        while self.connections:
+            conn, expires = self.connections.popleft()
+            sock.close(conn)
 
 class SimplePool(BasePool):
     
@@ -84,7 +84,7 @@ class SimplePool(BasePool):
     def clear(self):
         self._lock.writer_enters()
         try:
-            for netloc, host in self._hosts:
+            for netloc, host in self._hosts.items():
                 host.clear()
                 del self._hosts[netloc]
         finally:

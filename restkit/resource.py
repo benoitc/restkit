@@ -109,6 +109,11 @@ class Resource(object):
                         
         obj = type(self)(new_uri, headers=self._headers, **client_opts)
         return self._set_default_attrs(obj)
+        
+    def close(self):
+        pool = self.client_opts.get('pool_instance')
+        if not pool: return
+        pool.clear()
  
     def get(self, path=None, headers=None, **params):
         """ HTTP GET         
