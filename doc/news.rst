@@ -3,6 +3,15 @@
 News
 ====
 
+2.0.5 / 2010-07-20
+------------------
+
+- Added Resouce.close() method: close the pool connections
+- Fix keep-alive handling
+- Fix Content-Type headerfor GET
+- Fix "Accept-Encoding" header
+- Update oauth2
+
 2.0.2 / 2010-07-07
 ------------------
 

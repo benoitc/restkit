@@ -111,6 +111,7 @@ class Resource(object):
         return self._set_default_attrs(obj)
         
     def close(self):
+        """ Close all the connections related to the resource """
         pool = self.client_opts.get('pool_instance')
         if not pool: 
             return
