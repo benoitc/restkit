@@ -15,6 +15,7 @@ class BasePool(object):
             raise ValueError("Pool timeout isn't an integer")
         self.keepalive = keepalive
         self.timeout = timeout
+        self.alive = True
         
     def get(self, netloc):
         """ method used to return a connection from the pool"""
@@ -30,4 +31,9 @@ class BasePool(object):
         
     def clear(self):
         """ method used to release all connections """
-        raise NotImplementedError        
+        raise NotImplementedError
+        
+    def close(self):
+        """ close the pool monitoring and clear all connections """
+        self.alive = False
+        self.clear()

@@ -76,7 +76,6 @@ class MonitoredPool(BasePool):
         super(MonitoredPool, self).__init__(keepalive=keepalive, 
                         timeout=timeout)
         self._hosts = {}
-        self.alive = True
         self.start()
     
     def start(self):
