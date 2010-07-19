@@ -3,10 +3,14 @@
 News
 ====
 
-2.0.3 / 2010-07-10
+2.0.5 / 2010-07-20
 ------------------
 
-- Sync oauth module with python-oauth 1.2.1 and provide 3 legged auth example in doc.
+- Added Resouce.close() method: close the pool connections
+- Fix keep-alive handling
+- Fix Content-Type headerfor GET
+- Fix "Accept-Encoding" header
+- Update oauth2
 
 2.0.2 / 2010-07-07
 ------------------
