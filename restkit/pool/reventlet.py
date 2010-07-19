@@ -11,17 +11,13 @@ from restkit.pool.monitored import MonitoredHost, MonitoredPool
 class EventletHost(MonitoredHost):
     
     def init_pool(self):
-        self.pool = queue.LightQueue(0)
+        self.pool = queue.LightQueue()
 
     def do_get(self):
         return self.pool.get()
         
     def do_put(self, conn):
         self.pool.put(conn)
-
-    def monitor(self, conn):
-        super(EventletHost, self).monitor(conn)
-        eventlet.spawn_after(self.timeout, self.expire, conn.fileno())
         
     def waiting(self):
         return max(0, self.pool.getting() - self.pool.putting())   
@@ -29,3 +25,12 @@ class EventletHost(MonitoredHost):
 
 class EventletPool(MonitoredPool):
     HOST_CLASS = EventletHost
+    
+    def start(self):
+        self.loop = eventlet.spawn(self.monitor_loop)
+    
+    def monitor_loop(self):
+        while self.alive:
+            eventlet.sleep(0.1)
+            for host in self._hosts.values():
+                host.murder_connections()

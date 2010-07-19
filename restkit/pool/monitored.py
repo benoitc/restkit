@@ -4,6 +4,7 @@
 # See the NOTICE for more information.
 
 import socket
+import time
 
 from restkit.pool.base import BasePool
 from restkit.util import sock
@@ -18,7 +19,7 @@ class MonitoredHost(object):
         self.init_pool()
 
     def get(self):
-        if len(self.nb_connections) < self.keepalive:
+        if self.nb_connections < self.keepalive:
             return None
             
         while self.nb_connections:
@@ -38,20 +39,21 @@ class MonitoredHost(object):
             return
         self.nb_connections += 1
         self.do_put(conn)
-        self.monitor(conn)
+        self.alive[conn.fileno()] = (conn, self.timeout + time.time())
         
     def clear(self):
         while self.nb_connections:
-            conn = self.get()
+            self.nb_connections -= 1
+            conn = self.do_get()
             sock.close(conn)
             
-    def expire(self, fno):
-        if fno in self.alive:
-            conn = self.alive.pop(fno)
-            sock.close(conn)
-
-    def monitor(self, conn):
-        self.alive[conn.fileno()] = conn
+    def murder_connections(self):
+        for fno, connection in self.alive.items():
+            conn, expires = connection
+            if expires < time.time():
+                sock.close(conn)
+                self.nb_connections -= 1
+                del self.alive[fno]
         
     def init_pool(self):
         raise NotImplementedError
@@ -74,6 +76,11 @@ class MonitoredPool(BasePool):
         super(MonitoredPool, self).__init__(keepalive=keepalive, 
                         timeout=timeout)
         self._hosts = {}
+        self.alive = True
+        self.start()
+    
+    def start(self):
+        raise NotImplementedError
         
     def get(self, netloc):
         if netloc not in self._hosts:
