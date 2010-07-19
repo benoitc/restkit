@@ -112,8 +112,11 @@ class Resource(object):
         
     def close(self):
         pool = self.client_opts.get('pool_instance')
-        if not pool: return
-        pool.clear()
+        if not pool: 
+            return
+        
+        parsed_url = urlparse.urlparse(self.uri)
+        pool.clear_host(util.parse_netloc(parsed_url))
  
     def get(self, path=None, headers=None, **params):
         """ HTTP GET         
