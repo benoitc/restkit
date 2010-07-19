@@ -7,6 +7,7 @@ News
 ------------------
 
 - Added Resouce.close() method: close the pool connections
+- Added Pool.close() method: clear the pool and stop monitoring
 - Fix keep-alive handling
 - Fix Content-Type headerfor GET
 - Fix "Accept-Encoding" header
