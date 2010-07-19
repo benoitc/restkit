@@ -44,8 +44,9 @@ class Resource(object):
         """
 
         pool_instance = client_opts.get('pool_instance')
+        keepalive = client_opts.get("keepalive") or 10
         if not pool_instance and self.keepalive:
-            pool = self.pool_class()
+            pool = self.pool_class(keepalive=keepalive)
             client_opts['pool_instance'] = pool
             
         self.filters = client_opts.get('filters') or []

@@ -7,7 +7,7 @@
 
 class BasePool(object):
     
-    def __init__(self, keepalive=2, timeout=300):
+    def __init__(self, keepalive=10, timeout=300):
         """ abstract class from which all connection 
         pool should inherit.
         """

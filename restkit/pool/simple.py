@@ -4,14 +4,12 @@
 # See the NOTICE for more information.
 
 """ Thread-safe pool """
-
+import collections
 import time
 
 from restkit.pool.base import BasePool
 from restkit.util import sock
 from restkit.util.rwlock import RWLock
-
-import collections
 
 class Host(object):
     
@@ -21,9 +19,12 @@ class Host(object):
         self.connections = collections.deque()
         
     def get(self):
+        if len(self.connections) < self.keepalive:
+            return None
+            
         while len(self.connections):
             conn, expires = self.connections.popleft()
-            if expires < time.time():
+            if expires >= time.time():
                 return conn
         return None
         
@@ -41,8 +42,9 @@ class Host(object):
 
 class SimplePool(BasePool):
     
-    def __init__(self, *args, **params):
-        BasePool.__init__(self, *args, **params)
+    def __init__(self, keepalive=10, timeout=300):
+        super(SimplePool, self).__init__(keepalive=keepalive, 
+                        timeout=timeout)
         self._hosts = {}
         self._lock = RWLock()
         

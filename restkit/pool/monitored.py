@@ -18,7 +18,10 @@ class MonitoredHost(object):
         self.init_pool()
 
     def get(self):
-        while self.nb_connections:
+        if len(self.connections) < self.keepalive:
+            return None
+            
+         while self.nb_connections:
             self.nb_connections -= 1
             conn = self.do_get()
             try:
@@ -67,8 +70,9 @@ class MonitoredPool(BasePool):
     
     HOST_CLASS = None
     
-    def __init__(self, *args, **kwargs):
-        BasePool.__init__(self, *args, **kwargs)
+    def __init__(self, keepalive=10, timeout=300):
+        super(MonitoredPool, self).__init__(keepalive=keepalive, 
+                        timeout=timeout)
         self._hosts = {}
         
     def get(self, netloc):

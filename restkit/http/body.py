@@ -188,7 +188,6 @@ class Body(object):
        elif not self.closed:
            # release connection
            self.req.unreader.release()
-    
        self.closed = True
             
     def __enter__(self):
