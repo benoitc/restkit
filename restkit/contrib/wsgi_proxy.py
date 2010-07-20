@@ -79,7 +79,7 @@ class Proxy(object):
             path_info += '?' + query_string
 
         host_uri = self.extract_uri(environ)
-        uri = host_uri+path_info
+        uri = host_uri + path_info
 
         new_headers = {}
         for k, v in environ.items():
@@ -102,14 +102,14 @@ class Proxy(object):
         if 'location' in response:
             headers = []
             for k, v in response.headerslist:
-                if k == 'Location':
+                if k.lower() == 'location':
                     # rewrite location with a relative path. dont want to deal
                     # with complex url rebuild stuff
                     if v.startswith(host_uri):
                         v = v[len(host_uri):]
                     if self.strip_script_name:
                         v = environ['SCRIPT_NAME'] + v
-                    headers.append((k, v))
+                headers.append((k, v))
         else:
             headers = response.headerslist
 
