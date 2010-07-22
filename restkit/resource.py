@@ -113,9 +113,7 @@ class Resource(object):
 
         new_uri = util.make_uri(uri, path, charset=self.charset, 
                         safe=self.safe, encode_keys=self.encode_keys)
-                        
-        print new_uri
-                        
+                                                
         obj = type(self)(new_uri, **self.initial['client_opts'])
         return obj
         
