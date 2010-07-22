@@ -307,12 +307,7 @@ class HttpConnection(object):
         accept_encoding = 'identity'
         chunked = False
         content_type = None
-        
-        if not self.pool:
-            connection = "close"
-        else:
-            connection = "keep-alive"
-        
+
         # default host
         try:
             host = self.uri.netloc.encode('ascii')
@@ -336,15 +331,11 @@ class HttpConnection(object):
                 if value.lower() == "chunked":
                     chunked = True
                 self.headers.append((name, value))
-            elif name == "Connection":
-                connection = value
             else:
                 if not isinstance(value, types.StringTypes):
                     value = str(value)
                 self.headers.append((name, value))
-                
-        self.headers.append(("Connection", connection))
-        
+                        
         self.set_body(body, content_type=content_type, 
             content_length=content_length, chunked=chunked)
 
