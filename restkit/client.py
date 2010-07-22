@@ -130,7 +130,6 @@ class HttpConnection(object):
     version = (1, 1)
     response_class = HttpResponse
     
-    
     def __init__(self, timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
             filters=None, follow_redirect=False, force_follow_redirect=False, 
             max_follow_redirect=MAX_FOLLOW_REDIRECTS, 
@@ -212,8 +211,9 @@ class HttpConnection(object):
     def release_connection(self, address, socket):
         if not self.pool:
             sock.close(self._sock) 
-            return
-        self.pool.put(address, self._sock)
+        else:
+            self.pool.put(address, self._sock)
+        self._sock = None
         
     def parse_url(self, url):
         """ parse url and get host/port"""
