@@ -22,9 +22,6 @@ class Host(object):
         self.connections = collections.deque()
         
     def get(self):
-        if len(self.connections) < self.keepalive:
-            return None
-            
         while len(self.connections):
             conn, expires = self.connections.popleft()
             if expires >= time.time():

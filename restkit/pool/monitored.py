@@ -19,9 +19,6 @@ class MonitoredHost(object):
         self.init_pool()
 
     def get(self):
-        if self.nb_connections < self.keepalive:
-            return None
-            
         while self.nb_connections:
             self.nb_connections -= 1
             conn = self.do_get()

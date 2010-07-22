@@ -335,7 +335,7 @@ class HttpConnection(object):
                 if not isinstance(value, types.StringTypes):
                     value = str(value)
                 self.headers.append((name, value))
-                        
+
         self.set_body(body, content_type=content_type, 
             content_length=content_length, chunked=chunked)
 
