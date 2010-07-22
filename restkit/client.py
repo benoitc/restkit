@@ -204,7 +204,8 @@ class HttpConnection(object):
         return s
         
     def clean_connections(self):
-        sock.close(self._sock) 
+        sock.close(self._sock)
+        self._sock = None
         if hasattr(self.pool,'clear'):
             self.pool.clear_host((self.host, self.port))
         
