@@ -15,10 +15,17 @@ import urlparse
 
 from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
 ParserError, RequestError
-from restkit.client import HttpConnection
+from restkit.client import HttpConnection, HttpResponse
 from restkit.filters import BasicAuth
 from restkit import util
 from restkit.pool.simple import SimplePool
+
+_default_pool = None
+def default_pool(keepalive, timeout):
+    global _default_pool
+    if _default_pool is None:
+        _default_pool = SimplePool(keepalive=keepalive, timeout=timeout)
+    return _default_pool
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
@@ -28,26 +35,37 @@ class Resource(object):
     charset = 'utf-8'
     encode_keys = True
     safe = "/:"
-    pool_class = SimplePool
     keepalive = True
     basic_auth_url = True
+    response_class = HttpResponse
     
-    def __init__(self, uri, headers=None, **client_opts):
+    def __init__(self, uri, **client_opts):
         """Constructor for a `Resource` object.
 
         Resource represent an HTTP resource.
 
         :param uri: str, full uri to the server.
-        :param headers: dict, optionnal headers that will
-            be added to HTTP request.
         :param client_opts: `restkit.client.HttpConnection` Options
         """
+        
+        self.initial = dict(
+            uri = uri,
+            client_opts = client_opts
+        )
 
-        pool_instance = client_opts.get('pool_instance')
-        keepalive = client_opts.get("keepalive") or 10
-        if not pool_instance and self.keepalive:
-            pool = self.pool_class(keepalive=keepalive)
-            client_opts['pool_instance'] = pool
+        client_opts = client_opts or {}
+
+        # set default response_class
+        if self.response_class is not None and \
+                not 'response_class' in client_opts:
+            client_opts['response_class'] = self.response_class
+
+        # set default pool if needed
+        if not 'pool_instance' in client_opts and self.keepalive:
+            timeout = client_opts.get('timeout') or 300
+            keepalive = client_opts.get('keepalive') or 10
+            client_opts['pool_instance'] = default_pool(keepalive, timeout)
+
             
         self.filters = client_opts.get('filters') or []
         if self.basic_auth_url:
@@ -66,18 +84,10 @@ class Resource(object):
                     u.path, u.params, u.query, u.fragment))
                 
         self.uri = uri
-        self._headers = headers or {}
         self.client_opts = client_opts
-        self._body_parts = []
-
+        
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
-        
-    def _set_default_attrs(self, obj):
-        for attr_name in ('charset', 'encode_keys', 'pool_class',
-                'keepalive', 'basic_auth_url'):
-            setattr(obj, attr_name, getattr(self, attr_name))
-        return obj
         
     def clone(self):
         """if you want to add a path to resource uri, you can do:
@@ -87,11 +97,9 @@ class Resource(object):
             resr2 = res.clone()
         
         """
-        client_opts = self.client_opts.copy()
-        client_opts["filters"] = self.filters
-        obj = self.__class__(self.uri, headers=self._headers, 
-                        **client_opts)
-        return self._set_default_attrs(obj)
+        obj = self.__class__(self.initial['uri'], 
+                **self.initial['client_opts'])
+        return obj
    
     def __call__(self, path):
         """if you want to add a path to resource uri, you can do:
@@ -101,14 +109,15 @@ class Resource(object):
             Resource("/path").get()
         """
 
-        client_opts = self.client_opts.copy()
-        client_opts["filters"] = self.filters
-        
-        new_uri = util.make_uri(self.uri, path, charset=self.charset, 
+        uri = self.initial['uri']
+
+        new_uri = util.make_uri(uri, path, charset=self.charset, 
                         safe=self.safe, encode_keys=self.encode_keys)
                         
-        obj = type(self)(new_uri, headers=self._headers, **client_opts)
-        return self._set_default_attrs(obj)
+        print new_uri
+                        
+        obj = type(self)(new_uri, **self.initial['client_opts'])
+        return obj
         
     def close(self):
         """ Close all the connections related to the resource """
@@ -164,10 +173,14 @@ class Resource(object):
         return self.request("PUT", path=path, payload=payload,
                         headers=headers, **params)
                         
-    def do_request(self, url, method='GET', payload=None, headers=None):
-        http_client = HttpConnection(**self.client_opts)
-        return http_client.request(url, method=method, body=payload, 
-                            headers=headers)
+    def make_params(self, params):
+        return params or {}
+        
+    def make_headers(self, headers):
+        return headers or []
+        
+    def unauthorized(self, response):
+        return True
 
     def request(self, method, path=None, payload=None, headers=None, 
         **params):
@@ -183,27 +196,36 @@ class Resource(object):
         :param params: Optionnal parameterss added to the request
         """
         
-        headers = headers or []
-        uri = util.make_uri(self.uri, path, charset=self.charset, 
-                        safe=self.safe, encode_keys=self.encode_keys,
-                        **params)
-        
-        resp = self.do_request(uri, method=method, payload=payload, 
-                                headers=headers)
+        while True:
             
-        if resp is None:
-            # race condition
-            raise ValueError("Unkown error: response object is None")
+            uri = util.make_uri(self.uri, path, charset=self.charset, 
+                        safe=self.safe, encode_keys=self.encode_keys,
+                        **self.make_params(params))
+        
+            # make request
+            http = HttpConnection(**self.client_opts)
+            resp = http.request(uri, method=method, body=payload, 
+                        headers=self.make_headers(headers))
+            
+            if resp is None:
+                # race condition
+                raise ValueError("Unkown error: response object is None")
 
-        if resp.status_int >= 400:
-            if resp.status_int == 404:
-                raise ResourceNotFound(resp.body_string(), response=resp)
-            elif resp.status_int in (401, 403):
-                raise Unauthorized(resp.body_string(), 
-                                   http_code=resp.status_int, response=resp)
+            if resp.status_int >= 400:
+                if resp.status_int == 404:
+                    raise ResourceNotFound(resp.body_string(), 
+                                response=resp)
+                elif resp.status_int in (401, 403):
+                    if self.unauthorized(resp):
+                        raise Unauthorized(resp.body_string(), 
+                                http_code=resp.status_int, 
+                                response=resp)
+                else:
+                    raise RequestFailed(resp.body_string(), 
+                                http_code=resp.status_int,
+                                response=resp)
             else:
-                raise RequestFailed(resp.body_string(), 
-                                    http_code=resp.status_int, response=resp)
+                break
 
         return resp
 
@@ -213,3 +235,7 @@ class Resource(object):
         """
         self.uri = util.make_uri(self.uri, path, charset=self.charset, 
                         safe=self.safe, encode_keys=self.encode_keys)
+        self.original['uri'] =  util.make_uri(self.original['uri'], path, 
+                                    charset=self.charset, 
+                                    safe=self.safe, 
+                                    encode_keys=self.encode_keys)
