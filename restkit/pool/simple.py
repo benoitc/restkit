@@ -6,10 +6,13 @@
 """ Thread-safe pool """
 import collections
 import time
+try:
+    import threading
+except ImportError:
+    import dummy_threading as threading
 
 from restkit.pool.base import BasePool
 from restkit.util import sock
-from restkit.util.rwlock import RWLock
 
 class Host(object):
     
@@ -46,10 +49,10 @@ class SimplePool(BasePool):
         super(SimplePool, self).__init__(keepalive=keepalive, 
                         timeout=timeout)
         self._hosts = {}
-        self._lock = RWLock()
+        self._lock = threading.Lock()
         
     def get(self, netloc):
-        self._lock.reader_enters()
+        self._lock.acquire()
         try:
             if netloc not in self._hosts:
                 return
@@ -57,10 +60,10 @@ class SimplePool(BasePool):
             conn = host.get()
             return conn
         finally:
-            self._lock.reader_leaves()
+            self._lock.release()
             
     def put(self, netloc, conn):
-        self._lock.writer_enters()
+        self._lock.acquire()
         try:
             if netloc not in self._hosts:
                 host = Host(self.keepalive, self.timeout)
@@ -69,26 +72,26 @@ class SimplePool(BasePool):
                 host = self._hosts[netloc] 
             host.put(conn)
         finally:
-            self._lock.writer_leaves()
+            self._lock.release()
             
     def clear_host(self, netloc):
-        self._lock.writer_enters()
+        self._lock.acquire()
         try:
             if netloc not in self._hosts:
                 return
             host = self._hosts[netloc]
             host.clear()
         finally:
-            self._lock.writer_leaves()
+            self._lock.release()
             
     def clear(self):
-        self._lock.writer_enters()
+        self._lock.acquire()
         try:
             for netloc, host in self._hosts.items():
                 host.clear()
                 del self._hosts[netloc]
         finally:
-            self._lock.writer_leaves()
+            self._lock.release()
         
         
 
