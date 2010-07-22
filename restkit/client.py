@@ -209,7 +209,7 @@ class HttpConnection(object):
             self.pool.clear_host((self.host, self.port))
         
     def release_connection(self, address, socket):
-        if not self.pool:
+        if self.should_close:
             sock.close(self._sock) 
         else:
             self.pool.put(address, self._sock)
@@ -308,6 +308,8 @@ class HttpConnection(object):
         accept_encoding = 'identity'
         chunked = False
         content_type = None
+        connection = None
+        
 
         # default host
         try:
@@ -332,6 +334,8 @@ class HttpConnection(object):
                 if value.lower() == "chunked":
                     chunked = True
                 self.headers.append((name, value))
+            elif name == "Connection":
+                connection = value
             else:
                 if not isinstance(value, types.StringTypes):
                     value = str(value)
@@ -344,6 +348,10 @@ class HttpConnection(object):
         self.chunked = chunked
         self.host_hdr = host
         self.accept_encoding = accept_encoding
+        if connection == "close":
+            self.should_close = True
+        elif self.pool is not None:
+            self.should_close = False
         
         # Finally do the request
         return self.do_send()

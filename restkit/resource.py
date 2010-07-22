@@ -195,7 +195,6 @@ class Resource(object):
         """
         
         while True:
-            
             uri = util.make_uri(self.uri, path, charset=self.charset, 
                         safe=self.safe, encode_keys=self.encode_keys,
                         **self.make_params(params))
