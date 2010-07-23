@@ -13,7 +13,7 @@ News
   Resource object
 - Added Resouce.close() method: close the pool connections
 - Added Pool.close() method: clear the pool and stop monitoring
-- Update Oauth2
+- Updated Oauth2 module
 - Handle ECONNRESET error in HTTP client
 - Fix keep-alive handling
 - Fix Content-Type headerfor GET
