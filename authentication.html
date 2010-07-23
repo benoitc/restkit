@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Authentication &mdash; restkit v2.0.5 documentation</title>
+    <title>Authentication &mdash; restkit v2.1.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.0.5',
+        VERSION:     '2.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.0.5 documentation" href="index.html" />
+    <link rel="top" title="restkit v2.1.0 documentation" href="index.html" />
     <link rel="next" title="Stream you content" href="streaming.html" />
     <link rel="prev" title="Reuses connections" href="pool.html" />
 
@@ -91,7 +91,7 @@
 other authentication schema can easily be added using http filters.</p>
 <div class="section" id="basic-authentication">
 <h2>Basic authentication<a class="headerlink" href="#basic-authentication" title="Permalink to this headline">¶</a></h2>
-<p>Basic authentication is managed by the object <a class="reference external" href="api/restkit.filters.BasicAuth-module.html">restkit.filters.BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="api/restkit-module.html#request">request</a> function and in <a class="reference external" href="api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
+<p>Basic authentication is managed by the object <a class="reference external" href="api/restkit.filters-module.html#BasicAuth">BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="api/restkit-module.html#request">request</a> function and in <a class="reference external" href="api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
 <p>To use <cite>basic authentication</cite> in a <cite>Resource object</cite> you can do:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">BasicAuth</span>
 

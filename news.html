@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>News &mdash; restkit v2.0.5 documentation</title>
+    <title>News &mdash; restkit v2.1.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.0.5',
+        VERSION:     '2.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.0.5 documentation" href="index.html" />
+    <link rel="top" title="restkit v2.1.0 documentation" href="index.html" />
 
   <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
   
@@ -86,26 +86,27 @@
   <div class="section" id="news">
 <span id="id1"></span><h1>News<a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id2">
-<h2>2.0.5 / 2010-07-20<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<h2>2.1.0 / 2010-07-24<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li>Added make_params, make_headers method to the Resource allowing you to modify headers and params</li>
+<li>Added unauthorized method to Resource allowing you to react on 401/403, return True
+by default</li>
+<li>make sure default pool is only set one time in the main thread in
+Resource object</li>
 <li>Added Resouce.close() method: close the pool connections</li>
 <li>Added Pool.close() method: clear the pool and stop monitoring</li>
+<li>Update Oauth2</li>
+<li>Handle ECONNRESET error in HTTP client</li>
 <li>Fix keep-alive handling</li>
 <li>Fix Content-Type headerfor GET</li>
 <li>Fix &#8220;Accept-Encoding&#8221; header</li>
-<li>Update oauth2</li>
-</ul>
-</div>
-<div class="section" id="id3">
-<h2>2.0.2 / 2010-07-07<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
 <li>Fix HttpResponse.close() method</li>
 <li>Make sure we use ssl when https scheme is used</li>
 <li>Fix &#8220;__call__&#8221; and clone() methods from restkit.Resource object.</li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h2>2.0 / 2010-06-28<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>2.0 / 2010-06-28<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Complete refactoring of pool. Now handle more concurrent connections (priority to read)</li>
 <li>Added full ssl support in restkit. It needs <a class="reference external" href="http://pypi.python.org/pypi/ssl">ssl</a> module on Python 2.5x</li>
@@ -125,14 +126,14 @@
 </ul>
 </div>
 </div>
-<div class="section" id="id5">
-<h2>1.3.1 / 2010-04-09<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>1.3.1 / 2010-04-09<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Fixed Python 2.5 compatibility for ssl connections</li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h2>1.3 / 2010-04-02<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h2>1.3 / 2010-04-02<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Added IPython shell extension (<cite>restkit &#8211;shell</cite>)</li>
 <li>fix Python 2.5 compatibility</li>
@@ -140,14 +141,14 @@
 <li>By default accept all methods in proxy</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h2>1.2.1 / 2010-03-08<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h2>1.2.1 / 2010-03-08<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Improve console client</li>
 </ul>
 </div>
-<div class="section" id="id8">
-<h2>1.2 / 2010-03-06<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id7">
+<h2>1.2 / 2010-03-06<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Added <a class="reference external" href="pool.html">GEvent</a> Support</li>
 <li>Added <a class="reference external" href="wsgi_proxy.html">wsgi_proxy</a> using webob and restkit</li>
@@ -156,28 +157,28 @@
 <li>Fix TeeInput</li>
 </ul>
 </div>
-<div class="section" id="id9">
-<h2>1.1.3 / 2010-03-04<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id8">
+<h2>1.1.3 / 2010-03-04<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Fix ssl connections</li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h2>1.1.2 / 2010-03-02<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id9">
+<h2>1.1.2 / 2010-03-02<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>More logging information</li>
 <li>Fix retry loop so an error is raised instead of returning None.</li>
 </ul>
 </div>
-<div class="section" id="id11">
-<h2>1.1 / 2010-03-01<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id10">
+<h2>1.1 / 2010-03-01<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Improved HTTP Parser - Now buffered.</li>
 <li>Logging facility</li>
 </ul>
 </div>
-<div class="section" id="id12">
-<h2>1.0 / 2010-02-28<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id11">
+<h2>1.0 / 2010-02-28<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>New HTTP Parser and major refactoring</li>
 <li>Added OAuth support</li>
@@ -198,20 +199,19 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">News</a><ul>
-<li><a class="reference internal" href="#id2">2.0.5 / 2010-07-20</a></li>
-<li><a class="reference internal" href="#id3">2.0.2 / 2010-07-07</a></li>
-<li><a class="reference internal" href="#id4">2.0 / 2010-06-28</a><ul>
+<li><a class="reference internal" href="#id2">2.1.0 / 2010-07-24</a></li>
+<li><a class="reference internal" href="#id3">2.0 / 2010-06-28</a><ul>
 <li><a class="reference internal" href="#breaking-changes">Breaking changes:</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id5">1.3.1 / 2010-04-09</a></li>
-<li><a class="reference internal" href="#id6">1.3 / 2010-04-02</a></li>
-<li><a class="reference internal" href="#id7">1.2.1 / 2010-03-08</a></li>
-<li><a class="reference internal" href="#id8">1.2 / 2010-03-06</a></li>
-<li><a class="reference internal" href="#id9">1.1.3 / 2010-03-04</a></li>
-<li><a class="reference internal" href="#id10">1.1.2 / 2010-03-02</a></li>
-<li><a class="reference internal" href="#id11">1.1 / 2010-03-01</a></li>
-<li><a class="reference internal" href="#id12">1.0 / 2010-02-28</a></li>
+<li><a class="reference internal" href="#id4">1.3.1 / 2010-04-09</a></li>
+<li><a class="reference internal" href="#id5">1.3 / 2010-04-02</a></li>
+<li><a class="reference internal" href="#id6">1.2.1 / 2010-03-08</a></li>
+<li><a class="reference internal" href="#id7">1.2 / 2010-03-06</a></li>
+<li><a class="reference internal" href="#id8">1.1.3 / 2010-03-04</a></li>
+<li><a class="reference internal" href="#id9">1.1.2 / 2010-03-02</a></li>
+<li><a class="reference internal" href="#id10">1.1 / 2010-03-01</a></li>
+<li><a class="reference internal" href="#id11">1.0 / 2010-02-28</a></li>
 </ul>
 </li>
 </ul>

@@ -3,19 +3,21 @@
 News
 ====
 
-2.0.5 / 2010-07-20
+2.1.0 / 2010-07-24
 ------------------
 
+- Added make_params, make_headers method to the Resource allowing you to modify headers and params
+- Added unauthorized method to Resource allowing you to react on 401/403, return True
+  by default
+- make sure default pool is only set one time in the main thread in
+  Resource object
 - Added Resouce.close() method: close the pool connections
 - Added Pool.close() method: clear the pool and stop monitoring
+- Update Oauth2
+- Handle ECONNRESET error in HTTP client
 - Fix keep-alive handling
 - Fix Content-Type headerfor GET
 - Fix "Accept-Encoding" header
-- Update oauth2
-
-2.0.2 / 2010-07-07
-------------------
-
 - Fix HttpResponse.close() method
 - Make sure we use ssl when https scheme is used
 - Fix "__call__" and clone() methods from restkit.Resource object.

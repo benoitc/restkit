@@ -310,13 +310,21 @@
 <tr>
 <td width="33%" class="link-index"><a href="webob.response.Response-class.html#date">date</a><br />
 <span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#delete">delete()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.reventlet.EventletHost-class.html#do_put">do_put()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool.reventlet.EventletHost-class.html">EventletHost</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="webob.response.Response-class.html#default_charset">default_charset</a><br />
+<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.misc-module.html">restkit.util.misc</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.rgevent.GeventHost-class.html#do_put">do_put()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.rgevent.GeventHost-class.html">GeventHost</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="webob.response.Response-class.html#default_charset">default_charset</a><br />
+<td width="33%" class="link-index"><a href="webob.response.Response-class.html#default_conditional_response">default_conditional_response</a><br />
 <span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredHost-class.html#do_get">do_get()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.monitored.MonitoredHost-class.html">MonitoredHost</a>)</span></td>
@@ -324,33 +332,25 @@
 <span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="webob.response.Response-class.html#default_conditional_response">default_conditional_response</a><br />
+<td width="33%" class="link-index"><a href="webob.response.Response-class.html#default_content_type">default_content_type</a><br />
 <span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.reventlet.EventletHost-class.html#do_get">do_get()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.reventlet.EventletHost-class.html">EventletHost</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#do_request">do_request()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="webob.response.Response-class.html#default_content_type">default_content_type</a><br />
-<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.rgevent.GeventHost-class.html#do_get">do_get()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.rgevent.GeventHost-class.html">GeventHost</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#do_send">do_send()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.resource-module.html#default_pool">default_pool()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.resource-module.html">restkit.resource</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.rgevent.GeventHost-class.html#do_get">do_get()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool.rgevent.GeventHost-class.html">GeventHost</a>)</span></td>
+<td width="33%" class="link-index">&nbsp;</td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_api.Request-class.html#delete">delete</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api.Request-class.html">Request</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredHost-class.html#do_put">do_put()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.monitored.MonitoredHost-class.html">MonitoredHost</a>)</span></td>
-<td width="33%" class="link-index">&nbsp;</td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#delete">delete()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.reventlet.EventletHost-class.html#do_put">do_put()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.reventlet.EventletHost-class.html">EventletHost</a>)</span></td>
 <td width="33%" class="link-index">&nbsp;</td>
 </tr>
 </table>
@@ -658,82 +658,89 @@
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.console-module.html#main">main()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.console-module.html">restkit.contrib.console</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#message">message</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.client-module.html#MAX_FOLLOW_REDIRECTS">MAX_FOLLOW_REDIRECTS</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.client-module.html">restkit.client</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.oauth2.MissingSignature-class.html">MissingSignature</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.oauth2-module.html">restkit.util.oauth2</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell-module.html#main">main()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell-module.html">restkit.contrib.ipython_shell</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html#message">message</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors.ResourceError-class.html">ResourceError</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#message">message</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.reventlet.EventletPool-class.html#monitor_loop">monitor_loop()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.reventlet.EventletPool-class.html">EventletPool</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#make_connection">make_connection()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.http.message-module.html">message</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http-module.html">restkit.http</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html#message">message</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors.ResourceError-class.html">ResourceError</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.rgevent.GeventPool-class.html#monitor_loop">monitor_loop()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.rgevent.GeventPool-class.html">GeventPool</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#make_headers">make_headers()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.message-module.html">message</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http-module.html">restkit.http</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.monitored-module.html">monitored</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool-module.html">restkit.pool</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy-module.html#make_host_proxy">make_host_proxy()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy-module.html">restkit.contrib.wsgi_proxy</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.message.Message-class.html">Message</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.message-module.html">restkit.http.message</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.monitored-module.html">monitored</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool-module.html">restkit.pool</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredHost-class.html">MonitoredHost</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool.monitored-module.html">restkit.pool.monitored</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#make_nonce">make_nonce()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.oauth2.Error-class.html#message">message</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Error-class.html">Error</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredHost-class.html">MonitoredHost</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.monitored-module.html">restkit.pool.monitored</a>)</span></td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy-module.html#make_proxy">make_proxy()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy-module.html">restkit.contrib.wsgi_proxy</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.webob_api.Method-class.html">Method</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api-module.html">restkit.contrib.webob_api</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredPool-class.html">MonitoredPool</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.monitored-module.html">restkit.pool.monitored</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#make_timestamp">make_timestamp()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#method">method</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#make_params">make_params()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.webob_api.Method-class.html">Method</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api-module.html">restkit.contrib.webob_api</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util-module.html#monthname">monthname</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util-module.html">restkit.util</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.util-module.html#make_uri">make_uri()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util-module.html">restkit.util</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#methods">methods</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy-module.html#make_proxy">make_proxy()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy-module.html">restkit.contrib.wsgi_proxy</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#method">method</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.forms-module.html#multipart_form_encode">multipart_form_encode()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.forms-module.html">restkit.forms</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.util.sock-module.html#MAX_BODY">MAX_BODY</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.sock-module.html">restkit.util.sock</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.forms-module.html#MIME_BOUNDARY">MIME_BOUNDARY</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.forms-module.html">restkit.forms</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#make_timestamp">make_timestamp()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#methods">methods</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.forms.MultipartForm-class.html">MultipartForm</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.forms-module.html">restkit.forms</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.client-module.html#MAX_FOLLOW_REDIRECTS">MAX_FOLLOW_REDIRECTS</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.client-module.html">restkit.client</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.misc-module.html">misc</a><br />
+<td width="33%" class="link-index"><a href="restkit.util-module.html#make_uri">make_uri()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util-module.html">restkit.util</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.forms-module.html#MIME_BOUNDARY">MIME_BOUNDARY</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.forms-module.html">restkit.forms</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredHost-class.html#murder_connections">murder_connections()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.monitored.MonitoredHost-class.html">MonitoredHost</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.util.sock-module.html#MAX_BODY">MAX_BODY</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.sock-module.html">restkit.util.sock</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.misc-module.html">misc</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util-module.html">restkit.util</a>)</span></td>
+<td width="33%" class="link-index">&nbsp;</td>
 </tr>
 </table>
 </td></tr>
@@ -890,123 +897,114 @@
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#read">read()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#release_connection">release_connection()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.filters.Filters-class.html#remove">remove()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.filters.Filters-class.html">Filters</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html">Resource</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.resource-module.html">restkit.resource</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.ChunkedReader-class.html#read">read()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.ChunkedReader-class.html">ChunkedReader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.filters.Filters-class.html#remove">remove()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.filters.Filters-class.html">Filters</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Request-class.html">Request</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell-module.html">restkit.contrib.ipython_shell</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html">ResourceError</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.EOFReader-class.html#read">read()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.EOFReader-class.html">EOFReader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Request-class.html">Request</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell-module.html">restkit.contrib.ipython_shell</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.webob_api.Request-class.html">Request</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api-module.html">restkit.contrib.webob_api</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.ResourceNotFound-class.html">ResourceNotFound</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.GzipBody-class.html#read">read()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.GzipBody-class.html">GzipBody</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.webob_api.Request-class.html">Request</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api-module.html">restkit.contrib.webob_api</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.message.Request-class.html">Request</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.message-module.html">restkit.http.message</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Response-class.html">Response</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell-module.html">restkit.contrib.ipython_shell</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.LengthReader-class.html#read">read()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.LengthReader-class.html">LengthReader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.http.message.Request-class.html">Request</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.message-module.html">restkit.http.message</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html">Request</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2-module.html">restkit.util.oauth2</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.message.Response-class.html">Response</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.message-module.html">restkit.http.message</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.unreader.Unreader-class.html#read">read()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.unreader.Unreader-class.html">Unreader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html">Request</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2-module.html">restkit.util.oauth2</a>)</span></td>
+<td width="33%" class="link-index"><a href="webob.request.Request-class.html">Request</a></td>
 <td width="33%" class="link-index"><a href="webob.response.Response-class.html">Response</a></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#read">read()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
-<td width="33%" class="link-index"><a href="webob.request.Request-class.html">Request</a></td>
+<td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#request">request()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.ResponseError-class.html">ResponseError</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.util.rwlock.RWLock-class.html#reader_enters">reader_enters()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.rwlock.RWLock-class.html">RWLock</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#request">request()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#readline">readline()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#request">request()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy.ResponseIter-class.html">ResponseIter</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy-module.html">restkit.contrib.wsgi_proxy</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.util.rwlock.RWLock-class.html#reader_leaves">reader_leaves()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.rwlock.RWLock-class.html">RWLock</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#request">request()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.body.GzipBody-class.html#readline">readline()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.body.GzipBody-class.html">GzipBody</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit-module.html#request">request()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit-module.html">restkit</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.parser.ResponseParser-class.html">ResponseParser</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.parser-module.html">restkit.http.parser</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#readline">readline()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit-module.html#request">request()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit-module.html">restkit</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit-module.html">restkit</a></td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.http.body.GzipBody-class.html#readline">readline()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.body.GzipBody-class.html">GzipBody</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#request">request()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
-<td width="33%" class="link-index"><a href="webob.response.Response-class.html#retry_after">retry_after</a><br />
-<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
-</tr>
-<tr>
 <td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#readline">readline()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#request_meth">request_meth()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.reventlet-module.html">reventlet</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool-module.html">restkit.pool</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#request">request()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit-module.html">restkit</a></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#readlines">readlines()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#request_meth">request_meth()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
+<td width="33%" class="link-index"><a href="webob.response.Response-class.html#retry_after">retry_after</a><br />
+<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#readlines">readlines()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.RequestError-class.html">RequestError</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.reventlet-module.html">reventlet</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool-module.html">restkit.pool</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.errors.RedirectLimit-class.html">RedirectLimit</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.errors.RequestFailed-class.html">RequestFailed</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.rgevent-module.html">rgevent</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool-module.html">restkit.pool</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#readlines">readlines()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.errors.RequestFailed-class.html">RequestFailed</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.rwlock-module.html">rwlock</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util-module.html">restkit.util</a>)</span></td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.errors.RedirectLimit-class.html">RedirectLimit</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.http.parser.RequestParser-class.html">RequestParser</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.parser-module.html">restkit.http.parser</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.rwlock.RWLock-class.html">RWLock</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.rwlock-module.html">restkit.util.rwlock</a>)</span></td>
-</tr>
-<tr>
 <td width="33%" class="link-index"><a href="restkit.http.unreader.Unreader-class.html#release">release()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.unreader.Unreader-class.html">Unreader</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.parser.RequestParser-class.html">RequestParser</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.parser-module.html">restkit.http.parser</a>)</span></td>
+<td width="33%" class="link-index">&nbsp;</td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#release_connection">release_connection()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.resource-module.html">resource</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit-module.html">restkit</a>)</span></td>
 <td width="33%" class="link-index">&nbsp;</td>
@@ -1194,6 +1192,14 @@
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.Unauthorized-class.html">Unauthorized</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.unreader.Unreader-class.html#unread">unread()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.unreader.Unreader-class.html">Unreader</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#url">url</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#unauthorized">unauthorized()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.unreader-module.html">unreader</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http-module.html">restkit.http</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util-module.html#url_encode">url_encode()</a><br />
@@ -1228,13 +1234,6 @@
 <span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#update_uri">update_uri()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
-<td width="33%" class="link-index">&nbsp;</td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.http.unreader.Unreader-class.html#unread">unread()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.unreader.Unreader-class.html">Unreader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#url">url</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
 <td width="33%" class="link-index">&nbsp;</td>
 </tr>
 </table>
@@ -1290,32 +1289,30 @@
 <span class="index-where">(in&nbsp;<a href="restkit.pool.reventlet.EventletHost-class.html">EventletHost</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_helper-module.html#webob_exceptions">webob_exceptions</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper-module.html">restkit.contrib.webob_helper</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.rwlock.RWLock-class.html#writer_enters">writer_enters()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.rwlock.RWLock-class.html">RWLock</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy-module.html">wsgi_proxy</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib-module.html">restkit.contrib</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.pool.rgevent.GeventHost-class.html#waiting">waiting()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.rgevent.GeventHost-class.html">GeventHost</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_helper-module.html">webob_helper</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib-module.html">restkit.contrib</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.rwlock.RWLock-class.html#writer_leaves">writer_leaves()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.rwlock.RWLock-class.html">RWLock</a>)</span></td>
+<td width="33%" class="link-index"><a href="webob.response.Response-class.html#www_authenticate">www_authenticate</a><br />
+<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#warn">warn()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper-module.html">restkit.contrib.webob_helper</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy-module.html">wsgi_proxy</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib-module.html">restkit.contrib</a>)</span></td>
+<td width="33%" class="link-index">&nbsp;</td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_api-module.html">webob_api</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib-module.html">restkit.contrib</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util-module.html#weekdayname">weekdayname</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util-module.html">restkit.util</a>)</span></td>
-<td width="33%" class="link-index"><a href="webob.response.Response-class.html#www_authenticate">www_authenticate</a><br />
-<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
+<td width="33%" class="link-index">&nbsp;</td>
 </tr>
 </table>
 </td></tr>
@@ -1325,241 +1322,241 @@
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Request-class.html#__call__">__call__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.Request-class.html">Request</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.base.BasePool-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.base.BasePool-class.html">BasePool</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.JSON-class.html#__repr__">__repr__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.JSON-class.html">JSON</a>)</span></td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Response-class.html#__call__">__call__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.Response-class.html">Response</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredHost-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.monitored.MonitoredHost-class.html">MonitoredHost</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#__repr__">__repr__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy.Proxy-class.html#__call__">__call__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy.Proxy-class.html">Proxy</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredPool-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.monitored.MonitoredPool-class.html">MonitoredPool</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.unreader.Unreader-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.unreader.Unreader-class.html">Unreader</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Stream-class.html#__repr__">__repr__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.Stream-class.html">Stream</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#__call__">__call__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.simple.Host-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.simple.Host-class.html">Host</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Response-class.html#__call__">__call__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.Response-class.html">Response</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.base.BasePool-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool.base.BasePool-class.html">BasePool</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#__repr__">__repr__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.client.HttpResponse-class.html#__contains__">__contains__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.client.HttpResponse-class.html">HttpResponse</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.simple.SimplePool-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.simple.SimplePool-class.html">SimplePool</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy.Proxy-class.html#__call__">__call__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy.Proxy-class.html">Proxy</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredHost-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool.monitored.MonitoredHost-class.html">MonitoredHost</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#__repr__">__repr__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#__delete__">__delete__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#__init__">__init__()</a><br />
+<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#__call__">__call__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.monitored.MonitoredPool-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool.monitored.MonitoredPool-class.html">MonitoredPool</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#__set__">__set__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.contrib.webob_api-module.html#__doc__">__doc__</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api-module.html">restkit.contrib.webob_api</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.client.HttpResponse-class.html#__contains__">__contains__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.client.HttpResponse-class.html">HttpResponse</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.simple.Host-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool.simple.Host-class.html">Host</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ContentTypes-class.html#__str__">__str__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ContentTypes-class.html">ContentTypes</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#__enter__">__enter__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#__init__">__init__()</a><br />
+<td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#__delete__">__delete__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.pool.simple.SimplePool-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.pool.simple.SimplePool-class.html">SimplePool</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Request-class.html#__str__">__str__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.Request-class.html">Request</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#__exit__">__exit__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Consumer-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Consumer-class.html">Consumer</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.webob_api-module.html#__doc__">__doc__</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api-module.html">restkit.contrib.webob_api</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Response-class.html#__str__">__str__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.Response-class.html">Response</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.API-class.html#__get__">__get__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.API-class.html">API</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Error-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Error-class.html">Error</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#__enter__">__enter__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.ChunkMissingTerminator-class.html#__str__">__str__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.ChunkMissingTerminator-class.html">ChunkMissingTerminator</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.contrib.webob_api.Method-class.html#__get__">__get__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api.Method-class.html">Method</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#__exit__">__exit__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidChunkSize-class.html#__str__">__str__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidChunkSize-class.html">InvalidChunkSize</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#__get__">__get__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.API-class.html#__get__">__get__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.API-class.html">API</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Consumer-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Consumer-class.html">Consumer</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidHTTPStatus-class.html#__str__">__str__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHTTPStatus-class.html">InvalidHTTPStatus</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.client.HttpResponse-class.html#__getitem__">__getitem__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.client.HttpResponse-class.html">HttpResponse</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Token-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Token-class.html">Token</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.webob_api.Method-class.html#__get__">__get__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api.Method-class.html">Method</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Error-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Error-class.html">Error</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidHTTPVersion-class.html#__str__">__str__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHTTPVersion-class.html">InvalidHTTPVersion</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.rwlock.RWLock-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.rwlock.RWLock-class.html">RWLock</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.misc.deprecated_property-class.html#__get__">__get__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.misc.deprecated_property-class.html">deprecated_property</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidHeader-class.html#__str__">__str__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHeader-class.html">InvalidHeader</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.client.HttpResponse-class.html#__getitem__">__getitem__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.client.HttpResponse-class.html">HttpResponse</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.errors.InvalidHeaderName-class.html#__str__">__str__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHeaderName-class.html">InvalidHeaderName</a>)</span></td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Token-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Token-class.html">Token</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.errors.InvalidRequestLine-class.html#__str__">__str__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidRequestLine-class.html">InvalidRequestLine</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.client.HttpResponse-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.client.HttpResponse-class.html">HttpResponse</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.client.HttpResponse-class.html#__iter__">__iter__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.client.HttpResponse-class.html">HttpResponse</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.errors.InvalidHeaderName-class.html#__str__">__str__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHeaderName-class.html">InvalidHeaderName</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.errors.InvalidRequestMethod-class.html#__str__">__str__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidRequestMethod-class.html">InvalidRequestMethod</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.JSON-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.JSON-class.html">JSON</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy.ResponseIter-class.html#__iter__">__iter__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy.ResponseIter-class.html">ResponseIter</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.errors.InvalidRequestLine-class.html#__str__">__str__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidRequestLine-class.html">InvalidRequestLine</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.errors.NoMoreData-class.html#__str__">__str__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors.NoMoreData-class.html">NoMoreData</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.Shell-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.Shell-class.html">Shell</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.forms.MultipartForm-class.html#__iter__">__iter__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.forms.MultipartForm-class.html">MultipartForm</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.errors.InvalidRequestMethod-class.html#__str__">__str__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidRequestMethod-class.html">InvalidRequestMethod</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html#__str__">__str__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors.ResourceError-class.html">ResourceError</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#__iter__">__iter__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.errors.NoMoreData-class.html#__str__">__str__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors.NoMoreData-class.html">NoMoreData</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Consumer-class.html#__str__">__str__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Consumer-class.html">Consumer</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_api.Method-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api.Method-class.html">Method</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.parser.Parser-class.html#__iter__">__iter__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.parser.Parser-class.html">Parser</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html#__str__">__str__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors.ResourceError-class.html">ResourceError</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Error-class.html#__str__">__str__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Error-class.html">Error</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#__iter__">__iter__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Consumer-class.html#__str__">__str__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Consumer-class.html">Consumer</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Token-class.html#__str__">__str__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Token-class.html">Token</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy.HostProxy-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy.HostProxy-class.html">HostProxy</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit-module.html">restkit</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Error-class.html#__str__">__str__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Error-class.html">Error</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.console-module.html#__usage__">__usage__</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.console-module.html">restkit.contrib.console</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy.Proxy-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy.Proxy-class.html">Proxy</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.client-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.client-module.html">restkit.client</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Token-class.html#__str__">__str__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Token-class.html">Token</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.sock-module.html#_allowed_ssl_args">_allowed_ssl_args</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.sock-module.html">restkit.util.sock</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy.ResponseIter-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy.ResponseIter-class.html">ResponseIter</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib-module.html">restkit.contrib</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.console-module.html#__usage__">__usage__</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.console-module.html">restkit.contrib.console</a>)</span></td>
+<td width="33%" class="link-index"><a href="webob.response.Response-class.html#_cache_control_obj">_cache_control_obj</a><br />
+<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.ChunkMissingTerminator-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.ChunkMissingTerminator-class.html">ChunkMissingTerminator</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.console-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.console-module.html">restkit.contrib.console</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.sock-module.html#_allowed_ssl_args">_allowed_ssl_args</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.sock-module.html">restkit.util.sock</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_check_signature">_check_signature()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidChunkSize-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidChunkSize-class.html">InvalidChunkSize</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_api-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_api-module.html">restkit.contrib.webob_api</a>)</span></td>
-<td width="33%" class="link-index"><a href="webob.response.Response-class.html#_cache_control_obj">_cache_control_obj</a><br />
-<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_check_timestamp">_check_timestamp()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidHTTPStatus-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHTTPStatus-class.html">InvalidHTTPStatus</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_helper-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper-module.html">restkit.contrib.webob_helper</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_check_signature">_check_signature()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#_close_unreader">_close_unreader()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidHTTPVersion-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHTTPVersion-class.html">InvalidHTTPVersion</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.wsgi_proxy-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.wsgi_proxy-module.html">restkit.contrib.wsgi_proxy</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_check_timestamp">_check_timestamp()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.body.GzipBody-class.html#_decompress">_decompress()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.body.GzipBody-class.html">GzipBody</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidHeader-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHeader-class.html">InvalidHeader</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors-module.html">restkit.errors</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#_close_unreader">_close_unreader()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.resource-module.html#_default_pool">_default_pool</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.resource-module.html">restkit.resource</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidHeaderName-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidHeaderName-class.html">InvalidHeaderName</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.filters-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.filters-module.html">restkit.filters</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.http.body.GzipBody-class.html#_decompress">_decompress()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.body.GzipBody-class.html">GzipBody</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#_ensure_length">_ensure_length()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.InvalidRequestLine-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidRequestLine-class.html">InvalidRequestLine</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.filters.basicauth-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.filters.basicauth-module.html">restkit.filters.basicauth</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#_ensure_length">_ensure_length()</a><br />
+<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#_finalize">_finalize()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
 </tr>
 <tr>
@@ -1567,55 +1564,55 @@
 <span class="index-where">(in&nbsp;<a href="restkit.errors.InvalidRequestMethod-class.html">InvalidRequestMethod</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.filters.oauth2-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.filters.oauth2-module.html">restkit.filters.oauth2</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#_finalize">_finalize()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_get_message">_get_message()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.NoMoreData-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.NoMoreData-class.html">NoMoreData</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.filters.simpleproxy-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.filters.simpleproxy-module.html">restkit.filters.simpleproxy</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_get_message">_get_message()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html#_get_message">_get_message()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.errors.ResourceError-class.html">ResourceError</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.ResourceError-class.html">ResourceError</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.forms-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.forms-module.html">restkit.forms</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html#_get_message">_get_message()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.errors.ResourceError-class.html">ResourceError</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.filters.simpleproxy-module.html#_get_proxy_auth">_get_proxy_auth()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.filters.simpleproxy-module.html">restkit.filters.simpleproxy</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.filters.Filters-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.filters.Filters-class.html">Filters</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http-module.html">restkit.http</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.filters.simpleproxy-module.html#_get_proxy_auth">_get_proxy_auth()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.filters.simpleproxy-module.html">restkit.filters.simpleproxy</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_get_signature_method">_get_signature_method()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.filters.basicauth.BasicAuth-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.filters.basicauth.BasicAuth-class.html">BasicAuth</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.body-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body-module.html">restkit.http.body</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_get_signature_method">_get_signature_method()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#_get_timestamp_nonce">_get_timestamp_nonce()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.filters.oauth2.OAuthFilter-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.filters.oauth2.OAuthFilter-class.html">OAuthFilter</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.message-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.message-module.html">restkit.http.message</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#_get_timestamp_nonce">_get_timestamp_nonce()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_get_verifier">_get_verifier()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.forms.BoundaryItem-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.forms.BoundaryItem-class.html">BoundaryItem</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.parser-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.parser-module.html">restkit.http.parser</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_get_verifier">_get_verifier()</a><br />
+<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_get_version">_get_version()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
 </tr>
 <tr>
@@ -1623,118 +1620,109 @@
 <span class="index-where">(in&nbsp;<a href="restkit.forms.MultipartForm-class.html">MultipartForm</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.http.unreader-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.unreader-module.html">restkit.http.unreader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.oauth2.Server-class.html#_get_version">_get_version()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Server-class.html">Server</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.sock-module.html#_GLOBAL_DEFAULT_TIMEOUT">_GLOBAL_DEFAULT_TIMEOUT</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.sock-module.html">restkit.util.sock</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.Body-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.Body-class.html">Body</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool-module.html">restkit.pool</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.sock-module.html#_GLOBAL_DEFAULT_TIMEOUT">_GLOBAL_DEFAULT_TIMEOUT</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.sock-module.html">restkit.util.sock</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#_req_headers">_req_headers()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.ChunkedReader-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.ChunkedReader-class.html">ChunkedReader</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.base-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.base-module.html">restkit.pool.base</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.client.HttpConnection-class.html#_req_headers">_req_headers()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.client.HttpConnection-class.html">HttpConnection</a>)</span></td>
+<td width="33%" class="link-index"><a href="webob.response.Response-class.html#_safe_methods">_safe_methods</a><br />
+<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
 </tr>
 <tr>
 <td width="33%" class="link-index"><a href="restkit.http.body.EOFReader-class.html#__init__">__init__()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.http.body.EOFReader-class.html">EOFReader</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.monitored-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.monitored-module.html">restkit.pool.monitored</a>)</span></td>
-<td width="33%" class="link-index"><a href="webob.response.Response-class.html#_safe_methods">_safe_methods</a><br />
-<span class="index-where">(in&nbsp;<a href="webob.response.Response-class.html">Response</a>)</span></td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.http.body.GzipBody-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.body.GzipBody-class.html">GzipBody</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.reventlet-module.html#__package__">__package__</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.reventlet-module.html">restkit.pool.reventlet</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.resource.Resource-class.html#_set_default_attrs">_set_default_attrs()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.resource.Resource-class.html">Resource</a>)</span></td>
-</tr>
-<tr>
-<td width="33%" class="link-index"><a href="restkit.http.body.LengthReader-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.body.LengthReader-class.html">LengthReader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.pool.rgevent-module.html#__package__">__package__</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.pool.rgevent-module.html">restkit.pool.rgevent</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_set_message">_set_message()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.message.Message-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.message.Message-class.html">Message</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.body.GzipBody-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.body.GzipBody-class.html">GzipBody</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.pool.simple-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.pool.simple-module.html">restkit.pool.simple</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.errors.ResourceError-class.html#_set_message">_set_message()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.errors.ResourceError-class.html">ResourceError</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.message.Request-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.message.Request-class.html">Request</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.body.LengthReader-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.body.LengthReader-class.html">LengthReader</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.resource-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.resource-module.html">restkit.resource</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#_split_header">_split_header()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.message.Response-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.message.Response-class.html">Response</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.message.Message-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.message.Message-class.html">Message</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.tee-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.tee-module.html">restkit.tee</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.oauth2.Request-class.html#_split_url_string">_split_url_string()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.oauth2.Request-class.html">Request</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.parser.Parser-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.parser.Parser-class.html">Parser</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.message.Request-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.message.Request-class.html">Request</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util-module.html">restkit.util</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_status_int__get">_status_int__get()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.parser.RequestParser-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.parser.RequestParser-class.html">RequestParser</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.message.Response-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.message.Response-class.html">Response</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.misc-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.misc-module.html">restkit.util.misc</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_status_int__set">_status_int__set()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.webob_helper.WebobResourceError-class.html">WebobResourceError</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.parser.ResponseParser-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.parser.ResponseParser-class.html">ResponseParser</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.parser.Parser-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.parser.Parser-class.html">Parser</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.util.oauth2-module.html#__package__">__package__</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.util.oauth2-module.html">restkit.util.oauth2</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#_tee">_tee()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.unreader.IterUnreader-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.unreader.IterUnreader-class.html">IterUnreader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.rwlock-module.html#__package__">__package__</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.rwlock-module.html">restkit.util.rwlock</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.parser.RequestParser-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.parser.RequestParser-class.html">RequestParser</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.util.sock-module.html#__package__">__package__</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.util.sock-module.html">restkit.util.sock</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.tee.TeeInput-class.html#_tmp_size">_tmp_size()</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.tee.TeeInput-class.html">TeeInput</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.unreader.SocketUnreader-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.unreader.SocketUnreader-class.html">SocketUnreader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.util.sock-module.html#__package__">__package__</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.util.sock-module.html">restkit.util.sock</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.parser.ResponseParser-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.parser.ResponseParser-class.html">ResponseParser</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ContentTypes-class.html#__repr__">__repr__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ContentTypes-class.html">ContentTypes</a>)</span></td>
 <td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ContentTypes-class.html#_values">_values</a><br />
 <span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ContentTypes-class.html">ContentTypes</a>)</span></td>
 </tr>
 <tr>
-<td width="33%" class="link-index"><a href="restkit.http.unreader.Unreader-class.html#__init__">__init__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.http.unreader.Unreader-class.html">Unreader</a>)</span></td>
-<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ContentTypes-class.html#__repr__">__repr__()</a><br />
-<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ContentTypes-class.html">ContentTypes</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.http.unreader.IterUnreader-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.unreader.IterUnreader-class.html">IterUnreader</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.JSON-class.html#__repr__">__repr__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.JSON-class.html">JSON</a>)</span></td>
+<td width="33%" class="link-index">&nbsp;</td>
+</tr>
+<tr>
+<td width="33%" class="link-index"><a href="restkit.http.unreader.SocketUnreader-class.html#__init__">__init__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.http.unreader.SocketUnreader-class.html">SocketUnreader</a>)</span></td>
+<td width="33%" class="link-index"><a href="restkit.contrib.ipython_shell.ShellClient-class.html#__repr__">__repr__()</a><br />
+<span class="index-where">(in&nbsp;<a href="restkit.contrib.ipython_shell.ShellClient-class.html">ShellClient</a>)</span></td>
 <td width="33%" class="link-index">&nbsp;</td>
 </tr>
 </table>
@@ -1766,7 +1754,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jul 20 00:24:37 2010
+    Generated by Epydoc 3.0.1 on Sat Jul 24 01:13:09 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
