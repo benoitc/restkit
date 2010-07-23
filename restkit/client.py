@@ -416,11 +416,10 @@ class HttpConnection(object):
                 raise
             except socket.error, e:
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, errno.EPIPE,
-                            errno.ECONNREFUSED) or tries <= 0:
+                            errno.ECONNREFUSED, errno.ECONNRESET) or tries <= 0:
                     self.clean_connections()
                     raise
-                if e[0] == errno.EPIPE:
-                    log.debug("Got EPIPE")
+                if e[0] in (errno.EPIPE, errno.ECONNRESET):
                     self.clean_connections()
             except:
                 if tries <= 0:
