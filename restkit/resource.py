@@ -47,13 +47,13 @@ class Resource(object):
         :param uri: str, full uri to the server.
         :param client_opts: `restkit.client.HttpConnection` Options
         """
-        
+        client_opts = client_opts or {} 
+
         self.initial = dict(
             uri = uri,
-            client_opts = client_opts
+            client_opts = client_opts.copy()
         )
 
-        client_opts = client_opts or {}
 
         # set default response_class
         if self.response_class is not None and \
