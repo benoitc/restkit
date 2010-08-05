@@ -3,6 +3,12 @@
 News
 ====
 
+2.1.1/ 2010-08-05
+-----------------
+
+- Fix clone and __call__, make sure we use original client_opts rather
+  than an instance
+
 2.1.0 / 2010-07-24
 ------------------
 
