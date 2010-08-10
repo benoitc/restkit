@@ -387,7 +387,7 @@ class HttpConnection(object):
                 self._sock = self.make_connection()
                 
                 # apply on request filters
-                self.filters.apply("on_request", self)
+                self.filters.apply("on_request", self, tries)
                 
                 # build request headers
                 self.req_headers = req_headers = self._req_headers()

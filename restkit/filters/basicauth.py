@@ -13,6 +13,9 @@ class BasicAuth(object):
     def __init__(self, username, password):
         self.credentials = (username, password)
     
-    def on_request(self, req):
+    def on_request(self, req, tries):
+        print tries
+        if tries < 2: 
+            return
         encode = base64.b64encode("%s:%s" % self.credentials)
         req.headers.append(('Authorization', 'Basic %s' %  encode))

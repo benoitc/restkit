@@ -44,10 +44,10 @@ class Filters(object):
         for i, f in enumerate(self.filters):
             if obj == f: del self.filters[i]
             
-    def apply(self, kind, client):
+    def apply(self, kind, *args):
         for f in self.filters:
             try:
                 func = getattr(f, kind)
-                func(client)
+                func(*args)
             except AttributeError:
                 continue

@@ -55,7 +55,10 @@ class OAuthFilter(object):
         path = req.uri.path or "/"
         return (self.match.match(path) is not None)
         
-    def on_request(self, req):
+    def on_request(self, req, tries):
+        if tries < 2:
+            return
+
         if not self.on_path(req):
             return
 
