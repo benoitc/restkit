@@ -14,7 +14,6 @@ class BasicAuth(object):
         self.credentials = (username, password)
     
     def on_request(self, req, tries):
-        print tries
         if tries < 2: 
             return
         encode = base64.b64encode("%s:%s" % self.credentials)
