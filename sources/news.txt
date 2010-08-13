@@ -3,6 +3,22 @@
 News
 ====
 
+2.1.4 / 2008-08-11
+------------------
+
+ - Improve HTTP parsing (backport from Gunicorn)
+ - Handle KeyboardInterrupt and SystemExit exception in client.
+
+2.1.3 / 2008-08-11
+------------------
+
+ - Repackaged due to a spurious print.
+
+2.1.2 / 2008-08-11
+------------------
+
+- `Fix<http://github.com/benoitc/restkit/commit/c176f2905c82b33a69e73ab63ac91784f6d7af08>` a nasty bug in BasicAuth
+
 2.1.1/ 2010-08-05
 -----------------
 
