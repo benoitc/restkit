@@ -37,7 +37,7 @@ but you can do more like building object mapping HTTP resources, ....
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 2 
    
    resource
    pool
