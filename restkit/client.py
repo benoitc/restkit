@@ -421,7 +421,10 @@ class HttpConnection(object):
                     raise
                 if e[0] in (errno.EPIPE, errno.ECONNRESET):
                     self.clean_connections()
-            except:
+            except Exception, e:
+                if isinstance(e, (KeyboardInterrupt, SystemExit)):
+                    raise
+
                 if tries <= 0:
                     raise
                 # we don't know what happend. 
