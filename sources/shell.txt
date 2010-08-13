@@ -1,16 +1,13 @@
 restkit shell
--------------
+=============
 
 restkit come with a IPython based shell to help you to debug your http apps. Just run::
 
     $ restkit --shell http://benoitc.github.com/restkit/
 
-restkit shell
-=============
-
 HTTP Methods
 ------------
-
+::
     >>> delete([req|url|path_info])                                 # send a HTTP delete
     >>> get([req|url|path_info], **query_string)                    # send a HTTP get
     >>> head([req|url|path_info], **query_string)                   # send a HTTP head
@@ -20,7 +17,6 @@ HTTP Methods
 
 Helpers
 -------
-
 ::
 
     >>> req    # request to play with. By default http methods will use this one
