@@ -7,7 +7,7 @@ News
 ------------------
 
  - Improve HTTP parsing (backport from Gunicorn)
- - Handle KeyboardInterrupt and SystemExit exception in client.
+ - Handle KeyboardInterrupt and SystemExit exceptions in client.
 
 2.1.3 / 2008-08-11
 ------------------
