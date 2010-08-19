@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to RESTKit’s documentation! &mdash; restkit v2.1.4 documentation</title>
+    <title>Welcome to RESTKit’s documentation! &mdash; restkit v2.1.5 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.1.4',
+        VERSION:     '2.1.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.1.4 documentation" href="#" />
+    <link rel="top" title="restkit v2.1.5 documentation" href="#" />
     <link rel="next" title="Build resource object" href="resource.html" />
 
   <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
@@ -91,9 +91,7 @@
 <p>Usage example, get a friendpaste paste:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body</span>
-<span class="go">&#39;welcome to friendpaste&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body_string</span><span class="p">()</span>
 <span class="go">&#39;welcome to friendpaste&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">headers</span>
 <span class="go">{&#39;status&#39;: &#39;200 OK&#39;, &#39;transfer-encoding&#39;: &#39;chunked&#39;, &#39;set-cookie&#39;:</span>
@@ -107,7 +105,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">body_string</span><span class="p">()</span>
 <span class="go">&#39;welcome to friendpaste&#39;</span>
 </pre></div>
 </div>
