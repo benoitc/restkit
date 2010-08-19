@@ -14,9 +14,7 @@ Usage example, get a friendpaste paste::
 
   >>> from restkit import request
   >>> r = request('http://friendpaste.com/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw')
-  >>> r.body
-  'welcome to friendpaste'
-  >>> r.body_file.read()
+  >>> r.body_string()
   'welcome to friendpaste'
   >>> r.headers
   {'status': '200 OK', 'transfer-encoding': 'chunked', 'set-cookie': 
@@ -30,7 +28,7 @@ of from a resource:
   >>> from restkit import Resource
   >>> res = Resource('http://friendpaste.com')
   >>> r = res.get('/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw')
-  >>> r.body
+  >>> r.body_string()
   'welcome to friendpaste'
   
 but you can do more like building object mapping HTTP resources, ....
