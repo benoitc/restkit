@@ -1,3 +1,9 @@
+restkit (2.1.5-1) maverick; urgency=low
+
+  * Bump releaase 
+
+ -- Benoit Chesneau <benoitc@e-engura.org>  Fri, 27 Aug 2010 04:16:00 +0100
+
 restkit (2.1.2-1) maverick; urgency=low
 
   * Fix multiple headers in filters on_request 
