@@ -10,7 +10,7 @@ restkit (2.1.2-1) maverick; urgency=low
 
  -- Benoit Chesneau <benoitc@e-engura.org>  Tue, 10 Aug 2010 22:53:00 +0100
 
-restkit (2.1.1-1) maverick; urgency=low
+restkit (2.1.1-1) karmic; urgency=low
 
   * New release 
 

@@ -1,15 +1,14 @@
 Source: restkit
-Maintainer: Benoit Chesneau <benoitc@e-engura.org>
 Section: python
 Priority: optional
-Build-Depends: python-setuptools (>= 0.6b3), debhelper (>= 7), python-support (>= 0.8.4)
-Standards-Version: 3.7.2
-XS-Python-Version: current
+Maintainer: Benoit Chesneau <benoitc@e-engura.com>
+Build-Depends: debhelper (>= 7), python-support, python-setuptools
+Standards-Version: 3.9.0.0
+Homepage: http://benoitc.github.com/restkit
 
 Package: python-restkit
 Architecture: all
-Depends: ${python:Depends}
-XB-Python-Version: ${python:Versions}
+Depends: ${python:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Provides: ${python:Provides}
 Description: Python REST kit
  An HTTP resource kit for Python
