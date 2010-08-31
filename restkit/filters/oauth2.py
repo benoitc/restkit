@@ -6,9 +6,9 @@
 import re
 import urlparse
 try:
-    from urlparse import parse_qsl
+    from urlparse import parse_qsl, urlunparse
 except ImportError:
-    from cgi import parse_qsl
+    from cgi import parse_qsl, urlunparse
     
 from restkit.util.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
 Token
@@ -75,10 +75,13 @@ class OAuthFilter(object):
             
         # update params from quey parameters    
         params.update(parse_qsl(req.uri.query))
+      
+        raw_url = urlunparse((req.uri.scheme, req.uri.netloc,
+                req.uri.path, '', '', ''))
         
         oauth_req = Request.from_consumer_and_token(self.consumer, 
                         token=self.token, http_method=req.method, 
-                        http_url=req.url, parameters=params)
+                        http_url=raw_url, parameters=params)
                     
         oauth_req.sign_request(self.method, self.consumer, self.token)
         
