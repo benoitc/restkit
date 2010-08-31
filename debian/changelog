@@ -1,10 +1,17 @@
-restkit (2.1.5-1) maverick; urgency=low
+restkit (2.1.6-1) karmic; urgency=low
+
+  * Fix NoMoreData error on 0 Content-Length
+  * Fix oauth issue. 
+
+ -- Benoit Chesneau <benoitc@e-engura.org>  Tue, 31 Aug 2010 10:00:00 +0100
+
+restkit (2.1.5-1) karmic; urgency=low
 
   * Bump releaase 
 
  -- Benoit Chesneau <benoitc@e-engura.org>  Fri, 27 Aug 2010 04:16:00 +0100
 
-restkit (2.1.2-1) maverick; urgency=low
+restkit (2.1.2-1) karmic; urgency=low
 
   * Fix multiple headers in filters on_request 
 
