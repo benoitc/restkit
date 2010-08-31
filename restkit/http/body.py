@@ -248,7 +248,11 @@ class Body(object):
         
         idx = self.buf.getvalue().find("\n")
         while idx < 0:
-            data = self.reader.read(1024)
+            try:
+                data = self.reader.read(1024)
+            except NoMoreData:
+                data = ""
+
             if not len(data):
                 self.close()
                 break
