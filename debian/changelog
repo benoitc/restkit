@@ -1,9 +1,9 @@
-restkit (2.1.6-1) karmic; urgency=low
+restkit (2.1.5-1) karmic; urgency=low
 
   * Fix NoMoreData error on 0 Content-Length
   * Fix oauth issue. 
 
- -- Benoit Chesneau <benoitc@e-engura.org>  Tue, 31 Aug 2010 10:00:00 +0100
+ -- Benoit Chesneau <benoitc@e-engura.org>  Thu, 02 Sep 2010 22:51:00 +0100
 
 restkit (2.1.5-1) karmic; urgency=low
 
