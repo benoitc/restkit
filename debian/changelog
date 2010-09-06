@@ -1,3 +1,9 @@
+restkit (2.1.7-1) karmic; urgency=low
+
+  * bump version 
+
+ -- Benoit Chesneau <benoitc@e-engura.org>  Thu, 06 Sep 2010 03:51:00 -0700
+
 restkit (2.1.5-1) karmic; urgency=low
 
   * Fix NoMoreData error on 0 Content-Length
