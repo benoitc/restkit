@@ -18,20 +18,6 @@ WEBOB_ERROR = ("Content-Length is set to -1. This usually mean that WebOb has "
         "proxy: ``req.content_length = str(len(req.body));`` "
         "req.get_response(proxy)")
 
-class ResponseIter(object):
-
-    def __init__(self, response):
-        response.CHUNK_SIZE = BLOCK_SIZE
-        self.body = response.body_stream()
-
-    def next(self):
-        data = self.body.read(BLOCK_SIZE)
-        if not data:
-            raise StopIteration
-        return data
-
-    def __iter__(self):
-        return self
 
 class Proxy(object):
     """A proxy wich redirect the request to SERVER_NAME:SERVER_PORT
@@ -115,11 +101,7 @@ class Proxy(object):
 
         start_response(response.status, headers)
 
-        if 'content-length' in response and \
-                int(response['content-length']) <= MAX_BODY:
-            return [response.body]
-
-        return ResponseIter(response)
+        return response.body_stream() 
 
 class TransparentProxy(Proxy):
     """A proxy based on HTTP_HOST environ variable"""
