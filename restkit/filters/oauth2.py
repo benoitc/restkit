@@ -6,9 +6,11 @@
 import re
 import urlparse
 try:
-    from urlparse import parse_qsl, urlunparse
+    from urlparse import parse_qsl
 except ImportError:
-    from cgi import parse_qsl, urlunparse
+    from cgi import parse_qsl
+
+from urlparse import urlunparse
     
 from restkit.util.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
 Token
