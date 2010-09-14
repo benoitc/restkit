@@ -155,7 +155,7 @@ def options():
                            'For example: "Accept: application/json".')),
         op.make_option('-X', '--request', action='store', dest='method',
                        **opt_args('request', 'HTTP request method.')),
-        op.make_option('--follow-redirect', action='store_false',
+        op.make_option('--follow-redirect', action='store_true',
                        dest='follow_redirect', **opt_args('follow_redirect')),
         op.make_option('-S', '--server-response', action='store_true',
                        dest='server_response',
