@@ -48,6 +48,6 @@ class Filters(object):
         for f in self.filters:
             try:
                 func = getattr(f, kind)
-                func(*args)
             except AttributeError:
                 continue
+            func(*args)
