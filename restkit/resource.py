@@ -15,7 +15,7 @@ import urlparse
 
 from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
 ParserError, RequestError
-from restkit.client import HttpConnection, HttpResponse
+from restkit.client import HttpRequest, HttpResponse
 from restkit.filters import BasicAuth
 from restkit import util
 from restkit.pool.simple import SimplePool
@@ -45,7 +45,7 @@ class Resource(object):
         Resource represent an HTTP resource.
 
         :param uri: str, full uri to the server.
-        :param client_opts: `restkit.client.HttpConnection` Options
+        :param client_opts: `restkit.client.HttpRequest` Options
         """
         client_opts = client_opts or {} 
 
@@ -200,7 +200,7 @@ class Resource(object):
                         **self.make_params(params))
         
             # make request
-            http = HttpConnection(**self.client_opts)
+            http = HttpRequest(**self.client_opts)
             resp = http.request(uri, method=method, body=payload, 
                         headers=self.make_headers(headers))
             

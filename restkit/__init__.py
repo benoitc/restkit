@@ -5,13 +5,13 @@
 
 
 
-version_info = (2, 1, 7)
+version_info = (2, 2, 0)
 __version__ =  ".".join(map(str, version_info))
 
 try:
     from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceError
-    from restkit.client import HttpConnection, HttpResponse, MAX_FOLLOW_REDIRECTS
+    from restkit.client import HttpRequest, HttpResponse, MAX_FOLLOW_REDIRECTS
     from restkit.resource import Resource
     from restkit.pool.simple import SimplePool
     from restkit.filters import BasicAuth, SimpleProxy, OAuthFilter
@@ -79,7 +79,7 @@ def request(url, method='GET', body=None, headers=None,
             u.path, u.params, u.query, u.fragment))
         filters.append(BasicAuth(u.username, password))
     
-    http_client = HttpConnection(
+    http_client = HttpRequest(
             timeout=timeout, 
             filters=filters,
             follow_redirect=follow_redirect, 

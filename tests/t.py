@@ -14,7 +14,7 @@ dirname = os.path.dirname(__file__)
 
 from restkit.http.parser import RequestParser
 
-from restkit.client import HttpConnection
+from restkit.client import HttpRequest
 from restkit.resource import Resource
 
 from _server_test import HOST, PORT, run_server_test
@@ -87,7 +87,7 @@ class client_request(object):
                 pool_instance = ConnectionPool()
             else:
                 pool_instance = None
-            cli = HttpConnection(pool_instance=None, timeout=0.5)
+            cli = HttpRequest(pool_instance=None, timeout=0.5)
             func(self.url, cli)
         run.func_name = func.func_name
         return run

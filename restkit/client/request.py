@@ -19,12 +19,11 @@ import urlparse
 import uuid
 
 from restkit import __version__
-from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
-AlreadyRead
+from restkit.client.response import HttpResponse
+from restkit.errors import RequestError, InvalidUrl, RedirectLimit
 from restkit.filters import Filters
 from restkit.forms import multipart_form_encode, form_encode
 from restkit.util import sock
-from restkit import tee
 from restkit import util
 from restkit.util.misc import deprecated_property
 from restkit import http
@@ -35,96 +34,7 @@ USER_AGENT = "restkit/%s" % __version__
 
 log = logging.getLogger(__name__)
 
-class HttpResponse(object):
-    """ Http Response object returned by HttpConnction"""
-    
-    charset = "utf8"
-    unicode_errors = 'strict'
-    
-    def __init__(self, response, final_url):
-        self.response = response
-        self.status = response.status
-        self.status_int = response.status_int
-        self.version = response.version
-        self.headerslist = response.headers
-        self.final_url = final_url
-        
-        headers = {}
-        for key, value in response.headers:
-            headers[key.lower()] = value
-        self.headers = headers
-        self.closed = False
-            
-    def __getitem__(self, key):
-        try:
-            return getattr(self, key)
-        except AttributeError:
-            pass
-        return self.headers[key.lower()]
-    
-    def __contains__(self, key):
-        return (key.lower() in self.headers)
-
-    def __iter__(self):
-        for item in list(self.headers.items()):
-            yield item
-            
-    def body_string(self, charset=None, unicode_errors="strict"):
-        """ return body string, by default in bytestring """
-        if self.closed or self.response.body.closed:
-            raise AlreadyRead("The response have already been read")
-        body = self.response.body.read()
-        if charset is not None:
-            try:
-                body = body.decode(charset, unicode_errors)
-            except UnicodeDecodeError:
-                pass
-        self.close()
-        return body
-        
-    def body_stream(self):
-        """ return full body stream """
-        if self.closed or self.response.body.closed:
-            raise AlreadyRead("The response have already been read")
-        return self.response.body
-        
-    def close(self):
-        """ release the socket """
-        self.closed = True
-        self.response.body.close()
-          
-    @property
-    def body(self):
-        """ body in bytestring """
-        return self.body_string()
-        
-    body = deprecated_property(
-            body, 'body', 'use body_string() instead',
-            warning=True)
-        
-    @property
-    def body_file(self):
-        """ return body as a file like object"""
-        return self.body_stream()
-        
-    body_file = deprecated_property(
-            body_file, 'body_file', 'use body_stream() instead',
-            warning=True)   
-        
-    @property
-    def unicode_body(self):
-        """ like body but converted to unicode"""
-        if not self.charset:
-            raise AttributeError(
-            "You cannot access HttpResponse.unicode_body unless charset is set")
-        body = self.body_string()
-        return body.decode(self.charset, self.unicode_errors)
-            
-    unicode_body = deprecated_property(
-            unicode_body, 'unicode_body', 'replaced by body_string()',
-            warning=True)
-
-class HttpConnection(object):
+class HttpRequest(object):
     """ Http Connection object. """
     
     version = (1, 1)
@@ -136,7 +46,7 @@ class HttpConnection(object):
             pool_instance=None, response_class=None,
             **ssl_args):
             
-        """ HttpConnection constructor
+        """ HttpRequest constructor
         
         :param timeout: socket timeout
         :param filters: list, list of http filters. see the doc of http filters 
@@ -348,11 +258,13 @@ class HttpConnection(object):
         self.chunked = chunked
         self.host_hdr = host
         self.accept_encoding = accept_encoding
+
         if connection == "close":
             self.should_close = True
-        elif self.pool is not None:
-            self.should_close = False
+        elif self.should_close:
+            connection = "close" 
         
+        self.connection = connection
         # Finally do the request
         return self.do_send()
         
@@ -375,6 +287,8 @@ class HttpConnection(object):
             "User-Agent: %s\r\n" % self.ua,
             "Accept-Encoding: %s\r\n" % self.accept_encoding
         ]
+        if self.connection:
+            req_headers.append("Connection: %s\r\n" % self.connection)
         req_headers.extend(["%s: %s\r\n" % (k, v) for k, v in self.headers])
         req_headers.append('\r\n')
         return req_headers
@@ -421,10 +335,9 @@ class HttpConnection(object):
                     raise
                 if e[0] in (errno.EPIPE, errno.ECONNRESET):
                     self.clean_connections()
-            except Exception, e:
-                if isinstance(e, (KeyboardInterrupt, SystemExit)):
-                    raise
-
+            except (KeyboardInterrupt, SystemExit):
+                break
+            except:
                 if tries <= 0:
                     raise
                 # we don't know what happend. 
@@ -451,7 +364,8 @@ class HttpConnection(object):
         self.final_url = location
         response.body.read() 
         self.nb_redirections -= 1
-        sock.close(self._sock)
+        
+        self.release_connection((self.host, self.port), self._sock)
         return self.request(location, self.method, self.body, self.headers)
                         
     def start_response(self):
@@ -497,5 +411,3 @@ class HttpConnection(object):
             resp.body = StringIO()
 
         return self.response_class(resp, self.final_url)
-        
-        
