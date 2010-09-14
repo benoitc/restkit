@@ -141,3 +141,35 @@ def make_uri(base, *args, **kwargs):
         retval.extend(['?', params_str])
 
     return ''.join(retval)
+
+
+def replace_header(name, value, headers):
+    idx = -1
+    for i, (k, v) in enumerate(headers):
+        if k.upper() == name.upper():
+            idx = i
+            break
+    if idx > 0:
+        headers[i] = (name.title(), value)
+    else:
+        headers.append((name.title(), value))
+    return headers
+
+def replace_headers(new_headers, headers):
+    hdrs = {}
+    for (k, v) in new_headers:
+        hdrs[k.upper()] = v
+
+    found = []
+    for i, (k, v) in enumerate(headers):
+        ku = k.upper()
+        if ku in hdrs:
+            headers[i] = (k.title(), hdrs[ku])
+            found.append(ku)
+        if len(found) == len(new_headers):
+            return
+
+    for k, v in new_headers.items():
+        if k not in found:
+            headers.append((k.title(), v))
+    return headers

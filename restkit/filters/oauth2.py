@@ -12,6 +12,7 @@ except ImportError:
 
 from urlparse import urlunparse
     
+from restkit.util import replace_header
 from restkit.util.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
 Token
 
@@ -89,6 +90,8 @@ class OAuthFilter(object):
         
         if form:
             req.body = oauth_req.to_postdata()
+            req.headers = replace_header('Content-Length', len(req.body),
+                    req.headers)
         elif req.method in ('GET', 'HEAD'):
             req.url = req.final_url = oauth_req.to_url()
             req.uri = urlparse.urlparse(req.url)

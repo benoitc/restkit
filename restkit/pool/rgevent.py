@@ -35,5 +35,3 @@ class GeventPool(MonitoredPool):
             for host in self._hosts.values():
                 host.murder_connections()
         
-                
-            
