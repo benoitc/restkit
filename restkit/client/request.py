@@ -3,6 +3,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+import copy
 import cgi
 import errno
 import logging
@@ -25,7 +26,6 @@ from restkit.filters import Filters
 from restkit.forms import multipart_form_encode, form_encode
 from restkit.util import sock
 from restkit import util
-from restkit.util.misc import deprecated_property
 from restkit import http
 
 MAX_FOLLOW_REDIRECTS = 5
@@ -135,9 +135,10 @@ class HttpRequest(object):
         self.host = host
         self.port = port
         
-    def set_body(self, body, content_type=None, content_length=None, 
-            chunked=False):
+    def set_body(self, body, headers, chunked=False):
         """ set HTTP body and manage form if needed """
+        content_type = headers.get('CONTENT-TYPE')
+        content_length = headers.get('CONTENT-LENGTH')
         if not body:
             if content_type is not None:
                 self.headers.append(('Content-Type', content_type))
@@ -187,7 +188,7 @@ class HttpRequest(object):
                 self.headers.append(('Content-Type', content_type))
             
         elif not chunked:
-            raise RequestError("Can't determine content length and" +
+            raise RequestError("Can't determine content length and " +
                     "Transfer-Encoding header is not chunked")
             
         self.body = body               
@@ -206,65 +207,48 @@ class HttpRequest(object):
         self.final_url = url
         self.parse_url(url)
         self.method = method.upper()
+
+        self.init_headers = copy.copy(headers or [])
         self.headers = []
         
         # headers are better as list
         headers = headers  or []
         if isinstance(headers, dict):
-            headers = list(headers.items())
-            
-        ua = USER_AGENT
-        content_length = None
-        accept_encoding = 'identity'
+            headers = headers.items()
+        
         chunked = False
-        content_type = None
-        connection = None
         
-
-        # default host
-        try:
-            host = self.uri.netloc.encode('ascii')
-        except UnicodeEncodeError:
-            host = self.uri.netloc.encode('idna')
-
         # normalize headers
-        for name, value in headers:
-            name = name.title()
-            if name == "User-Agent":
-                ua = value
-            elif name == "Content-Type":
-                content_type = value
-            elif name == "Content-Length":
-                content_length = str(value)
-            elif name == "Accept-Encoding":
-                accept_encoding = value
-            elif name == "Host":
-                host = value
-            elif name == "Transfer-Encoding":
-                if value.lower() == "chunked":
-                    chunked = True
-                self.headers.append((name, value))
-            elif name == "Connection":
-                connection = value
-            else:
-                if not isinstance(value, types.StringTypes):
-                    value = str(value)
-                self.headers.append((name, value))
+        search_headers = ('USER-AGENT', 'CONTENT-TYPE',
+                'CONTENT-LENGTH', 'ACCEPT-ENCODING',
+                'TRANSFER-ENCODING', 'CONNECTION', 'HOST')
+        found_headers = {}
+        new_headers = copy.copy(headers)
+        for (name, value) in headers:
+            uname = name.upper()
+            if uname in search_headers:
+                if uname == 'TRANSFER-ENCODING':
+                    if value.lower() == "chunked":
+                        chunked = True
+                else:
+                    found_headers[uname] = value
+                    new_headers.remove((name, value))
 
-        self.set_body(body, content_type=content_type, 
-            content_length=content_length, chunked=chunked)
-
-        self.ua = ua
-        self.chunked = chunked
-        self.host_hdr = host
-        self.accept_encoding = accept_encoding
-
-        if connection == "close":
-            self.should_close = True
-        elif self.should_close:
-            connection = "close" 
+        self.headers = new_headers
+        self.chunked = chunked 
         
-        self.connection = connection
+        # set body
+        self.set_body(body, found_headers, chunked=chunked)
+
+        # force connection close if needed
+        if found_headers.get('CONNECTION') == "close":
+            self.should_close = True
+        elif self.pool is None:
+            found_headers['CONNECTION'] = "close" 
+        
+        self.found_headers = found_headers
+        
+
         # Finally do the request
         return self.do_send()
         
@@ -279,16 +263,30 @@ class HttpRequest(object):
         path = self.uri.path or "/"
         req_path = urlparse.urlunparse(('','', path, '', 
                         self.uri.query, self.uri.fragment))
-           
+
+
+        ua = self.found_headers.get('USER-AGENT')
+        accept_encoding = self.found_headers.get('CONTENT-ENCODING')
+        connection = self.found_headers.get('CONNECTION')
+        
+        # default host header
+        try:
+            host = self.uri.netloc.encode('ascii')
+        except UnicodeEncodeError:
+            host = self.uri.netloc.encode('idna')
+        host = self.found_headers.get('HOST') or host
+        
         # build final request headers
         req_headers = [
             "%s %s %s\r\n" % (self.method, req_path, httpver),
-            "Host: %s\r\n" % self.host_hdr,
-            "User-Agent: %s\r\n" % self.ua,
-            "Accept-Encoding: %s\r\n" % self.accept_encoding
+            "Host: %s\r\n" % host,
+            "User-Agent: %s\r\n" % ua or USER-AGENT,
+            "Accept-Encoding: %s\r\n" % accept_encoding or 'identity'
         ]
-        if self.connection:
-            req_headers.append("Connection: %s\r\n" % self.connection)
+
+        if connection is not None:
+            req_headers.append("Connection: %s\r\n" % connection)
+
         req_headers.extend(["%s: %s\r\n" % (k, v) for k, v in self.headers])
         req_headers.append('\r\n')
         return req_headers
@@ -366,7 +364,7 @@ class HttpRequest(object):
         self.nb_redirections -= 1
         
         self.release_connection((self.host, self.port), self._sock)
-        return self.request(location, self.method, self.body, self.headers)
+        return self.request(location, self.method, self.body, self.init_headers)
                         
     def start_response(self):
         """
