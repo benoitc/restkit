@@ -56,6 +56,7 @@ Features
 - Reuses connections
 - `Eventlet <http://www.eventlet.net>`_ and `Gevent <http://www.gevent.org>`_ support
 - Support `Chunked transfer encoding`_ in both ways.
+- Support for streamed decompression (gzip and deflate). 
 - Support `Basic Authentification`_ and `OAuth`_.
 - Multipart forms and url-encoded forms
 - Proxy handling
