@@ -55,7 +55,8 @@
 </b></center><br />
 <h1 class="epydoc">Class Hierarchy</h1>
 <ul class="nomargin-top">
-    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>
+    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>:
+      <em class="summary">Allow embedding an IPython shell into a running program.</em>
     </li>
     <li> <strong class="uidlink">webob.Response</strong>
     </li>
@@ -76,15 +77,15 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.errors.AlreadyRead-class.html">restkit.errors.AlreadyRead</a></strong>:
-      <em class="summary">raised when a response have already been read</em>
-    </li>
     <li> <strong class="uidlink">exceptions.BaseException</strong>:
       <em class="summary">Common base class for all exceptions</em>
     <ul>
     <li> <strong class="uidlink">exceptions.Exception</strong>:
       <em class="summary">Common base class for all non-exit exceptions.</em>
     <ul>
+    <li> <strong class="uidlink"><a href="restkit.errors.AlreadyRead-class.html">restkit.errors.AlreadyRead</a></strong>:
+      <em class="summary">raised when a response have already been read</em>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.errors.BadStatusLine-class.html">restkit.errors.BadStatusLine</a></strong>:
       <em class="summary">Exception returned by the parser when the status line is invalid</em>
     </li>
@@ -129,10 +130,10 @@
     <li> <strong class="uidlink"><a href="restkit.errors.ParserError-class.html">restkit.errors.ParserError</a></strong>:
       <em class="summary">Generic exception returned by the parser</em>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.filters.simpleproxy.ProxyError-class.html">restkit.filters.simpleproxy.ProxyError</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.errors.ProxyError-class.html">restkit.errors.ProxyError</a></strong>:
       <em class="summary">raised when proxy error happend</em>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.filters.simpleproxy.ProxyError-class.html">restkit.filters.simpleproxy.ProxyError</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.errors.RedirectLimit-class.html">restkit.errors.RedirectLimit</a></strong>:
       <em class="summary">Exception raised when the redirection limit is reached.</em>
@@ -178,6 +179,9 @@
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.UnexpectedEOF-class.html">restkit.errors.UnexpectedEOF</a></strong>:
+      <em class="summary">exception raised when remote closed the connection</em>
+    </li>
     </ul>
     </li>
     </ul>
@@ -185,6 +189,10 @@
     <li> <strong class="uidlink"><a href="restkit.pool.base.BasePool-class.html">restkit.pool.base.BasePool</a></strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.pool.monitored.MonitoredPool-class.html">restkit.pool.monitored.MonitoredPool</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.pool.rgevent.GeventPool-class.html">restkit.pool.rgevent.GeventPool</a></strong>
+    </li>
+    </ul>
     </li>
     <li> <strong class="uidlink"><a href="restkit.pool.simple.SimplePool-class.html">restkit.pool.simple.SimplePool</a></strong>
     </li>
@@ -207,6 +215,10 @@
     <li> <strong class="uidlink"><a href="restkit.http.body.Body-class.html">restkit.http.body.Body</a></strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.http.body.GzipBody-class.html">restkit.http.body.GzipBody</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.http.body.DeflateBody-class.html">restkit.http.body.DeflateBody</a></strong>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
@@ -225,10 +237,10 @@
     </li>
     <li> <strong class="uidlink"><a href="restkit.pool.simple.Host-class.html">restkit.pool.simple.Host</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.client.HttpConnection-class.html">restkit.client.HttpConnection</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.client.request.HttpRequest-class.html">restkit.client.request.HttpRequest</a></strong>:
       <em class="summary">Http Connection object.</em>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.client.HttpResponse-class.html">restkit.client.HttpResponse</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.client.response.HttpResponse-class.html">restkit.client.response.HttpResponse</a></strong>:
       <em class="summary">Http Response object returned by HttpConnction</em>
     </li>
     <li> <strong class="uidlink"><a href="restkit.http.body.LengthReader-class.html">restkit.http.body.LengthReader</a></strong>
@@ -242,6 +254,11 @@
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="restkit.pool.monitored.MonitoredHost-class.html">restkit.pool.monitored.MonitoredHost</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.pool.rgevent.GeventHost-class.html">restkit.pool.rgevent.GeventHost</a></strong>:
+      <em class="summary">hash(x)</em>
+    </li>
+    </ul>
     </li>
     <li> <strong class="uidlink"><a href="restkit.forms.MultipartForm-class.html">restkit.forms.MultipartForm</a></strong>
     </li>
@@ -283,8 +300,6 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.contrib.wsgi_proxy.ResponseIter-class.html">restkit.contrib.wsgi_proxy.ResponseIter</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="restkit.util.oauth2.Server-class.html">restkit.util.oauth2.Server</a></strong>:
       <em class="summary">A skeletal implementation of a service provider, providing 
         protected resources to requests from authorized consumers.</em>
@@ -309,9 +324,6 @@
       <em class="summary">An OAuth credential used to request authorization or a protected 
         resource.</em>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.errors.UnexpectedEOF-class.html">restkit.errors.UnexpectedEOF</a></strong>:
-      <em class="summary">exception raised when remote closed the connection</em>
-    </li>
     <li> <strong class="uidlink"><a href="restkit.http.unreader.Unreader-class.html">restkit.http.unreader.Unreader</a></strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.http.unreader.IterUnreader-class.html">restkit.http.unreader.IterUnreader</a></strong>
@@ -324,7 +336,15 @@
       <em class="summary">Wraps a decorator, with a deprecation warning or error</em>
     </li>
     <li> <strong class="uidlink">dict</strong>:
-      <em class="summary">dict() -&gt; new empty dictionary.</em>
+      <em class="summary">dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+    (key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+    d = {}
+    for k, v in iterable:
+        d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+    in the keyword argument list.</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.util.oauth2.Request-class.html">restkit.util.oauth2.Request</a></strong>:
       <em class="summary">The parameters and information for an HTTP request, suitable for 
@@ -368,7 +388,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Sep  2 22:53:53 2010
+    Generated by Epydoc 3.0.1 on Tue Sep 14 20:59:25 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

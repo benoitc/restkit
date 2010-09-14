@@ -3,7 +3,18 @@
 News
 ====
 
-2.1.6 / 2010-09-9
+2.2.0 / 2009-09-14
+------------------
+ - Refactor client code. Improve header parsing
+ - Fix Deflate/Gzip decompression and make it fully
+streamed.
+ - Fix oauth2 in POST requests
+ - Fix import with Python 2.5/2.4
+ - Fix Exceptions
+ - body, unicod_body and body_file methods have been removed from the
+   HTTP response.
+
+2.1.6 / 2010-09-
 -----------------
  - Fix debian packaging 
  - Fix oauth

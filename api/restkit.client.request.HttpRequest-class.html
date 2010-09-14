@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>restkit.client.HttpConnection</title>
+  <title>restkit.client.request.HttpRequest</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,9 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="restkit-module.html">Package&nbsp;restkit</a> ::
-        <a href="restkit.client-module.html">Module&nbsp;client</a> ::
-        Class&nbsp;HttpConnection
+        <a href="restkit.client-module.html">Package&nbsp;client</a> ::
+        <a href="restkit.client.request-module.html">Module&nbsp;request</a> ::
+        Class&nbsp;HttpRequest
       </span>
     </td>
     <td>
@@ -49,18 +50,18 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="restkit.client.HttpConnection-class.html"
+            >]&nbsp;|&nbsp;<a href="restkit.client.request.HttpRequest-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class HttpConnection</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class HttpRequest</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest">source&nbsp;code</a></span></p>
 <pre class="base-tree">
 object --+
          |
-        <strong class="uidshort">HttpConnection</strong>
+        <strong class="uidshort">HttpRequest</strong>
 </pre>
 
 <hr />
@@ -87,7 +88,7 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="restkit.client.HttpResponse-class.html" class="summary-name">response_class</a><br />
+        <a href="restkit.client.response.HttpResponse-class.html" class="summary-name">response_class</a><br />
       Http Response object returned by HttpConnction
     </td>
   </tr>
@@ -115,8 +116,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.client.HttpConnection-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">socket._GLOBAL_DEFAULT_TIMEOUT</span>,
+          <td><span class="summary-sig"><a href="restkit.client.request.HttpRequest-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">sock._GLOBAL_DEFAULT_TIMEOUT</span>,
         <span class="summary-sig-arg">filters</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">follow_redirect</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">force_follow_redirect</span>=<span class="summary-sig-default">False</span>,
@@ -124,9 +125,9 @@ object --+
         <span class="summary-sig-arg">pool_instance</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">response_class</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**ssl_args</span>)</span><br />
-      HttpConnection constructor</td>
+      HttpRequest constructor</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -143,7 +144,7 @@ object --+
           <td><span class="summary-sig"><a name="make_connection"></a><span class="summary-sig-name">make_connection</span>(<span class="summary-sig-arg">self</span>)</span><br />
       initate a connection if needed or reuse a socket</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.make_connection">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.make_connection">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -159,7 +160,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="clean_connections"></a><span class="summary-sig-name">clean_connections</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.clean_connections">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.clean_connections">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -177,7 +178,7 @@ object --+
         <span class="summary-sig-arg">address</span>,
         <span class="summary-sig-arg">socket</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.release_connection">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.release_connection">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -195,7 +196,7 @@ object --+
         <span class="summary-sig-arg">url</span>)</span><br />
       parse url and get host/port</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.parse_url">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.parse_url">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -211,12 +212,11 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="set_body"></a><span class="summary-sig-name">set_body</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">body</span>,
-        <span class="summary-sig-arg">content_type</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">content_length</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">headers</span>,
         <span class="summary-sig-arg">chunked</span>=<span class="summary-sig-default">False</span>)</span><br />
       set HTTP body and manage form if needed</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.set_body">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.set_body">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -230,14 +230,14 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.client.HttpConnection-class.html#request" class="summary-sig-name">request</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="restkit.client.request.HttpRequest-class.html#request" class="summary-sig-name">request</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">url</span>,
         <span class="summary-sig-arg">method</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">GET</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">body</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">None</span>)</span><br />
       make effective request</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.request">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.request">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -253,7 +253,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="_req_headers"></a><span class="summary-sig-name">_req_headers</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection._req_headers">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest._req_headers">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -269,7 +269,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="do_send"></a><span class="summary-sig-name">do_send</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.do_send">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.do_send">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -288,7 +288,7 @@ object --+
         <span class="summary-sig-arg">location</span>)</span><br />
       follow redirections if needed</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.do_redirect">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.do_redirect">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -305,7 +305,7 @@ object --+
           <td><span class="summary-sig"><a name="start_response"></a><span class="summary-sig-name">start_response</span>(<span class="summary-sig-arg">self</span>)</span><br />
       Get headers, set Body object and return HttpResponse</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.start_response">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.start_response">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -408,7 +408,7 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">timeout</span>=<span class="sig-default">socket._GLOBAL_DEFAULT_TIMEOUT</span>,
+        <span class="sig-arg">timeout</span>=<span class="sig-default">sock._GLOBAL_DEFAULT_TIMEOUT</span>,
         <span class="sig-arg">filters</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">follow_redirect</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">force_follow_redirect</span>=<span class="sig-default">False</span>,
@@ -419,11 +419,11 @@ object --+
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>HttpConnection constructor</p>
+  <p>HttpRequest constructor</p>
   <p>:param timeout: socket timeout :param filters: list, list of http 
   filters. see the doc of http filters for more info :param 
   follow_redirect: boolean, by default is false. If true, if the HTTP 
@@ -454,7 +454,7 @@ object --+
         <span class="sig-arg">headers</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.client-pysrc.html#HttpConnection.request">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.request">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
@@ -493,7 +493,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Sep  2 22:53:53 2010
+    Generated by Epydoc 3.0.1 on Tue Sep 14 20:59:25 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>restkit.client.response</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="restkit-module.html">Package&nbsp;restkit</a> ::
+        <a href="restkit.client-module.html">Package&nbsp;client</a> ::
+        Module&nbsp;response
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="restkit.client.response-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="restkit.client.response-module.html">Module restkit.client.response</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of restkit released under the MIT license. </tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># See the NOTICE for more information.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package restkit=restkit-module.html"><a title="restkit" class="py-name" href="#" onclick="return doclink('link-0', 'restkit', 'link-0');">restkit</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Module restkit.errors=restkit.errors-module.html"><a title="restkit.errors" class="py-name" href="#" onclick="return doclink('link-1', 'errors', 'link-1');">errors</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class restkit.errors.AlreadyRead=restkit.errors.AlreadyRead-class.html"><a title="restkit.errors.AlreadyRead" class="py-name" href="#" onclick="return doclink('link-2', 'AlreadyRead', 'link-2');">AlreadyRead</a></tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"> </tt>
+<a name="HttpResponse"></a><div id="HttpResponse-def"><a name="L8"></a><tt class="py-lineno"> 8</tt> <a class="py-toggle" href="#" id="HttpResponse-toggle" onclick="return toggle('HttpResponse');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="restkit.client.response.HttpResponse-class.html">HttpResponse</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpResponse-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="HttpResponse-expanded"><a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt class="py-docstring">""" Http Response object returned by HttpConnction"""</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">     </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">    <tt id="link-3" class="py-name" targets="Variable restkit.client.response.HttpResponse.charset=restkit.client.response.HttpResponse-class.html#charset,Variable restkit.resource.Resource.charset=restkit.resource.Resource-class.html#charset"><a title="restkit.client.response.HttpResponse.charset
+restkit.resource.Resource.charset" class="py-name" href="#" onclick="return doclink('link-3', 'charset', 'link-3');">charset</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"utf8"</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">    <tt id="link-4" class="py-name" targets="Variable restkit.client.response.HttpResponse.unicode_errors=restkit.client.response.HttpResponse-class.html#unicode_errors,Variable webob.response.Response.unicode_errors=webob.response.Response-class.html#unicode_errors"><a title="restkit.client.response.HttpResponse.unicode_errors
+webob.response.Response.unicode_errors" class="py-name" href="#" onclick="return doclink('link-4', 'unicode_errors', 'link-4');">unicode_errors</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'strict'</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">     </tt>
+<a name="HttpResponse.__init__"></a><div id="HttpResponse.__init__-def"><a name="L14"></a><tt class="py-lineno">14</tt> <a class="py-toggle" href="#" id="HttpResponse.__init__-toggle" onclick="return toggle('HttpResponse.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.client.response.HttpResponse-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">response</tt><tt class="py-op">,</tt> <tt class="py-param">final_url</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpResponse.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="HttpResponse.__init__-expanded"><a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Module restkit.client.response=restkit.client.response-module.html"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-5', 'response', 'link-5');">response</a></tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-6', 'response', 'link-5');">response</a></tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">status</tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-7', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt class="py-name">status</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Variable restkit.contrib.webob_helper.WebobResourceError.status_int=restkit.contrib.webob_helper.WebobResourceError-class.html#status_int,Variable restkit.errors.ResourceError.status_int=restkit.errors.ResourceError-class.html#status_int,Variable restkit.errors.ResourceNotFound.status_int=restkit.errors.ResourceNotFound-class.html#status_int"><a title="restkit.contrib.webob_helper.WebobResourceError.status_int
+restkit.errors.ResourceError.status_int
+restkit.errors.ResourceNotFound.status_int" class="py-name" href="#" onclick="return doclink('link-8', 'status_int', 'link-8');">status_int</a></tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-9', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="restkit.contrib.webob_helper.WebobResourceError.status_int
+restkit.errors.ResourceError.status_int
+restkit.errors.ResourceNotFound.status_int" class="py-name" href="#" onclick="return doclink('link-10', 'status_int', 'link-8');">status_int</a></tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Variable restkit.client.request.HttpRequest.version=restkit.client.request.HttpRequest-class.html#version,Variable restkit.util.oauth2.Request.version=restkit.util.oauth2.Request-class.html#version,Variable restkit.util.oauth2.Server.version=restkit.util.oauth2.Server-class.html#version"><a title="restkit.client.request.HttpRequest.version
+restkit.util.oauth2.Request.version
+restkit.util.oauth2.Server.version" class="py-name" href="#" onclick="return doclink('link-11', 'version', 'link-11');">version</a></tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-12', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="restkit.client.request.HttpRequest.version
+restkit.util.oauth2.Request.version
+restkit.util.oauth2.Server.version" class="py-name" href="#" onclick="return doclink('link-13', 'version', 'link-11');">version</a></tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">headerslist</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-14', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt class="py-name">headers</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">final_url</tt> <tt class="py-op">=</tt> <tt class="py-name">final_url</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">         </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-name">headers</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-15" class="py-name" targets="Variable restkit.util.oauth2.Consumer.key=restkit.util.oauth2.Consumer-class.html#key,Variable restkit.util.oauth2.Token.key=restkit.util.oauth2.Token-class.html#key"><a title="restkit.util.oauth2.Consumer.key
+restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink('link-15', 'key', 'link-15');">key</a></tt><tt class="py-op">,</tt> <tt class="py-name">value</tt> <tt class="py-keyword">in</tt> <tt id="link-16" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-16', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt class="py-name">headers</tt><tt class="py-op">:</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">            <tt class="py-name">headers</tt><tt class="py-op">[</tt><tt id="link-17" class="py-name"><a title="restkit.util.oauth2.Consumer.key
+restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink('link-17', 'key', 'link-15');">key</a></tt><tt class="py-op">.</tt><tt class="py-name">lower</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">value</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">headers</tt> <tt class="py-op">=</tt> <tt class="py-name">headers</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">closed</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">             </tt>
+<a name="HttpResponse.__getitem__"></a><div id="HttpResponse.__getitem__-def"><a name="L28"></a><tt class="py-lineno">28</tt> <a class="py-toggle" href="#" id="HttpResponse.__getitem__-toggle" onclick="return toggle('HttpResponse.__getitem__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.client.response.HttpResponse-class.html#__getitem__">__getitem__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpResponse.__getitem__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="HttpResponse.__getitem__-expanded"><a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt id="link-18" class="py-name"><a title="restkit.util.oauth2.Consumer.key
+restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink('link-18', 'key', 'link-15');">key</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">            <tt class="py-keyword">pass</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">headers</tt><tt class="py-op">[</tt><tt id="link-19" class="py-name"><a title="restkit.util.oauth2.Consumer.key
+restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink('link-19', 'key', 'link-15');">key</a></tt><tt class="py-op">.</tt><tt class="py-name">lower</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">     </tt>
+<a name="HttpResponse.__contains__"></a><div id="HttpResponse.__contains__-def"><a name="L35"></a><tt class="py-lineno">35</tt> <a class="py-toggle" href="#" id="HttpResponse.__contains__-toggle" onclick="return toggle('HttpResponse.__contains__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.client.response.HttpResponse-class.html#__contains__">__contains__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpResponse.__contains__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="HttpResponse.__contains__-expanded"><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt id="link-20" class="py-name"><a title="restkit.util.oauth2.Consumer.key
+restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink('link-20', 'key', 'link-15');">key</a></tt><tt class="py-op">.</tt><tt class="py-name">lower</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">headers</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"> </tt>
+<a name="HttpResponse.__iter__"></a><div id="HttpResponse.__iter__-def"><a name="L38"></a><tt class="py-lineno">38</tt> <a class="py-toggle" href="#" id="HttpResponse.__iter__-toggle" onclick="return toggle('HttpResponse.__iter__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.client.response.HttpResponse-class.html#__iter__">__iter__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpResponse.__iter__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="HttpResponse.__iter__-expanded"><a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">item</tt> <tt class="py-keyword">in</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">headers</tt><tt class="py-op">.</tt><tt class="py-name">items</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">item</tt> </tt>
+</div><a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">             </tt>
+<a name="HttpResponse.body_string"></a><div id="HttpResponse.body_string-def"><a name="L42"></a><tt class="py-lineno">42</tt> <a class="py-toggle" href="#" id="HttpResponse.body_string-toggle" onclick="return toggle('HttpResponse.body_string');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.client.response.HttpResponse-class.html#body_string">body_string</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">charset</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">unicode_errors</tt><tt class="py-op">=</tt><tt class="py-string">"strict"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpResponse.body_string-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="HttpResponse.body_string-expanded"><a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">        <tt class="py-docstring">""" return body string, by default in bytestring """</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">closed</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-21', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Module restkit.http.body=restkit.http.body-module.html"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-22', 'body', 'link-22');">body</a></tt><tt class="py-op">.</tt><tt class="py-name">closed</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-23" class="py-name"><a title="restkit.errors.AlreadyRead" class="py-name" href="#" onclick="return doclink('link-23', 'AlreadyRead', 'link-2');">AlreadyRead</a></tt><tt class="py-op">(</tt><tt class="py-string">"The response have already been read"</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt id="link-24" class="py-name"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-24', 'body', 'link-22');">body</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-25', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-26', 'body', 'link-22');">body</a></tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Method restkit.http.body.Body.read()=restkit.http.body.Body-class.html#read,Method restkit.http.body.ChunkedReader.read()=restkit.http.body.ChunkedReader-class.html#read,Method restkit.http.body.EOFReader.read()=restkit.http.body.EOFReader-class.html#read,Method restkit.http.body.GzipBody.read()=restkit.http.body.GzipBody-class.html#read,Method restkit.http.body.LengthReader.read()=restkit.http.body.LengthReader-class.html#read,Method restkit.http.unreader.Unreader.read()=restkit.http.unreader.Unreader-class.html#read,Method restkit.tee.TeeInput.read()=restkit.tee.TeeInput-class.html#read"><a title="restkit.http.body.Body.read
+restkit.http.body.ChunkedReader.read
+restkit.http.body.EOFReader.read
+restkit.http.body.GzipBody.read
+restkit.http.body.LengthReader.read
+restkit.http.unreader.Unreader.read
+restkit.tee.TeeInput.read" class="py-name" href="#" onclick="return doclink('link-27', 'read', 'link-27');">read</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-28" class="py-name"><a title="restkit.client.response.HttpResponse.charset
+restkit.resource.Resource.charset" class="py-name" href="#" onclick="return doclink('link-28', 'charset', 'link-3');">charset</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">            <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">                <tt id="link-29" class="py-name"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-29', 'body', 'link-22');">body</a></tt> <tt class="py-op">=</tt> <tt id="link-30" class="py-name"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-30', 'body', 'link-22');">body</a></tt><tt class="py-op">.</tt><tt class="py-name">decode</tt><tt class="py-op">(</tt><tt id="link-31" class="py-name"><a title="restkit.client.response.HttpResponse.charset
+restkit.resource.Resource.charset" class="py-name" href="#" onclick="return doclink('link-31', 'charset', 'link-3');">charset</a></tt><tt class="py-op">,</tt> <tt id="link-32" class="py-name"><a title="restkit.client.response.HttpResponse.unicode_errors
+webob.response.Response.unicode_errors" class="py-name" href="#" onclick="return doclink('link-32', 'unicode_errors', 'link-4');">unicode_errors</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">            <tt class="py-keyword">except</tt> <tt class="py-name">UnicodeDecodeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">                <tt class="py-keyword">pass</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name" targets="Method restkit.client.response.HttpResponse.close()=restkit.client.response.HttpResponse-class.html#close,Method restkit.http.body.Body.close()=restkit.http.body.Body-class.html#close,Method restkit.http.unreader.SocketUnreader.close()=restkit.http.unreader.SocketUnreader-class.html#close,Method restkit.http.unreader.Unreader.close()=restkit.http.unreader.Unreader-class.html#close,Method restkit.pool.base.BasePool.close()=restkit.pool.base.BasePool-class.html#close,Method restkit.resource.Resource.close()=restkit.resource.Resource-class.html#close,Method restkit.tee.TeeInput.close()=restkit.tee.TeeInput-class.html#close,Function restkit.util.sock.close()=restkit.util.sock-module.html#close"><a title="restkit.client.response.HttpResponse.close
+restkit.http.body.Body.close
+restkit.http.unreader.SocketUnreader.close
+restkit.http.unreader.Unreader.close
+restkit.pool.base.BasePool.close
+restkit.resource.Resource.close
+restkit.tee.TeeInput.close
+restkit.util.sock.close" class="py-name" href="#" onclick="return doclink('link-33', 'close', 'link-33');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-34" class="py-name"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-34', 'body', 'link-22');">body</a></tt> </tt>
+</div><a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">         </tt>
+<a name="HttpResponse.body_stream"></a><div id="HttpResponse.body_stream-def"><a name="L55"></a><tt class="py-lineno">55</tt> <a class="py-toggle" href="#" id="HttpResponse.body_stream-toggle" onclick="return toggle('HttpResponse.body_stream');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.client.response.HttpResponse-class.html#body_stream">body_stream</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpResponse.body_stream-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="HttpResponse.body_stream-expanded"><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">        <tt class="py-docstring">""" return full body stream """</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">closed</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-35', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-36', 'body', 'link-22');">body</a></tt><tt class="py-op">.</tt><tt class="py-name">closed</tt><tt class="py-op">:</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-37" class="py-name"><a title="restkit.errors.AlreadyRead" class="py-name" href="#" onclick="return doclink('link-37', 'AlreadyRead', 'link-2');">AlreadyRead</a></tt><tt class="py-op">(</tt><tt class="py-string">"The response have already been read"</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-38', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-39', 'body', 'link-22');">body</a></tt> </tt>
+</div><a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">         </tt>
+<a name="HttpResponse.close"></a><div id="HttpResponse.close-def"><a name="L61"></a><tt class="py-lineno">61</tt> <a class="py-toggle" href="#" id="HttpResponse.close-toggle" onclick="return toggle('HttpResponse.close');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.client.response.HttpResponse-class.html#close">close</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpResponse.close-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="HttpResponse.close-expanded"><a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">        <tt class="py-docstring">""" release the socket """</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">closed</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="restkit.client.response" class="py-name" href="#" onclick="return doclink('link-40', 'response', 'link-5');">response</a></tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="restkit.http.body" class="py-name" href="#" onclick="return doclink('link-41', 'body', 'link-22');">body</a></tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="restkit.client.response.HttpResponse.close
+restkit.http.body.Body.close
+restkit.http.unreader.SocketUnreader.close
+restkit.http.unreader.Unreader.close
+restkit.pool.base.BasePool.close
+restkit.resource.Resource.close
+restkit.tee.TeeInput.close
+restkit.util.sock.close" class="py-name" href="#" onclick="return doclink('link-42', 'close', 'link-33');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Tue Sep 14 20:59:27 2010
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
