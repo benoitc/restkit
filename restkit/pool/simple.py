@@ -24,7 +24,7 @@ class Host(object):
     def get(self):
         while len(self.connections):
             conn, expires = self.connections.popleft()
-            if expires <= time.time():
+            if expires >= time.time():
                 return conn
         return None
         
