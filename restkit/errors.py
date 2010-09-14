@@ -85,10 +85,10 @@ class ParserError(Exception):
     """ Generic exception returned by the parser """
     pass
     
-class UnexpectedEOF(object):
+class UnexpectedEOF(Exception):
     """ exception raised when remote closed the connection """
     
-class AlreadyRead(object):
+class AlreadyRead(Exception):
     """ raised when a response have already been read """
     
     
