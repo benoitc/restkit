@@ -248,7 +248,6 @@ class HttpRequest(object):
         
         self.found_headers = found_headers
         
-
         # Finally do the request
         return self.do_send()
         
@@ -266,7 +265,7 @@ class HttpRequest(object):
 
 
         ua = self.found_headers.get('USER-AGENT')
-        accept_encoding = self.found_headers.get('CONTENT-ENCODING')
+        accept_encoding = self.found_headers.get('ACCEPT-ENCODING')
         connection = self.found_headers.get('CONNECTION')
         
         # default host header
@@ -280,7 +279,7 @@ class HttpRequest(object):
         req_headers = [
             "%s %s %s\r\n" % (self.method, req_path, httpver),
             "Host: %s\r\n" % host,
-            "User-Agent: %s\r\n" % ua or USER-AGENT,
+            "User-Agent: %s\r\n" % ua or USER_AGENT,
             "Accept-Encoding: %s\r\n" % accept_encoding or 'identity'
         ]
 

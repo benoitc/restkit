@@ -12,7 +12,7 @@ except ImportError:
     from StringIO import StringIO
 
 from restkit.http.body import ChunkedReader, LengthReader, EOFReader, Body, \
-GzipBody
+GzipBody, DeflateBody
 from restkit.errors import InvalidHeader, InvalidHeaderName, NoMoreData, \
 InvalidRequestLine, InvalidRequestMethod, InvalidHTTPVersion, InvalidHTTPStatus
 
@@ -105,7 +105,6 @@ class Message(object):
     def set_body_reader(self):
         chunked = False
         clength = None
-
         for (name, value) in self.headers:
             if name.upper() == "CONTENT-LENGTH":
                 try:
@@ -117,9 +116,6 @@ class Message(object):
             elif name.upper() == "CONTENT-ENCODING":
                 self.encoding = value.lower()
 
-            if clength is not None or chunked:
-                break
-        
         if chunked:
             self.body = Body(ChunkedReader(self, self.unreader))
         elif clength is not None:
@@ -223,5 +219,7 @@ class Response(Message):
         super(Response, self).set_body_reader()
         if self.encoding == "gzip":
             self.body = GzipBody(self.body.reader)
+        elif self.encoding == "deflate":
+            self.body = DeflateBody(self.body.reader)
         
         

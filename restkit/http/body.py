@@ -135,6 +135,7 @@ class LengthReader(object):
                 break
             data = self.unreader.read()
         
+        
         buf = buf.getvalue()
         ret, rest = buf[:size], buf[size:]
         self.unreader.unread(rest)
@@ -289,10 +290,10 @@ class Body(object):
                 ret.append(line)
         return ret
         
-        
+
 class GzipBody(Body):
     def __init__(self, reader):
-        Body.__init__(self, reader)
+        super(GzipBody, self).__init__(reader)
         self._d = zlib.decompressobj(16+zlib.MAX_WBITS)
         
     def _decompress(self, data):
@@ -308,21 +309,20 @@ class GzipBody(Body):
             ret, rest = data[:size], data[size:]
             self.buf.truncate(0)
             self.buf.write(rest)
-            return ret
+            return self._decompress(ret)
 
         while size > self.buf.tell():
             data = self.reader.read(1024)
             if not len(data):
                 self.close()
                 break
-            data = self._decompress(data)
             self.buf.write(data)
 
         data = self.buf.getvalue()
         ret, rest = data[:size], data[size:]
         self.buf.truncate(0)
         self.buf.write(rest)
-        return ret
+        return self._decompress(ret)
     
     def readline(self, size=None):
         size = self.getsize(size)
@@ -335,8 +335,7 @@ class GzipBody(Body):
             if not len(data):
                 self.close()
                 break
-            data = self._decompress(data)
-            self.buf.write(data)
+            self.buf.write(self._decompress(data))
             idx = self.buf.getvalue().find("\n")
             if size < self.buf.tell():
                 break
@@ -358,6 +357,10 @@ class GzipBody(Body):
         self.buf.truncate(0)
         self.buf.write(rest)
         return ret
-        
-        
-    
+
+
+class DeflateBody(GzipBody):
+    def __init__(self, reader):
+        super(DeflateBody, self).__init__(reader)
+        self._d = zlib.decompressobj()
+
