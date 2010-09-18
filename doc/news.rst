@@ -3,7 +3,11 @@
 News
 ====
 
-2.2.0 / 2009-09-14
+2.2.1 / 2010-09-18
+------------------
+ - Fix readline `b7365155 <http://github.com/benoitc/restkit/commit/b7365155168cc9df7e48edabad79b2c478e8c5c7>`_ .
+
+2.2.0 / 2010-09-14
 ------------------
  - Refactor client code. Improve header parsing
  - Fix Deflate/Gzip decompression and make it fully
