@@ -7,7 +7,7 @@ News
 ------------------
  - Refactor client code. Improve header parsing
  - Fix Deflate/Gzip decompression and make it fully
-streamed.
+   streamed.
  - Fix oauth2 in POST requests
  - Fix import with Python 2.5/2.4
  - Fix Exceptions
