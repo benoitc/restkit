@@ -98,7 +98,7 @@
 <p>Example of usage with Gevent:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">gevent</span> <span class="kn">import</span> <span class="n">monkey</span><span class="p">;</span> <span class="n">monkey</span><span class="o">.</span><span class="n">patch_socket</span><span class="p">()</span>
-<span class="kn">from</span> <span class="nn">restkit.poll.rgevent</span> <span class="kn">import</span> <span class="n">GeventPool</span>
+<span class="kn">from</span> <span class="nn">restkit.pool.rgevent</span> <span class="kn">import</span> <span class="n">GeventPool</span>
 <span class="n">pool</span> <span class="o">=</span> <span class="n">GeventPool</span><span class="p">(</span><span class="n">keepalive</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">,</span> <span class="n">pool_instance</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
 </pre></div>

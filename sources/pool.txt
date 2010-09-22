@@ -15,7 +15,7 @@ Example of usage with Gevent::
 
   from restkit import *
   from gevent import monkey; monkey.patch_socket()
-  from restkit.poll.rgevent import GeventPool
+  from restkit.pool.rgevent import GeventPool
   pool = GeventPool(keepalive=2, timeout=300)
   r = request('http://friendpaste.com', pool_instance=pool)
 

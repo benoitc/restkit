@@ -220,6 +220,7 @@ exceptions.BaseException --+       |
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>webob.exc.WSGIHTTPException</code></b>:
       <code>__call__</code>,
+      <code>__str__</code>,
       <code>generate_response</code>,
       <code>html_body</code>,
       <code>plain_body</code>
@@ -229,7 +230,6 @@ exceptions.BaseException --+       |
       </p></div>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b>:
       <code><a href="webob.response.Response-class.html#__repr__">__repr__</a></code>,
-      <code><a href="webob.response.Response-class.html#__str__">__str__</a></code>,
       <code><a href="webob.response.Response-class.html#app_iter_range">app_iter_range</a></code>,
       <code><a href="webob.response.Response-class.html#conditional_response_app">conditional_response_app</a></code>,
       <code><a href="webob.response.Response-class.html#copy">copy</a></code>,
@@ -310,6 +310,31 @@ exceptions.BaseException --+       |
     </td>
   </tr>
 </table>
+<!-- ==================== CLASS METHODS ==================== -->
+<a name="section-ClassMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b>:
+      <code><a href="webob.response.Response-class.html#from_file">from_file</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
 <!-- ==================== CLASS VARIABLES ==================== -->
 <a name="section-ClassVariables"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -339,32 +364,11 @@ exceptions.BaseException --+       |
       <code>title</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b>:
-      <code><a href="webob.response.Response-class.html#accept_ranges">accept_ranges</a></code>,
-      <code><a href="webob.response.Response-class.html#age">age</a></code>,
-      <code><a href="webob.response.Response-class.html#allow">allow</a></code>,
-      <code><a href="webob.response.Response-class.html#cache_expires">cache_expires</a></code>,
-      <code><a href="webob.response.Response-class.html#content_disposition">content_disposition</a></code>,
-      <code><a href="webob.response.Response-class.html#content_encoding">content_encoding</a></code>,
-      <code><a href="webob.response.Response-class.html#content_language">content_language</a></code>,
-      <code><a href="webob.response.Response-class.html#content_length">content_length</a></code>,
-      <code><a href="webob.response.Response-class.html#content_location">content_location</a></code>,
-      <code><a href="webob.response.Response-class.html#content_md5">content_md5</a></code>,
-      <code><a href="webob.response.Response-class.html#content_range">content_range</a></code>,
-      <code><a href="webob.response.Response-class.html#date">date</a></code>,
       <code><a href="webob.response.Response-class.html#default_charset">default_charset</a></code>,
       <code><a href="webob.response.Response-class.html#default_conditional_response">default_conditional_response</a></code>,
       <code><a href="webob.response.Response-class.html#default_content_type">default_content_type</a></code>,
-      <code><a href="webob.response.Response-class.html#etag">etag</a></code>,
-      <code><a href="webob.response.Response-class.html#expires">expires</a></code>,
-      <code><a href="webob.response.Response-class.html#last_modified">last_modified</a></code>,
-      <code><a href="webob.response.Response-class.html#location">location</a></code>,
-      <code><a href="webob.response.Response-class.html#pragma">pragma</a></code>,
-      <code><a href="webob.response.Response-class.html#retry_after">retry_after</a></code>,
-      <code><a href="webob.response.Response-class.html#server">server</a></code>,
       <code><a href="webob.response.Response-class.html#status_code">status_code</a></code>,
-      <code><a href="webob.response.Response-class.html#unicode_errors">unicode_errors</a></code>,
-      <code><a href="webob.response.Response-class.html#vary">vary</a></code>,
-      <code><a href="webob.response.Response-class.html#www_authenticate">www_authenticate</a></code>
+      <code><a href="webob.response.Response-class.html#unicode_errors">unicode_errors</a></code>
       </p>
     <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b> (private):
       <code><a href="webob.response.Response-class.html#_cache_control_obj" onclick="show_private();">_cache_control_obj</a></code>,
@@ -412,20 +416,41 @@ exceptions.BaseException --+       |
       <code>wsgi_response</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="webob.response.Response-class.html">webob.response.Response</a></code></b>:
+      <code><a href="webob.response.Response-class.html#accept_ranges">accept_ranges</a></code>,
+      <code><a href="webob.response.Response-class.html#age">age</a></code>,
+      <code><a href="webob.response.Response-class.html#allow">allow</a></code>,
       <code><a href="webob.response.Response-class.html#app_iter">app_iter</a></code>,
       <code><a href="webob.response.Response-class.html#body">body</a></code>,
       <code><a href="webob.response.Response-class.html#body_file">body_file</a></code>,
       <code><a href="webob.response.Response-class.html#cache_control">cache_control</a></code>,
+      <code><a href="webob.response.Response-class.html#cache_expires">cache_expires</a></code>,
       <code><a href="webob.response.Response-class.html#charset">charset</a></code>,
+      <code><a href="webob.response.Response-class.html#content_disposition">content_disposition</a></code>,
+      <code><a href="webob.response.Response-class.html#content_encoding">content_encoding</a></code>,
+      <code><a href="webob.response.Response-class.html#content_language">content_language</a></code>,
+      <code><a href="webob.response.Response-class.html#content_length">content_length</a></code>,
+      <code><a href="webob.response.Response-class.html#content_location">content_location</a></code>,
+      <code><a href="webob.response.Response-class.html#content_md5">content_md5</a></code>,
+      <code><a href="webob.response.Response-class.html#content_range">content_range</a></code>,
       <code><a href="webob.response.Response-class.html#content_type">content_type</a></code>,
       <code><a href="webob.response.Response-class.html#content_type_params">content_type_params</a></code>,
+      <code><a href="webob.response.Response-class.html#date">date</a></code>,
       <code><a href="webob.response.Response-class.html#environ">environ</a></code>,
+      <code><a href="webob.response.Response-class.html#etag">etag</a></code>,
+      <code><a href="webob.response.Response-class.html#expires">expires</a></code>,
       <code><a href="webob.response.Response-class.html#headerlist">headerlist</a></code>,
       <code><a href="webob.response.Response-class.html#headers">headers</a></code>,
+      <code><a href="webob.response.Response-class.html#last_modified">last_modified</a></code>,
+      <code><a href="webob.response.Response-class.html#location">location</a></code>,
+      <code><a href="webob.response.Response-class.html#pragma">pragma</a></code>,
       <code><a href="webob.response.Response-class.html#request">request</a></code>,
+      <code><a href="webob.response.Response-class.html#retry_after">retry_after</a></code>,
+      <code><a href="webob.response.Response-class.html#server">server</a></code>,
       <code><a href="webob.response.Response-class.html#status">status</a></code>,
       <code><a href="webob.response.Response-class.html#ubody">ubody</a></code>,
-      <code><a href="webob.response.Response-class.html#unicode_body">unicode_body</a></code>
+      <code><a href="webob.response.Response-class.html#unicode_body">unicode_body</a></code>,
+      <code><a href="webob.response.Response-class.html#vary">vary</a></code>,
+      <code><a href="webob.response.Response-class.html#www_authenticate">www_authenticate</a></code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
       <code>args</code>
@@ -610,7 +635,7 @@ exceptions.BaseException --+       |
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Sep 18 19:22:51 2010
+    Generated by Epydoc 3.0.1 on Wed Sep 22 20:52:58 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
