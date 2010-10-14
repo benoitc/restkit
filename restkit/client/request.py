@@ -370,10 +370,13 @@ class HttpRequest(object):
         Get headers, set Body object and return HttpResponse
         """
         # read headers
-        parser = http.ResponseParser(self._sock, 
+        while True:
+            parser = http.ResponseParser(self._sock, 
                         release_source = lambda:self.release_connection(
                         (self.host, self.port), self._sock))
-        resp = parser.next()
+            resp = parser.next()
+            if resp.status_int != 100:
+                break
 
         log.debug("Start response: %s", resp.status)
         log.debug("Response headers: [%s]", resp.headers)
