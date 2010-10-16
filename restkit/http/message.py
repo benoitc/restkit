@@ -17,7 +17,7 @@ from restkit.errors import InvalidHeader, InvalidHeaderName, NoMoreData, \
 InvalidRequestLine, InvalidRequestMethod, InvalidHTTPVersion, InvalidHTTPStatus
 
 class Message(object):
-    def __init__(self, unreader):
+    def __init__(self, unreader, **kwargs):
         self.unreader = unreader
         self.version = None
         self.headers = []
@@ -186,13 +186,13 @@ class Request(Message):
 
 class Response(Message):
     
-    def __init__(self, unreader):
+    def __init__(self, unreader, decompress=True):
         self.versre = re.compile("HTTP/(\d+).(\d+)")
         self.stare = re.compile("(\d{3})\s*(\w*)")
         self.status = None
         self.reason = None
         self.status_int = None
-        
+        self.decompress = decompress
         super(Response, self).__init__(unreader)
         
     def parse_first_line(self, line):
@@ -217,9 +217,11 @@ class Response(Message):
         
     def set_body_reader(self):
         super(Response, self).set_body_reader()
-        if self.encoding == "gzip":
-            self.body = GzipBody(self.body.reader)
-        elif self.encoding == "deflate":
-            self.body = DeflateBody(self.body.reader)
+
+        if self.decompress:
+            if self.encoding == "gzip":
+                self.body = GzipBody(self.body.reader)
+            elif self.encoding == "deflate":
+                self.body = DeflateBody(self.body.reader)
         
         

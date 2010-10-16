@@ -42,7 +42,8 @@ class HttpRequest(object):
     
     def __init__(self, timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
             filters=None, follow_redirect=False, force_follow_redirect=False, 
-            max_follow_redirect=MAX_FOLLOW_REDIRECTS, 
+            max_follow_redirect=MAX_FOLLOW_REDIRECTS,
+            decompress=True,
             pool_instance=None, response_class=None,
             **ssl_args):
             
@@ -71,6 +72,7 @@ class HttpRequest(object):
         self.follow_redirect = follow_redirect
         self.nb_redirections = max_follow_redirect
         self.force_follow_redirect = force_follow_redirect
+        self.decompress = decompress
         self.method = 'GET'
         self.body = None
         self.response_body = StringIO()
@@ -370,10 +372,12 @@ class HttpRequest(object):
         Get headers, set Body object and return HttpResponse
         """
         # read headers
+        release_fun = lambda:self.release_connection(
+                        (self.host, self.port), self._sock)
         while True:
             parser = http.ResponseParser(self._sock, 
-                        release_source = lambda:self.release_connection(
-                        (self.host, self.port), self._sock))
+                        release_source=release_fun,
+                        decompress=self.decompress)
             resp = parser.next()
             if resp.status_int != 100:
                 break

@@ -54,7 +54,6 @@ class Resource(object):
             client_opts = client_opts.copy()
         )
 
-
         # set default response_class
         if self.response_class is not None and \
                 not 'response_class' in client_opts:
@@ -66,7 +65,6 @@ class Resource(object):
             keepalive = client_opts.get('keepalive') or 10
             client_opts['pool_instance'] = default_pool(keepalive, timeout)
 
-            
         self.filters = client_opts.get('filters') or []
         if self.basic_auth_url:
             # detect credentials from url

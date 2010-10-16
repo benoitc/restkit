@@ -52,7 +52,7 @@ from restkit.util.sock import _GLOBAL_DEFAULT_TIMEOUT
 def request(url, method='GET', body=None, headers=None,  
         timeout=_GLOBAL_DEFAULT_TIMEOUT, filters=None, follow_redirect=False, 
         force_follow_redirect=False, max_follow_redirect=MAX_FOLLOW_REDIRECTS,
-        pool_instance=None, response_class=None, **ssl_args):
+        decompress=True, pool_instance=None, response_class=None, **ssl_args):
     """ Quick shortcut method to pass a request
     
     :param url: str, url string
@@ -78,13 +78,14 @@ def request(url, method='GET', body=None, headers=None,
         url = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
             u.path, u.params, u.query, u.fragment))
         filters.append(BasicAuth(u.username, password))
-    
+   
     http_client = HttpRequest(
             timeout=timeout, 
             filters=filters,
             follow_redirect=follow_redirect, 
             force_follow_redirect=force_follow_redirect,
             max_follow_redirect=max_follow_redirect,
+            decompress=decompress,
             pool_instance=pool_instance, 
             response_class=response_class,
             **ssl_args)
