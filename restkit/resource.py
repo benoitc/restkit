@@ -20,6 +20,10 @@ from restkit.filters import BasicAuth
 from restkit import util
 from restkit.pool.simple import SimplePool
 
+
+DEFAULT_TIMEOUT = 300
+DEFAULT_KEEPALIVE = 10
+
 _default_pool = None
 def default_pool(keepalive, timeout):
     global _default_pool
@@ -61,8 +65,8 @@ class Resource(object):
 
         # set default pool if needed
         if not 'pool_instance' in client_opts and self.keepalive:
-            timeout = client_opts.get('timeout') or 300
-            keepalive = client_opts.get('keepalive') or 10
+            timeout = client_opts.get('timeout') or DEFAULT_TIMEOUT
+            keepalive = client_opts.get('keepalive') or DEFAULT_KEEPALIVE
             client_opts['pool_instance'] = default_pool(keepalive, timeout)
 
         self.filters = client_opts.get('filters') or []
