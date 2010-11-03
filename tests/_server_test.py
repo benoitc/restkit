@@ -32,7 +32,7 @@ except ImportError:
 import urllib
 from restkit.util import to_bytestring
 
-HOST = socket.getfqdn('127.0.0.1')
+HOST = 'localhost'
 PORT = (os.getpid() % 31000) + 1024
 
 class HTTPTestHandler(BaseHTTPRequestHandler):
@@ -255,7 +255,8 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         for k, v in req:
             body_parts.append(' %s: %s\r\n' % (k, v))
         body = ''.join(body_parts)
-        self._respond(400, [('Content-type', 'text/plain')], body)
+        self._respond(400, [('Content-type', 'text/plain'),
+        ('Content-Length', str(len(body)))], body)
 
 
     def _respond(self, http_code, extra_headers, body):

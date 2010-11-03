@@ -234,7 +234,7 @@ class Resource(object):
         """
         self.uri = util.make_uri(self.uri, path, charset=self.charset, 
                         safe=self.safe, encode_keys=self.encode_keys)
-        self.original['uri'] =  util.make_uri(self.original['uri'], path, 
+        self.initial['uri'] =  util.make_uri(self.original['uri'], path, 
                                     charset=self.charset, 
                                     safe=self.safe, 
                                     encode_keys=self.encode_keys)
