@@ -16,7 +16,7 @@ except ImportError:
     raise ImportError('webob (http://pythonpaste.org/webob/) is required.')
 
 from restkit import __version__
-from restkit.console import common_indent, json
+from restkit.contrib.console import common_indent, json
 from restkit.contrib.webob_api import Request as BaseRequest
 from webob import Response as BaseResponse
 from StringIO import StringIO
