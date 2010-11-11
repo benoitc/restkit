@@ -18,13 +18,13 @@ Token
 
 def validate_consumer(consumer):
     """ validate a consumer agains oauth2.Consumer object """
-    if not isinstance(consumer, Consumer):
+    if not hasattr(consumer, "key"):
         raise ValueError("Invalid consumer.")
     return consumer
     
 def validate_token(token):
     """ validate a token agains oauth2.Token object """
-    if token is not None and not isinstance(token, Token):
+    if token is not None and not hasattr(token, "key"):
         raise ValueError("Invalid token.")
     return token
 

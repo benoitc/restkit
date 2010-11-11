@@ -16,6 +16,8 @@ try:
 except ImportError:
     from cgi import parse_qs, parse_qsl
 
+from restkit.util import to_bytestring
+
 
 VERSION = '1.0'  # Hi Blaine!
 HTTP_METHOD = 'GET'
@@ -640,7 +642,7 @@ class SignatureMethod_HMAC_SHA1(SignatureMethod):
         if token:
             key += escape(token.secret)
         raw = '&'.join(sig)
-        return key, raw
+        return to_bytestring(key), raw
 
     def sign(self, request, consumer, token):
         """Builds the base signature string."""
