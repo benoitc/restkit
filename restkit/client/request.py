@@ -262,7 +262,7 @@ class HttpRequest(object):
 
         # request path
         path = self.uri.path or "/"
-        req_path = urlparse.urlunparse(('','', path, '', 
+        req_path = urlparse.urlunparse(('','', path, self.uri.params, 
                         self.uri.query, self.uri.fragment))
 
 
