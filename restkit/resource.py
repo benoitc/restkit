@@ -128,7 +128,7 @@ class Resource(object):
         parsed_url = urlparse.urlparse(self.uri)
         pool.clear_host(util.parse_netloc(parsed_url))
  
-    def get(self, path=None, headers=None, **params):
+    def get(self, path=None, headers=None, params_dict=None, **params):
         """ HTTP GET         
         
         :param path: string  additionnal path to the uri
@@ -136,23 +136,27 @@ class Resource(object):
             be added to HTTP request.
         :param params: Optionnal parameterss added to the request.
         """
-        return self.request("GET", path=path, headers=headers, **params)
+        return self.request("GET", path=path, headers=headers,
+                params_dict=params_dict, **params)
 
-    def head(self, path=None, headers=None, **params):
+    def head(self, path=None, headers=None, params_dict=None, **params):
         """ HTTP HEAD
 
         see GET for params description.
         """
-        return self.request("HEAD", path=path, headers=headers, **params)
+        return self.request("HEAD", path=path, headers=headers,
+                params_dict=params_dict, **params)
 
-    def delete(self, path=None, headers=None, **params):
+    def delete(self, path=None, headers=None, params_dict=None, **params):
         """ HTTP DELETE
 
         see GET for params description.
         """
-        return self.request("DELETE", path=path, headers=headers, **params)
+        return self.request("DELETE", path=path, headers=headers,
+                params_dict=params_dict, **params)
 
-    def post(self, path=None, payload=None, headers=None, **params):
+    def post(self, path=None, payload=None, headers=None,
+            params_dict=None, **params):
         """ HTTP POST
 
         :param payload: string passed to the body of the request
@@ -163,15 +167,16 @@ class Resource(object):
         """
 
         return self.request("POST", path=path, payload=payload, 
-                        headers=headers, **params)
+                        headers=headers, params_dict=params_dict, **params)
 
-    def put(self, path=None, payload=None, headers=None, **params):
+    def put(self, path=None, payload=None, headers=None,
+            params_dict=None, **params):
         """ HTTP PUT
 
         see POST for params description.
         """
         return self.request("PUT", path=path, payload=payload,
-                        headers=headers, **params)
+                        headers=headers, params_dict=params_dict, **params)
                         
     def make_params(self, params):
         return params or {}
@@ -183,7 +188,7 @@ class Resource(object):
         return True
 
     def request(self, method, path=None, payload=None, headers=None, 
-        **params):
+        params_dict=None, **params):
         """ HTTP request
 
         This method may be the only one you want to override when
@@ -193,9 +198,13 @@ class Resource(object):
         :param path: string  additionnal path to the uri
         :param headers: dict, optionnal headers that will
             be added to HTTP request.
+        :params_dict: Options parameters added to the request as a dict
         :param params: Optionnal parameterss added to the request
         """
         
+        params = params or {}
+        params.update(params_dict or {})
+
         while True:
             uri = util.make_uri(self.uri, path, charset=self.charset, 
                         safe=self.safe, encode_keys=self.encode_keys,
