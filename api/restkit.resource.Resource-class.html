@@ -207,6 +207,7 @@ object --+
           <td><span class="summary-sig"><a href="restkit.resource.Resource-class.html#get" class="summary-sig-name">get</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">path</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">params_dict</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**params</span>)</span><br />
       HTTP GET</td>
           <td align="right" valign="top">
@@ -227,6 +228,7 @@ object --+
           <td><span class="summary-sig"><a href="restkit.resource.Resource-class.html#head" class="summary-sig-name">head</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">path</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">params_dict</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**params</span>)</span><br />
       HTTP HEAD</td>
           <td align="right" valign="top">
@@ -247,6 +249,7 @@ object --+
           <td><span class="summary-sig"><a href="restkit.resource.Resource-class.html#delete" class="summary-sig-name">delete</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">path</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">params_dict</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**params</span>)</span><br />
       HTTP DELETE</td>
           <td align="right" valign="top">
@@ -268,6 +271,7 @@ object --+
         <span class="summary-sig-arg">path</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">payload</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">params_dict</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**params</span>)</span><br />
       HTTP POST</td>
           <td align="right" valign="top">
@@ -289,6 +293,7 @@ object --+
         <span class="summary-sig-arg">path</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">payload</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">params_dict</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**params</span>)</span><br />
       HTTP PUT</td>
           <td align="right" valign="top">
@@ -362,6 +367,7 @@ object --+
         <span class="summary-sig-arg">path</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">payload</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">params_dict</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">**params</span>)</span><br />
       HTTP request</td>
           <td align="right" valign="top">
@@ -621,6 +627,7 @@ if you want to add a path to resource uri, you can do:
   <h3 class="epydoc"><span class="sig"><span class="sig-name">get</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">path</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">headers</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">params_dict</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**params</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -651,6 +658,7 @@ HTTP GET
   <h3 class="epydoc"><span class="sig"><span class="sig-name">head</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">path</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">headers</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">params_dict</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**params</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -674,6 +682,7 @@ HTTP GET
   <h3 class="epydoc"><span class="sig"><span class="sig-name">delete</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">path</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">headers</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">params_dict</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**params</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -698,6 +707,7 @@ HTTP GET
         <span class="sig-arg">path</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">payload</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">headers</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">params_dict</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**params</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -730,6 +740,7 @@ HTTP POST
         <span class="sig-arg">path</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">payload</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">headers</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">params_dict</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**params</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -755,6 +766,7 @@ HTTP POST
         <span class="sig-arg">path</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">payload</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">headers</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">params_dict</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**params</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -772,6 +784,7 @@ subclassing `restkit.rest.Resource`.
 :param path: string  additionnal path to the uri
 :param headers: dict, optionnal headers that will
     be added to HTTP request.
+:params_dict: Options parameters added to the request as a dict
 :param params: Optionnal parameterss added to the request
 
 </pre>
@@ -806,7 +819,7 @@ subclassing `restkit.rest.Resource`.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Sep 22 20:52:59 2010
+    Generated by Epydoc 3.0.1 on Fri Nov 19 09:43:03 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
