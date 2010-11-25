@@ -51,7 +51,7 @@ class GeventPool(Pool):
         return conn
 
     def release(self, conn, duration=300):
-        if self.connections.qsize() >= self.nb_connecions:
+        if self.connections.qsize() >= self.nb_connections:
             conn.close()
             return
         expires = time.time() + duration
