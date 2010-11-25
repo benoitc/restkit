@@ -21,7 +21,7 @@ import uuid
 
 from restkit import __version__
 from restkit.client.response import HttpResponse
-from restkit.conn import get_default_manager
+from restkit.conn import get_default_manager, DEFAULT_CONN_NB_CONNECTIONS
 from restkit.errors import RequestError, InvalidUrl, RedirectLimit
 from restkit.filters import Filters
 from restkit.forms import multipart_form_encode, form_encode
@@ -51,6 +51,7 @@ class HttpRequest(object):
             pool_instance=None, 
             response_class=None,
             conn_manager=None,
+            nb_connections=DEFAULT_CONN_NB_CONNECTIONS,
             **ssl_args):
             
         """ HttpRequest constructor
@@ -93,7 +94,10 @@ class HttpRequest(object):
         elif conn_manager is not None:
             self.conn_manager = conn_manager
         else:
-            self.conn_manager = get_default_manager()
+            self.conn_manager = get_default_manager(
+                    timeout=timeout,
+                    nb_connections=nb_connections
+            )
             
         if response_class is not None:
             self.response_class = response_class
