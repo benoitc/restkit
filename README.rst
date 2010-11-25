@@ -71,15 +71,22 @@ Here is the snippet::
 Reuses connections
 ------------------
 
-Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a pool instance inheriting `reskit.pool.PoolInterface`. You can use our threadsafe pool in any application::
+Reusing connections is good. Restkit can maintain for you the http connections and
+reuse them if the server allows it. To do that you can pass to any object a pool 
+instance inheriting `reskit.pool.PoolInterface`. You can use our threadsafe pool 
+in any application:
 
+::
 
   from restkit import Resource, TConnectionManager 
   
   mgr = TConnectionManager(nb_connections=10)
   res = Resource('http://friendpaste.com', conn_manager=mgr)
-  
-or if you use Gevent::
+
+
+or if you use `Gevent <http://gevent.org>`_:
+
+::
 
   from restkit import Resource
   from restkit.conn.genet_manager import GeventConnectionManager
