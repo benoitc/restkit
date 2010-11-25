@@ -72,26 +72,21 @@ Reuses connections
 Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a pool instance inheriting `reskit.pool.PoolInterface`. You can use our threadsafe pool in any application::
 
 
-  from restkit import Resource, SimplePool
+  from restkit import Resource, TConnectionManager 
   
-  pool = SimplePool(keepalive=2)
-  res = Resource('http://friendpaste.com', pool_instance=pool)
+  mgr = TConnectionManager(nb_connections=10)
+  res = Resource('http://friendpaste.com', conn_manager=mgr)
   
-or if you use Eventlet::
+or if you use Gevent::
 
-  import eventlet
-  eventlet.monkey_patch(all=False, socket=True, select=True)
-  
+
   from restkit import Resource
-  from restkit.pool.reventlet import EventletPool
+  from restkit.conn.genet_manager import GeventConnectionManager
   
-  pool = EventletPool(keepalive=2, timeout=300)
-  res = Resource('http://friendpaste.com', pool_instance=pool)
+  mgr = GeventConnectionManager(timeout=300, nb_connections=10)
+  res = Resource('http://friendpaste.com', conn_manager=mgr)
 
-
-Using `eventlet <http://eventlet.net>`_ pool is definitely better since it allows you to define a timeout for connections. When timeout is reached and the connection is still in the pool, it will be closed.
-
-Authentication
+  Authentication
 ==============
 
 Restkit support for now `basic authentication`_  and `OAuth`_. But any
