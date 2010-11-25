@@ -149,7 +149,7 @@ def replace_header(name, value, headers):
         if k.upper() == name.upper():
             idx = i
             break
-    if idx > 0:
+    if idx >= 0:
         headers[i] = (name.title(), value)
     else:
         headers.append((name.title(), value))
