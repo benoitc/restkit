@@ -50,7 +50,7 @@ class HttpRequest(object):
             decompress=True,
             pool_instance=None, 
             response_class=None,
-            connection_manager=None,
+            conn_manager=None,
             **ssl_args):
             
         """ HttpRequest constructor
@@ -63,8 +63,8 @@ class HttpRequest(object):
         the location.
         :param max_follow_redirect: max number of redirection. If max is reached
         the RedirectLimit exception is raised.
-        :param pool_instance: a pool instance inherited from 
-        `restkit.pool.PoolInterface`
+        :param conn_manager: a connectoin manager instance inherited from 
+        `restkit.conn.base.ConnectioManager`
         :param ssl_args: ssl arguments. See http://docs.python.org/library/ssl.html
         for more information.
         """
@@ -89,11 +89,11 @@ class HttpRequest(object):
         self.ssl_args = ssl_args or {}
 
         if pool_instance is not None:
-            self.connection_manager = pool_instance
-        elif connection_manager is not None:
-            self.connection_manager = connection_manager
+            self.conn_manager = pool_instance
+        elif conn_manager is not None:
+            self.conn_manager = conn_manager
         else:
-            self.connection_manager = get_default_manager()
+            self.conn_manager = get_default_manager()
             
         if response_class is not None:
             self.response_class = response_class
@@ -268,7 +268,7 @@ class HttpRequest(object):
         addr = (self.host, self.port)
         is_ssl = (self.uri.scheme == "https")
         route = (addr, is_ssl, self.filters, self.ssl_args)
-        self._pool = self.connection_manager.get_pool(route)
+        self._pool = self.conn_manager.get_pool(route)
         tries = 2
         while True:
             try:

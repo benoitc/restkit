@@ -3,6 +3,27 @@
 News
 ====
 
+2.3.0 / 2010-11-25
+------------------
+ - Refactored Http Connections management (reuse connections).
+   restkit.pool is now replaced by restkit.conn module. SimplePool has
+   been replaced by TConnectionManager (threadsafe). Now by default all
+   connections are reusing connections using TConnectionManager (10
+   connections per route).
+ - Improved Gevent & Eventlet support
+ - Added an ``decompress`` option to ``request`` function and ``Resource`` 
+   instance to decompress the body or not. By default it's true.
+ - Added ``params_dict`` to keywords arguments of ``Resource`` instances
+   methods. Allows you to pass any argument to the query. 
+ - Fix response 100-continue
+ - Fix compressed atatchments
+ - Fix body readline
+ - Fix basic authentication
+ - Stop when system exit or keyboard interrupt
+ - Fix oauth2
+
+More details `here <https://github.com/benoitc/restkit/compare/2.1.1...2.1.3>`_ .
+
 2.2.1 / 2010-09-18
 ------------------
  - Fix readline `b7365155 <http://github.com/benoitc/restkit/commit/b7365155168cc9df7e48edabad79b2c478e8c5c7>`_ .
