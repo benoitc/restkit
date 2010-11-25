@@ -63,7 +63,6 @@ class GeventPool(Pool):
                 expires, conn = self.connections.get_nowait()
             except queue.Empty:
                 break
-            expires, conn = entry
             if time.time() > expires:
                 conn.close()
             else:

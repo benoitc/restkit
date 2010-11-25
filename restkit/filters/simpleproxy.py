@@ -13,9 +13,7 @@ import os
 import urlparse
 import socket
 
-from restkit import http
 from restkit import util
-from restkit.util import sock
 
 from restkit import __version__
         
@@ -30,12 +28,12 @@ class SimpleProxy(object):
     
     def on_connect(self, conn):
         proxy_auth = _get_proxy_auth()
-        if req.uri.scheme == "https":
+        if conn.uri.is_ssl == "https":
             proxy = os.environ.get('https_proxy')
             if proxy:
                 if proxy_auth:
                     proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-                proxy_connect = 'CONNECT %s HTTP/1.0\r\n' % (req.uri.netloc)
+                proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % conn.addr
                 user_agent = "User-Agent: restkit/%s\r\n" % __version__
                 proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, 
                                         user_agent)
@@ -50,7 +48,7 @@ class SimpleProxy(object):
                 except socket.error, e:
                     raise ProxyError(str(e))
 
-                conn.sock = psock
+                conn.sock = p_sock
                 conn.addr = (proxy_host, proxy_port)
                 conn.is_ssl = True
 

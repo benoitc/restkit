@@ -11,7 +11,7 @@ from restkit.conn import http_connection
 from eventlet.green import socket
 from eventlet.green import ssl
 from eventlet import queue
-from eventlet import Semaphore
+from eventlet import semaphore
 
 class EventletHttpConnection(http_connection.HttpConnection):
 
@@ -43,7 +43,7 @@ class EventletPool(Pool):
         try:
             expires, conn = self.connections.get_nowait()
         except queue.Empty:
-            conn = GeventHttpConnection(
+            conn = EventletHttpConnection(
                 self.conn_manager,
                 self.route[0], 
                 self.route[1], 
@@ -65,7 +65,6 @@ class EventletPool(Pool):
                 expires, conn = self.connections.get_nowait()
             except queue.Empty:
                 break
-            expires, conn = entry
             if time.time() > expires:
                 conn.close()
             else:
@@ -83,7 +82,7 @@ class EventletPool(Pool):
     
 class EventletConnectionManager(ConnectionManager):
 
-    POOL_CLASS = EventLetPool
+    POOL_CLASS = EventletPool
 
     def init_lock(self):
         return semaphore.Semaphore(1)
