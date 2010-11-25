@@ -89,7 +89,7 @@ or if you use `Gevent <http://gevent.org>`_:
 ::
 
   from restkit import Resource
-  from restkit.conn.genet_manager import GeventConnectionManager
+  from restkit.conn.gevent_manager import GeventConnectionManager
   
   mgr = GeventConnectionManager(timeout=300, nb_connections=10)
   res = Resource('http://friendpaste.com', conn_manager=mgr)
