@@ -19,19 +19,17 @@ Here is the snippet::
     
   class TwitterSearch(Resource):
     
-      def __init__(self,  pool_instance=None, **kwargs):
+      def __init__(self, **kwargs):
           search_url = "http://search.twitter.com"
           super(TwitterSearch, self).__init__(search_url, follow_redirect=True, 
-                                          max_follow_redirect=10,
-                                          pool_instance=pool_instance,
-                                          **kwargs)
+                                          max_follow_redirect=10, **kwargs)
 
       def search(self, query):
           return self.get('search.json', q=query)
         
       def request(self, *args, **kwargs):
           resp = super(TwitterSearch, self).request(*args, **kwargs)
-          return json.loads(resp.body)
+          return json.loads(resp.body_string())
         
   if __name__ == "__main__":
       s = TwitterSearch()

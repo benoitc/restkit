@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Build resource object &mdash; restkit v2.2.4 documentation</title>
+    <title>Build resource object &mdash; restkit v2.3.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.2.4',
+        VERSION:     '2.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.2.4 documentation" href="index.html" />
+    <link rel="top" title="restkit v2.3.0 documentation" href="index.html" />
     <link rel="next" title="Reuses connections" href="pool.html" />
     <link rel="prev" title="Welcome to RESTKit’s documentation!" href="index.html" />
 
@@ -101,19 +101,17 @@
 
 <span class="k">class</span> <span class="nc">TwitterSearch</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">pool_instance</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">search_url</span> <span class="o">=</span> <span class="s">&quot;http://search.twitter.com&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TwitterSearch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">search_url</span><span class="p">,</span> <span class="n">follow_redirect</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                                        <span class="n">max_follow_redirect</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                                        <span class="n">pool_instance</span><span class="o">=</span><span class="n">pool_instance</span><span class="p">,</span>
-                                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                                        <span class="n">max_follow_redirect</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;search.json&#39;</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">resp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">TwitterSearch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">body_string</span><span class="p">())</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">TwitterSearch</span><span class="p">()</span>

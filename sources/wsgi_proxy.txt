@@ -16,11 +16,11 @@ use `webob <http://pythonpaste.org/webob/>`_ and `gunicorn
   import urlparse
 
   from webob import Request
-  from restkit.pool.simple import SimplePool
+  from restkit.conn import TConnectionManager
   from restkit.ext.wsgi_proxy import HostProxy
 
-  pool = SimplePool(keepalive=10)
-  proxy = HostProxy("http://127.0.0.1:5984", pool=pool)
+  mgr = TConnectionManager(nb_connections=10)
+  proxy = HostProxy("http://127.0.0.1:5984", pool=mgr)
 
 
   def application(environ, start_response):
@@ -59,11 +59,12 @@ distributed proxy. `/a/db` will proxify `http://a.mypool.org/db`::
   import urlparse
 
   from webob import Request
-  from restkit.pool.simple import SimplePool
+  from restkit.conn import TConnectionManager
   from restkit.ext.wsgi_proxy import Proxy
 
-  pool = SimplePool(keepalive=10)
-  proxy = Proxy(pool=pool, strip_script_name=True)
+  mgr = TConnectionManager(nb_connections=10)
+
+  proxy = Proxy(pool=mgr, strip_script_name=True)
 
 
   def application(environ, start_response):

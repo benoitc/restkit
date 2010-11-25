@@ -112,8 +112,11 @@ restkit.util.oauth2.Error.message" class="py-name" href="#" onclick="return docl
 <a name="build_xoauth_string"></a><div id="build_xoauth_string-def"><a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"> </tt>
 <a name="L51"></a><tt class="py-lineno"> 51</tt> <a class="py-toggle" href="#" id="build_xoauth_string-toggle" onclick="return toggle('build_xoauth_string');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.util.oauth2-module.html#build_xoauth_string">build_xoauth_string</a><tt class="py-op">(</tt><tt class="py-param">url</tt><tt class="py-op">,</tt> <tt class="py-param">consumer</tt><tt class="py-op">,</tt> <tt class="py-param">token</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="build_xoauth_string-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="build_xoauth_string-expanded"><a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">    <tt class="py-docstring">"""Build an XOAUTH string for use in SMTP/IMPA authentication."""</tt> </tt>
-<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Module restkit.client.request=restkit.client.request-module.html,Method restkit.client.request.HttpRequest.request()=restkit.client.request.HttpRequest-class.html#request,Method restkit.contrib.ipython_shell.ShellClient.request()=restkit.contrib.ipython_shell.ShellClient-class.html#request,Function restkit.request()=restkit-module.html#request,Method restkit.resource.Resource.request()=restkit.resource.Resource-class.html#request"><a title="restkit.client.request
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Module restkit.client.request=restkit.client.request-module.html,Method restkit.client.request.HttpRequest.request()=restkit.client.request.HttpRequest-class.html#request,Method restkit.conn.eventlet_manager.EventletPool.request()=restkit.conn.eventlet_manager.EventletPool-class.html#request,Method restkit.conn.gevent_manager.GeventPool.request()=restkit.conn.gevent_manager.GeventPool-class.html#request,Method restkit.conn.threaded.TPool.request()=restkit.conn.threaded.TPool-class.html#request,Method restkit.contrib.ipython_shell.ShellClient.request()=restkit.contrib.ipython_shell.ShellClient-class.html#request,Function restkit.request()=restkit-module.html#request,Method restkit.resource.Resource.request()=restkit.resource.Resource-class.html#request"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-7', 'request', 'link-7');">request</a></tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name" targets="Class restkit.contrib.ipython_shell.Request=restkit.contrib.ipython_shell.Request-class.html,Class restkit.contrib.webob_api.Request=restkit.contrib.webob_api.Request-class.html,Class restkit.http.message.Request=restkit.http.message.Request-class.html,Class restkit.util.oauth2.Request=restkit.util.oauth2.Request-class.html,Class webob.request.Request=webob.request.Request-class.html"><a title="restkit.contrib.ipython_shell.Request
@@ -126,6 +129,9 @@ webob.request.Request" class="py-name" href="#" onclick="return doclink('link-8'
 <a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">    <tt class="py-name">signing_method</tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name" targets="Class restkit.util.oauth2.SignatureMethod_HMAC_SHA1=restkit.util.oauth2.SignatureMethod_HMAC_SHA1-class.html"><a title="restkit.util.oauth2.SignatureMethod_HMAC_SHA1" class="py-name" href="#" onclick="return doclink('link-11', 'SignatureMethod_HMAC_SHA1', 'link-11');">SignatureMethod_HMAC_SHA1</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">    <tt id="link-12" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-12', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method restkit.util.oauth2.Request.sign_request()=restkit.util.oauth2.Request-class.html#sign_request"><a title="restkit.util.oauth2.Request.sign_request" class="py-name" href="#" onclick="return doclink('link-13', 'sign_request', 'link-13');">sign_request</a></tt><tt class="py-op">(</tt><tt class="py-name">signing_method</tt><tt class="py-op">,</tt> <tt class="py-name">consumer</tt><tt class="py-op">,</tt> <tt class="py-name">token</tt><tt class="py-op">)</tt> </tt>
@@ -133,6 +139,9 @@ restkit.resource.Resource.request" class="py-name" href="#" onclick="return docl
 <a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">    <tt class="py-name">params</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
 <a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">k</tt><tt class="py-op">,</tt> <tt class="py-name">v</tt> <tt class="py-keyword">in</tt> <tt class="py-name">sorted</tt><tt class="py-op">(</tt><tt id="link-14" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-14', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt class="py-name">iteritems</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
@@ -449,12 +458,7 @@ restkit.util.oauth2.Server.version" class="py-name" href="#" onclick="return doc
 <a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">urlparse</tt><tt class="py-op">.</tt><tt class="py-name">urlunparse</tt><tt class="py-op">(</tt><tt id="link-80" class="py-name"><a title="restkit.util.oauth2.Request.url" class="py-name" href="#" onclick="return doclink('link-80', 'url', 'link-10');">url</a></tt><tt class="py-op">)</tt> </tt>
 </div><a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line"> </tt>
 <a name="Request.get_parameter"></a><div id="Request.get_parameter-def"><a name="L343"></a><tt class="py-lineno">343</tt> <a class="py-toggle" href="#" id="Request.get_parameter-toggle" onclick="return toggle('Request.get_parameter');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.util.oauth2.Request-class.html#get_parameter">get_parameter</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">parameter</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="Request.get_parameter-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Request.get_parameter-expanded"><a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line">        <tt class="py-name">ret</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-81" class="py-name" targets="Variable restkit.contrib.webob_api.Request.get=restkit.contrib.webob_api.Request-class.html#get,Method restkit.pool.base.BasePool.get()=restkit.pool.base.BasePool-class.html#get,Method restkit.pool.monitored.MonitoredHost.get()=restkit.pool.monitored.MonitoredHost-class.html#get,Method restkit.pool.monitored.MonitoredPool.get()=restkit.pool.monitored.MonitoredPool-class.html#get,Method restkit.pool.simple.Host.get()=restkit.pool.simple.Host-class.html#get,Method restkit.pool.simple.SimplePool.get()=restkit.pool.simple.SimplePool-class.html#get,Method restkit.resource.Resource.get()=restkit.resource.Resource-class.html#get"><a title="restkit.contrib.webob_api.Request.get
-restkit.pool.base.BasePool.get
-restkit.pool.monitored.MonitoredHost.get
-restkit.pool.monitored.MonitoredPool.get
-restkit.pool.simple.Host.get
-restkit.pool.simple.SimplePool.get
+</div><div id="Request.get_parameter-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Request.get_parameter-expanded"><a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line">        <tt class="py-name">ret</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-81" class="py-name" targets="Variable restkit.contrib.webob_api.Request.get=restkit.contrib.webob_api.Request-class.html#get,Method restkit.resource.Resource.get()=restkit.resource.Resource-class.html#get"><a title="restkit.contrib.webob_api.Request.get
 restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink('link-81', 'get', 'link-81');">get</a></tt><tt class="py-op">(</tt><tt class="py-name">parameter</tt><tt class="py-op">)</tt> </tt>
 <a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">ret</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
 <a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-82" class="py-name" targets="Class restkit.util.oauth2.Error=restkit.util.oauth2.Error-class.html"><a title="restkit.util.oauth2.Error" class="py-name" href="#" onclick="return doclink('link-82', 'Error', 'link-82');">Error</a></tt><tt class="py-op">(</tt><tt class="py-string">'Parameter not found: %s'</tt> <tt class="py-op">%</tt> <tt class="py-name">parameter</tt><tt class="py-op">)</tt> </tt>
@@ -656,16 +660,25 @@ restkit.util.oauth2.SignatureMethod_PLAINTEXT.name" class="py-name" href="#" onc
 restkit.util.oauth2.Request.version
 restkit.util.oauth2.Server.version" class="py-name" href="#" onclick="return doclink('link-119', 'version', 'link-70');">version</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-120" class="py-name" targets="Method restkit.util.oauth2.Server._get_version()=restkit.util.oauth2.Server-class.html#_get_version"><a title="restkit.util.oauth2.Server._get_version" class="py-name" href="#" onclick="return doclink('link-120', '_get_version', 'link-120');">_get_version</a></tt><tt class="py-op">(</tt><tt id="link-121" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-121', 'request', 'link-7');">request</a></tt><tt class="py-op">)</tt> </tt>
 <a name="L521"></a><tt class="py-lineno">521</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-122" class="py-name" targets="Method restkit.util.oauth2.Server._check_signature()=restkit.util.oauth2.Server-class.html#_check_signature"><a title="restkit.util.oauth2.Server._check_signature" class="py-name" href="#" onclick="return doclink('link-122', '_check_signature', 'link-122');">_check_signature</a></tt><tt class="py-op">(</tt><tt id="link-123" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-123', 'request', 'link-7');">request</a></tt><tt class="py-op">,</tt> <tt class="py-name">consumer</tt><tt class="py-op">,</tt> <tt class="py-name">token</tt><tt class="py-op">)</tt> </tt>
 <a name="L522"></a><tt class="py-lineno">522</tt>  <tt class="py-line">        <tt class="py-name">parameters</tt> <tt class="py-op">=</tt> <tt id="link-124" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-124', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-125" class="py-name" targets="Method restkit.util.oauth2.Request.get_nonoauth_parameters()=restkit.util.oauth2.Request-class.html#get_nonoauth_parameters"><a title="restkit.util.oauth2.Request.get_nonoauth_parameters" class="py-name" href="#" onclick="return doclink('link-125', 'get_nonoauth_parameters', 'link-125');">get_nonoauth_parameters</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
@@ -682,6 +695,9 @@ restkit.resource.Resource.request" class="py-name" href="#" onclick="return docl
 restkit.util.oauth2.Request.version
 restkit.util.oauth2.Server.version" class="py-name" href="#" onclick="return doclink('link-126', 'version', 'link-70');">version</a></tt> <tt class="py-op">=</tt> <tt id="link-127" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-127', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-128" class="py-name" targets="Method restkit.util.oauth2.Request.get_parameter()=restkit.util.oauth2.Request-class.html#get_parameter"><a title="restkit.util.oauth2.Request.get_parameter" class="py-name" href="#" onclick="return doclink('link-128', 'get_parameter', 'link-128');">get_parameter</a></tt><tt class="py-op">(</tt><tt class="py-string">'oauth_version'</tt><tt class="py-op">)</tt> </tt>
@@ -710,6 +726,9 @@ restkit.util.oauth2.Server.version" class="py-name" href="#" onclick="return doc
 <a name="L543"></a><tt class="py-lineno">543</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
 <a name="L544"></a><tt class="py-lineno">544</tt>  <tt class="py-line">            <tt class="py-name">signature_method</tt> <tt class="py-op">=</tt> <tt id="link-137" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-137', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-138" class="py-name"><a title="restkit.util.oauth2.Request.get_parameter" class="py-name" href="#" onclick="return doclink('link-138', 'get_parameter', 'link-128');">get_parameter</a></tt><tt class="py-op">(</tt><tt class="py-string">'oauth_signature_method'</tt><tt class="py-op">)</tt> </tt>
@@ -728,6 +747,9 @@ restkit.resource.Resource.request" class="py-name" href="#" onclick="return docl
 <a name="Server._get_verifier"></a><div id="Server._get_verifier-def"><a name="L557"></a><tt class="py-lineno">557</tt> <a class="py-toggle" href="#" id="Server._get_verifier-toggle" onclick="return toggle('Server._get_verifier');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.util.oauth2.Server-class.html#_get_verifier">_get_verifier</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">request</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="Server._get_verifier-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Server._get_verifier-expanded"><a name="L558"></a><tt class="py-lineno">558</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-143" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-143', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-144" class="py-name"><a title="restkit.util.oauth2.Request.get_parameter" class="py-name" href="#" onclick="return doclink('link-144', 'get_parameter', 'link-128');">get_parameter</a></tt><tt class="py-op">(</tt><tt class="py-string">'oauth_verifier'</tt><tt class="py-op">)</tt> </tt>
@@ -735,12 +757,18 @@ restkit.resource.Resource.request" class="py-name" href="#" onclick="return docl
 <a name="Server._check_signature"></a><div id="Server._check_signature-def"><a name="L560"></a><tt class="py-lineno">560</tt> <a class="py-toggle" href="#" id="Server._check_signature-toggle" onclick="return toggle('Server._check_signature');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.util.oauth2.Server-class.html#_check_signature">_check_signature</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">request</tt><tt class="py-op">,</tt> <tt class="py-param">consumer</tt><tt class="py-op">,</tt> <tt class="py-param">token</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="Server._check_signature-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Server._check_signature-expanded"><a name="L561"></a><tt class="py-lineno">561</tt>  <tt class="py-line">        <tt class="py-name">timestamp</tt><tt class="py-op">,</tt> <tt class="py-name">nonce</tt> <tt class="py-op">=</tt> <tt id="link-145" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-145', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-146" class="py-name" targets="Method restkit.util.oauth2.Request._get_timestamp_nonce()=restkit.util.oauth2.Request-class.html#_get_timestamp_nonce"><a title="restkit.util.oauth2.Request._get_timestamp_nonce" class="py-name" href="#" onclick="return doclink('link-146', '_get_timestamp_nonce', 'link-146');">_get_timestamp_nonce</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L562"></a><tt class="py-lineno">562</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-147" class="py-name" targets="Method restkit.util.oauth2.Server._check_timestamp()=restkit.util.oauth2.Server-class.html#_check_timestamp"><a title="restkit.util.oauth2.Server._check_timestamp" class="py-name" href="#" onclick="return doclink('link-147', '_check_timestamp', 'link-147');">_check_timestamp</a></tt><tt class="py-op">(</tt><tt class="py-name">timestamp</tt><tt class="py-op">)</tt> </tt>
 <a name="L563"></a><tt class="py-lineno">563</tt>  <tt class="py-line">        <tt class="py-name">signature_method</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-148" class="py-name" targets="Method restkit.util.oauth2.Server._get_signature_method()=restkit.util.oauth2.Server-class.html#_get_signature_method"><a title="restkit.util.oauth2.Server._get_signature_method" class="py-name" href="#" onclick="return doclink('link-148', '_get_signature_method', 'link-148');">_get_signature_method</a></tt><tt class="py-op">(</tt><tt id="link-149" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-149', 'request', 'link-7');">request</a></tt><tt class="py-op">)</tt> </tt>
@@ -748,6 +776,9 @@ restkit.resource.Resource.request" class="py-name" href="#" onclick="return docl
 <a name="L565"></a><tt class="py-lineno">565</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
 <a name="L566"></a><tt class="py-lineno">566</tt>  <tt class="py-line">            <tt class="py-name">signature</tt> <tt class="py-op">=</tt> <tt id="link-150" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-150', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-151" class="py-name"><a title="restkit.util.oauth2.Request.get_parameter" class="py-name" href="#" onclick="return doclink('link-151', 'get_parameter', 'link-128');">get_parameter</a></tt><tt class="py-op">(</tt><tt class="py-string">'oauth_signature'</tt><tt class="py-op">)</tt> </tt>
@@ -757,27 +788,36 @@ restkit.resource.Resource.request" class="py-name" href="#" onclick="return docl
 <a name="L570"></a><tt class="py-lineno">570</tt>  <tt class="py-line">        <tt class="py-comment"># Validate the signature.</tt> </tt>
 <a name="L571"></a><tt class="py-lineno">571</tt>  <tt class="py-line">        <tt class="py-name">valid</tt> <tt class="py-op">=</tt> <tt class="py-name">signature_method</tt><tt class="py-op">.</tt><tt id="link-153" class="py-name" targets="Method restkit.util.oauth2.SignatureMethod.check()=restkit.util.oauth2.SignatureMethod-class.html#check"><a title="restkit.util.oauth2.SignatureMethod.check" class="py-name" href="#" onclick="return doclink('link-153', 'check', 'link-153');">check</a></tt><tt class="py-op">(</tt><tt id="link-154" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-154', 'request', 'link-7');">request</a></tt><tt class="py-op">,</tt> <tt class="py-name">consumer</tt><tt class="py-op">,</tt> <tt class="py-name">token</tt><tt class="py-op">,</tt> <tt class="py-name">signature</tt><tt class="py-op">)</tt> </tt>
 <a name="L572"></a><tt class="py-lineno">572</tt>  <tt class="py-line"> </tt>
 <a name="L573"></a><tt class="py-lineno">573</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">valid</tt><tt class="py-op">:</tt> </tt>
 <a name="L574"></a><tt class="py-lineno">574</tt>  <tt class="py-line">            <tt id="link-155" class="py-name"><a title="restkit.util.oauth2.Consumer.key
-restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink('link-155', 'key', 'link-18');">key</a></tt><tt class="py-op">,</tt> <tt id="link-156" class="py-name" targets="Module restkit.pool.base=restkit.pool.base-module.html"><a title="restkit.pool.base" class="py-name" href="#" onclick="return doclink('link-156', 'base', 'link-156');">base</a></tt> <tt class="py-op">=</tt> <tt class="py-name">signature_method</tt><tt class="py-op">.</tt><tt id="link-157" class="py-name" targets="Method restkit.util.oauth2.SignatureMethod.signing_base()=restkit.util.oauth2.SignatureMethod-class.html#signing_base,Method restkit.util.oauth2.SignatureMethod_HMAC_SHA1.signing_base()=restkit.util.oauth2.SignatureMethod_HMAC_SHA1-class.html#signing_base,Method restkit.util.oauth2.SignatureMethod_PLAINTEXT.signing_base()=restkit.util.oauth2.SignatureMethod_PLAINTEXT-class.html#signing_base"><a title="restkit.util.oauth2.SignatureMethod.signing_base
+restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink('link-155', 'key', 'link-18');">key</a></tt><tt class="py-op">,</tt> <tt id="link-156" class="py-name" targets="Module restkit.conn.base=restkit.conn.base-module.html"><a title="restkit.conn.base" class="py-name" href="#" onclick="return doclink('link-156', 'base', 'link-156');">base</a></tt> <tt class="py-op">=</tt> <tt class="py-name">signature_method</tt><tt class="py-op">.</tt><tt id="link-157" class="py-name" targets="Method restkit.util.oauth2.SignatureMethod.signing_base()=restkit.util.oauth2.SignatureMethod-class.html#signing_base,Method restkit.util.oauth2.SignatureMethod_HMAC_SHA1.signing_base()=restkit.util.oauth2.SignatureMethod_HMAC_SHA1-class.html#signing_base,Method restkit.util.oauth2.SignatureMethod_PLAINTEXT.signing_base()=restkit.util.oauth2.SignatureMethod_PLAINTEXT-class.html#signing_base"><a title="restkit.util.oauth2.SignatureMethod.signing_base
 restkit.util.oauth2.SignatureMethod_HMAC_SHA1.signing_base
 restkit.util.oauth2.SignatureMethod_PLAINTEXT.signing_base" class="py-name" href="#" onclick="return doclink('link-157', 'signing_base', 'link-157');">signing_base</a></tt><tt class="py-op">(</tt><tt id="link-158" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-158', 'request', 'link-7');">request</a></tt><tt class="py-op">,</tt> <tt class="py-name">consumer</tt><tt class="py-op">,</tt> <tt class="py-name">token</tt><tt class="py-op">)</tt> </tt>
 <a name="L575"></a><tt class="py-lineno">575</tt>  <tt class="py-line"> </tt>
 <a name="L576"></a><tt class="py-lineno">576</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-159" class="py-name"><a title="restkit.util.oauth2.Error" class="py-name" href="#" onclick="return doclink('link-159', 'Error', 'link-82');">Error</a></tt><tt class="py-op">(</tt><tt class="py-string">'Invalid signature. Expected signature base '</tt>  </tt>
-<a name="L577"></a><tt class="py-lineno">577</tt>  <tt class="py-line">                <tt class="py-string">'string: %s'</tt> <tt class="py-op">%</tt> <tt id="link-160" class="py-name"><a title="restkit.pool.base" class="py-name" href="#" onclick="return doclink('link-160', 'base', 'link-156');">base</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L577"></a><tt class="py-lineno">577</tt>  <tt class="py-line">                <tt class="py-string">'string: %s'</tt> <tt class="py-op">%</tt> <tt id="link-160" class="py-name"><a title="restkit.conn.base" class="py-name" href="#" onclick="return doclink('link-160', 'base', 'link-156');">base</a></tt><tt class="py-op">)</tt> </tt>
 <a name="L578"></a><tt class="py-lineno">578</tt>  <tt class="py-line"> </tt>
 <a name="L579"></a><tt class="py-lineno">579</tt>  <tt class="py-line">        <tt class="py-name">built</tt> <tt class="py-op">=</tt> <tt class="py-name">signature_method</tt><tt class="py-op">.</tt><tt id="link-161" class="py-name"><a title="restkit.util.oauth2.SignatureMethod.sign
 restkit.util.oauth2.SignatureMethod_HMAC_SHA1.sign
 restkit.util.oauth2.SignatureMethod_PLAINTEXT.sign" class="py-name" href="#" onclick="return doclink('link-161', 'sign', 'link-92');">sign</a></tt><tt class="py-op">(</tt><tt id="link-162" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-162', 'request', 'link-7');">request</a></tt><tt class="py-op">,</tt> <tt class="py-name">consumer</tt><tt class="py-op">,</tt> <tt class="py-name">token</tt><tt class="py-op">)</tt> </tt>
@@ -829,6 +869,9 @@ restkit.resource.Resource.request" class="py-name" href="#" onclick="return docl
 restkit.util.oauth2.SignatureMethod_HMAC_SHA1.sign
 restkit.util.oauth2.SignatureMethod_PLAINTEXT.sign" class="py-name" href="#" onclick="return doclink('link-166', 'sign', 'link-92');">sign</a></tt><tt class="py-op">(</tt><tt id="link-167" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-167', 'request', 'link-7');">request</a></tt><tt class="py-op">,</tt> <tt class="py-name">consumer</tt><tt class="py-op">,</tt> <tt class="py-name">token</tt><tt class="py-op">)</tt> </tt>
@@ -842,6 +885,9 @@ restkit.util.oauth2.SignatureMethod_PLAINTEXT.name" class="py-name" href="#" onc
 <a name="SignatureMethod_HMAC_SHA1.signing_base"></a><div id="SignatureMethod_HMAC_SHA1.signing_base-def"><a name="L631"></a><tt class="py-lineno">631</tt> <a class="py-toggle" href="#" id="SignatureMethod_HMAC_SHA1.signing_base-toggle" onclick="return toggle('SignatureMethod_HMAC_SHA1.signing_base');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.util.oauth2.SignatureMethod_HMAC_SHA1-class.html#signing_base">signing_base</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">request</tt><tt class="py-op">,</tt> <tt class="py-param">consumer</tt><tt class="py-op">,</tt> <tt class="py-param">token</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="SignatureMethod_HMAC_SHA1.signing_base-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="SignatureMethod_HMAC_SHA1.signing_base-expanded"><a name="L632"></a><tt class="py-lineno">632</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-169" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-169', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt class="py-name">normalized_url</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
@@ -850,16 +896,25 @@ restkit.resource.Resource.request" class="py-name" href="#" onclick="return docl
 <a name="L635"></a><tt class="py-lineno">635</tt>  <tt class="py-line">        <tt class="py-name">sig</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
 <a name="L636"></a><tt class="py-lineno">636</tt>  <tt class="py-line">            <tt id="link-170" class="py-name"><a title="restkit.util.oauth2.escape" class="py-name" href="#" onclick="return doclink('link-170', 'escape', 'link-15');">escape</a></tt><tt class="py-op">(</tt><tt id="link-171" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-171', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-172" class="py-name"><a title="restkit.util.oauth2.Request.method" class="py-name" href="#" onclick="return doclink('link-172', 'method', 'link-73');">method</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
 <a name="L637"></a><tt class="py-lineno">637</tt>  <tt class="py-line">            <tt id="link-173" class="py-name"><a title="restkit.util.oauth2.escape" class="py-name" href="#" onclick="return doclink('link-173', 'escape', 'link-15');">escape</a></tt><tt class="py-op">(</tt><tt id="link-174" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-174', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt class="py-name">normalized_url</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
 <a name="L638"></a><tt class="py-lineno">638</tt>  <tt class="py-line">            <tt id="link-175" class="py-name"><a title="restkit.util.oauth2.escape" class="py-name" href="#" onclick="return doclink('link-175', 'escape', 'link-15');">escape</a></tt><tt class="py-op">(</tt><tt id="link-176" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-176', 'request', 'link-7');">request</a></tt><tt class="py-op">.</tt><tt id="link-177" class="py-name" targets="Method restkit.util.oauth2.Request.get_normalized_parameters()=restkit.util.oauth2.Request-class.html#get_normalized_parameters"><a title="restkit.util.oauth2.Request.get_normalized_parameters" class="py-name" href="#" onclick="return doclink('link-177', 'get_normalized_parameters', 'link-177');">get_normalized_parameters</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
@@ -883,6 +938,9 @@ restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink(
 restkit.util.oauth2.SignatureMethod_HMAC_SHA1.signing_base
 restkit.util.oauth2.SignatureMethod_PLAINTEXT.signing_base" class="py-name" href="#" onclick="return doclink('link-187', 'signing_base', 'link-157');">signing_base</a></tt><tt class="py-op">(</tt><tt id="link-188" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-188', 'request', 'link-7');">request</a></tt><tt class="py-op">,</tt> <tt class="py-name">consumer</tt><tt class="py-op">,</tt> <tt class="py-name">token</tt><tt class="py-op">)</tt> </tt>
@@ -921,6 +979,9 @@ restkit.util.oauth2.Token.key" class="py-name" href="#" onclick="return doclink(
 restkit.util.oauth2.SignatureMethod_HMAC_SHA1.signing_base
 restkit.util.oauth2.SignatureMethod_PLAINTEXT.signing_base" class="py-name" href="#" onclick="return doclink('link-196', 'signing_base', 'link-157');">signing_base</a></tt><tt class="py-op">(</tt><tt id="link-197" class="py-name"><a title="restkit.client.request
 restkit.client.request.HttpRequest.request
+restkit.conn.eventlet_manager.EventletPool.request
+restkit.conn.gevent_manager.GeventPool.request
+restkit.conn.threaded.TPool.request
 restkit.contrib.ipython_shell.ShellClient.request
 restkit.request
 restkit.resource.Resource.request" class="py-name" href="#" onclick="return doclink('link-197', 'request', 'link-7');">request</a></tt><tt class="py-op">,</tt> <tt class="py-name">consumer</tt><tt class="py-op">,</tt> <tt class="py-name">token</tt><tt class="py-op">)</tt> </tt>
@@ -958,7 +1019,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Nov 19 09:43:05 2010
+    Generated by Epydoc 3.0.1 on Thu Nov 25 19:07:46 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

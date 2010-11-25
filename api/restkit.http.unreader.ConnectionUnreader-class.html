@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>restkit.pool.rgevent.GeventHost</title>
+  <title>restkit.http.unreader.ConnectionUnreader</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,9 +38,9 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="restkit-module.html">Package&nbsp;restkit</a> ::
-        <a href="restkit.pool-module.html">Package&nbsp;pool</a> ::
-        <a href="restkit.pool.rgevent-module.html">Module&nbsp;rgevent</a> ::
-        Class&nbsp;GeventHost
+        <a href="restkit.http-module.html">Package&nbsp;http</a> ::
+        <a href="restkit.http.unreader-module.html">Module&nbsp;unreader</a> ::
+        Class&nbsp;ConnectionUnreader
       </span>
     </td>
     <td>
@@ -50,25 +50,25 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="restkit.pool.rgevent.GeventHost-class.html"
+            >]&nbsp;|&nbsp;<a href="restkit.http.unreader.ConnectionUnreader-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class GeventHost</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class ConnectionUnreader</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.http.unreader-pysrc.html#ConnectionUnreader">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-             object --+    
-                      |    
-<a href="restkit.pool.monitored.MonitoredHost-class.html">monitored.MonitoredHost</a> --+
-                          |
-                         <strong class="uidshort">GeventHost</strong>
+object --+        
+         |        
+  <a href="restkit.http.unreader.Unreader-class.html">Unreader</a> --+    
+             |    
+<a href="restkit.http.unreader.SocketUnreader-class.html">SocketUnreader</a> --+
+                 |
+                <strong class="uidshort">ConnectionUnreader</strong>
 </pre>
 
 <hr />
-<p>hash(x)</p>
-
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -92,9 +92,13 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.rgevent.GeventHost-class.html#init_pool" class="summary-sig-name">init_pool</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a href="restkit.http.unreader.ConnectionUnreader-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">connection</span>,
+        <span class="summary-sig-arg">release_fun</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">max_chunk</span>=<span class="summary-sig-default">8192</span>)</span><br />
+      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost.init_pool">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.http.unreader-pysrc.html#ConnectionUnreader.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -108,9 +112,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.rgevent.GeventHost-class.html#do_get" class="summary-sig-name">do_get</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a href="restkit.http.unreader.ConnectionUnreader-class.html#chunk" class="summary-sig-name">chunk</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost.do_get">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.http.unreader-pysrc.html#ConnectionUnreader.chunk">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -124,26 +128,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.rgevent.GeventHost-class.html#do_put" class="summary-sig-name">do_put</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">conn</span>)</span></td>
+          <td><span class="summary-sig"><a href="restkit.http.unreader.ConnectionUnreader-class.html#close" class="summary-sig-name">close</a>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost.do_put">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.rgevent.GeventHost-class.html#waiting" class="summary-sig-name">waiting</a>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost.waiting">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.http.unreader-pysrc.html#ConnectionUnreader.close">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -153,12 +140,10 @@
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.pool.monitored.MonitoredHost-class.html">monitored.MonitoredHost</a></code></b>:
-      <code><a href="restkit.pool.monitored.MonitoredHost-class.html#__init__">__init__</a></code>,
-      <code><a href="restkit.pool.monitored.MonitoredHost-class.html#clear">clear</a></code>,
-      <code><a href="restkit.pool.monitored.MonitoredHost-class.html#get">get</a></code>,
-      <code><a href="restkit.pool.monitored.MonitoredHost-class.html#murder_connections">murder_connections</a></code>,
-      <code><a href="restkit.pool.monitored.MonitoredHost-class.html#put">put</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.http.unreader.Unreader-class.html">Unreader</a></code></b>:
+      <code><a href="restkit.http.unreader.Unreader-class.html#read">read</a></code>,
+      <code><a href="restkit.http.unreader.Unreader-class.html#release">release</a></code>,
+      <code><a href="restkit.http.unreader.Unreader-class.html#unread">unread</a></code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
@@ -220,91 +205,74 @@
   </td>
 </tr>
 </table>
-<a name="init_pool"></a>
+<a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">init_pool</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">connection</span>,
+        <span class="sig-arg">release_fun</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">max_chunk</span>=<span class="sig-default">8192</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost.init_pool">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.http.unreader-pysrc.html#ConnectionUnreader.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  
+  <p>x.__init__(...) initializes x; see x.__class__.__doc__ for 
+  signature</p>
   <dl class="fields">
     <dt>Overrides:
-        <a href="restkit.pool.monitored.MonitoredHost-class.html#init_pool">monitored.MonitoredHost.init_pool</a>
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="do_get"></a>
+<a name="chunk"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">do_get</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">chunk</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost.do_get">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.http.unreader-pysrc.html#ConnectionUnreader.chunk">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
   
   <dl class="fields">
     <dt>Overrides:
-        <a href="restkit.pool.monitored.MonitoredHost-class.html#do_get">monitored.MonitoredHost.do_get</a>
+        <a href="restkit.http.unreader.Unreader-class.html#chunk">Unreader.chunk</a>
     </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="do_put"></a>
+<a name="close"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">do_put</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">conn</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">close</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost.do_put">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.http.unreader-pysrc.html#ConnectionUnreader.close">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
   
   <dl class="fields">
     <dt>Overrides:
-        <a href="restkit.pool.monitored.MonitoredHost-class.html#do_put">monitored.MonitoredHost.do_put</a>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="waiting"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">waiting</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.rgevent-pysrc.html#GeventHost.waiting">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="restkit.pool.monitored.MonitoredHost-class.html#waiting">monitored.MonitoredHost.waiting</a>
+        <a href="restkit.http.unreader.Unreader-class.html#close">Unreader.close</a>
     </dt>
   </dl>
 </td></tr></table>
@@ -336,7 +304,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Nov 19 09:43:03 2010
+    Generated by Epydoc 3.0.1 on Thu Nov 25 19:07:45 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

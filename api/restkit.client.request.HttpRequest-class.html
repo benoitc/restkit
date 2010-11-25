@@ -117,7 +117,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="restkit.client.request.HttpRequest-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">socket._GLOBAL_DEFAULT_TIMEOUT</span>,
+        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">300</span>,
         <span class="summary-sig-arg">filters</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">follow_redirect</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">force_follow_redirect</span>=<span class="summary-sig-default">False</span>,
@@ -125,61 +125,12 @@ object --+
         <span class="summary-sig-arg">decompress</span>=<span class="summary-sig-default">True</span>,
         <span class="summary-sig-arg">pool_instance</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">response_class</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">conn_manager</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">nb_connections</span>=<span class="summary-sig-default">10</span>,
         <span class="summary-sig-arg">**ssl_args</span>)</span><br />
       HttpRequest constructor</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.__init__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="make_connection"></a><span class="summary-sig-name">make_connection</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      initate a connection if needed or reuse a socket</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.make_connection">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="clean_connections"></a><span class="summary-sig-name">clean_connections</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.clean_connections">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="release_connection"></a><span class="summary-sig-name">release_connection</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">address</span>,
-        <span class="summary-sig-arg">socket</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.release_connection">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -255,6 +206,22 @@ object --+
           <td><span class="summary-sig"><a name="_req_headers"></a><span class="summary-sig-name">_req_headers</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest._req_headers">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="shutdown_connection"></a><span class="summary-sig-name">shutdown_connection</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.client.request-pysrc.html#HttpRequest.shutdown_connection">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -409,7 +376,7 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">timeout</span>=<span class="sig-default">socket._GLOBAL_DEFAULT_TIMEOUT</span>,
+        <span class="sig-arg">timeout</span>=<span class="sig-default">300</span>,
         <span class="sig-arg">filters</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">follow_redirect</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">force_follow_redirect</span>=<span class="sig-default">False</span>,
@@ -417,6 +384,8 @@ object --+
         <span class="sig-arg">decompress</span>=<span class="sig-default">True</span>,
         <span class="sig-arg">pool_instance</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">response_class</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">conn_manager</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">nb_connections</span>=<span class="sig-default">10</span>,
         <span class="sig-arg">**ssl_args</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
@@ -431,10 +400,10 @@ object --+
   follow_redirect: boolean, by default is false. If true, if the HTTP 
   status is 301, 302 or 303 the client will follow the location. :param 
   max_follow_redirect: max number of redirection. If max is reached the 
-  RedirectLimit exception is raised. :param pool_instance: a pool instance 
-  inherited from `restkit.pool.PoolInterface` :param ssl_args: ssl 
-  arguments. See http://docs.python.org/library/ssl.html for more 
-  information.</p>
+  RedirectLimit exception is raised. :param conn_manager: a connectoin 
+  manager instance inherited from `restkit.conn.base.ConnectioManager` 
+  :param ssl_args: ssl arguments. See 
+  http://docs.python.org/library/ssl.html for more information.</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
@@ -495,7 +464,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Nov 19 09:43:03 2010
+    Generated by Epydoc 3.0.1 on Thu Nov 25 19:07:44 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>restkit.pool.monitored.MonitoredPool</title>
+  <title>restkit.conn.base.ConnectionManager</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,9 +38,9 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="restkit-module.html">Package&nbsp;restkit</a> ::
-        <a href="restkit.pool-module.html">Package&nbsp;pool</a> ::
-        <a href="restkit.pool.monitored-module.html">Module&nbsp;monitored</a> ::
-        Class&nbsp;MonitoredPool
+        <a href="restkit.conn-module.html">Package&nbsp;conn</a> ::
+        <a href="restkit.conn.base-module.html">Module&nbsp;base</a> ::
+        Class&nbsp;ConnectionManager
       </span>
     </td>
     <td>
@@ -50,29 +50,30 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="restkit.pool.monitored.MonitoredPool-class.html"
+            >]&nbsp;|&nbsp;<a href="restkit.conn.base.ConnectionManager-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class MonitoredPool</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class ConnectionManager</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.conn.base-pysrc.html#ConnectionManager">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-   object --+    
-            |    
-<a href="restkit.pool.base.BasePool-class.html">base.BasePool</a> --+
-                |
-               <strong class="uidshort">MonitoredPool</strong>
+object --+
+         |
+        <strong class="uidshort">ConnectionManager</strong>
 </pre>
 
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li><a href="restkit.pool.reventlet.EventletPool-class.html">reventlet.EventletPool</a></li><li>, <a href="restkit.pool.rgevent.GeventPool-class.html">rgevent.GeventPool</a></li>  </ul>
+<li><a href="restkit.conn.threaded.TConnectionManager-class.html">threaded.TConnectionManager</a></li><li>, <a href="restkit.conn.gevent_manager.GeventConnectionManager-class.html">gevent_manager.GeventConnectionManager</a></li><li>, <a href="restkit.conn.eventlet_manager.EventletConnectionManager-class.html">eventlet_manager.EventletConnectionManager</a></li>  </ul>
 </dd></dl>
 
 <hr />
+<p>maintain all connections pools. By default a pool have 10 
+  connections</p>
+
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -96,12 +97,12 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.monitored.MonitoredPool-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">keepalive</span>=<span class="summary-sig-default">10</span>,
-        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">300</span>)</span><br />
-      abstract class from which all connection pool should inherit.</td>
+          <td><span class="summary-sig"><a href="restkit.conn.base.ConnectionManager-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">300</span>,
+        <span class="summary-sig-arg">nb_connections</span>=<span class="summary-sig-default">10</span>)</span><br />
+      constructor for the manager</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.conn.base-pysrc.html#ConnectionManager.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -115,9 +116,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="start"></a><span class="summary-sig-name">start</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="init_lock"></a><span class="summary-sig-name">init_lock</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.start">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.conn.base-pysrc.html#ConnectionManager.init_lock">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -131,11 +132,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.monitored.MonitoredPool-class.html#get" class="summary-sig-name">get</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">netloc</span>)</span><br />
-      method used to return a connection from the pool</td>
+          <td><span class="summary-sig"><a name="get_key"></a><span class="summary-sig-name">get_key</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">route</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.get">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.conn.base-pysrc.html#ConnectionManager.get_key">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -149,47 +149,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.monitored.MonitoredPool-class.html#put" class="summary-sig-name">put</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">netloc</span>,
-        <span class="summary-sig-arg">conn</span>)</span><br />
-      Put an item back into the pool, when done</td>
+          <td><span class="summary-sig"><a href="restkit.conn.base.ConnectionManager-class.html#get_pool" class="summary-sig-name">get_pool</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">route</span>)</span><br />
+      get a pool for given route</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.put">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.monitored.MonitoredPool-class.html#clear_host" class="summary-sig-name">clear_host</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">netloc</span>)</span><br />
-      method to clear all connections from host</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.clear_host">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="restkit.pool.monitored.MonitoredPool-class.html#clear" class="summary-sig-name">clear</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      method used to release all connections</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.clear">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.conn.base-pysrc.html#ConnectionManager.get_pool">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -199,9 +163,6 @@
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.pool.base.BasePool-class.html">base.BasePool</a></code></b>:
-      <code><a href="restkit.pool.base.BasePool-class.html#close">close</a></code>
-      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
       <code>__format__</code>,
@@ -240,7 +201,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="HOST_CLASS"></a><span class="summary-name">HOST_CLASS</span> = <code title="None">None</code><br />
+        <a name="POOL_CLASS"></a><span class="summary-name">POOL_CLASS</span> = <code title="None">None</code><br />
       hash(x)
     </td>
   </tr>
@@ -296,117 +257,44 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">keepalive</span>=<span class="sig-default">10</span>,
-        <span class="sig-arg">timeout</span>=<span class="sig-default">300</span>)</span>
+        <span class="sig-arg">timeout</span>=<span class="sig-default">300</span>,
+        <span class="sig-arg">nb_connections</span>=<span class="sig-default">10</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.conn.base-pysrc.html#ConnectionManager.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>abstract class from which all connection pool should inherit.</p>
+  <p>constructor for the manager</p>
+  <p>:attr timeout: integer, default timeout :attr nb_connections: 
+  integeger, number of connections in the pool</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="get"></a>
+<a name="get_pool"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">netloc</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_pool</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">route</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.get">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="restkit.conn.base-pysrc.html#ConnectionManager.get_pool">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>method used to return a connection from the pool</p>
+  <p>get a pool for given route</p>
+  <p>where address is a tuple of (host, port) and ssl_args a dict 
+  containing ssl arguments</p>
   <dl class="fields">
-    <dt>Overrides:
-        <a href="restkit.pool.base.BasePool-class.html#get">base.BasePool.get</a>
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="put"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">put</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">netloc</span>,
-        <span class="sig-arg">conn</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.put">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Put an item back into the pool, when done</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="restkit.pool.base.BasePool-class.html#put">base.BasePool.put</a>
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="clear_host"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">clear_host</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">netloc</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.clear_host">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>method to clear all connections from host</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="restkit.pool.base.BasePool-class.html#clear_host">base.BasePool.clear_host</a>
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="clear"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">clear</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.pool.monitored-pysrc.html#MonitoredPool.clear">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>method used to release all connections</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="restkit.pool.base.BasePool-class.html#clear">base.BasePool.clear</a>
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
   </dl>
 </td></tr></table>
 </div>
@@ -437,7 +325,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Nov 19 09:43:03 2010
+    Generated by Epydoc 3.0.1 on Thu Nov 25 19:07:44 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

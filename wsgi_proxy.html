@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>wsgi_proxy &mdash; restkit v2.2.4 documentation</title>
+    <title>wsgi_proxy &mdash; restkit v2.3.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.2.4',
+        VERSION:     '2.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.2.4 documentation" href="index.html" />
+    <link rel="top" title="restkit v2.3.0 documentation" href="index.html" />
     <link rel="prev" title="restkit shell" href="shell.html" />
 
   <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
@@ -96,11 +96,11 @@ use <a class="reference external" href="http://pythonpaste.org/webob/">webob</a>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urlparse</span>
 
 <span class="kn">from</span> <span class="nn">webob</span> <span class="kn">import</span> <span class="n">Request</span>
-<span class="kn">from</span> <span class="nn">restkit.pool.simple</span> <span class="kn">import</span> <span class="n">SimplePool</span>
+<span class="kn">from</span> <span class="nn">restkit.conn</span> <span class="kn">import</span> <span class="n">TConnectionManager</span>
 <span class="kn">from</span> <span class="nn">restkit.ext.wsgi_proxy</span> <span class="kn">import</span> <span class="n">HostProxy</span>
 
-<span class="n">pool</span> <span class="o">=</span> <span class="n">SimplePool</span><span class="p">(</span><span class="n">keepalive</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">proxy</span> <span class="o">=</span> <span class="n">HostProxy</span><span class="p">(</span><span class="s">&quot;http://127.0.0.1:5984&quot;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+<span class="n">mgr</span> <span class="o">=</span> <span class="n">TConnectionManager</span><span class="p">(</span><span class="n">nb_connections</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">proxy</span> <span class="o">=</span> <span class="n">HostProxy</span><span class="p">(</span><span class="s">&quot;http://127.0.0.1:5984&quot;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">mgr</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
@@ -134,11 +134,12 @@ distributed proxy. <cite>/a/db</cite> will proxify <cite>http://a.mypool.org/db<
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urlparse</span>
 
 <span class="kn">from</span> <span class="nn">webob</span> <span class="kn">import</span> <span class="n">Request</span>
-<span class="kn">from</span> <span class="nn">restkit.pool.simple</span> <span class="kn">import</span> <span class="n">SimplePool</span>
+<span class="kn">from</span> <span class="nn">restkit.conn</span> <span class="kn">import</span> <span class="n">TConnectionManager</span>
 <span class="kn">from</span> <span class="nn">restkit.ext.wsgi_proxy</span> <span class="kn">import</span> <span class="n">Proxy</span>
 
-<span class="n">pool</span> <span class="o">=</span> <span class="n">SimplePool</span><span class="p">(</span><span class="n">keepalive</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">proxy</span> <span class="o">=</span> <span class="n">Proxy</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">,</span> <span class="n">strip_script_name</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">mgr</span> <span class="o">=</span> <span class="n">TConnectionManager</span><span class="p">(</span><span class="n">nb_connections</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">proxy</span> <span class="o">=</span> <span class="n">Proxy</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="n">mgr</span><span class="p">,</span> <span class="n">strip_script_name</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
