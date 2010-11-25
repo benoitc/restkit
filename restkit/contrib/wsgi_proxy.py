@@ -5,7 +5,7 @@
 
 import urlparse
 from restkit import request
-from restkit.pool.simple import SimplePool
+from restkit.conn import get_default_manager
 from restkit.util.sock import MAX_BODY
 
 ALLOWED_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
@@ -25,7 +25,7 @@ class Proxy(object):
 
     def __init__(self, pool=None, allowed_methods=ALLOWED_METHODS,
             strip_script_name=True, **kwargs):
-        self.pool = pool or SimplePool()
+        self.pool = pool or get_default_manager()
         self.allowed_methods = allowed_methods
         self.strip_script_name = strip_script_name
 

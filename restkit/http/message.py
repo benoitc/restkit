@@ -132,7 +132,6 @@ class Message(object):
                     return False
         return self.version <= (1, 0)
 
-
 class Request(Message):
     def __init__(self, unreader):
         self.methre = re.compile("[A-Z0-9$-_.]{3,20}")

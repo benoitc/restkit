@@ -64,6 +64,9 @@ class RedirectLimit(Exception):
 
 class RequestError(Exception):
     """Exception raised when a request is malformed"""
+
+class RequestTimeout(Exception):
+    """ Exception raised on socket timeout """
     
 class InvalidUrl(Exception):
     """

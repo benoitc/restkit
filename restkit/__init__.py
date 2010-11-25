@@ -5,7 +5,7 @@
 
 
 
-version_info = (2, 2, 4)
+version_info = (2, 3, 0)
 __version__ =  ".".join(map(str, version_info))
 
 try:
@@ -13,7 +13,8 @@ try:
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceError
     from restkit.client import HttpRequest, HttpResponse, MAX_FOLLOW_REDIRECTS
     from restkit.resource import Resource
-    from restkit.pool.simple import SimplePool
+    from restkit.conn import get_default_manager, set_default_manager_class
+    from restkit.conn import TConnectionManager
     from restkit.filters import BasicAuth, SimpleProxy, OAuthFilter
 except ImportError:
     import traceback

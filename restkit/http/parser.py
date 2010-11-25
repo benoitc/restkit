@@ -5,16 +5,23 @@
 
 import socket
 
+from restkit.conn.http_connection import HttpConnection
 from restkit.http.message import Request, Response
-from restkit.http.unreader import SocketUnreader, IterUnreader
+from restkit.http.unreader import ConnectionUnreader, SocketUnreader, \
+IterUnreader
 
 class Parser(object):
     def __init__(self, mesg_class, source, release_source=None, **kwargs):
         self.mesg_class = mesg_class
-        if isinstance(source, socket.socket):
-            self.unreader = SocketUnreader(source, release_fun=release_source)
+        if isinstance(source, HttpConnection):
+             self.unreader = ConnectionUnreader(source, 
+                     release_fun=release_source)
+        elif isinstance(source, socket.socket):
+            self.unreader = SocketUnreader(source, 
+                    release_fun=release_source)
         else:
-            self.unreader = IterUnreader(source, release_fun=release_source)
+            self.unreader = IterUnreader(source, 
+                    release_fun=release_source)
         self.mesg = None
         self.kwargs = kwargs
 

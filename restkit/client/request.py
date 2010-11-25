@@ -21,6 +21,7 @@ import uuid
 
 from restkit import __version__
 from restkit.client.response import HttpResponse
+from restkit.conn import get_default_manager
 from restkit.errors import RequestError, InvalidUrl, RedirectLimit
 from restkit.filters import Filters
 from restkit.forms import multipart_form_encode, form_encode
@@ -40,11 +41,16 @@ class HttpRequest(object):
     version = (1, 1)
     response_class = HttpResponse
     
-    def __init__(self, timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
-            filters=None, follow_redirect=False, force_follow_redirect=False, 
+    def __init__(self, 
+            timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
+            filters=None, 
+            follow_redirect=False, 
+            force_follow_redirect=False, 
             max_follow_redirect=MAX_FOLLOW_REDIRECTS,
             decompress=True,
-            pool_instance=None, response_class=None,
+            pool_instance=None, 
+            response_class=None,
+            connection_manager=None,
             **ssl_args):
             
         """ HttpRequest constructor
@@ -62,7 +68,7 @@ class HttpRequest(object):
         :param ssl_args: ssl arguments. See http://docs.python.org/library/ssl.html
         for more information.
         """
-        self._sock = None
+        self._conn = None
         self.timeout = timeout
         self.headers = []
         self.req_headers = []
@@ -81,52 +87,17 @@ class HttpRequest(object):
         # build filter lists
         self.filters = Filters(filters)
         self.ssl_args = ssl_args or {}
-       
-        if not pool_instance:
-            self.should_close = True
-            self.pool = None
+
+        if pool_instance is not None:
+            self.connection_manager = pool_instance
+        elif connection_manager is not None:
+            self.connection_manager = connection_manager
         else:
-            self.pool = pool_instance
-            self.should_close = False
+            self.connection_manager = get_default_manager()
             
         if response_class is not None:
             self.response_class = response_class
-         
-    def make_connection(self):
-        """ initate a connection if needed or reuse a socket"""
-        
-        # apply on connect filters
-        self.filters.apply("on_connect", self)
-        if self._sock is not None:
-            return self._sock
-        
-        addr = (self.host, self.port)
-        s = None
-        # if we defined a pool use it
-        if self.pool is not None:
-            s = self.pool.get(addr)
-            
-        if not s:
-            # pool is empty or we don't use a pool
-            if self.uri.scheme == "https":
-                s = sock.connect(addr, True, self.timeout, **self.ssl_args)
-            else:
-                s = sock.connect(addr, False, self.timeout)
-        return s
-        
-    def clean_connections(self):
-        sock.close(self._sock)
-        self._sock = None
-        if hasattr(self.pool,'clear'):
-            self.pool.clear_host((self.host, self.port))
-        
-    def release_connection(self, address, socket):
-        if self.should_close:
-            sock.close(self._sock) 
-        else:
-            self.pool.put(address, self._sock)
-        self._sock = None
-        
+                 
     def parse_url(self, url):
         """ parse url and get host/port"""
         self.uri = urlparse.urlparse(url)
@@ -204,7 +175,7 @@ class HttpRequest(object):
         :param body: the body, could be a string, an iterator or a file-like object
         :param headers: dict or list of tupple, http headers
         """
-        self._sock = None
+        self._conn = None
         self.url = url
         self.final_url = url
         self.parse_url(url)
@@ -241,12 +212,6 @@ class HttpRequest(object):
         
         # set body
         self.set_body(body, found_headers, chunked=chunked)
-
-        # force connection close if needed
-        if found_headers.get('CONNECTION') == "close":
-            self.should_close = True
-        elif self.pool is None:
-            found_headers['CONNECTION'] = "close" 
         
         self.found_headers = found_headers
         
@@ -292,16 +257,31 @@ class HttpRequest(object):
         req_headers.append('\r\n')
         return req_headers
                
+    def shutdown_connection(self):
+        self._pool.shutdown()
+        if not self._conn:
+            return
+        self._conn.close()
+        self._conn = None
+
     def do_send(self):
+        addr = (self.host, self.port)
+        is_ssl = (self.uri.scheme == "https")
+        route = (addr, is_ssl, self.filters, self.ssl_args)
+        self._pool = self.connection_manager.get_pool(route)
         tries = 2
         while True:
             try:
-                # get socket
-                self._sock = self.make_connection()
-                
-                # apply on request filters
+                if not self._conn:
+                    # get new connection
+                    self._conn = self._pool.request()
+                # socket
+                s = self._conn.socket()
+                self.headers.extend(self._conn.headers)
+
+                # apply on_request filters
                 self.filters.apply("on_request", self, tries)
-                
+
                 # build request headers
                 self.req_headers = req_headers = self._req_headers()
                 
@@ -309,41 +289,44 @@ class HttpRequest(object):
                 log.info('Start request: %s %s', self.method, self.url)
                 log.debug("Request headers: [%s]", req_headers)
                 
-                self._sock.sendall("".join(req_headers))
+                s.sendall("".join(req_headers))
                 
                 if self.body is not None:
                     if hasattr(self.body, 'read'):
                         if hasattr(self.body, 'seek'): self.body.seek(0)
-                        sock.sendfile(self._sock, self.body, self.chunked)
+                        sock.sendfile(s, self.body, self.chunked)
                     elif isinstance(self.body, types.StringTypes):
-                        sock.send(self._sock, self.body, self.chunked)
+                        sock.send(s, self.body, self.chunked)
                     else:
-                        sock.sendlines(self._sock, self.body, self.chunked)
+                        sock.sendlines(s, self.body, self.chunked)
                         
                     if self.chunked: # final chunk
-                        sock.send_chunk(self._sock, "")
+                        sock.send_chunk(s, "")
                         
                 return self.start_response()
             except socket.gaierror, e:
-                self.clean_connections()
-                raise
+                self.shutdown_connection()
+                raise RequestError(str(e))
+            except socket.timeout, e:
+                self.shutdown_connection() 
+                raise RequestTimeout(str(e))
             except socket.error, e:
-                if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, errno.EPIPE,
-                            errno.ECONNREFUSED, errno.ECONNRESET) or tries <= 0:
-                    self.clean_connections()
-                    raise
+                if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
+                        errno.EPIPE, errno.ECONNREFUSED, 
+                        errno.ECONNRESET) or tries <= 0:
+                    self.shutdown_connection()
+                    raise RequestError(str(e))
                 if e[0] in (errno.EPIPE, errno.ECONNRESET):
-                    self.clean_connections()
+                    self.shutdown_connection()
             except (KeyboardInterrupt, SystemExit):
                 break
             except:
-                if tries <= 0:
+                if tries < 0:
                     raise
                 # we don't know what happend. 
-                self.clean_connections()
+                self.shutdown_connection()
             time.sleep(0.2)
             tries -= 1
-            
       
     def do_redirect(self, response, location):
         """ follow redirections if needed"""
@@ -363,8 +346,9 @@ class HttpRequest(object):
         self.final_url = location
         response.body.read() 
         self.nb_redirections -= 1
-        
-        self.release_connection((self.host, self.port), self._sock)
+        if response.should_close:
+            self._conn.close()
+            self._conn = None
         return self.request(location, self.method, self.body, self.init_headers)
                         
     def start_response(self):
@@ -372,11 +356,9 @@ class HttpRequest(object):
         Get headers, set Body object and return HttpResponse
         """
         # read headers
-        release_fun = lambda:self.release_connection(
-                        (self.host, self.port), self._sock)
         while True:
-            parser = http.ResponseParser(self._sock, 
-                        release_source=release_fun,
+            parser = http.ResponseParser(self._conn, 
+                        release_source=self._pool.release,
                         decompress=self.decompress)
             resp = parser.next()
             if resp.status_int != 100:
@@ -413,5 +395,6 @@ class HttpRequest(object):
         log.debug("Return response: %s" % self.final_url)
         if self.method == "HEAD":
             resp.body = StringIO()
-
+            self._conn.close()
+            self._conn = None
         return self.response_class(resp, self.final_url)

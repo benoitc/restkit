@@ -75,7 +75,21 @@ class SocketUnreader(Unreader):
         try:
             self.sock.close()
         except socket.error:
-            pass 
+            pass
+
+class ConnectionUnreader(SocketUnreader):
+    def __init__(self, connection, release_fun=None, max_chunk=8192):
+        fun = lambda: release_fun(connection) 
+        super(SocketUnreader, self).__init__(release_fun=fun)
+        self.conn = connection
+        self.sock = connection.socket()
+        self.mxchunk = max_chunk
+    
+    def chunk(self):
+        return self.sock.recv(self.mxchunk)
+        
+    def close(self):
+        self.conn.close()
 
 class IterUnreader(Unreader):
     def __init__(self, iterable, release_fun=None):

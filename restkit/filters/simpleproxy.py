@@ -4,30 +4,14 @@
 # See the NOTICE for more information.
 
 """
-filters - Http filters
+filters - Simple proxy 
 
-Http filters are object used before sending the request to the server
-and after. The `HttpClient` instance is passed as argument.
-
-An object with a method `on_request` is called just before the request. 
-An object with a method `on_response` is called after fetching response headers.
-
-ex::
-
-    class MyFilter(object):
-        
-        def on_request(self, http_client):
-            "do something with/to http_client instance"
-
-        def on_response(self, http_client):
-            "do something on http_client and get response infos"
-            
-            
 """
 
 import base64
 import os
 import urlparse
+import socket
 
 from restkit import http
 from restkit import util
@@ -44,7 +28,7 @@ class SimpleProxy(object):
     connect to the proxy and modify connection headers.
     """
     
-    def on_connect(self, req):
+    def on_connect(self, conn):
         proxy_auth = _get_proxy_auth()
         if req.uri.scheme == "https":
             proxy = os.environ.get('https_proxy')
@@ -58,45 +42,27 @@ class SimpleProxy(object):
                 proxy_uri = urlparse.urlparse(proxy)
                 proxy_host, proxy_port = util.parse_netloc(proxy_uri)
                 
-                if req.pool is not None:
-                    s = req.pool.get((proxy_host, proxy_port))
-                    if s:
-                        self._sock = s
-                        req.host = proxy_host
-                        req.port = proxy_port
-                        return
-                
-                # Connect to the proxy server, 
-                # very simple recv and error checking
-                
-                p_sock = sock.connect((proxy_host, int(proxy_port)))          
-                sock.send(p_sock, proxy_pieces)
-            
-                # wait header
-                parser = http.ResponseParser(p_sock)
-                resp = parser.next()
- 
-                if resp.status_int != 200:
-                    raise ProxyError('Error status=%s' % resp.status)
-                    
-                sock._ssl_wrap_socket(p_sock, None, None)
-                
-                # update socket
-                req._sock = p_sock
-                req.host = proxy_host
-                req.port = proxy_port
+                route = ((proxy_host, proxy_port), True, None, {})
+                pool = conn.get_pool(route)
+
+                try:
+                    p_sock = pool.request()
+                except socket.error, e:
+                    raise ProxyError(str(e))
+
+                conn.sock = psock
+                conn.addr = (proxy_host, proxy_port)
+                conn.is_ssl = True
+
         else:
             proxy = os.environ.get('http_proxy')
             if proxy:
                 proxy_uri = urlparse.urlparse(proxy)
                 proxy_host, proxy_port = self._host_port(proxy_uri)
                 if proxy_auth:
-                    req.headers.append(('Proxy-Authorization', 
+                    proxy.headers.append(('Proxy-Authorization', 
                              proxy_auth.strip()))
-                             
-                req.host = proxy_host
-                req.port = proxy_port
-                
+                proxy.addr = (proxy_host, proxy_port)       
             
      
 def _get_proxy_auth():

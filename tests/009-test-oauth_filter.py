@@ -71,6 +71,8 @@ def test_002(o, u, b):
 @oauth_request('two_legged')
 def test_003(o, u, b):
     r = request(u, "POST", body=b, filters=[o])
+    import sys
+    print >>sys.stderr, r.body_string()
     t.eq(r.status_int, 200)
     
 @oauth_request('two_legged')
