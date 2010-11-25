@@ -21,8 +21,10 @@ import uuid
 
 from restkit import __version__
 from restkit.client.response import HttpResponse
-from restkit.conn import get_default_manager, DEFAULT_CONN_NB_CONNECTIONS
-from restkit.errors import RequestError, InvalidUrl, RedirectLimit
+from restkit.conn import get_default_manager, \
+DEFAULT_CONN_NB_CONNECTIONS, DEFAULT_CONN_TIMEOUT
+from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
+RequestTimeout
 from restkit.filters import Filters
 from restkit.forms import multipart_form_encode, form_encode
 from restkit.util import sock
@@ -42,7 +44,7 @@ class HttpRequest(object):
     response_class = HttpResponse
     
     def __init__(self, 
-            timeout=sock._GLOBAL_DEFAULT_TIMEOUT, 
+            timeout=DEFAULT_CONN_TIMEOUT, 
             filters=None, 
             follow_redirect=False, 
             force_follow_redirect=False, 
