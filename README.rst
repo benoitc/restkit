@@ -73,8 +73,8 @@ Reuses connections
 
 Reusing connections is good. Restkit can maintain for you the http connections and
 reuse them if the server allows it. To do that you can pass to any object a pool 
-instance inheriting `reskit.pool.PoolInterface`. You can use our threadsafe pool 
-in any application:
+instance inheriting `reskit.pool.PoolInterface`. By default a threadsafe pool is
+used in any application:
 
 ::
 
