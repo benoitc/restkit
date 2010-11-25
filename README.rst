@@ -35,7 +35,9 @@ Usage example, get friendpaste page::
 Create a simple Twitter Search resource
 +++++++++++++++++++++++++++++++++++++++
 
-Building a resource object is easy using `restkit.Resource` class. We use `simplejson <http://code.google.com/p/simplejson/>`_ to handle deserialisation of data.
+Building a resource object is easy using `restkit.Resource` class. 
+We use `simplejson <http://code.google.com/p/simplejson/>`_ to 
+handle deserialisation of data.
 
 Here is the snippet::
 
@@ -79,14 +81,14 @@ Reusing connections is good. Restkit can maintain for you the http connections a
   
 or if you use Gevent::
 
-
   from restkit import Resource
   from restkit.conn.genet_manager import GeventConnectionManager
   
   mgr = GeventConnectionManager(timeout=300, nb_connections=10)
   res = Resource('http://friendpaste.com', conn_manager=mgr)
 
-  Authentication
+
+Authentication
 ==============
 
 Restkit support for now `basic authentication`_  and `OAuth`_. But any
