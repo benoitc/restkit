@@ -29,8 +29,6 @@ class HttpConnection(object):
         self.sock = sock.connect(self.addr, self.is_ssl, 
                 self.timeout, **self.ssl_args)
         
-        
-
     def socket(self):
         return self.sock
 

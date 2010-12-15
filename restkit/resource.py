@@ -57,6 +57,7 @@ class Resource(object):
             client_opts['connection_manager'] = get_default_manager()
 
         self.filters = client_opts.get('filters') or []
+        self.uri = uri
         if self.basic_auth_url:
             # detect credentials from url
             u = urlparse.urlparse(uri)
@@ -69,10 +70,9 @@ class Resource(object):
                 client_opts['filters'] = filters
                 
                 # update uri
-                uri = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
+                self.uri = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
                     u.path, u.params, u.query, u.fragment))
-                
-        self.uri = uri
+
         self.client_opts = client_opts
         
     def __repr__(self):
