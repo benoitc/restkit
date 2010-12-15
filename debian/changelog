@@ -1,3 +1,10 @@
+restkit (2.3.2-1) karmic; urgency=low
+
+  * bump version 
+
+ -- Benoit Chesneau <benoitc@e-engura.org>  Wed, 15 Dec 2010 23:00:00 +0100
+
+
 restkit (2.3.1-1) karmic; urgency=low
 
   * bump version 
