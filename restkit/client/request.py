@@ -120,9 +120,9 @@ class HttpRequest(object):
         content_length = headers.get('CONTENT-LENGTH')
         if not body:
             if content_type is not None:
-                self.headers.append(('Content-Type', content_type))
+                self.bheaders.append(('Content-Type', content_type))
             if self.method in ('POST', 'PUT'):
-                self.headers.append(("Content-Length", "0"))
+                self.bheaders.append(("Content-Length", "0"))
             return
         
         # set content lengh if needed
@@ -131,7 +131,7 @@ class HttpRequest(object):
                     content_type.startswith("multipart/form-data"):
                 type_, opts = cgi.parse_header(content_type)
                 boundary = opts.get('boundary', uuid.uuid4().hex)
-                body, self.headers = multipart_form_encode(body, 
+                body, self.bheaders = multipart_form_encode(body, 
                                             self.headers, boundary)
             else:
                 content_type = "application/x-www-form-urlencoded; charset=utf-8"
@@ -162,9 +162,9 @@ class HttpRequest(object):
                 content_length = len(body)
         
         if content_length:
-            self.headers.append(("Content-Length", content_length))
+            self.bheaders.append(("Content-Length", content_length))
             if content_type is not None:
-                self.headers.append(('Content-Type', content_type))
+                self.bheaders.append(('Content-Type', content_type))
             
         elif not chunked:
             raise RequestError("Can't determine content length and " +
@@ -188,7 +188,7 @@ class HttpRequest(object):
         self.method = method.upper()
 
         self.init_headers = copy.copy(headers or [])
-        self.headers = []
+        self.bheaders = []
         
         # headers are better as list
         headers = headers  or []
@@ -213,13 +213,15 @@ class HttpRequest(object):
                     found_headers[uname] = value
                     new_headers.remove((name, value))
 
-        self.headers = new_headers
+        self.bheaders = new_headers
         self.chunked = chunked 
         
         # set body
         self.set_body(body, found_headers, chunked=chunked)
         
         self.found_headers = found_headers
+
+        
         
         # Finally do the request
         return self.do_send()
@@ -283,14 +285,18 @@ class HttpRequest(object):
                     self._conn = self._pool.request()
                 # socket
                 s = self._conn.socket()
+
+                self.headers = copy.copy(self.bheaders)
+
                 self.headers.extend(self._conn.headers)
 
                 # apply on_request filters
                 self.filters.apply("on_request", self, tries)
 
                 # build request headers
-                self.req_headers = req_headers = self._req_headers()
-                
+                req_headers = self._req_headers()
+                self.req_headers = req_headers
+
                 # send request
                 log.info('Start request: %s %s', self.method, self.url)
                 log.debug("Request headers: [%s]", req_headers)
@@ -314,8 +320,9 @@ class HttpRequest(object):
                 self.shutdown_connection()
                 raise RequestError(str(e))
             except socket.timeout, e:
-                self.shutdown_connection() 
-                raise RequestTimeout(str(e))
+                if tries < 0:
+                    raise RequestTimeout(str(e))
+                self.shutdown_connection()
             except socket.error, e:
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
                         errno.EPIPE, errno.ECONNREFUSED, 
