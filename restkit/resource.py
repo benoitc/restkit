@@ -53,8 +53,9 @@ class Resource(object):
             client_opts['response_class'] = self.response_class
 
         # set default pool if needed
-        if not 'pool_instance' in client_opts and self.keepalive:
-            client_opts['conn_manager'] = get_default_manager()
+        if not 'conn_manager' in client_opts:
+            if not 'pool_instance' in client_opts and self.keepalive:
+                client_opts['conn_manager'] = get_default_manager()
 
         self.filters = client_opts.get('filters') or []
         self.uri = uri
