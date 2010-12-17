@@ -54,7 +54,7 @@ class Resource(object):
 
         # set default pool if needed
         if not 'pool_instance' in client_opts and self.keepalive:
-            client_opts['connection_manager'] = get_default_manager()
+            client_opts['conn_manager'] = get_default_manager()
 
         self.filters = client_opts.get('filters') or []
         self.uri = uri
