@@ -151,7 +151,15 @@ class HttpRequest(object):
                     body.flush()
                 except IOError:
                     pass
-                content_length = str(os.fstat(body.fileno())[6])
+                try:
+                    fno = body.fileno()
+                    content_length = str(os.fstat(fno)[6])
+
+                except IOError:
+                    # io.IOBAse inherited object. Sometimes fileno isn't
+                    # supported
+                    content_length = len(body.read())
+
             elif hasattr(body, 'getvalue'):
                 try:
                     content_length = str(len(body.getvalue()))
@@ -161,7 +169,7 @@ class HttpRequest(object):
                 body = util.to_bytestring(body)
                 content_length = len(body)
         
-        if content_length:
+        if content_length is not None:
             self.bheaders.append(("Content-Length", content_length))
             if content_type is not None:
                 self.bheaders.append(('Content-Type', content_type))
