@@ -50,10 +50,20 @@ def set_logging(level, handler=None):
     
 from restkit.util.sock import _GLOBAL_DEFAULT_TIMEOUT
     
-def request(url, method='GET', body=None, headers=None,  
-        timeout=_GLOBAL_DEFAULT_TIMEOUT, filters=None, follow_redirect=False, 
-        force_follow_redirect=False, max_follow_redirect=MAX_FOLLOW_REDIRECTS,
-        decompress=True, pool_instance=None, response_class=None, **ssl_args):
+def request(url, 
+        method='GET', 
+        body=None, 
+        headers=None,  
+        timeout=_GLOBAL_DEFAULT_TIMEOUT, 
+        filters=None,
+        follow_redirect=False, 
+        force_follow_redirect=False, 
+        max_follow_redirect=MAX_FOLLOW_REDIRECTS,
+        decompress=True, 
+        pool_instance=None,
+        conn_manager=None,
+        response_class=None,
+        **ssl_args):
     """ Quick shortcut method to pass a request
     
     :param url: str, url string
@@ -87,7 +97,8 @@ def request(url, method='GET', body=None, headers=None,
             force_follow_redirect=force_follow_redirect,
             max_follow_redirect=max_follow_redirect,
             decompress=decompress,
-            pool_instance=pool_instance, 
+            pool_instance=pool_instance,
+            conn_manager=conn_manager,
             response_class=response_class,
             **ssl_args)
     return http_client.request(url, method=method, body=body, 
