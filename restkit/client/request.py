@@ -290,6 +290,7 @@ class HttpRequest(object):
             try:
                 if not self._conn:
                     # get new connection
+                    print "create new conn"
                     self._conn = self._pool.request()
                 # socket
                 s = self._conn.socket()
@@ -330,13 +331,15 @@ class HttpRequest(object):
             except socket.timeout, e:
                 if tries < 0:
                     raise RequestTimeout(str(e))
+                self._conn = None
                 self.shutdown_connection()
             except socket.error, e:
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
                         errno.EPIPE, errno.ECONNREFUSED, 
-                        errno.ECONNRESET) or tries <= 0:
+                        errno.ECONNRESET) or tries < 0:
                     self.shutdown_connection()
                     raise RequestError(str(e))
+                self._conn = None
                 if e[0] in (errno.EPIPE, errno.ECONNRESET):
                     self.shutdown_connection()
             except (KeyboardInterrupt, SystemExit):
@@ -344,7 +347,8 @@ class HttpRequest(object):
             except:
                 if tries < 0:
                     raise
-                # we don't know what happend. 
+                # we don't know what happend.
+                self._conn = None
                 self.shutdown_connection()
             time.sleep(0.2)
             tries -= 1
@@ -365,11 +369,13 @@ class HttpRequest(object):
         log.debug("Redirect to %s" % location)
           
         self.final_url = location
-        response.body.read() 
+        
         self.nb_redirections -= 1
         if response.should_close:
             self._conn.close()
             self._conn = None
+        else:
+            response.body.read() 
         return self.request(location, self.method, self.body, self.init_headers)
                         
     def start_response(self):
