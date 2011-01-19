@@ -290,7 +290,7 @@ class HttpRequest(object):
             try:
                 if not self._conn:
                     # get new connection
-                    print "create new conn"
+                    log.debug("Create new connection")
                     self._conn = self._pool.request()
                 # socket
                 s = self._conn.socket()
