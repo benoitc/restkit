@@ -6,7 +6,7 @@
 import time
 import urllib
 
-from restkit.errors import InvalidUrl
+from ..errors import InvalidUrl
 
 weekdayname = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 monthname = [None,

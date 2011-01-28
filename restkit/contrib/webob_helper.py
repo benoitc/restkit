@@ -4,8 +4,9 @@
 # See the NOTICE for more information.
 
 
-import restkit.errors
 import webob.exc
+
+from .. import errors
 
 class WebobResourceError(webob.exc.WSGIHTTPException):
     """
@@ -55,6 +56,6 @@ def wrap_exceptions():
     """ wrap restkit exception to return WebBob exceptions"""
     global webob_exceptions
     if webob_exceptions: return
-    restkit.errors.ResourceError = WebobResourceError
+    errors.ResourceError = WebobResourceError
     webob_exceptions = True
     

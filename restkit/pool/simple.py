@@ -10,6 +10,6 @@ warnings.warn("The Simplepool module is deprecated.  Please use the "
 
 
 
-from restkit.conn import TConnectionManager
+from ..conn import TConnectionManager
 
 SimplePool = TConnectionManager

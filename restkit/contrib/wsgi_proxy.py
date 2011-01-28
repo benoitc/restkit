@@ -4,9 +4,9 @@
 # See the NOTICE for more information.
 
 import urlparse
-from restkit import request
-from restkit.conn import get_default_manager
-from restkit.util.sock import MAX_BODY
+from .. import request
+from ..conn import get_default_manager
+from ..util.sock import MAX_BODY
 
 ALLOWED_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
 

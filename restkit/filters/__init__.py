@@ -25,9 +25,9 @@ ex::
             
 """
 
-from restkit.filters.basicauth import BasicAuth
-from restkit.filters.oauth2 import OAuthFilter
-from restkit.filters.simpleproxy import SimpleProxy
+from .basicauth import BasicAuth
+from .oauth2 import OAuthFilter
+from .simpleproxy import SimpleProxy
 
 class Filters(object):
     

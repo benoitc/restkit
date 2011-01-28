@@ -9,13 +9,12 @@ version_info = (2, 3, 4)
 __version__ =  ".".join(map(str, version_info))
 
 try:
-    from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
+    from .errors import ResourceNotFound, Unauthorized, RequestFailed,\
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceError
-    from restkit.client import HttpRequest, HttpResponse, MAX_FOLLOW_REDIRECTS
-    from restkit.resource import Resource
-    from restkit.conn import get_default_manager, set_default_manager_class
-    from restkit.conn import TConnectionManager
-    from restkit.filters import BasicAuth, SimpleProxy, OAuthFilter
+    from .client import HttpRequest, HttpResponse, MAX_FOLLOW_REDIRECTS
+    from .resource import Resource
+    from .conn import get_default_manager, set_default_manager_class, TConnectionManager
+    from .filters import BasicAuth, SimpleProxy, OAuthFilter
 except ImportError:
     import traceback
     traceback.print_exc()
@@ -48,7 +47,7 @@ def set_logging(level, handler=None):
     handler.setFormatter(logging.Formatter(format, datefmt))
     logger.addHandler(handler)
     
-from restkit.util.sock import _GLOBAL_DEFAULT_TIMEOUT
+from .util.sock import _GLOBAL_DEFAULT_TIMEOUT
     
 def request(url, 
         method='GET', 

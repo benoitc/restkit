@@ -6,7 +6,7 @@
 import copy
 import socket
 
-from restkit.util import sock
+from ..util import sock
 
 class HttpConnection(object):
 

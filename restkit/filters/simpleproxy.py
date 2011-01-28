@@ -13,9 +13,8 @@ import os
 import urlparse
 import socket
 
-from restkit import util
-
-from restkit import __version__
+from .. import util
+from .. import __version__
         
 class ProxyError(Exception):
     pass

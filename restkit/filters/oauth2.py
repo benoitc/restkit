@@ -12,8 +12,8 @@ except ImportError:
 
 from urlparse import urlunparse
     
-from restkit.util import replace_header
-from restkit.util.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
+from ..util import replace_header
+from ..util.oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
 Token
 
 def validate_consumer(consumer):

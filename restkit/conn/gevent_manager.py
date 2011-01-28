@@ -5,8 +5,8 @@
 
 import time
 
-from restkit.conn.base import Pool, ConnectionManager
-from restkit.conn import http_connection
+from .base import Pool, ConnectionManager
+from . import http_connection
 
 from gevent import coros
 from gevent import queue

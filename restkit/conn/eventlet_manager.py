@@ -5,8 +5,8 @@
 
 import time
 
-from restkit.conn.base import Pool, ConnectionManager
-from restkit.conn import http_connection
+from .base import Pool, ConnectionManager
+from . import http_connection
 
 from eventlet.green import socket
 from eventlet.green import ssl

@@ -3,7 +3,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from restkit.conn.threaded import TConnectionManager
+from .threaded import TConnectionManager
 
 DEFAULT_MANAGER_CLASS = TConnectionManager
 

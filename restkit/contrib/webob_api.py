@@ -4,14 +4,16 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+from StringIO import StringIO
+import urlparse
+import urllib
+
 try:
     from webob import Request as BaseRequest
 except ImportError:
     raise ImportError('WebOb (http://pypi.python.org/pypi/WebOb) is required')
-from StringIO import StringIO
-from restkit.contrib.wsgi_proxy import Proxy
-import urlparse
-import urllib
+
+from .wsgi_proxy import Proxy
 
 __doc__ = '''Subclasses of webob.Request who use restkit to get a
 webob.Response via restkit.ext.wsgi_proxy.Proxy.

@@ -3,6 +3,8 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+from StringIO import StringIO
+
 
 try:
     from IPython.Shell import IPShellEmbed
@@ -15,12 +17,13 @@ try:
 except ImportError:
     raise ImportError('webob (http://pythonpaste.org/webob/) is required.')
 
-from restkit import __version__
-from restkit.contrib.console import common_indent, json
-from restkit.contrib.webob_api import Request as BaseRequest
 from webob import Response as BaseResponse
-from StringIO import StringIO
 import IPython
+
+from . import __version__
+from .console import common_indent, json
+from .webob_api import Request as BaseRequest
+
 
 class Stream(StringIO):
     def __repr__(self):

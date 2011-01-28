@@ -19,17 +19,17 @@ import types
 import urlparse
 import uuid
 
-from restkit import __version__
-from restkit.client.response import HttpResponse
-from restkit.conn import get_default_manager, \
+from .. import __version__
+from .response import HttpResponse
+from ..conn import get_default_manager, \
 DEFAULT_CONN_NB_CONNECTIONS, DEFAULT_CONN_TIMEOUT
-from restkit.errors import RequestError, InvalidUrl, RedirectLimit, \
+from ..errors import RequestError, InvalidUrl, RedirectLimit, \
 RequestTimeout
-from restkit.filters import Filters
-from restkit.forms import multipart_form_encode, form_encode
-from restkit.util import sock
-from restkit import util
-from restkit import http
+from ..filters import Filters
+from ..forms import multipart_form_encode, form_encode
+from ..util import sock
+from .. import util
+from .. import http
 
 MAX_FOLLOW_REDIRECTS = 5
 

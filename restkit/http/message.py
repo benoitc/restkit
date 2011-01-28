@@ -11,9 +11,9 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from restkit.http.body import ChunkedReader, LengthReader, EOFReader, Body, \
+from .body import ChunkedReader, LengthReader, EOFReader, Body, \
 GzipBody, DeflateBody
-from restkit.errors import InvalidHeader, InvalidHeaderName, NoMoreData, \
+from ..errors import InvalidHeader, InvalidHeaderName, NoMoreData, \
 InvalidRequestLine, InvalidRequestMethod, InvalidHTTPVersion, InvalidHTTPStatus
 
 class Message(object):

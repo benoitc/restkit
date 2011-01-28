@@ -7,9 +7,9 @@ import time
 import collections
 import threading
 
-from restkit.conn.base import Pool, ConnectionManager
-from restkit.conn.http_connection import HttpConnection
-from restkit.util import sock
+from .base import Pool, ConnectionManager
+from .http_connection import HttpConnection
+from ..util import sock
 
 class TPool(Pool):
 

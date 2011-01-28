@@ -5,9 +5,9 @@
 
 import socket
 
-from restkit.conn.http_connection import HttpConnection
-from restkit.http.message import Request, Response
-from restkit.http.unreader import ConnectionUnreader, SocketUnreader, \
+from ..conn.http_connection import HttpConnection
+from .message import Request, Response
+from .unreader import ConnectionUnreader, SocketUnreader, \
 IterUnreader
 
 class Parser(object):
