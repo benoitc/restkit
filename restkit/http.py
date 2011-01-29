@@ -3,7 +3,10 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+import os
+import re
 import sys
+import urlparse
 import zlib
 
 try:
@@ -11,9 +14,52 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from ..errors import NoMoreData, ChunkMissingTerminator, \
-InvalidChunkSize
+from .errors import *
 
+
+class Unreader(object):
+    def __init__(self, sock, max_chunk=8192):
+        self.buf = StringIO()
+        self.sock = sock
+        self.max_chunk = max_chunk
+
+    def _data(self):
+        return self.sock.recv(self.max_chunk)
+    
+    def read(self, size=None):
+        if size is not None and not isinstance(size, (int, long)):
+            raise TypeError("size parameter must be an int or long.")
+        if size == 0:
+            return ""
+        if size < 0:
+            size = None
+
+        self.buf.seek(0, os.SEEK_END)
+
+        if size is None and self.buf.tell():
+            ret = self.buf.getvalue()
+            self.buf.truncate(0)
+            return ret
+        if size is None:
+            return self._data()
+
+        while self.buf.tell() < size:
+            data = self._data()
+            if not len(data):
+                ret = self.buf.getvalue()
+                self.buf.truncate(0)
+                return ret
+            self.buf.write(data)
+
+        data = self.buf.getvalue()
+        self.buf.truncate(0)
+        self.buf.write(data[size:])
+        return data[:size]
+    
+    def unread(self, data):
+        self.buf.seek(0, os.SEEK_END)
+        self.buf.write(data)
+        
 class ChunkedReader(object):
     def __init__(self, req, unreader):
         self.unreader = unreader
@@ -183,27 +229,9 @@ class EOFReader(object):
 class Body(object):
     def __init__(self, reader):
         self.reader = reader
-        self.req = reader.req
         self.buf = StringIO()
         self.closed = False
-        
-    def close(self):
-       """ Close the socket if needed """
-       if self.req.should_close():
-           self.req.unreader.close()
-       elif not self.closed:
-           # release connection
-           self.req.unreader.release()
-       self.closed = True
             
-    def __enter__(self):
-        return self
-        
-    def __exit__(self, exc_type, exc_val, traceback):
-        if exc_type is None:
-            """ close on exit and release connection if needed """
-            self.close()
-
     def __iter__(self):
         return self
     
@@ -212,6 +240,11 @@ class Body(object):
         if not ret:
             raise StopIteration()
         return ret
+
+    def discard(self):
+        data = self.read(8192)
+        while data:
+            data = self.read()
 
     def getsize(self, size):
         if size is None:
@@ -237,7 +270,6 @@ class Body(object):
         while size > self.buf.tell():
             data = self.reader.read(1024)
             if not len(data):
-                self.close()
                 break
             self.buf.write(data)
 
@@ -267,7 +299,6 @@ class Body(object):
         while lsize < size and ch != "\n":
             ch = self.reader.read(1)
             if not len(ch):
-                self.close()
                 break
             lsize += 1
             buf.append(ch)
@@ -310,7 +341,6 @@ class GzipBody(Body):
         while size > self.buf.tell():
             data = self.reader.read(1024)
             if not len(data):
-                self.close()
                 break
             self.buf.write(data)
 
@@ -329,7 +359,6 @@ class GzipBody(Body):
         while idx < 0:
             data = self.reader.read(1024)
             if not len(data):
-                self.close()
                 break
             self.buf.write(self._decompress(data))
             idx = self.buf.getvalue().find("\n")
@@ -359,4 +388,152 @@ class DeflateBody(GzipBody):
     def __init__(self, reader):
         super(DeflateBody, self).__init__(reader)
         self._d = zlib.decompressobj()
+
+
+class Request(object):
+    def __init__(self, unreader, decompress=True):
+        self.unreader = unreader
+        self.version = None
+        self.headers = []
+        self.trailers = []
+        self.body = None
+        self.encoding = None
+        self.status = None
+        self.reason = None
+        self.status_int = None
+        self.decompress = decompress
+
+        self.versre = re.compile("HTTP/(\d+).(\d+)")
+        self.stare = re.compile("(\d{3})\s*(\w*)")
+        self.hdrre = re.compile("[\x00-\x1F\x7F()<>@,;:\[\]={} \t\\\\\"]")
+
+        unused = self.parse(self.unreader)
+        self.unreader.unread(unused)
+        self.set_body_reader()
+        
+    def get_data(self, unreader, buf, stop=False):
+        data = unreader.read()
+        if not data:
+            if stop:
+                raise StopIteration()
+            raise NoMoreData(buf.getvalue())
+        buf.write(data)
+        
+    def parse(self, unreader):
+        buf = StringIO()
+
+        self.get_data(unreader, buf, stop=True)
+        
+        # Request line
+        idx = buf.getvalue().find("\r\n")
+        while idx < 0:
+            self.get_data(unreader, buf)
+            idx = buf.getvalue().find("\r\n")
+        self.parse_first_line(buf.getvalue()[:idx])
+        rest = buf.getvalue()[idx+2:] # Skip \r\n
+        buf.truncate(0)
+        buf.write(rest)
+        
+        # Headers
+        idx = buf.getvalue().find("\r\n\r\n")
+        done = buf.getvalue()[:2] == "\r\n"
+        while idx < 0 and not done:
+            self.get_data(unreader, buf)
+            idx = buf.getvalue().find("\r\n\r\n")
+            done = buf.getvalue()[:2] == "\r\n"
+        if done:
+            self.unreader.unread(buf.getvalue()[2:])
+            return ""
+
+        self.headers = self.parse_headers(buf.getvalue()[:idx])
+
+        ret = buf.getvalue()[idx+4:]
+        buf.truncate(0)
+        return ret
+    
+    def parse_first_line(self, line):
+        bits = line.split(None, 1)
+        if len(bits) != 2:
+            raise InvalidRequestLine(line)
+            
+        # version 
+        matchv = self.versre.match(bits[0])
+        if matchv is None:
+            raise InvalidHTTPVersion(bits[0])
+        self.version = (int(matchv.group(1)), int(matchv.group(2)))
+            
+        # status
+        matchs = self.stare.match(bits[1])
+        if matchs is None:
+            raise InvalidHTTPStatus(bits[1])
+        
+        self.status = bits[1]
+        self.status_int = int(matchs.group(1))
+        self.reason = matchs.group(2)
+
+    def parse_headers(self, data):
+        headers = []
+
+        # Split lines on \r\n keeping the \r\n on each line
+        lines = []
+        lines = [line + "\r\n" for line in data.split("\r\n")]
+
+        # Parse headers into key/value pairs paying attention
+        # to continuation lines.
+        while len(lines):
+            # Parse initial header name : value pair.
+            curr = lines.pop(0)
+            if curr.find(":") < 0:
+                raise InvalidHeader(curr.strip())
+            name, value = curr.split(":", 1)
+            name = name.rstrip(" \t")
+            if self.hdrre.search(name.upper()):
+                raise InvalidHeaderName(name)
+            name, value = name.strip(), [value.lstrip()]
+            
+            # Consume value continuation lines
+            while len(lines) and lines[0].startswith((" ", "\t")):
+                value.append(lines.pop(0))
+            value = ''.join(value).rstrip()
+            
+            headers.append((name, value))
+        return headers
+
+    def set_body_reader(self):
+        chunked = False
+        clength = None
+        for (name, value) in self.headers:
+            if name.upper() == "CONTENT-LENGTH":
+                try:
+                    clength = int(value)
+                except ValueError:
+                    clength = None
+            elif name.upper() == "TRANSFER-ENCODING":
+                chunked = value.lower() == "chunked"
+            elif name.upper() == "CONTENT-ENCODING":
+                self.encoding = value.lower()
+
+        if chunked:
+            reader = ChunkedReader(self, self.unreader)
+        elif clength is not None:
+            reader = LengthReader(self, self.unreader, clength)
+        else:
+            reader = EOFReader(self, self.unreader)
+
+        if self.decompress and self.encoding in ('gzip', 'deflate',):
+            if self.encoding == "gzip":
+                self.body =  GzipBody(reader)
+            else:
+                self.body = DeflateBody(reader)
+        else:
+            self.body = Body(reader)
+
+    def should_close(self):
+        for (h, v) in self.headers:
+            if h.lower() == "connection":
+                if v.lower().strip() == "close":
+                    return True
+                elif v.lower().strip() == "keep-alive":
+                    return False
+        return self.version <= (1, 0)
 

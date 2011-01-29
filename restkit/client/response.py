@@ -5,6 +5,35 @@
 
 from ..errors import AlreadyRead
 
+
+class BodyWrapper(object):
+
+    def __init__(self, body):
+        self.body = body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, traceback):
+        if exc_type is None:
+            return
+    
+    def __iter__(self):
+        return self
+
+    def next(self):
+        return self.body.next()
+
+    def read(self, size=None):
+        return self.body.read(size=size)
+
+    def readline(self, size=None):
+        return self.body.readline(size=size)
+
+    def readlines(self, size=None):
+        return self.body.readlines(size=size)
+
+
 class HttpResponse(object):
     """ Http Response object returned by HttpConnction"""
     
@@ -49,16 +78,14 @@ class HttpResponse(object):
                 body = body.decode(charset, unicode_errors)
             except UnicodeDecodeError:
                 pass
-        self.close()
         return body
         
     def body_stream(self):
         """ return full body stream """
         if self.closed or self.response.body.closed:
             raise AlreadyRead("The response have already been read")
-        return self.response.body
+        return BodyWrapper(self.response.body)
         
     def close(self):
         """ release the socket """
         self.closed = True
-        self.response.body.close()

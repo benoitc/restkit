@@ -12,8 +12,6 @@ import tempfile
 
 dirname = os.path.dirname(__file__)
 
-from restkit.http.parser import RequestParser
-
 from restkit.client import HttpRequest
 from restkit.resource import Resource
 
@@ -27,17 +25,6 @@ def data_source(fname):
             line = line.rstrip("\n").replace("\\r\\n", "\r\n")
             buf.write(line)
         return buf
-
-class request(object):
-    def __init__(self, name):
-        self.fname = os.path.join(dirname, "requests", name)
-        
-    def __call__(self, func):
-        def run():
-            src = data_source(self.fname)
-            func(src, RequestParser(src))
-        run.func_name = func.func_name
-        return run
         
         
 class FakeSocket(object):

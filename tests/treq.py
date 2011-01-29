@@ -8,10 +8,28 @@ import t
 import inspect
 import os
 import random
+from StringIO import StringIO
 import urlparse
 
 from restkit.errors import ParseException
-from restkit.http.parser import RequestParser, ResponseParser
+from restkit.http import Request, Unreader
+
+class IterUnreader(Unreader):
+
+    def __init__(self, iterable, **kwargs):
+        self.buf = StringIO()
+        self.iter = iter(iterable)
+        
+
+    def _data(self):
+        if not self.iter:
+            return ""
+        try:
+            return self.iter.next()
+        except StopIteration:
+            self.iter = None
+            return ""
+     
 
 dirname = os.path.dirname(__file__)
 random.seed()
@@ -35,11 +53,6 @@ def uri(data):
     ret["fragment"] = parts.fragment or None
     return ret
 
-def load_request_py(fname):
-    config = globals().copy()
-    config["uri"] = uri
-    execfile(fname, config)
-    return config["request"]
     
 def load_response_py(fname):
     config = globals().copy()
@@ -47,7 +60,7 @@ def load_response_py(fname):
     execfile(fname, config)
     return config["response"]
 
-class request(object):
+class response(object):
     def __init__(self, fname, expect):
         self.fname = fname
         self.name = os.path.basename(fname)
@@ -228,107 +241,10 @@ class request(object):
 
     def check(self, sender, sizer, matcher):
         cases = self.expect[:]
-        p = RequestParser(sender())
-        for req in p:
-            self.same(req, sizer, matcher, cases.pop(0))
-        t.eq(len(cases), 0)
 
-    def same(self, req, sizer, matcher, exp):
-        t.eq(req.method, exp["method"])
-        t.eq(req.uri, exp["uri"]["raw"])
-        t.eq(req.scheme, exp["uri"]["scheme"])
-        t.eq(req.host, exp["uri"]["host"])
-        t.eq(req.port, exp["uri"]["port"])
-        t.eq(req.path, exp["uri"]["path"])
-        t.eq(req.query, exp["uri"]["query"])
-        t.eq(req.fragment, exp["uri"]["fragment"])
-        t.eq(req.version, exp["version"])
-        t.eq(req.headers, exp["headers"])
-        matcher(req, exp["body"], sizer)
-        t.eq(req.trailers, exp.get("trailers", []))
-
-class badrequest(object):
-    def __init__(self, fname, expect):
-        self.fname = fname
-        self.name = os.path.basename(fname)
-
-        self.expect = expect
-        if not isinstance(self.expect, list):
-            self.expect = [self.expect]
-
-        with open(self.fname) as handle:
-            self.data = handle.read()
-        self.data = self.data.replace("\n", "").replace("\\r\\n", "\r\n")
-        self.data = self.data.replace("\\0", "\000")
-
-    def send(self):
-        maxs = len(self.data) / 10
-        read = 0
-        while read < len(self.data):
-            chunk = random.randint(1, maxs)
-            yield self.data[read:read+chunk]
-            read += chunk                
-
-    def size(self):
-        return random.randint(0, 4)
-
-    def match(self, req, body):
-        data = req.body.read(self.size())
-        count = 1000
-        while len(body):
-            if body[:len(data)] != data:
-                raise AssertionError("Invalid body data read: %r != %r" % (
-                                        data, body[:len(data)]))
-            body = body[len(data):]
-            data = req.body.read(self.size())
-            if not data:
-                count -= 1
-            if count <= 0:
-                raise AssertionError("Unexpected apparent EOF")
-
-        if len(body):
-            raise AssertionError("Failed to read entire body: %r" % body)
-        elif len(data):
-            raise AssertionError("Read beyond expected body: %r" % data)        
-        data = req.body.read(sizes())
-        if data:
-            raise AssertionError("Read after body finished: %r" % data)
-
-    def same(self, req, sizer, matcher, exp):
-        t.eq(req.method, exp["method"])
-        t.eq(req.uri, exp["uri"]["raw"])
-        t.eq(req.scheme, exp["uri"]["scheme"])
-        t.eq(req.host, exp["uri"]["host"])
-        t.eq(req.port, exp["uri"]["port"])
-        t.eq(req.path, exp["uri"]["path"])
-        t.eq(req.query, exp["uri"]["query"])
-        t.eq(req.fragment, exp["uri"]["fragment"])
-        t.eq(req.version, exp["version"])
-        t.eq(req.headers, exp["headers"])
-        self.match(req, exp["body"])
-        t.eq(req.trailers, exp.get("trailers", []))
-
-    def check(self):
-        cases = self.expect[:]
-        p = RequestParser(self.send())
-        try:
-            for req in p:
-                self.same(req, cases.pop(0))
-        except Exception, inst:
-            exp = cases.pop(0)
-            if not issubclass(exp, Exception):
-                raise TypeError("Test case is not an exception calss: %s" % exp)
-            if not isinstance(inst, exp):
-                raise TypeError("Invalid error result: %s: %s" % (exp, inst))
-        t.eq(len(cases), 0)
-
-class response(request):
-    
-    def check(self, sender, sizer, matcher):
-        cases = self.expect[:]
-        p = ResponseParser(sender())
-        for resp in p:
-            self.same(resp, sizer, matcher, cases.pop(0))
+        unreader = IterUnreader(sender())
+        resp = Request(unreader)
+        self.same(resp, sizer, matcher, cases.pop(0))
         t.eq(len(cases), 0)
 
     def same(self, resp, sizer, matcher, exp):

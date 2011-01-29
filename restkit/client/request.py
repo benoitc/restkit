@@ -383,11 +383,11 @@ class HttpRequest(object):
         Get headers, set Body object and return HttpResponse
         """
         # read headers
+        unreader = http.Unreader(self._conn.socket())
+
         while True:
-            parser = http.ResponseParser(self._conn, 
-                        release_source=self._pool.release,
-                        decompress=self.decompress)
-            resp = parser.next()
+            resp = http.Request(unreader)
+            
             if resp.status_int != 100:
                 break
 
