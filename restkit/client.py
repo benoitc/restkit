@@ -243,7 +243,8 @@ class Client(object):
     def release_connection(self, key, sck):
         self._lock.acquire()
         try:
-            if key in self._connections:
+            if key in self._connections or \
+                    len(self._connections) > self.max_conn: 
                 self._manager.store_socket(sck, key[0], key[1])
             else:
                 self._connections[key] = sck
