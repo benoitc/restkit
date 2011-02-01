@@ -94,7 +94,8 @@ class UnexpectedEOF(Exception):
 class AlreadyRead(Exception):
     """ raised when a response have already been read """
     
-    
+class ProxyError(Exception):
+    pass 
     
 #############################
 # HTTP parser errors

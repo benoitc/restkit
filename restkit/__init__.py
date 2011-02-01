@@ -5,15 +5,15 @@
 
 
 
-version_info = (2, 3, 4)
+version_info = (3, 0, 0)
 __version__ =  ".".join(map(str, version_info))
 
 try:
     from .errors import ResourceNotFound, Unauthorized, RequestFailed,\
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceError
-    from .client import HttpRequest, HttpResponse, MAX_FOLLOW_REDIRECTS
+    from .client import Client, ClientResponse, MAX_FOLLOW_REDIRECTS
     from .resource import Resource
-    from .conn import get_default_manager, set_default_manager_class, TConnectionManager
+    from .manager import Manager 
     from .filters import BasicAuth, SimpleProxy, OAuthFilter
 except ImportError:
     import traceback
@@ -47,22 +47,12 @@ def set_logging(level, handler=None):
     handler.setFormatter(logging.Formatter(format, datefmt))
     logger.addHandler(handler)
     
-from .util.sock import _GLOBAL_DEFAULT_TIMEOUT
     
 def request(url, 
         method='GET', 
         body=None, 
         headers=None,  
-        timeout=_GLOBAL_DEFAULT_TIMEOUT, 
-        filters=None,
-        follow_redirect=False, 
-        force_follow_redirect=False, 
-        max_follow_redirect=MAX_FOLLOW_REDIRECTS,
-        decompress=True, 
-        pool_instance=None,
-        conn_manager=None,
-        response_class=None,
-        **ssl_args):
+        **kwargs):
     """ Quick shortcut method to pass a request
     
     :param url: str, url string
@@ -84,21 +74,13 @@ def request(url,
     u = urlparse.urlparse(url)
     if u.username is not None:
         password = u.password or ""
-        filters = filters or []
+        filters = kwargs.get('filters') or []
         url = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
             u.path, u.params, u.query, u.fragment))
         filters.append(BasicAuth(u.username, password))
-   
-    http_client = HttpRequest(
-            timeout=timeout, 
-            filters=filters,
-            follow_redirect=follow_redirect, 
-            force_follow_redirect=force_follow_redirect,
-            max_follow_redirect=max_follow_redirect,
-            decompress=decompress,
-            pool_instance=pool_instance,
-            conn_manager=conn_manager,
-            response_class=response_class,
-            **ssl_args)
+  
+        kwargs['filters'] = filters
+    
+    http_client = Client(**kwargs)
     return http_client.request(url, method=method, body=body, 
-        headers=headers)
+            headers=headers)

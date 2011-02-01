@@ -10,6 +10,7 @@ if size > MAX_BODY or memory. It's now possible to rewind
 read or restart etc ... It's based on TeeInput from Gunicorn.
 
 """
+import copy
 import os
 try:
     from cStringIO import StringIO
@@ -18,47 +19,31 @@ except ImportError:
 import tempfile
 
 
-from restkit.http.body import ChunkedReader, LengthReader, EOFReader
-from restkit.errors import UnexpectedEOF
-from restkit.util import sock
+from .http import LengthReader
+from . import sock
 
 class TeeInput(object):
     
     CHUNK_SIZE = sock.CHUNK_SIZE
     
-    def __init__(self, response, release_connection = None):
+    def __init__(self, resp, client):
         self.buf = StringIO()
-        self.response = response
-        self.release_connection = release_connection
-        self._len = None
-        self._clen = 0
+        self.resp = resp
+        self.client = client
+        self._sock = client._sock
+        self._sock_key = copy.copy(client._sock_key)
         self.eof = False
         
         # set temporary body
-        if isinstance(response.body.reader, LengthReader):
-            self._len = response.body.reader.length 
-            if (response.body.reader.length <= sock.MAX_BODY):
+        if isinstance(resp.body.reader, LengthReader):
+            clen = int(resp.headers.iget('content-length'))
+            
+            if (clen <= sock.MAX_BODY):
                 self.tmp = StringIO()
             else:
                 self.tmp = tempfile.TemporaryFile()
         else:
             self.tmp = tempfile.TemporaryFile()
-                       
-    @property
-    def len(self):
-        if self._len is not None: 
-            return self._len
-        
-        if not self.eof:
-            pos = self.tmp.tell()
-            self.tmp.seek(0, 2)
-            while True:
-                if not self._tee(self.CHUNK_SIZE):
-                    break
-            self.tmp.seek(pos)
-        self._len = self._tmp_size()
-        return self._len
-    __len__ = len
         
     def seek(self, offset, whence=0):
         """ naive implementation of seek """
@@ -167,31 +152,22 @@ class TeeInput(object):
         """ fetch partial body"""
         buf2 = self.buf
         buf2.seek(0, 2) 
-        chunk = self.response.body.read(length)
+        chunk = self.resp.body.read(length)
         if chunk:
             self.tmp.write(chunk)
             self.tmp.flush()
             self.tmp.seek(0, 2)
-            self._clen += len(chunk)
             
-            # do we need to close the socket
-            if self._len is not None and self._clen >= self._len:
-                self._finalize()
             return chunk
                 
         self._finalize()
         return ""
         
     def _close_unreader(self):
-        if self.response.should_close():
-            self.response.unreader.close()
-        elif callable(self.release_connection):
-            if not self.eof:
-                # read remaining data
-                while True:
-                    if not self.response.body.read(self.CHUNK_SIZE):
-                        break          
-            self.release_connection()
+
+        if not self.eof:
+            self.resp.body.discard()
+        self.client.release_connection(self._sock_key, self._sock)
             
     def _finalize(self):
         """ here we wil fetch final trailers

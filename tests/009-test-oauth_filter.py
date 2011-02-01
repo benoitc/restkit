@@ -19,7 +19,7 @@ except ImportError:
 import urllib
 
 from restkit import request, OAuthFilter
-from restkit.util.oauth2 import Consumer
+from restkit.oauth2 import Consumer
 import t
 
 

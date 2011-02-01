@@ -14,6 +14,7 @@ try:
 except ImportError:
     from StringIO import StringIO
 
+from .datastructures import MultiDict
 from .errors import *
 
 
@@ -394,7 +395,7 @@ class Request(object):
     def __init__(self, unreader, decompress=True):
         self.unreader = unreader
         self.version = None
-        self.headers = []
+        self.headers = MultiDict() 
         self.trailers = []
         self.body = None
         self.encoding = None
@@ -472,10 +473,9 @@ class Request(object):
         self.reason = matchs.group(2)
 
     def parse_headers(self, data):
-        headers = []
+        headers = MultiDict()
 
         # Split lines on \r\n keeping the \r\n on each line
-        lines = []
         lines = [line + "\r\n" for line in data.split("\r\n")]
 
         # Parse headers into key/value pairs paying attention
@@ -496,22 +496,26 @@ class Request(object):
                 value.append(lines.pop(0))
             value = ''.join(value).rstrip()
             
-            headers.append((name, value))
+            headers.add(name, value)
         return headers
 
     def set_body_reader(self):
+        clen = self.headers.iget('content-length')
+        te = self.headers.iget('transfer-encoding')
+        encoding = self.headers.iget('content-encoding')
+
         chunked = False
         clength = None
-        for (name, value) in self.headers:
-            if name.upper() == "CONTENT-LENGTH":
-                try:
-                    clength = int(value)
-                except ValueError:
-                    clength = None
-            elif name.upper() == "TRANSFER-ENCODING":
-                chunked = value.lower() == "chunked"
-            elif name.upper() == "CONTENT-ENCODING":
-                self.encoding = value.lower()
+        if clen is not None:
+            try:
+                clength = int(clen)
+            except ValueError:
+                pass
+        elif te is not None:
+            chunked = te.lower() == "chunked"
+
+        if encoding:
+            self.encoding = encoding.lower()
 
         if chunked:
             reader = ChunkedReader(self, self.unreader)
@@ -529,11 +533,11 @@ class Request(object):
             self.body = Body(reader)
 
     def should_close(self):
-        for (h, v) in self.headers:
-            if h.lower() == "connection":
-                if v.lower().strip() == "close":
-                    return True
-                elif v.lower().strip() == "keep-alive":
-                    return False
+        connection = self.headers.ifind("connection")
+
+        if connection.lower().strip() == "close":
+            return True
+        elif connection.lower().strip() == "keep-alive":
+            return False
         return self.version <= (1, 0)
 

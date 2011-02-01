@@ -7,51 +7,24 @@ import socket
 
 CHUNK_SIZE = (16 * 1024)
 MAX_BODY = 1024 * 112
+DNS_TIMEOUT = 60
 
 try:
     import ssl # python 2.6
     have_ssl = True
 except ImportError:
     have_ssl = False
-        
-if not hasattr(socket, '_GLOBAL_DEFAULT_TIMEOUT'): # python < 2.6
-    _GLOBAL_DEFAULT_TIMEOUT = object()
-else:
-    _GLOBAL_DEFAULT_TIMEOUT = socket._GLOBAL_DEFAULT_TIMEOUT
-    
+
+ 
 _allowed_ssl_args = ('keyfile', 'certfile', 'server_side',
                     'cert_reqs', 'ssl_version', 'ca_certs', 
                     'do_handshake_on_connect', 'suppress_ragged_eofs')
 
-def connect(address, is_ssl, timeout=_GLOBAL_DEFAULT_TIMEOUT, **ssl_args):
-    ssl_args = ssl_args or {}
-    msg = "getaddrinfo returns an empty list"
-    host, port = address
-    for res in socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM):
-        af, socktype, proto, canonname, sa = res
-        sock = None
-        try:
-            sock = socket.socket(af, socktype, proto)
-            if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
-                sock.settimeout(timeout)
-            sock.connect(sa)
-            if is_ssl:
-                if not have_ssl:
-                    raise ValueError("https isn't supported.  On python 2.5x,"
-                                + " https support requires ssl module "
-                                + "(http://pypi.python.org/pypi/ssl) "
-                                + "to be intalled.")
-                                
-                for arg in ssl_args:
-                    if arg not in _allowed_ssl_args:
-                        raise TypeError('connect() got an unexpected keyword argument %r' % arg)   
-                return ssl.wrap_socket(sock, **ssl_args)
-            return sock
-        except socket.error, msg:
-            if sock is not None:
-                sock.close()
-    raise socket.error, msg
-    
+def validate_ssl_args(ssl_args):
+    for arg in ssl_args:
+        if arg not in _allowed_ssl_args:
+            raise TypeError('connect() got an unexpected keyword argument %r' % arg)   
+
 def close(skt):
     if not skt or not hasattr(skt, "close"): return
     try:

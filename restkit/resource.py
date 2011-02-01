@@ -15,10 +15,9 @@ import urlparse
 
 from .errors import ResourceNotFound, Unauthorized, RequestFailed,\
 ParserError, RequestError
-from .client import HttpRequest, HttpResponse
+from .client import Client, ClientResponse
 from .filters import BasicAuth
-from . import util
-from .conn import get_default_manager
+import util as util
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
@@ -28,9 +27,8 @@ class Resource(object):
     charset = 'utf-8'
     encode_keys = True
     safe = "/:"
-    keepalive = True
     basic_auth_url = True
-    response_class = HttpResponse
+    response_class = ClientResponse
     
     def __init__(self, uri, **client_opts):
         """Constructor for a `Resource` object.
@@ -50,12 +48,7 @@ class Resource(object):
         # set default response_class
         if self.response_class is not None and \
                 not 'response_class' in client_opts:
-            client_opts['response_class'] = self.response_class
-
-        # set default pool if needed
-        if not 'conn_manager' in client_opts:
-            if not 'pool_instance' in client_opts and self.keepalive:
-                client_opts['conn_manager'] = get_default_manager()
+            client_opts['response_class'] = self.response_class 
 
         self.filters = client_opts.get('filters') or []
         self.uri = uri
@@ -75,6 +68,7 @@ class Resource(object):
                     u.path, u.params, u.query, u.fragment))
 
         self.client_opts = client_opts
+        self.client = Client(**client_opts)
         
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
@@ -106,16 +100,7 @@ class Resource(object):
                                                 
         obj = type(self)(new_uri, **self.initial['client_opts'])
         return obj
-        
-    def close(self):
-        """ Close all the connections related to the resource """
-        pool = self.client_opts.get('pool_instance')
-        if not pool: 
-            return
-        
-        parsed_url = urlparse.urlparse(self.uri)
-        pool.clear_host(util.parse_netloc(parsed_url))
- 
+         
     def get(self, path=None, headers=None, params_dict=None, **params):
         """ HTTP GET         
         
@@ -199,8 +184,7 @@ class Resource(object):
                         **self.make_params(params))
         
             # make request
-            http = HttpRequest(**self.client_opts)
-            resp = http.request(uri, method=method, body=payload, 
+            resp = self.client.request(uri, method=method, body=payload, 
                         headers=self.make_headers(headers))
             
             if resp is None:

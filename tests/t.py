@@ -12,7 +12,7 @@ import tempfile
 
 dirname = os.path.dirname(__file__)
 
-from restkit.client import HttpRequest
+from restkit.client import Client
 from restkit.resource import Resource
 
 from _server_test import HOST, PORT, run_server_test
@@ -61,8 +61,7 @@ class FakeSocket(object):
                 
 class client_request(object):
     
-    def __init__(self, path, pool=False):
-        self.pool = pool
+    def __init__(self, path):
         if path.startswith("http://") or path.startswith("https://"):
             self.url = path
         else:
@@ -70,11 +69,8 @@ class client_request(object):
         
     def __call__(self, func):
         def run():
-            if self.pool:
-                pool_instance = ConnectionPool()
-            else:
-                pool_instance = None
-            cli = HttpRequest(pool_instance=None, timeout=0.5)
+
+            cli = Client(timeout=0.5)
             func(self.url, cli)
         run.func_name = func.func_name
         return run

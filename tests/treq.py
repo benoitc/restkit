@@ -11,6 +11,7 @@ import random
 from StringIO import StringIO
 import urlparse
 
+from restkit.datastructures import MultiDict 
 from restkit.errors import ParseException
 from restkit.http import Request, Unreader
 
@@ -250,6 +251,6 @@ class response(object):
     def same(self, resp, sizer, matcher, exp):
         t.eq(resp.status, exp["status"])
         t.eq(resp.version, exp["version"])
-        t.eq(resp.headers, exp["headers"])
+        t.eq(resp.headers, MultiDict(exp["headers"]))
         matcher(resp, exp["body"], sizer)
         t.eq(resp.trailers, exp.get("trailers", []))
