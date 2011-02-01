@@ -69,8 +69,7 @@ class client_request(object):
         
     def __call__(self, func):
         def run():
-
-            cli = Client(timeout=0.5)
+            cli = Client(timeout=300)
             func(self.url, cli)
         run.func_name = func.func_name
         return run

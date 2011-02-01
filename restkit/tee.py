@@ -35,7 +35,7 @@ class TeeInput(object):
         self.eof = False
         
         # set temporary body
-        if isinstance(resp.body.reader, LengthReader):
+        if isinstance(resp._body.reader, LengthReader):
             clen = int(resp.headers.iget('content-length'))
             
             if (clen <= sock.MAX_BODY):
@@ -158,7 +158,7 @@ class TeeInput(object):
         """ fetch partial body"""
         buf2 = self.buf
         buf2.seek(0, 2) 
-        chunk = self.resp.body.read(length)
+        chunk = self.resp._body.read(length)
         if chunk:
             self.tmp.write(chunk)
             self.tmp.flush()
@@ -172,8 +172,9 @@ class TeeInput(object):
     def _close_unreader(self):
 
         if not self.eof:
-            self.resp.body.discard()
-        self.client.release_connection(self._sock_key, self._sock)
+            self.resp._body.discard()
+        self.client.release_connection(self._sock_key, self._sock,
+                self.resp.should_close)
             
     def _finalize(self):
         """ here we wil fetch final trailers

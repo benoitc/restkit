@@ -4,9 +4,16 @@
 # See the NOTICE for more information.
 
 import urlparse
-from .. import request
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
+
+from ..client import Client 
 from ..globals import _manager 
 from ..sock import MAX_BODY
+from ..util import rewrite_location
 
 ALLOWED_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
 
@@ -18,16 +25,15 @@ WEBOB_ERROR = ("Content-Length is set to -1. This usually mean that WebOb has "
         "proxy: ``req.content_length = str(len(req.body));`` "
         "req.get_response(proxy)")
 
-
 class Proxy(object):
     """A proxy wich redirect the request to SERVER_NAME:SERVER_PORT
     and send HTTP_HOST header"""
 
-    def __init__(self, pool=None, allowed_methods=ALLOWED_METHODS,
+    def __init__(self, manager=None, allowed_methods=ALLOWED_METHODS,
             strip_script_name=True, **kwargs):
-        self.pool = pool 
         self.allowed_methods = allowed_methods
         self.strip_script_name = strip_script_name
+        self.client = Client(manager=manager)
 
     def extract_uri(self, environ):
         port = None
@@ -81,27 +87,30 @@ class Proxy(object):
         if new_headers.get('Content-Length', '0') == '-1':
             raise ValueError(WEBOB_ERROR)
 
-        response = request(uri, method,
-                           body=environ['wsgi.input'], headers=new_headers,
-                           pool_instance=self.pool)
+        response = self.client.request(uri, method, body=environ['wsgi.input'], 
+                headers=new_headers)
 
         if 'location' in response:
+            if self.strip_script_name:
+                prefix_path = environ['SCRIPT_NAME']
+
+            new_location = rewrite_location(host_uri, response.location,
+                    prefix_path=prefix_path)
+       
             headers = []
             for k, v in response.headerslist:
                 if k.lower() == 'location':
-                    # rewrite location with a relative path. dont want to deal
-                    # with complex url rebuild stuff
-                    if v.startswith(host_uri):
-                        v = v[len(host_uri):]
-                    if self.strip_script_name:
-                        v = environ['SCRIPT_NAME'] + v
+                    v = new_location 
                 headers.append((k, v))
         else:
             headers = response.headerslist
 
         start_response(response.status, headers)
 
-        return response.body_stream() 
+        if method == "HEAD":
+            return StringIO()
+
+        return response.tee()
 
 class TransparentProxy(Proxy):
     """A proxy based on HTTP_HOST environ variable"""
@@ -156,4 +165,3 @@ def make_host_proxy(global_config, uri=None, **local_config):
     config = get_config(local_config)
     print 'Running HostProxy on %s with %s' % (uri, config)
     return HostProxy(uri, **config)
-

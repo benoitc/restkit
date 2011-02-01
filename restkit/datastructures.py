@@ -18,7 +18,7 @@ class MultiDict(DictMixin):
             raise TypeError("MultiDict can only be called with one positional argument")
         if args:
             if isinstance(args[0], MultiDict):
-                items = args[0].items
+                items = args[0]._items
             elif hasattr(args[0], 'iteritems'):
                 items = list(args[0].iteritems())
             elif hasattr(args[0], 'items'):

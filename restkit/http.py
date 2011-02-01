@@ -271,6 +271,7 @@ class Body(object):
         while size > self.buf.tell():
             data = self.reader.read(1024)
             if not len(data):
+                self.closed = True
                 break
             self.buf.write(data)
 
@@ -300,6 +301,7 @@ class Body(object):
         while lsize < size and ch != "\n":
             ch = self.reader.read(1)
             if not len(ch):
+                self.closed = True
                 break
             lsize += 1
             buf.append(ch)
@@ -533,11 +535,12 @@ class Request(object):
             self.body = Body(reader)
 
     def should_close(self):
-        connection = self.headers.ifind("connection")
+        connection = self.headers.iget("connection")
 
-        if connection.lower().strip() == "close":
-            return True
-        elif connection.lower().strip() == "keep-alive":
-            return False
+        if connection is not None:
+            if connection.lower().strip() == "close":
+                return True
+            elif connection.lower().strip() == "keep-alive":
+                return False
         return self.version <= (1, 0)
 

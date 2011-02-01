@@ -67,6 +67,7 @@ def test_009(res):
 def test_010(res):
     r = res.post('/unicode', payload=u"éàù@")
     t.eq(r.body_string(), "éàù@")
+    print "ok"
     r = res.post('/unicode', payload=u"éàù@")
     t.eq(r.body_string(charset="utf-8"), u"éàù@")
 

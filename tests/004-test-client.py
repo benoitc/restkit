@@ -216,7 +216,7 @@ def test_017(u, c):
 
 def test_0018():
     for i in range(10):
-        t.client_request('/large', test_017)
+        t.client_request('/large')(test_017)
         
 @t.client_request('/')
 def test_019(u, c):

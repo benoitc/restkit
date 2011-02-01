@@ -7,6 +7,8 @@ import t
 from _server_test import HOST, PORT
 from restkit.contrib import wsgi_proxy
 
+root_uri = "http://%s:%s" % (HOST, PORT)
+
 def with_webob(func):
     def wrapper(*args, **kwargs):
         from webob import Request
@@ -83,7 +85,7 @@ def test_006(req):
     proxy = wsgi_proxy.Proxy(allowed_methods=['GET'])
     resp = req.get_response(proxy)
     body = resp.body
-    assert resp.location == '/complete_redirect', str(resp)
+    assert resp.location == '%s/complete_redirect' % root_uri, str(resp)
 
 @with_webob
 def test_007(req):
@@ -92,7 +94,9 @@ def test_007(req):
     proxy = wsgi_proxy.Proxy(allowed_methods=['GET'])
     resp = req.get_response(proxy)
     body = resp.body
-    assert resp.location == '/complete_redirect', str(resp)
+
+    print resp.location
+    assert resp.location == '%s/complete_redirect' % root_uri, str(resp)
 
 @with_webob
 def test_008(req):
@@ -102,7 +106,7 @@ def test_008(req):
     proxy = wsgi_proxy.Proxy(allowed_methods=['GET'], strip_script_name=True)
     resp = req.get_response(proxy)
     body = resp.body
-    assert resp.location == '/name/complete_redirect', str(resp)
+    assert resp.location == '%s/name/complete_redirect' % root_uri, str(resp)
 
 
 

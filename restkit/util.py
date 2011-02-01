@@ -4,11 +4,15 @@
 # See the NOTICE for more information.
 
 import os
+import re
 import time
 import urllib
+import urlparse
 import warnings
 
 from .errors import InvalidUrl
+
+absolute_http_url_re = re.compile(r"^https?://", re.I)
 
 try:#python 2.6, use subprocess
     import subprocess
@@ -174,6 +178,19 @@ def make_uri(base, *args, **kwargs):
 
     return ''.join(retval)
 
+
+def rewrite_location(host_uri, location, prefix_path=None):
+    prefix_path = prefix_path or ''
+    url = urlparse.urlparse(location)
+    host_url = urlparse.urlparse(host_uri)
+
+    if not absolute_http_url_re.match(location):
+        # remote server doesn't follow rfc2616
+        proxy_uri = '%s%s' % (host_uri, prefix_path)
+        return urlparse.urljoin(proxy_uri, location)
+
+    return urlparse.urlunparse((host_url.scheme, host_url.netloc, 
+        prefix_path + url.path, url.params, url.query, url.fragment))
 
 def replace_header(name, value, headers):
     idx = -1

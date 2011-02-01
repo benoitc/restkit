@@ -5,6 +5,7 @@
 
 import copy
 import errno
+import logging
 import mimetypes
 import os
 import threading
@@ -14,6 +15,10 @@ import types
 import urlparse
 import uuid
 
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 
 try:
     import ssl # python 2.6
@@ -31,7 +36,7 @@ from . import http
 
 from .sock import close, send, sendfile, sendlines, send_chunk
 from .tee import TeeInput
-from .util import parse_netloc, to_bytestring
+from .util import parse_netloc, to_bytestring, rewrite_location
 
 MAX_CLIENT_TIMEOUT=300
 MAX_CLIENT_CONNECTIONS = 5
@@ -40,6 +45,59 @@ CLIENT_WAIT_TRIES = 1.0
 MAX_FOLLOW_REDIRECTS = 5
 USER_AGENT = "restkit/%s" % __version__
 
+log = logging.getLogger(__name__)
+
+
+class BodyWrapper(object):
+
+    def __init__(self, resp, client):
+        self.resp = resp
+        self.body = resp._body
+        self.client = client
+        self._sock = client._sock
+        self._sock_key = copy.copy(client._sock_key)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, traceback):
+        self.close() 
+
+    def close(self):
+        """ release connection """ 
+        if not self.body.closed:
+            self.resp._body.discard()
+        self.client.release_connection(self._sock_key, 
+                self._sock, self.resp.should_close)
+    
+    def __iter__(self):
+        return self
+
+    def next(self):
+        try:
+            return self.body.next()
+        except StopIteration:
+            self.close() 
+            raise
+
+    def read(self, size=None):
+        data = self.body.read(size=size)
+        if not data:
+            self.close()
+        return data
+
+    def readline(self, size=None):
+        line = self.body.readline(size=size)
+        if not line: 
+            self.close()
+        return line
+
+    def readlines(self, size=None):
+        lines = self.body.readlines(size=size)
+        if self.body.close:
+            self.close()
+        return line
+
 
 class ClientResponse(object):
 
@@ -47,40 +105,65 @@ class ClientResponse(object):
     unicode_errors = 'strict'
 
     def __init__(self, client, resp):
-        
-
         self.client = client
+        self._sock = client._sock
+        self._sock_key = copy.copy(client._sock_key)
+
+        self._body = resp.body
+
+        # response infos
         self.status = resp.status
         self.status_int = resp.status_int
         self.version = resp.version
         self.headerslist = resp.headers.items()
         self.headers = resp.headers
+        self.location = resp.headers.iget('location')
+        self.final_url = client.url
+        self.should_close = resp.should_close()
 
-        self.body = TeeInput(resp, client)
 
-        if client._initial_url:
-            self.final_url = url
+        self._closed = False
+        self._already_read = False
+
+        #if client.method == "HEAD":
+        #    """ no body on HEAD, release the connection now """
+        #    self.client.release_connection(self._sock_key, self._sock,
+        #            resp.should_close())
 
     def __getitem__(self, key):
         try:
             return getattr(self, key)
         except AttributeError:
             pass
-        return self.headers[key.lower()]
+        return self.headers.iget(key)
     
     def __contains__(self, key):
-        return (key.lower() in self.headers)
+        return (self.headers.iget(key) is not None)
 
     def __iter__(self):
         return self.headers.iteritems()
 
+    def release_connection(self):
+        """ release the connection in the client or pool """
+        self.client.release_connection(self._sock_key, 
+                self._sock, self.should_close)
+        self._closed = True
+
+    def can_read(self):
+        return not self._closed and not self._already_read
+
     def body_string(self, charset=None, unicode_errors="strict"):
         """ return body string, by default in bytestring """
-        
-        # always seek
-        self.body.seek(0)
+       
+        if not self.can_read():
+            raise AlreadyRead() 
 
-        body = self.body.read()
+        body = self._body.read()
+        self._already_read = True
+        
+        # release connection
+        self.release_connection()
+
         if charset is not None:
             try:
                 body = body.decode(charset, unicode_errors)
@@ -89,9 +172,21 @@ class ClientResponse(object):
         return body
 
     def body_stream(self):
-         # always seek
-        self.body.seek(0)
-        return self.body
+        """ stream body """ 
+        if not self.can_read():
+            raise AlreadyRead()
+
+        self._already_read = True
+
+        return BodyWrapper(self, self.client) 
+
+    def tee(self):
+        """ copy response input to standard output or a file if length >
+        sock.MAX_BODY. This make possible to reuse it in your
+        appplication. When all the input has been read, connection is
+        released """
+
+        return TeeInput(self, self.client)
 
 
 class Client(object):
@@ -102,7 +197,7 @@ class Client(object):
     def __init__(self,
             follow_redirect=False,
             force_follow_redirect=False,
-            max_follow_redirect=False,
+            max_follow_redirect=MAX_FOLLOW_REDIRECTS,
             filters=None, 
             decompress=True, 
             manager=None,
@@ -120,15 +215,21 @@ class Client(object):
         self.filters = Filters(filters)
         self.decompress = decompress
         
+        # set manager
         if manager is None:
             manager = _manager
         self._manager = manager
+
+        # change default response class 
         if response_class is not None:
-            self.response_class =response_class
+            self.response_class = response_class
+
         self.max_conn = max_conn
         self.max_tries = max_tries
         self.wait_tries = wait_tries
         self.timeout = timeout
+
+        self._nb_redirections = self.max_follow_redirect
         self._connections = {}
         self._url = None
         self._initial_url = None
@@ -136,12 +237,14 @@ class Client(object):
         self._headers = None 
         self._sock_key = None
         self._sock = None
+        self._original = None
 
-        self.req_method = 'GET'
-        self.req_body = None
+        self.method = 'GET'
+        self.body = None
 
         self.ssl_args = ssl_args or {}
         self._lock = threading.Lock()
+        
 
     def _headers__get(self):
         if not isinstance(self._headers, MultiDict):
@@ -149,7 +252,7 @@ class Client(object):
         return self._headers
     def _headers__set(self, value):
         self._headers = MultiDict(value)
-    req_headers = property(_headers__get, _headers__set, doc=_headers__get.__doc__)
+    headers = property(_headers__get, _headers__set, doc=_headers__get.__doc__)
     
     
     def write_callback(self, cb):
@@ -163,42 +266,39 @@ class Client(object):
         return urlparse.urlunparse(self._url)
     def _url__set(self, string):
         self._url = urlparse.urlparse(string)
-    req_url = property(_url__get, _url__set, doc="current url to request")
+    url = property(_url__get, _url__set, doc="current url to request")
+
+    def _parsed_url__get(self):
+        if self._url is None:
+            raise ValueError("url isn't set")
+        return self._url
+    parsed_url = property(_parsed_url__get)
 
     def _host__get(self):
         try:
-            host = self._url.netloc.encode('ascii')
+            h = self.parsed_url.netloc.encode('ascii')
         except UnicodeEncodeError:
-            host = self._url.netloc.encode('idna')
+            h = self.parsed_url.netloc.encode('idna')
         
-        hdr_host = self.req_headers.iget("host")
+        hdr_host = self.headers.iget("host")
         if not hdr_host:
-            return host
+            return h
         return hdr_host
-    req_host = property(_host__get, doc="host requested")
+    host = property(_host__get)
 
     def _path__get(self):
-        path = self._url.path or '/'
+        path = self.parsed_url.path or '/'
 
         return urlparse.urlunparse(('','', path, self._url.params, 
             self._url.query, self._url.fragment))
-    req_path = property(_path__get, doc="request path")
+    path = property(_path__get, doc="request path")
 
     def req_is_chunked(self):
-        te = self.req_headers.iget("transfer-encoding")
+        te = self.headers.iget("transfer-encoding")
         return (te is not None and te.lower() == "chunked")
 
     def req_is_ssl(self):
-        if not self._url:
-            return False
-        return self._url.scheme == "ssl"
-
-    def request(self, url, method='GET', body=None, headers=None):
-        self.req_url = url
-        self.req_method = method
-        self.req_body = body
-        self.req_headers = copy.copy(headers) or []
-        return self.perform()
+        return self.parsed_url.scheme == "ssl"
 
     def connect(self, addr, ssl):
         for res in socket.getaddrinfo(addr[0], addr[1], 0, 
@@ -224,7 +324,7 @@ class Client(object):
         raise socket.error, "getaddrinfo returns an empty list" 
 
     def get_connection(self):
-        addr = parse_netloc(self._url)
+        addr = parse_netloc(self.parsed_url)
         
         ssl = self.req_is_ssl()
         self._sock_key = (addr, ssl)
@@ -240,7 +340,12 @@ class Client(object):
         finally:
             self._lock.release()
 
-    def release_connection(self, key, sck):
+    def release_connection(self, key, sck, should_close=False):
+        if should_close:
+            print "should_close"
+            close(sck)
+            return
+
         self._lock.acquire()
         try:
             if key in self._connections or \
@@ -256,61 +361,60 @@ class Client(object):
         self._sock = None
 
     def parse_body(self):
-        if not self.req_body:
-            if self.req_method in ('POST', 'PUT',):
-                self.req_headers['Content-Length'] = 0
+        if not self.body:
+            if self.method in ('POST', 'PUT',):
+                self.headers['Content-Length'] = 0
             return
 
-        ctype = self.req_headers.iget('content-type')
-        clen = self.req_headers.iget('content-length')
+        ctype = self.headers.iget('content-type')
+        clen = self.headers.iget('content-length')
        
-        if isinstance(self.req_body, dict):
+        if isinstance(self.body, dict):
             if ctype is not None and \
                     ctype.startswith("multipart/form-data"):
                 type_, opts = cgi.parse_header(ctype)
                 boundary = opts.get('boundary', uuid.uuid4().hex)
-                self.req_body, self.req_headers = multipart_form_encode(body, 
-                                            self.req_headers, boundary)
+                self.body, self.headers = multipart_form_encode(body, 
+                                            self.headers, boundary)
             else:
                 ctype = "application/x-www-form-urlencoded; charset=utf-8"
-                self.req_body = form_encode(self.req_body)
-        elif hasattr(self.req_body, "boundary"):
-            ctype = "multipart/form-data; boundary=%s" % self.req_body.boundary
-            clen = self.req_body.get_size()
+                self.body = form_encode(self.body)
+        elif hasattr(self.body, "boundary"):
+            ctype = "multipart/form-data; boundary=%s" % self.body.boundary
+            clen = self.body.get_size()
 
         if not ctype:
             ctype = 'application/octet-stream'
-            if hasattr(self.req_body, 'name'):
-                ctype =  mimetypes.guess_type(self.req_body.name)[0]
+            if hasattr(self.body, 'name'):
+                ctype =  mimetypes.guess_type(self.body.name)[0]
         
         if not clen:
-            if hasattr(self.req_body, 'fileno'):
+            if hasattr(self.body, 'fileno'):
                 try:
-                    self.req_body.flush()
+                    self.body.flush()
                 except IOError:
                     pass
                 try:
-                    fno = self.req_body.fileno()
+                    fno = self.body.fileno()
                     clen = str(os.fstat(fno)[6])
                 except  IOError:
                     if not self.req_is_chunked():
-                        clen = len(self.req_body.read())
-            elif hasattr(self.req_body, 'getvalue') and not \
+                        clen = len(self.body.read())
+            elif hasattr(self.body, 'getvalue') and not \
                     self.req_is_chunked():
-                clen = len(self.req_body.getvalue())
-            elif isinstance(self.req_body, types.StringTypes):
-                print "ici"
-                self.req_body = to_bytestring(self.req_body)
-                clen = len(self.req_body)
+                clen = len(self.body.getvalue())
+            elif isinstance(self.body, types.StringTypes):
+                self.body = to_bytestring(self.body)
+                clen = len(self.body)
 
         if clen is not None:
-            self.req_headers['Content-Length'] = clen
+            self.headers['Content-Length'] = clen
         elif not self.req_is_chunked():
             raise RequestError("Can't determine content length and " +
                     "Transfer-Encoding header is not chunked")
 
         if ctype is not None:
-            self.req_headers['Content-Type'] = ctype
+            self.headers['Content-Type'] = ctype
 
     def make_headers_string(self):
         if self.version == (1,1):
@@ -318,54 +422,83 @@ class Client(object):
         else:
             httpver = "HTTP/1.0"
 
-        ua = self.req_headers.iget('user_agent')
-        host = self.req_host
-        accept_encoding = self.req_headers.iget('accept-encoding')
+        ua = self.headers.iget('user_agent')
+        host = self.host
+        accept_encoding = self.headers.iget('accept-encoding')
 
         headers = [
-            "%s %s %s\r\n" % (self.req_method, self.req_path, httpver),
+            "%s %s %s\r\n" % (self.method, self.path, httpver),
             "Host: %s\r\n" % host,
             "User-Agent: %s\r\n" % ua or USER_AGENT,
             "Accept-Encoding: %s\r\n" % accept_encoding or 'identity'
         ]
 
- 
         headers.extend(["%s: %s\r\n" % (k, str(v)) for k, v in \
-                self.req_headers.items() if k.lower() not in \
+                self.headers.items() if k.lower() not in \
                 ('user-agent', 'host', 'accept-encoding',)])
-        return "%s\r\n" % "".join(headers) 
 
+        log.debug("Send headers: %s" % headers)
+        return "%s\r\n" % "".join(headers)
+
+    def reset_request(self):
+        if self._original is None:
+            return
+        
+        self.url = self._original["url"] 
+        self.method = self._original["method"]
+        self.body = self._original["body"]
+        self.headers = self._original["headers"]
+        self._nb_redirections = self.max_follow_redirect 
+        
     def perform(self):
-        if not self._url:
-            raise RequestError("req_url isn't set")
+        if not self.url:
+            raise RequestError("url isn't set")
+
+        log.debug("Start to perform request: %s %s %s" % (self.method,
+            self.host, self.path))
+
+        self._original = dict( 
+                url = self.url,
+                method = self.method,
+                body = self.body,
+                headers = self.headers
+       ) 
+
         tries = self.max_tries
         wait = self.wait_tries
         while tries > 0:
             try:
+                # generate final body
                 self.parse_body()
-                
-                headers_str = self.make_headers_string()
                 
                 # get or create a connection to the remote host
                 self._sock = self.get_connection()
-
+                
+                # set socket timeout in case default has changed
+                self._sock.settimeout(self.timeout)
+                
+                # apply on_request filters
+                self.filters.apply("on_request", self)
+                
                 # send headers
+                headers_str = self.make_headers_string()
                 self._sock.sendall(headers_str)
-
-                chunked = self.req_is_chunked()
                 
                 # send body
-                if self.req_body is not None:
-                    if hasattr(self.req_body, 'read'):
-                        if hasattr(self.req_body, 'seek'): self.req_body.seek(0)
-                        sendfile(self._sock, self.req_body, chunked)
-                    elif isinstance(self.req_body, types.StringTypes):
-                        send(self._sock, self.req_body, chunked)
-                    else:
-                        sendlines(self._sock, self.req_body, chunked)
-                    if chunked:
-                        send_chunk(s, "")
+                if self.body is not None:
+                    chunked = self.req_is_chunked()
+                    log.debug("send body (chunked: %s) %s" % (chunked,
+                        type(self.body)))
 
+                    if hasattr(self.body, 'read'):
+                        if hasattr(self.body, 'seek'): self.body.seek(0)
+                        sendfile(self._sock, self.body, chunked)
+                    elif isinstance(self.body, types.StringTypes):
+                        send(self._sock, self.body, chunked)
+                    else:
+                        sendlines(self._sock, self.body, chunked)
+                    if chunked:
+                        send_chunk(self._sock, "")
                 
                 return self.get_response()
             except socket.gaierror, e:
@@ -387,48 +520,82 @@ class Client(object):
             except Exception, e:
                 # unkown error
                 self.close_connection()
-                raise RequestError("unknown: '%s'" % str(e))
+                raise
 
             # time until we retry.
             time.sleep(wait)
             wait = wait * 2
-            tries = tries + 1
+            tries = tries - 1
 
-    def redirect(self, resp, location):
+            # reset request
+            self.reset_request()
+
+    def request(self, url, method='GET', body=None, headers=None):
+        self.url = url
+        self.method = method
+        self.body = body
+        self.headers = copy.copy(headers) or []
+        self._nb_redirections = self.max_follow_redirect
+        return self.perform()
+
+    def redirect(self, resp, location, method=None):
+        if self._nb_redirections <= 0:
+            raise RedirectLimit("Redirection limit is reached")
+
         if self._initial_url is None:
-            self._initial_url = self.req_url
-        self.url = location
+            self._initial_url = self.url
+
+        # discard response body and reset request informations
         resp.body.discard()
-        self.perform()
+        self.reset_request()
+
+        # make sure location follow rfc2616
+        location = rewrite_location(self.url, location)
+        
+        log.debug("Redirect to %s" % location)
+
+        # change request url and method if needed
+        self.url = location
+        if method is not None:
+            self.method = "GET"
+
+        self._nb_redirections -= 1
+        return self.perform()
 
     def get_response(self):
         unreader = http.Unreader(self._sock)
 
+        log.info("Start to parse response")
         while True:
             resp = http.Request(unreader)
             if resp.status_int != 100:
                 break
+
+            log.debug("Go 100-Continue header")
         
         location = resp.headers.iget('location')
 
         if self.follow_redirect:
             if resp.status_int in (301, 302, 307,):
-                if self.req_method in ('GET', 'HEAD',) or \
+                if self.method in ('GET', 'HEAD',) or \
                         self.force_follow_redirect:
-                    if hasattr(self.req_body, 'read'):
+                    if hasattr(self.body, 'read'):
                         try:
-                            self.req_body.seek(0)
+                            self.body.seek(0)
                         except AttributeError:
                             raise RequestError("Can't redirect %s to %s "
                                     "because body has already been read"
-                                    % (self.req_url, location))
-                    return self.redirect(location)
+                                    % (self.url, location))
+                    return self.redirect(resp, location)
 
-            elif  resp.status_int == 303 and self.req_method in ('GET',
-                    'HEAD'):
-                return self.redirect(resp, location)
+            elif resp.status_int == 303 and self.method == "POST":
+                return self.redirect(resp, location, method="GET")
+       
+        # apply final response
+        self.filters.apply("on_response", self, resp)
+        
+        # reset request
+        self.reset_request()
 
-        if self.req_method == "HEAD":
-            self.release_connection(self._sock_key, self._sock)
-
+        log.debug("return response class")
         return self.response_class(self, resp)

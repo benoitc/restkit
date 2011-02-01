@@ -48,9 +48,9 @@ class BasicAuth(object):
     def __init__(self, username, password):
         self.credentials = (username, password)
     
-    def on_request(self, req, tries):
+    def on_request(self, client):
         encode = base64.b64encode("%s:%s" % self.credentials)
-        req.headers.append(('Authorization', 'Basic %s' %  encode))
+        client.headers['Authorization'] = 'Basic %s' %  encode
 
 
 class SimpleProxy(object):
@@ -59,9 +59,12 @@ class SimpleProxy(object):
     connect to the proxy and modify connection headers.
     """
     
-    def on_connect(self, conn):
+    def on_connect(self, sock, ssl):
         proxy_auth = _get_proxy_auth()
-        if conn.uri.is_ssl == "https":
+        if ssl:
+            # open a tunnel
+
+
             proxy = os.environ.get('https_proxy')
             if proxy:
                 if proxy_auth:
@@ -149,50 +152,44 @@ class OAuthFilter(object):
         self.token = validate_token(token)
         self.method = method or SignatureMethod_HMAC_SHA1()
   
-    def on_path(self, req):
-        path = req.uri.path or "/"
+    def on_path(self, client):
+        path = client.parsed_url.path or "/"
         return (self.match.match(path) is not None)
         
-    def on_request(self, req, tries):
-        if tries < 2:
+    def on_request(self, client):
+        if not self.on_path(client):
             return
 
-        if not self.on_path(req):
-            return
-
-        headers = dict(req.headers)
         params = {}
         form = False
-        if req.body and req.body is not None:
-            ctype = headers.get('Content-Type')
+        parsed_url = client.parsed_url
+
+        if client.body and client.body is not None:
+            ctype = client.headers.iget('content-ype')
             if ctype is not None and \
                     ctype.startswith('application/x-www-form-urlencoded'):
                 # we are in a form try to get oauth params from here
                 form = True
-                params = dict(parse_qsl(req.body))
+                params = dict(parse_qsl(client.body))
             
         # update params from quey parameters    
-        params.update(parse_qsl(req.uri.query))
+        params.update(parse_qsl(parsed_url.query))
       
-        raw_url = urlunparse((req.uri.scheme, req.uri.netloc,
-                req.uri.path, '', '', ''))
+        raw_url = urlunparse((parsed_url.scheme, parsed_url.netloc,
+                parsed_url.path, '', '', ''))
         
         oauth_req = Request.from_consumer_and_token(self.consumer, 
-                        token=self.token, http_method=req.method, 
+                        token=self.token, http_method=client.method, 
                         http_url=raw_url, parameters=params)
                     
         oauth_req.sign_request(self.method, self.consumer, self.token)
         
         if form:
-            req.body = oauth_req.to_postdata()
-            req.headers = replace_header('Content-Length', len(req.body),
-                    req.headers)
-        elif req.method in ('GET', 'HEAD'):
-            req.url = req.final_url = oauth_req.to_url()
-            req.uri = urlparse.urlparse(req.url)
+            client.body = oauth_req.to_postdata()
+            client.headers['Content-Length'] = len(client.body)
+        elif client.method in ('GET', 'HEAD'):
+            client.original_url = client.url
+            client.url = oauth_req.to_url()
         else:
             oauth_headers = oauth_req.to_header()
-            for k, v in list(oauth_headers.items()):
-                if not isinstance(v, basestring):
-                    v = str(v)
-                req.headers.append((k.title(), v))
+            client.headers.update(oauth_headers)
