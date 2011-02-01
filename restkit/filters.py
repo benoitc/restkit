@@ -126,7 +126,6 @@ def validate_token(token):
 class OAuthFilter(object):
     """ oauth filter """
 
-    
     def __init__(self, path, consumer, token=None, method=None):
         """ Init OAuthFilter
         

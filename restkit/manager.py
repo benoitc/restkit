@@ -19,7 +19,7 @@ class Manager(object):
         self.timeout = timeout
 
         self.sockets = dict()
-        self.active_socks = dict()
+        self.active_sockets = dict()
         self._lock = threading.Lock()
         self.connections_count = Counter()
 
@@ -90,7 +90,7 @@ class Manager(object):
                 socks.appendleft(sock)
                 self.sockets[key] = socks
                 self.connections_count[key] += 1
-                self.active_sockets[sock.fileno()] = (sock, time.time())
+                self.active_sockets[sock.fileno()] = (sock, time.time())
             else:
                 # close connection if we have enough connections in the
                 # pool.
