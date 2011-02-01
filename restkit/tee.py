@@ -44,6 +44,12 @@ class TeeInput(object):
                 self.tmp = tempfile.TemporaryFile()
         else:
             self.tmp = tempfile.TemporaryFile()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, traceback):
+        return
         
     def seek(self, offset, whence=0):
         """ naive implementation of seek """

@@ -27,7 +27,8 @@ from .errors import *
 from .filters import Filters
 from .forms import multipart_form_encode, form_encode
 from .globals import _manager
-import http
+from . import http
+
 from .sock import close, send, sendfile, sendlines, send_chunk
 from .tee import TeeInput
 from .util import parse_netloc, to_bytestring
