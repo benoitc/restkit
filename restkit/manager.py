@@ -26,12 +26,18 @@ class Manager(object):
         if timeout and timeout is not None:
             self.start()
 
-    def murder_connections(self):
-        for (sock, t0) in self.active_socks.items():
-            diff = time.time() - t0
-            if diff <= self.timeout:
-                continue
-            close(sock)
+    def murder_connections(self, signum, frame):
+        self._lock.acquire()
+        try:
+            active_socks = self.active_socks.copy()
+            for fno, (sock, t0) in active_socks.items():
+                diff = time.time() - t0
+                if diff <= self.timeout:
+                    continue
+                close(sock)
+                del self.active_socks[fno]
+        finally:
+            self._lock.release()
        
     def start(self):
         signal.signal(signal.SIGALRM, self.murder_connections)
@@ -55,10 +61,14 @@ class Manager(object):
             key = (addr, ssl)
             try:
                 socks = self.sockets[key]
-                sock = socks.pop()
+                while True:
+                    sock = socks.pop()
+                    if sock.fileno() in self.active_sockets:
+                        del self.active_sockets[sock.fileno()]
+                        break
+
                 self.sockets[key] = socks
                 self.connections_count[key] -= 1 
-                self.active_socks[sock] = key
                 return sock
             except (IndexError, KeyError,):
                 return None
@@ -80,6 +90,7 @@ class Manager(object):
                 socks.appendleft(sock)
                 self.sockets[key] = socks
                 self.connections_count[key] += 1
+                self.active_sockets[sock.fileno()] = (sock, time.time())
             else:
                 # close connection if we have enough connections in the
                 # pool.
