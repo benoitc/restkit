@@ -31,7 +31,7 @@ from .datastructures import MultiDict
 from .errors import *
 from .filters import Filters
 from .forms import multipart_form_encode, form_encode
-from .globals import _manager
+from .globals import _manager 
 from . import http
 
 from .sock import close, send, sendfile, sendlines, send_chunk
@@ -41,12 +41,11 @@ from .util import parse_netloc, to_bytestring, rewrite_location
 MAX_CLIENT_TIMEOUT=300
 MAX_CLIENT_CONNECTIONS = 5
 MAX_CLIENT_TRIES = 5
-CLIENT_WAIT_TRIES = 1.0
+CLIENT_WAIT_TRIES = 0.3
 MAX_FOLLOW_REDIRECTS = 5
 USER_AGENT = "restkit/%s" % __version__
 
 log = logging.getLogger(__name__)
-
 
 class BodyWrapper(object):
 
@@ -125,8 +124,6 @@ class ClientResponse(object):
         if client.method == "HEAD":
             """ no body on HEAD, release the connection now """
             self._body = StringIO()
-            self.client.release_connection(self._sock_key, self._sock,
-                    resp.should_close())
 
     def __getitem__(self, key):
         try:
@@ -183,11 +180,21 @@ class ClientResponse(object):
         sock.MAX_BODY. This make possible to reuse it in your
         appplication. When all the input has been read, connection is
         released """
+        if not hasattr(self._body, "reader"):
+            # head case
+            return self._body
 
         return TeeInput(self, self.client)
 
 
 class Client(object):
+
+    """ A client handle a connection at a time. A client is threadsafe,
+    but an handled shouldn't be shared between threads. All connections
+    are shared between threads via a pool. 
+    
+    
+    """
 
     version = (1, 1)
     response_class=ClientResponse
@@ -200,7 +207,6 @@ class Client(object):
             decompress=True, 
             manager=None,
             response_class=None,
-            max_conn=MAX_CLIENT_CONNECTIONS,
             timeout=MAX_CLIENT_TIMEOUT,
             force_dns=False,
             max_tries=5,
@@ -222,13 +228,11 @@ class Client(object):
         if response_class is not None:
             self.response_class = response_class
 
-        self.max_conn = max_conn
         self.max_tries = max_tries
         self.wait_tries = wait_tries
         self.timeout = timeout
 
         self._nb_redirections = self.max_follow_redirect
-        self._connections = {}
         self._url = None
         self._initial_url = None
         self._write_cb = None
@@ -239,9 +243,7 @@ class Client(object):
 
         self.method = 'GET'
         self.body = None
-
         self.ssl_args = ssl_args or {}
-        self._lock = threading.Lock()
         
 
     def _headers__get(self):
@@ -299,6 +301,7 @@ class Client(object):
         return self.parsed_url.scheme == "ssl"
 
     def connect(self, addr, ssl):
+        """ create a socket """
         for res in socket.getaddrinfo(addr[0], addr[1], 0, 
                 socket.SOCK_STREAM):
             af, socktype, proto, canonname, sa = res
@@ -322,47 +325,34 @@ class Client(object):
         raise socket.error, "getaddrinfo returns an empty list" 
 
     def get_connection(self):
+        """ get a connection from the pool or create new one. """
         addr = parse_netloc(self.parsed_url)
-        
         ssl = self.req_is_ssl()
         self._sock_key = (addr, ssl)
-    
-        self._lock.acquire()
-        try:
-            try:
-                sock = self._connections.pop(self._sock_key)
-            except KeyError:
-                sock = self._manager.find_socket(addr, ssl)
 
-            if sock is None:
-                sock = self.connect(addr, ssl)
-            return sock
-        finally:
-            self._lock.release()
+        sock = self._manager.find_socket(addr, ssl)
+        if sock is None:
+            sock = self.connect(addr, ssl)
+        return sock
 
     def release_connection(self, key, sck, should_close=False):
+        """ release a connection to the pool """
+
         if should_close:
             log.debug("close connection")
             close(sck)
             return
 
         log.debug("release connection")
-        
-        self._lock.acquire()
-        try:
-            if key in self._connections or \
-                    len(self._connections) > self.max_conn: 
-                self._manager.store_socket(sck, key[0], key[1])
-            else:
-                self._connections[key] = sck
-        finally:
-            self._lock.release()
+        self._manager.store_socket(sck, key[0], key[1])
 
     def close_connection(self):
+        """ close a connection """
         close(self._sock)
         self._sock = None
 
     def parse_body(self):
+        """ transform a body if needed and set appropriate headers """
         if not self.body:
             if self.method in ('POST', 'PUT',):
                 self.headers['Content-Length'] = 0
@@ -419,6 +409,7 @@ class Client(object):
             self.headers['Content-Type'] = ctype
 
     def make_headers_string(self):
+        """ create final header string """
         if self.version == (1,1):
             httpver = "HTTP/1.1"
         else:
@@ -443,6 +434,8 @@ class Client(object):
         return "%s\r\n" % "".join(headers)
 
     def reset_request(self):
+        """ reset a client handle to its intial state before performing.
+        It doesn't handle case where body has already been consumed """
         if self._original is None:
             return
         
@@ -450,9 +443,11 @@ class Client(object):
         self.method = self._original["method"]
         self.body = self._original["body"]
         self.headers = self._original["headers"]
-        self._nb_redirections = self.max_follow_redirect 
+        self._nb_redirections = self.max_follow_redirect
         
     def perform(self):
+        """ perform the request. If an error happen it will first try to
+        restart it """
         if not self.url:
             raise RequestError("url isn't set")
 
@@ -508,14 +503,15 @@ class Client(object):
                 raise RequestError(str(e))
             except socket.timeout, e:
                 self.close_connection()
+                wait = wait * 2
                 if tries <= 0:
                     raise RequestTimeout(str(e))
             except socket.error, e:
                 self.close_connection()
-
+                log.debug("socket error: %s" % str(e))
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
                         errno.EPIPE, errno.ECONNREFUSED, 
-                        errno.ECONNRESET) or tries <= 0:
+                        errno.ECONNRESET, errno.EBADF) or tries <= 0:
                     raise RequestError(str(e))
             except (KeyboardInterrupt, SystemExit):
                 break
@@ -526,13 +522,14 @@ class Client(object):
 
             # time until we retry.
             time.sleep(wait)
-            wait = wait * 2
+            
             tries = tries - 1
 
             # reset request
             self.reset_request()
 
     def request(self, url, method='GET', body=None, headers=None):
+        """ perform immediatly a new request """
         self.url = url
         self.method = method
         self.body = body
@@ -541,6 +538,7 @@ class Client(object):
         return self.perform()
 
     def redirect(self, resp, location, method=None):
+        """ reset request, set new url of request and perform it """
         if self._nb_redirections <= 0:
             raise RedirectLimit("Redirection limit is reached")
 
@@ -565,6 +563,8 @@ class Client(object):
         return self.perform()
 
     def get_response(self):
+        """ return final respons, it is only accessible via peform
+        method """
         unreader = http.Unreader(self._sock)
 
         log.info("Start to parse response")

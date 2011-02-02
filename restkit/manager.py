@@ -6,11 +6,15 @@
 from __future__ import with_statement
 
 from collections import Counter, deque
+import logging
 import signal
+import socket
 import threading
 import time
 
 from .sock import close
+
+log = logging.getLogger(__name__)
 
 class Manager(object):
 
@@ -20,7 +24,7 @@ class Manager(object):
 
         self.sockets = dict()
         self.active_sockets = dict()
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
         self.connections_count = Counter()
 
         if timeout and timeout is not None:
@@ -67,7 +71,8 @@ class Manager(object):
                         del self.active_sockets[sock.fileno()]
                         break
                 self.sockets[key] = socks
-                self.connections_count[key] -= 1 
+                self.connections_count[key] -= 1
+                log.debug("get connection from manager")
                 return sock
             except (IndexError, KeyError,):
                 return None
@@ -86,10 +91,19 @@ class Manager(object):
 
             if len(socks) < self.max_conn:
                 # add connection to the pool
+                try:
+                    self.active_sockets[sock.fileno()] = (sock, time.time())
+                except (socket.error, AttributeError,):
+                    # socket has been closed
+                    log.info("socket closed")
+                    return
+
                 socks.appendleft(sock)
                 self.sockets[key] = socks
                 self.connections_count[key] += 1
-                self.active_sockets[sock.fileno()] = (sock, time.time())
+
+                log.debug("put connection in manager %s" %
+                        self.all_connections_count())
             else:
                 # close connection if we have enough connections in the
                 # pool.

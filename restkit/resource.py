@@ -67,8 +67,7 @@ class Resource(object):
                 self.uri = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
                     u.path, u.params, u.query, u.fragment))
 
-        self.client_opts = client_opts
-        self.client = Client(**client_opts)
+        self.client_opts = client_opts 
         
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.uri)
@@ -184,7 +183,8 @@ class Resource(object):
                         **self.make_params(params))
         
             # make request
-            resp = self.client.request(uri, method=method, body=payload, 
+            client = Client(**self.client_opts)
+            resp = client.request(uri, method=method, body=payload, 
                         headers=self.make_headers(headers))
             
             if resp is None:

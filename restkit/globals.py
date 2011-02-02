@@ -16,5 +16,11 @@ def set_default_manager():
     if _manager is None:
         _manager = Manager()
 
+def get_manager(self):
+    global _manager
+    if _manager is None:
+        set_default_manager()
+    return _manager
 
 set_default_manager()
+
