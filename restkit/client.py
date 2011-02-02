@@ -65,8 +65,6 @@ class BodyWrapper(object):
 
     def close(self):
         """ release connection """ 
-        if not self.body.closed:
-            self.resp._body.discard()
         self.client.release_connection(self._sock_key, 
                 self._sock, self.resp.should_close)
     
@@ -108,15 +106,14 @@ class ClientResponse(object):
         self.client = client
         self._sock = client._sock
         self._sock_key = copy.copy(client._sock_key)
-
         self._body = resp.body
-
+        
         # response infos
+        self.headers = resp.headers
         self.status = resp.status
         self.status_int = resp.status_int
         self.version = resp.version
         self.headerslist = resp.headers.items()
-        self.headers = resp.headers
         self.location = resp.headers.iget('location')
         self.final_url = client.url
         self.should_close = resp.should_close()
@@ -125,10 +122,11 @@ class ClientResponse(object):
         self._closed = False
         self._already_read = False
 
-        #if client.method == "HEAD":
-        #    """ no body on HEAD, release the connection now """
-        #    self.client.release_connection(self._sock_key, self._sock,
-        #            resp.should_close())
+        if client.method == "HEAD":
+            """ no body on HEAD, release the connection now """
+            self._body = StringIO()
+            self.client.release_connection(self._sock_key, self._sock,
+                    resp.should_close())
 
     def __getitem__(self, key):
         try:
@@ -331,9 +329,11 @@ class Client(object):
     
         self._lock.acquire()
         try:
-            return self._connections.pop(self._sock_key)
-        except KeyError:
-            sock = self._manager.find_socket(addr, ssl)
+            try:
+                sock = self._connections.pop(self._sock_key)
+            except KeyError:
+                sock = self._manager.find_socket(addr, ssl)
+
             if sock is None:
                 sock = self.connect(addr, ssl)
             return sock
@@ -342,10 +342,11 @@ class Client(object):
 
     def release_connection(self, key, sck, should_close=False):
         if should_close:
-            print "should_close"
+            log.debug("close connection")
             close(sck)
             return
 
+        log.debug("release connection")
         self._lock.acquire()
         try:
             if key in self._connections or \

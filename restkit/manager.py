@@ -66,7 +66,6 @@ class Manager(object):
                     if sock.fileno() in self.active_sockets:
                         del self.active_sockets[sock.fileno()]
                         break
-
                 self.sockets[key] = socks
                 self.connections_count[key] -= 1 
                 return sock
