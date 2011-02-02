@@ -5,7 +5,7 @@
 
 from __future__ import with_statement
 
-from collections import Counter, deque
+from collections import deque
 import logging
 import signal
 import socket
@@ -24,8 +24,8 @@ class Manager(object):
 
         self.sockets = dict()
         self.active_sockets = dict()
+        self.connections_count = dict()
         self._lock = self.get_lock()
-        self.connections_count = Counter()
 
         if timeout and timeout is not None:
             self.start()
@@ -50,13 +50,18 @@ class Manager(object):
         signal.signal(signal.SIGALRM, self.murder_connections)
         signal.alarm(self.timeout)
 
-    def all_connections_count(self, n=None):
-        """ return all counts per address registered. if n is specified,
-        it will return the n most commons """
-        return self.connections_count.most_common(n)
+    def all_connections_count(self):
+        """ return all counts per address registered. """
+        return self.connections_count.items()
 
     def connection_count(self, addr, ssl):
         """ get connections count for an address """
+        self._lock.acquire()
+        try:
+            return self.connections_count[(addr, ssl)]
+        finally:
+            self._lock.release()
+
         return self.connections_count[(addr, ssl)]
 
     def find_socket(self, addr, ssl=False):
@@ -103,7 +108,11 @@ class Manager(object):
 
                 socks.appendleft(sock)
                 self.sockets[key] = socks
-                self.connections_count[key] += 1
+                
+                try:
+                    self.connections_count[key] += 1
+                except KeyError:
+                    self.connections_count[key] = 1 
 
                 log.debug("put connection in manager %s" %
                         self.all_connections_count())
