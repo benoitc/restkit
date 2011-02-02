@@ -319,10 +319,10 @@ class Client(object):
             af, socktype, proto, canonname, sa = res
 
             try:
-                sock = socket.socket(af, socktype, proto)
+                sck = socket.socket(af, socktype, proto)
         
-                sock.settimeout(self.timeout)
-                sock.connect(sa)
+                sck.settimeout(self.timeout)
+                sck.connect(sa)
                     
                 if ssl:
                     if not have_ssl:
@@ -331,14 +331,14 @@ class Client(object):
                                         + "(http://pypi.python.org/pypi/ssl) "
                                         + "to be intalled.")
                     validate_ssl_args(self.ssl_args)
-                    sock = ssl.wrap_socket(sock, **self.ssl_args)
+                    sock = ssl.wrap_socket(sck, **self.ssl_args)
                 
                 # apply connect filters
-                self.filters.apply("on_connect", self, sock, ssl)
+                self.filters.apply("on_connect", self, sck, ssl)
 
-                return sock
+                return sck
             except socket.error:
-                close(sock)
+                close(sck)
         raise socket.error, "getaddrinfo returns an empty list" 
 
     def get_connection(self):
