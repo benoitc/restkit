@@ -18,8 +18,6 @@ def set_default_manager():
 
 def get_manager():
     global _manager
-    if _manager is None:
-        set_default_manager()
     return _manager
 
 set_default_manager()

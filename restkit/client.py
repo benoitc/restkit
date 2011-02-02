@@ -234,7 +234,7 @@ class Client(object):
         # set manager
         if manager is None:
             manager = get_manager()
-        self._manager = manager 
+        self._manager = manager
 
         # change default response class 
         if response_class is not None:

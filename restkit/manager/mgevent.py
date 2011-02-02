@@ -9,7 +9,7 @@ loop.
 """
 
 import gevent
-from gevent.coros import Semaphore
+from gevent.coros import RLock
 from gevent.event import Event
 
 from .base import Manager
@@ -21,7 +21,7 @@ class GeventManager(Manager):
         self._timeout_ev = Event()
 
     def get_lock(self):
-        return Semaphore(1)
+        return RLock()
 
     def murder_connections(self):
         self._timeout_ev.clear()

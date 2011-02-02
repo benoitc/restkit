@@ -1,7 +1,8 @@
 import threading
+import timeit
 from restkit import *
 
-set_logging("debug")
+#set_logging("debug")
 
 urls = [
         "http://yahoo.fr",
@@ -10,19 +11,26 @@ urls = [
         "http://benoitc.io", 
         "http://couchdb.apache.org"]
 
+allurls = []
+for i in range(10):
+    allurls.extend(urls)
+
 def fetch(u):
     c = Client()
     c.url = u
     c.follow_redirect=True
     r = c.perform()
     print "RESULT: %s: %s (%s)" % (u, r.status, len(r.body_string()))
-    
 
-for i in range(10):
-    
-    for u in urls:
-        t =  threading.Thread(target=fetch, args=[u])
-        t.daemon = True
-        t.start()
+def spawn(u):
+    t =  threading.Thread(target=fetch, args=[u])
+    t.daemon = True
+    t.start()
+    return t
 
-t.join()
+def extract():
+    threads = [spawn(u) for u in allurls]
+    [t.join() for t in threads]
+
+t = timeit.Timer(stmt=extract)
+print "%.2f s" % t.timeit(number=1)
