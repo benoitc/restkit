@@ -3,6 +3,15 @@
 News
 ====
 
+3.0 / 2001-02-02
+----------------
+
+- New Connection management. Better concurrency handling
+- Improved Client. Fix redirect, better error handling, timeout /
+  connection support. New possibilities with the new Client object.
+- Major refactoring. consolidation of some module, ease the HTTP parser
+  code.
+
 2.3.0 / 2010-11-25
 ------------------
  - Refactored Http Connections management (reuse connections).
