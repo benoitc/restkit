@@ -25,10 +25,7 @@ for i in range(10):
     allurls.extend(urls)
 
 def fetch(u):
-    c = Client()
-    c.url = u
-    c.follow_redirect=True
-    r = c.perform()
+    r = request(u, follow_redirect=True)
     print "RESULT: %s: %s (%s)" % (u, r.status, len(r.body_string()))
 
 def extract():
