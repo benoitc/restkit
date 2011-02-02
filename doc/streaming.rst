@@ -30,7 +30,7 @@ Sending will be chunked. If you want to send without TE: chunked, you need to ad
 Stream from
 -----------
 
-Each requests return a :api:`restkit.client.HttpResponse` object. If you want to receive the content in a streaming fashion you just have to use the `body_file` member of the response. You can `iter` on it or just use as a file-like object (read, readline, readlines, ...).
+Each requests return a :api:`restkit.client.HttpResponse` object. If you want to receive the content in a streaming fashion you just have to use the `body_stream` member of the response. You can `iter` on it or just use as a file-like object (read, readline, readlines, ...).
 
 **Attention**: Since 2.0, response.body are just streamed and aren't persistent. In previous version, the implementation may cause problem with memory or storage usage.
 
@@ -57,3 +57,32 @@ Or if you just want to read::
           if not data:
               break
           f.write(data)
+
+Tee input
+---------
+
+While with body_stream you can only consume the input until the end, you
+may want to reuse this body later in your application. For that, restkit
+since the 3.0 version offer the `tee` method. It copy response input to 
+standard output or a file if length > sock.MAX_BODY. When all the input 
+has been read, connection is released::
+
+   from restkit import request
+   import tempfile
+
+   r = request("http://e-engura.com/images/logo.gif")
+   fd, fname = tempfile.mkstemp(suffix='.gif')
+   fd1, fname1 = tempfile.mkstemp(suffix='.gif')
+   
+   body = t.tee()
+   # save first file
+   with os.fdopen(fd, "wb") as f:
+      for chunk in body: f.write(chunk)
+
+   # reset
+   body.seek(0)
+   # save second file.
+   with os.fdopen(fd1, "wb") as f:
+      for chunk in body: f.write(chunk)
+
+

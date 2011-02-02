@@ -50,6 +50,7 @@ Features
 --------
 
 - Full compatible HTTP client for HTTP 1.0 and 1.1
+- Threadsafe
 - Use pure socket calls and its own HTTP parser (It's not based on httplib or urllib2)
 - Map HTTP resources to Python objects
 - **Read** and **Send** on the fly

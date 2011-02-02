@@ -78,21 +78,25 @@ used in any application:
 
 ::
 
-  from restkit import Resource, TConnectionManager 
+  from restkit import Resource, Manager
   
-  mgr = TConnectionManager(nb_connections=10)
-  res = Resource('http://friendpaste.com', conn_manager=mgr)
+  manager = TManager(max_conn=10)
+  res = Resource('http://friendpaste.com', manager=manager)
 
 
 or if you use `Gevent <http://gevent.org>`_:
 
 ::
 
-  from restkit import Resource
-  from restkit.conn.gevent_manager import GeventConnectionManager
-  
-  mgr = GeventConnectionManager(timeout=300, nb_connections=10)
-  res = Resource('http://friendpaste.com', conn_manager=mgr)
+  from gevent import monkey; monkey.patch_all()
+
+  from restkit import request
+  from restkit.globals import set_manager
+  from restkit.manager.mgevent import GeventManager
+
+  set_manager(GeventManager(timeout=300))
+
+  r = request('http://friendpaste.com')
 
 
 Authentication
