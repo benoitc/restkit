@@ -323,6 +323,7 @@ class Client(object):
         
                 sock.settimeout(self.timeout)
                 sock.connect(sa)
+                    
                 if ssl:
                     if not have_ssl:
                         raise ValueError("https isn't supported.  On python 2.5x,"
@@ -330,7 +331,11 @@ class Client(object):
                                         + "(http://pypi.python.org/pypi/ssl) "
                                         + "to be intalled.")
                     validate_ssl_args(self.ssl_args)
-                    return ssl.wrap_socket(sock, **self.ssl_args)
+                    sock = ssl.wrap_socket(sock, **self.ssl_args)
+                
+                # apply connect filters
+                self.filters.apply("on_connect", self, sock, ssl)
+
                 return sock
             except socket.error:
                 close(sock)

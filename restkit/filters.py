@@ -13,11 +13,14 @@ except ImportError:
     from cgi import parse_qsl
 from urlparse import urlunparse
 
-from . import __version__
+from . import __version__ 
 from .errors import ProxyError
-from .util import replace_header, parse_netloc
+from .http import Request, Unreader
 from .oauth2 import Consumer, Request, SignatureMethod_HMAC_SHA1,\
 Token
+from .sock import send
+from .util import parse_netloc
+
 
 class Filters(object):
     
@@ -53,50 +56,33 @@ class BasicAuth(object):
         client.headers['Authorization'] = 'Basic %s' %  encode
 
 
+
 class SimpleProxy(object):
     """ Simple proxy filter. 
     This filter find proxy from environment and if it exists it
     connect to the proxy and modify connection headers.
     """
     
-    def on_connect(self, sock, ssl):
-        proxy_auth = _get_proxy_auth()
-        if ssl:
-            # open a tunnel
+    def on_connect(self, client, sck, ssl):
+        proxy = os.environ.get('https_proxy')
+        if proxy:
+            proxy_uri = urlparse.urlparse(proxy)
+            proxy_auth = _get_proxy_auth()
+            if proxy_auth:
+                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
+            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' %  parse_netloc(proxy_uri)
 
-
-            proxy = os.environ.get('https_proxy')
-            if proxy:
-                if proxy_auth:
-                    proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-                proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % conn.addr
-                user_agent = "User-Agent: restkit/%s\r\n" % __version__
-                proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, 
-                                        user_agent)
-                proxy_uri = urlparse.urlparse(proxy)
-                proxy_host, proxy_port = parse_netloc(proxy_uri)
-                
-                route = ((proxy_host, proxy_port), True, None, {})
-                pool = conn.get_pool(route)
-
-                try:
-                    p_sock = pool.request()
-                except socket.error, e:
-                    raise ProxyError(str(e))
-
-                conn.sock = p_sock
-                conn.addr = (proxy_host, proxy_port)
-                conn.is_ssl = True
-
-        else:
-            proxy = os.environ.get('http_proxy')
-            if proxy:
-                proxy_uri = urlparse.urlparse(proxy)
-                proxy_host, proxy_port = self._host_port(proxy_uri)
-                if proxy_auth:
-                    proxy.headers.append(('Proxy-Authorization', 
-                             proxy_auth.strip()))
-                proxy.addr = (proxy_host, proxy_port)       
+            user_agent = "User-Agent: restkit/%s\r\n" % __version__
+            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, 
+                                    user_agent)
+                            
+            send(sck, proxy_pieces)
+            unreader = http.Unreader(sck)
+            resp = http.Request(unreader)
+            body = resp.body.read()
+            if resp.status_int != 200:
+                raise ProxyError("Tunnel connection failed: %d %s" %
+                        (resp.status_int, body))
             
      
 def _get_proxy_auth():
