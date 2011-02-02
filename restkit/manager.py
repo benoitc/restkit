@@ -29,13 +29,13 @@ class Manager(object):
     def murder_connections(self, signum, frame):
         self._lock.acquire()
         try:
-            active_socks = self.active_socks.copy()
-            for fno, (sock, t0) in active_socks.items():
+            active_sockets = self.active_sockets.copy()
+            for fno, (sock, t0) in active_sockets.items():
                 diff = time.time() - t0
                 if diff <= self.timeout:
                     continue
                 close(sock)
-                del self.active_socks[fno]
+                del self.active_sockets[fno]
         finally:
             self._lock.release()
        
