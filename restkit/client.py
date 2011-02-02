@@ -193,7 +193,19 @@ class Client(object):
     but an handled shouldn't be shared between threads. All connections
     are shared between threads via a pool. 
     
-    
+    >>> from restkit import *
+    >>> c = Client()
+    >>> c.url = "http://google.com"
+    >>> r = c.perform()
+    r>>> r.status
+    '301 Moved Permanently'
+    >>> r.body_string()
+    '<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">\n<TITLE>301 Moved</TITLE></HEAD><BODY>\n<H1>301 Moved</H1>\nThe document has moved\n<A HREF="http://www.google.com/">here</A>.\r\n</BODY></HTML>\r\n'
+    >>> c.follow_redirect = True
+    >>> r = c.perform()
+    >>> r.status
+    '200 OK'
+     
     """
 
     version = (1, 1)
@@ -546,7 +558,10 @@ class Client(object):
             self._initial_url = self.url
 
         # discard response body and reset request informations
-        resp.body.discard()
+        if hasattr(resp, "_body"):
+            resp._body.discard()
+        else:
+            resp.body.discard()
         self.reset_request()
 
         # make sure location follow rfc2616

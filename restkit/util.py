@@ -188,9 +188,11 @@ def rewrite_location(host_uri, location, prefix_path=None):
         # remote server doesn't follow rfc2616
         proxy_uri = '%s%s' % (host_uri, prefix_path)
         return urlparse.urljoin(proxy_uri, location)
-
-    return urlparse.urlunparse((host_url.scheme, host_url.netloc, 
-        prefix_path + url.path, url.params, url.query, url.fragment))
+    elif url.scheme == host_url.scheme and url.netloc == host_url.netloc:
+        return urlparse.urlunparse((host_url.scheme, host_url.netloc, 
+            prefix_path + url.path, url.params, url.query, url.fragment))
+    
+    return location
 
 def replace_header(name, value, headers):
     idx = -1
