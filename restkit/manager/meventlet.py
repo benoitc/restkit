@@ -4,14 +4,13 @@
 # See the NOTICE for more information.
 
 """
-gevent connection manager. 
+eventlet connection manager. 
 """
-
-from gevent.coros import RLock
+from eventlet.semaphore import Semaphore
 
 from .base import Manager
 
-class GeventManager(Manager):
+class EventletManager(Manager):
 
     def get_lock(self):
-        return RLock()
+        return Semaphore(1)
