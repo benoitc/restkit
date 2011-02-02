@@ -9,12 +9,9 @@ from restkit.manager.mgevent import GeventManager
 
 #set_logging("debug")
 
-
 print "Manager was: %s" % type(get_manager())
 set_manager(GeventManager())
 print"Manager is set to: %s" %type(get_manager())
-
-
 
 urls = [
         "http://yahoo.fr",
