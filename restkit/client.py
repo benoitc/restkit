@@ -31,7 +31,7 @@ from .datastructures import MultiDict
 from .errors import *
 from .filters import Filters
 from .forms import multipart_form_encode, form_encode
-from .globals import _manager 
+from .globals import get_manager 
 from . import http
 
 from .sock import close, send, sendfile, sendlines, send_chunk
@@ -233,8 +233,8 @@ class Client(object):
         
         # set manager
         if manager is None:
-            manager = _manager
-        self._manager = manager
+            manager = get_manager()
+        self._manager = manager 
 
         # change default response class 
         if response_class is not None:

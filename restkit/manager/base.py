@@ -12,7 +12,7 @@ import socket
 import threading
 import time
 
-from .sock import close
+from ..sock import close
 
 log = logging.getLogger(__name__)
 
@@ -24,13 +24,16 @@ class Manager(object):
 
         self.sockets = dict()
         self.active_sockets = dict()
-        self._lock = threading.RLock()
+        self._lock = self.get_lock()
         self.connections_count = Counter()
 
         if timeout and timeout is not None:
             self.start()
 
-    def murder_connections(self, signum, frame):
+    def get_lock(self):
+        return threading.RLock()
+
+    def murder_connections(self, *args):
         self._lock.acquire()
         try:
             active_sockets = self.active_sockets.copy()
