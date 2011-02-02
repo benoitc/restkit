@@ -21,4 +21,3 @@ def get_manager():
     return _manager
 
 set_default_manager()
-
