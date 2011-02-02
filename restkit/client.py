@@ -347,6 +347,7 @@ class Client(object):
             return
 
         log.debug("release connection")
+        
         self._lock.acquire()
         try:
             if key in self._connections or \
@@ -573,6 +574,9 @@ class Client(object):
                 break
 
             log.debug("Go 100-Continue header")
+
+        log.info("Got response: %s" % resp.status)
+        log.info("headers: [%s]" % resp.headers)
         
         location = resp.headers.iget('location')
 
