@@ -26,7 +26,7 @@ except ImportError:
         json = False
 
 from .. import __version__, request, set_logging
-from ..util.misc import popen3, locate_program
+from ..util import popen3, locate_program
 
 __usage__ = "'%prog [options] url [METHOD] [filename]'"
 
@@ -134,7 +134,7 @@ def options():
             follow_redirect=False,
             server_response=False,
             prettify=False,
-            log_level='info',
+            log_level=None,
             input=None,
             output=None,
             )
@@ -194,7 +194,8 @@ def main():
     if args_len < 1:
         return parser.error('incorrect number of arguments')
 
-    set_logging(opts.log_level)
+    if opts.log_level is not None:
+        set_logging(opts.log_level)
 
     body = None
     headers = []
