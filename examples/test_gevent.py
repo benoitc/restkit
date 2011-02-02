@@ -8,6 +8,8 @@ from restkit.manager.mgevent import GeventManager
 
 #set_logging("debug")
 
+set_manager(GeventManager())
+
 urls = [
         "http://yahoo.fr",
         "http://google.com", 

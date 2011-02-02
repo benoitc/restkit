@@ -7,9 +7,9 @@ from .manager import Manager
 
 _manager = None
 
-def set_manager(manager_class=None):
+def set_manager(manager_instance=None):
     global _manager
-    _manager = manager_class()
+    _manager = manager_instance
 
 def set_default_manager():
     global _manager
