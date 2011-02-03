@@ -3,7 +3,7 @@
 News
 ====
 
-3.0 / 2001-02-02
+3.0 / 2011-02-02
 ----------------
 
 - New Connection management: Better concurrency handling and iddle
