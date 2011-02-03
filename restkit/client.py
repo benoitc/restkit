@@ -313,6 +313,7 @@ class Client(object):
 
     def connect(self, addr, ssl):
         """ create a socket """
+        log.debug("create new connection")
         for res in socket.getaddrinfo(addr[0], addr[1], 0, 
                 socket.SOCK_STREAM):
             af, socktype, proto, canonname, sa = res
@@ -364,6 +365,7 @@ class Client(object):
 
     def close_connection(self):
         """ close a connection """
+        log.debug("close connection")
         close(self._sock)
         self._sock = None
 

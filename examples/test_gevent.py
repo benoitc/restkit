@@ -7,7 +7,7 @@ from restkit import *
 from restkit.globals import set_manager, get_manager
 from restkit.manager.mgevent import GeventManager
 
-#set_logging("debug")
+set_logging("debug")
 
 print "Manager was: %s" % type(get_manager())
 set_manager(GeventManager())
