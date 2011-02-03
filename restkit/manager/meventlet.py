@@ -6,6 +6,7 @@
 """
 eventlet connection manager. 
 """
+import signal
 
 import eventlet
 from eventlet.semaphore import Semaphore

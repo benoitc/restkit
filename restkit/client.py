@@ -8,7 +8,6 @@ import errno
 import logging
 import mimetypes
 import os
-import threading
 import time
 import socket
 import types

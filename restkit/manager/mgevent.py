@@ -6,6 +6,7 @@
 """
 gevent connection manager. 
 """
+import signal
 
 import gevent
 from gevent.coros import RLock
