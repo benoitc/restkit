@@ -593,7 +593,7 @@ class Client(object):
             resp = http.Request(unreader)
             if resp.status_int != 100:
                 break
-
+            resp.body.discard()
             log.debug("Go 100-Continue header")
 
         log.info("Got response: %s" % resp.status)
