@@ -77,8 +77,8 @@ class SimpleProxy(object):
                                     user_agent)
                             
             send(sck, proxy_pieces)
-            unreader = http.Unreader(sck)
-            resp = http.Request(unreader)
+            unreader = Unreader(sck)
+            resp = Request(unreader)
             body = resp.body.read()
             if resp.status_int != 200:
                 raise ProxyError("Tunnel connection failed: %d %s" %

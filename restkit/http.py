@@ -15,7 +15,9 @@ except ImportError:
     from StringIO import StringIO
 
 from .datastructures import MultiDict
-from .errors import *
+from .errors import NoMoreData, ChunkMissingTerminator, \
+InvalidChunkSize, InvalidRequestLine, InvalidHTTPVersion, \
+InvalidHTTPStatus, InvalidHeader, InvalidHeaderName
 
 
 class Unreader(object):

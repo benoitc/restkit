@@ -2,7 +2,7 @@
 #
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
-
+import cgi
 import copy
 import errno
 import logging
@@ -27,13 +27,15 @@ except ImportError:
 
 from . import __version__ 
 from .datastructures import MultiDict
-from .errors import *
+from .errors import AlreadyRead, RequestError, RequestTimeout, \
+RedirectLimit
 from .filters import Filters
 from .forms import multipart_form_encode, form_encode
 from .globals import get_manager 
 from . import http
 
-from .sock import close, send, sendfile, sendlines, send_chunk
+from .sock import close, send, sendfile, sendlines, send_chunk, \
+validate_ssl_args
 from .tee import TeeInput
 from .util import parse_netloc, to_bytestring, rewrite_location
 
@@ -92,7 +94,7 @@ class BodyWrapper(object):
         lines = self.body.readlines(size=size)
         if self.body.close:
             self.close()
-        return line
+        return lines
 
 
 class ClientResponse(object):
@@ -331,7 +333,7 @@ class Client(object):
                                         + "(http://pypi.python.org/pypi/ssl) "
                                         + "to be intalled.")
                     validate_ssl_args(self.ssl_args)
-                    sock = ssl.wrap_socket(sck, **self.ssl_args)
+                    sck = ssl.wrap_socket(sck, **self.ssl_args)
                 
                 # apply connect filters
                 self.filters.apply("on_connect", self, sck, ssl)
@@ -384,7 +386,7 @@ class Client(object):
                     ctype.startswith("multipart/form-data"):
                 type_, opts = cgi.parse_header(ctype)
                 boundary = opts.get('boundary', uuid.uuid4().hex)
-                self.body, self.headers = multipart_form_encode(body, 
+                self.body, self.headers = multipart_form_encode(self.body, 
                                             self.headers, boundary)
             else:
                 ctype = "application/x-www-form-urlencoded; charset=utf-8"
