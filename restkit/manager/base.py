@@ -6,12 +6,15 @@
 from __future__ import with_statement
 
 from collections import deque
+import logging
 import signal
 import socket
 import threading
 import time
 
 from ..sock import close
+
+log = logging.getLogger(__name__)
 
 class ConnectionReaper(threading.Thread):
     """ connection reaper thread. Open a thread that will murder iddle
@@ -65,6 +68,7 @@ class Manager(object):
 
     def murder_connections(self, *args):
         self._lock.acquire()
+        log.info("murder connections")
         try:
             active_sockets = self.active_sockets.copy()
             for fno, (sock, t0, k) in active_sockets.items():
@@ -117,22 +121,24 @@ class Manager(object):
         self._lock.acquire()
         try:
             key = (addr, ssl)
+            log.debug("key %s" % str(key))
             try:
                 socks = self.sockets[key]
                 while True:
-                    sock = socks.pop()
-                    if sock.fileno() in self.active_sockets:
-                        del self.active_sockets[sock.fileno()]
+                    fno, sck = socks.pop()
+                    if fno in self.active_sockets:
+                        del self.active_sockets[fno]
                         break
                 self.sockets[key] = socks
                 self.connections_count[key] -= 1
-                return sock
+                log.info("fetch sock from pool")
+                return sck
             except (IndexError, KeyError,):
                 return None
         finally:
             self._lock.release()
 
-    def store_socket(self, sock, addr, ssl=False):
+    def store_socket(self, sck, addr, ssl=False):
         """ store a socket in the pool to reuse it across threads """
 
         if self._reaper is not None:
@@ -149,15 +155,17 @@ class Manager(object):
             if len(socks) < self.max_conn:
                 # add connection to the pool
                 try:
-                    self.active_sockets[sock.fileno()] = (sock,
-                            time.time(), key)
+                    fno = sck.fileno() 
                 except (socket.error, AttributeError,):
                     # socket has been closed
                     return
 
-                socks.appendleft(sock)
+                self.active_sockets[fno] = (sck, time.time(), key)
+
+                socks.appendleft((fno, sck))
                 self.sockets[key] = socks
-                
+               
+                log.debug("insert sock in pool")
                 try:
                     self.connections_count[key] += 1
                 except KeyError:
@@ -166,6 +174,6 @@ class Manager(object):
             else:
                 # close connection if we have enough connections in the
                 # pool.
-                close(sock)
+                close(sck)
         finally:
             self._lock.release()
