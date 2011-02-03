@@ -67,7 +67,7 @@ object --+
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li><a href="restkit.contrib.ipython_shell.Response-class.html">restkit.contrib.ipython_shell.Response</a></li><li>, exc.WSGIHTTPException</li>  </ul>
+<li>exc.WSGIHTTPException</li>  </ul>
 </dd></dl>
 
 <hr />
@@ -205,23 +205,6 @@ object --+
         <span class="summary-sig-arg">environ</span>)</span><br />
       Returns a headerlist, with the Location header possibly made absolute
       given the request environ.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_add_cookie"></a><span class="summary-sig-name">_add_cookie</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">cookie</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -541,8 +524,7 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_content_type_params__del"></a><span class="summary-sig-name">_content_type_params__del</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
+          <td><span class="summary-sig"><a name="_content_type_params__del"></a><span class="summary-sig-name">_content_type_params__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -1005,7 +987,8 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="encode_content"></a><span class="summary-sig-name">encode_content</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">encoding</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">gzip</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">encoding</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">gzip</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">lazy</span>=<span class="summary-sig-default">False</span>)</span><br />
       Encode the content with the given encoding (only gzip and identity 
       are supported).</td>
           <td align="right" valign="top">
@@ -1068,9 +1051,8 @@ object --+
         <span class="summary-sig-arg">max_age</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">path</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">domain</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">secure</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">secure</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">httponly</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">comment</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">expires</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">overwrite</span>=<span class="summary-sig-default">False</span>)</span><br />
@@ -1090,7 +1072,7 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#unset_cookie" class="summary-sig-name">unset_cookie</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a name="unset_cookie"></a><span class="summary-sig-name">unset_cookie</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">key</span>,
         <span class="summary-sig-arg">strict</span>=<span class="summary-sig-default">True</span>)</span><br />
       Unset a cookie with the given name (remove it from the response).</td>
@@ -1231,7 +1213,7 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#status_code" class="summary-name">status_code</a> = <code title="&lt;Deprecated attribute status_code: &lt;property object at 0x32fbc58&gt;&gt;">&lt;Deprecated attribute status_code: &lt;property obj<code class="variable-ellipsis">...</code></code>
+        <a href="webob.response.Response-class.html#status_code" class="summary-name">status_code</a> = <code title="&lt;Deprecated attribute status_code: &lt;property object at 0x102e63520&gt;&gt;">&lt;Deprecated attribute status_code: &lt;property obj<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -1909,29 +1891,6 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="unset_cookie"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">unset_cookie</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">key</span>,
-        <span class="sig-arg">strict</span>=<span class="sig-default">True</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Unset a cookie with the given name (remove it from the response).  If 
-  there are multiple cookies (e.g., two cookies with the same name and 
-  different paths or domains), all such cookies will be deleted.</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
 <br />
 <!-- ==================== CLASS VARIABLE DETAILS ==================== -->
 <a name="section-ClassVariableDetails"></a>
@@ -1963,7 +1922,7 @@ object --+
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;Deprecated attribute status_code: &lt;property object at 0x32fbc58&gt;&gt;
+&lt;Deprecated attribute status_code: &lt;property object at 0x102e63520&gt;&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -2401,8 +2360,7 @@ object --+
         <span class="summary-sig-arg">value_dict</span>)</span>
     </dd>
     <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_content_type_params__del(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
+    <dd class="value"><span class="summary-sig">_content_type_params__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
@@ -2799,8 +2757,8 @@ object --+
   <p>Gets and sets and deletes the WWW-Authenticate header. For more 
   information on WWW-Authenticate see `section 14.47 
   &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47&gt;`_.
-  Converts it as a &lt;function parse_auth at 0x32dc7d0&gt; and 
-  &lt;function serialize_auth at 0x32dc848&gt;.</p>
+  Converts it as a &lt;function parse_auth at 0x102e47b90&gt; and 
+  &lt;function serialize_auth at 0x102e47c08&gt;.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2842,7 +2800,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Nov 25 19:07:45 2010
+    Generated by Epydoc 3.0.1 on Thu Feb  3 16:04:19 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

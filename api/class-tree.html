@@ -55,23 +55,20 @@
 </b></center><br />
 <h1 class="epydoc">Class Hierarchy</h1>
 <ul class="nomargin-top">
-    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>:
-      <em class="summary">Allow embedding an IPython shell into a running program.</em>
+    <li> <strong class="uidlink">UserDict.DictMixin</strong>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Shell-class.html">restkit.contrib.ipython_shell.Shell</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.datastructures.MultiDict-class.html">restkit.datastructures.MultiDict</a></strong>:
+      <em class="summary">An ordered dictionary that can have multiple values for each key.</em>
     </li>
     </ul>
+    </li>
+    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>:
+      <em class="summary">Allow embedding an IPython shell into a running program.</em>
+    </li>
+    <li> <strong class="uidlink">webob.Response</strong>
     </li>
     <li> <strong class="uidlink">StringIO.StringIO</strong>:
       <em class="summary">class StringIO([buffer])</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Stream-class.html">restkit.contrib.ipython_shell.Stream</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.JSON-class.html">restkit.contrib.ipython_shell.JSON</a></strong>
-    </li>
-    </ul>
-    </li>
-    </ul>
     </li>
     <li> <strong class="uidlink">object</strong>:
       <em class="summary">The most base type</em>
@@ -82,10 +79,6 @@
       <em class="summary">The default request implementation</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Request-class.html">restkit.contrib.webob_api.Request</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Request-class.html">restkit.contrib.ipython_shell.Request</a></strong>
-    </li>
-    </ul>
     </li>
     </ul>
     </li>
@@ -102,6 +95,8 @@
     </li>
     <li> <strong class="uidlink"><a href="restkit.errors.BadStatusLine-class.html">restkit.errors.BadStatusLine</a></strong>:
       <em class="summary">Exception returned by the parser when the status line is invalid</em>
+    </li>
+    <li> <strong class="uidlink"><a href="greenlet.GreenletExit-class.html">greenlet.GreenletExit</a></strong>
     </li>
     <li> <strong class="uidlink">webob.exc.HTTPException</strong>:
       <em class="summary">Exception used on pre-Python-2.5, where new-style classes cannot be
@@ -144,10 +139,7 @@
     <li> <strong class="uidlink"><a href="restkit.errors.ParserError-class.html">restkit.errors.ParserError</a></strong>:
       <em class="summary">Generic exception returned by the parser</em>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.errors.ProxyError-class.html">restkit.errors.ProxyError</a></strong>:
-      <em class="summary">raised when proxy error happend</em>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.filters.simpleproxy.ProxyError-class.html">restkit.filters.simpleproxy.ProxyError</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.errors.ProxyError-class.html">restkit.errors.ProxyError</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.errors.RedirectLimit-class.html">restkit.errors.RedirectLimit</a></strong>:
       <em class="summary">Exception raised when the redirection limit is reached.</em>
@@ -185,10 +177,10 @@
     <li> <strong class="uidlink">exceptions.RuntimeError</strong>:
       <em class="summary">Unspecified run-time error.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Error-class.html">restkit.util.oauth2.Error</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.oauth2.Error-class.html">restkit.oauth2.Error</a></strong>:
       <em class="summary">Generic exception class.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.MissingSignature-class.html">restkit.util.oauth2.MissingSignature</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.oauth2.MissingSignature-class.html">restkit.oauth2.MissingSignature</a></strong>
     </li>
     </ul>
     </li>
@@ -198,6 +190,8 @@
     </li>
     <li> <strong class="uidlink"><a href="restkit.errors.UnexpectedEOF-class.html">restkit.errors.UnexpectedEOF</a></strong>:
       <em class="summary">exception raised when remote closed the connection</em>
+    </li>
+    <li> <strong class="uidlink"><a href="greenlet.error-class.html">greenlet.error</a></strong>
     </li>
     </ul>
     </li>
@@ -209,101 +203,62 @@
       <em class="summary">The default request implementation</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Request-class.html">restkit.contrib.webob_api.Request</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Request-class.html">restkit.contrib.ipython_shell.Request</a></strong>
     </li>
     </ul>
     </li>
     </ul>
     </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.filters.basicauth.BasicAuth-class.html">restkit.filters.basicauth.BasicAuth</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.filters.BasicAuth-class.html">restkit.filters.BasicAuth</a></strong>:
       <em class="summary">Simple filter to manage basic authentification</em>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.http.body.Body-class.html">restkit.http.body.Body</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.http.Body-class.html">restkit.http.Body</a></strong>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.http.body.GzipBody-class.html">restkit.http.body.GzipBody</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.http.GzipBody-class.html">restkit.http.GzipBody</a></strong>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.http.body.DeflateBody-class.html">restkit.http.body.DeflateBody</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.http.DeflateBody-class.html">restkit.http.DeflateBody</a></strong>
     </li>
     </ul>
     </li>
     </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.client.BodyWrapper-class.html">restkit.client.BodyWrapper</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.forms.BoundaryItem-class.html">restkit.forms.BoundaryItem</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.http.body.ChunkedReader-class.html">restkit.http.body.ChunkedReader</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.http.ChunkedReader-class.html">restkit.http.ChunkedReader</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.conn.base.ConnectionManager-class.html">restkit.conn.base.ConnectionManager</a></strong>:
-      <em class="summary">maintain all connections pools.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.conn.eventlet_manager.EventletConnectionManager-class.html">restkit.conn.eventlet_manager.EventletConnectionManager</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.client.Client-class.html">restkit.client.Client</a></strong>:
+      <em class="summary">A client handle a connection at a time.</em>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.conn.gevent_manager.GeventConnectionManager-class.html">restkit.conn.gevent_manager.GeventConnectionManager</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.client.ClientResponse-class.html">restkit.client.ClientResponse</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.conn.threaded.TConnectionManager-class.html">restkit.conn.threaded.TConnectionManager</a></strong>
-    </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Consumer-class.html">restkit.util.oauth2.Consumer</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.oauth2.Consumer-class.html">restkit.oauth2.Consumer</a></strong>:
       <em class="summary">A consumer of OAuth-protected services.</em>
     </li>
     <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.ContentTypes-class.html">restkit.contrib.ipython_shell.ContentTypes</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.http.body.EOFReader-class.html">restkit.http.body.EOFReader</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.http.EOFReader-class.html">restkit.http.EOFReader</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.manager.meventlet.EventletConnectionReaper-class.html">restkit.manager.meventlet.EventletConnectionReaper</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.filters.Filters-class.html">restkit.filters.Filters</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.conn.http_connection.HttpConnection-class.html">restkit.conn.http_connection.HttpConnection</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.http.LengthReader-class.html">restkit.http.LengthReader</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.manager.base.Manager-class.html">restkit.manager.base.Manager</a></strong>:
+      <em class="summary">Connection mager, it keeps a pool of opened connections and reap 
+        them after a delay if reap_connection is True.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.conn.eventlet_manager.EventletHttpConnection-class.html">restkit.conn.eventlet_manager.EventletHttpConnection</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.manager.meventlet.EventletManager-class.html">restkit.manager.meventlet.EventletManager</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.conn.gevent_manager.GeventHttpConnection-class.html">restkit.conn.gevent_manager.GeventHttpConnection</a></strong>
-    </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.client.request.HttpRequest-class.html">restkit.client.request.HttpRequest</a></strong>:
-      <em class="summary">Http Connection object.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.client.response.HttpResponse-class.html">restkit.client.response.HttpResponse</a></strong>:
-      <em class="summary">Http Response object returned by HttpConnction</em>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.http.body.LengthReader-class.html">restkit.http.body.LengthReader</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.http.message.Message-class.html">restkit.http.message.Message</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.http.message.Request-class.html">restkit.http.message.Request</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.http.message.Response-class.html">restkit.http.message.Response</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.manager.mgevent.GeventManager-class.html">restkit.manager.mgevent.GeventManager</a></strong>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="restkit.forms.MultipartForm-class.html">restkit.forms.MultipartForm</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.filters.oauth2.OAuthFilter-class.html">restkit.filters.oauth2.OAuthFilter</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.http.parser.Parser-class.html">restkit.http.parser.Parser</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.http.parser.RequestParser-class.html">restkit.http.parser.RequestParser</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.http.parser.ResponseParser-class.html">restkit.http.parser.ResponseParser</a></strong>
-    </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.conn.base.Pool-class.html">restkit.conn.base.Pool</a></strong>:
-      <em class="summary">Connection pull for a given route</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.conn.eventlet_manager.EventletPool-class.html">restkit.conn.eventlet_manager.EventletPool</a></strong>:
-      <em class="summary">hash(x)</em>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.conn.gevent_manager.GeventPool-class.html">restkit.conn.gevent_manager.GeventPool</a></strong>:
-      <em class="summary">hash(x)</em>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.conn.threaded.TPool-class.html">restkit.conn.threaded.TPool</a></strong>:
-      <em class="summary">hash(x)</em>
-    </li>
-    </ul>
+    <li> <strong class="uidlink"><a href="restkit.filters.OAuthFilter-class.html">restkit.filters.OAuthFilter</a></strong>:
+      <em class="summary">oauth filter</em>
     </li>
     <li> <strong class="uidlink"><a href="restkit.contrib.wsgi_proxy.Proxy-class.html">restkit.contrib.wsgi_proxy.Proxy</a></strong>:
       <em class="summary">A proxy wich redirect the request to SERVER_NAME:SERVER_PORT and 
@@ -317,6 +272,8 @@
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.http.Request-class.html">restkit.http.Request</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.resource.Resource-class.html">restkit.resource.Resource</a></strong>:
       <em class="summary">A class that can be instantiated for access to a RESTful resource, 
         including authentication.</em>
@@ -324,9 +281,6 @@
     <li> <strong class="uidlink"><a href="webob.response.Response-class.html">webob.response.Response</a></strong>:
       <em class="summary">Represents a WSGI response</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Response-class.html">restkit.contrib.ipython_shell.Response</a></strong>:
-      <em class="summary">Represents a WSGI response</em>
-    </li>
     <li> <strong class="uidlink">webob.exc.WSGIHTTPException</strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html">restkit.contrib.webob_helper.WebobResourceError</a></strong>:
@@ -336,43 +290,44 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Server-class.html">restkit.util.oauth2.Server</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.oauth2.Server-class.html">restkit.oauth2.Server</a></strong>:
       <em class="summary">A skeletal implementation of a service provider, providing 
         protected resources to requests from authorized consumers.</em>
     </li>
     <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.ShellClient-class.html">restkit.contrib.ipython_shell.ShellClient</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.SignatureMethod-class.html">restkit.util.oauth2.SignatureMethod</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.oauth2.SignatureMethod-class.html">restkit.oauth2.SignatureMethod</a></strong>:
       <em class="summary">A way of signing requests.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.SignatureMethod_HMAC_SHA1-class.html">restkit.util.oauth2.SignatureMethod_HMAC_SHA1</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.oauth2.SignatureMethod_HMAC_SHA1-class.html">restkit.oauth2.SignatureMethod_HMAC_SHA1</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.SignatureMethod_PLAINTEXT-class.html">restkit.util.oauth2.SignatureMethod_PLAINTEXT</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.oauth2.SignatureMethod_PLAINTEXT-class.html">restkit.oauth2.SignatureMethod_PLAINTEXT</a></strong>
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.filters.simpleproxy.SimpleProxy-class.html">restkit.filters.simpleproxy.SimpleProxy</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.filters.SimpleProxy-class.html">restkit.filters.SimpleProxy</a></strong>:
       <em class="summary">Simple proxy filter.</em>
     </li>
     <li> <strong class="uidlink"><a href="restkit.tee.TeeInput-class.html">restkit.tee.TeeInput</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Token-class.html">restkit.util.oauth2.Token</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.oauth2.Token-class.html">restkit.oauth2.Token</a></strong>:
       <em class="summary">An OAuth credential used to request authorization or a protected 
         resource.</em>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.http.unreader.Unreader-class.html">restkit.http.unreader.Unreader</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.http.unreader.IterUnreader-class.html">restkit.http.unreader.IterUnreader</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.http.Unreader-class.html">restkit.http.Unreader</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.http.unreader.SocketUnreader-class.html">restkit.http.unreader.SocketUnreader</a></strong>
+    <li> <strong class="uidlink">threading._Verbose</strong>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.http.unreader.ConnectionUnreader-class.html">restkit.http.unreader.ConnectionUnreader</a></strong>
+    <li> <strong class="uidlink">threading.Thread</strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.manager.base.ConnectionReaper-class.html">restkit.manager.base.ConnectionReaper</a></strong>:
+      <em class="summary">connection reaper thread.</em>
     </li>
     </ul>
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.util.misc.deprecated_property-class.html">restkit.util.misc.deprecated_property</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.util.deprecated_property-class.html">restkit.util.deprecated_property</a></strong>:
       <em class="summary">Wraps a decorator, with a deprecation warning or error</em>
     </li>
     <li> <strong class="uidlink">dict</strong>:
@@ -386,17 +341,27 @@ dict(iterable) -&gt; new dictionary initialized as if via:
 dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     in the keyword argument list.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.util.oauth2.Request-class.html">restkit.util.oauth2.Request</a></strong>:
+    <li> <strong class="uidlink"><a href="restkit.oauth2.Request-class.html">restkit.oauth2.Request</a></strong>:
       <em class="summary">The parameters and information for an HTTP request, suitable for 
         authorizing with OAuth credentials.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">greenlet.greenlet</strong>:
+      <em class="summary">greenlet(run=None, parent=None) -&gt; greenlet</em>
+    <ul>
+    <li> <strong class="uidlink">gevent.greenlet.Greenlet</strong>:
+      <em class="summary">A light-weight cooperatively-scheduled execution unit.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.manager.mgevent.GeventConnectionReaper-class.html">restkit.manager.mgevent.GeventConnectionReaper</a></strong>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink">property</strong>:
       <em class="summary">property(fget=None, fset=None, fdel=None, doc=None) -&gt; property attribute</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.API-class.html">restkit.contrib.ipython_shell.API</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Method-class.html">restkit.contrib.webob_api.Method</a></strong>
     </li>
     </ul>
@@ -430,7 +395,7 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Nov 25 19:07:44 2010
+    Generated by Epydoc 3.0.1 on Thu Feb  3 16:04:18 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

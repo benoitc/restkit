@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to RESTKit’s documentation! &mdash; restkit v2.3.0 documentation</title>
+    <title>Welcome to RESTKit’s documentation! &mdash; restkit v3.0.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.3.0',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.3.0 documentation" href="#" />
+    <link rel="top" title="restkit v3.0.0 documentation" href="#" />
     <link rel="next" title="Build resource object" href="resource.html" />
 
   <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
@@ -125,6 +125,12 @@
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Stream you content</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="streaming.html#stream-to">Stream to</a></li>
 <li class="toctree-l2"><a class="reference internal" href="streaming.html#stream-from">Stream from</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#tee-input">Tee input</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="green.html">Usage with Eventlet and Gevent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="green.html#use-it-with-gevent">Use it with gevent:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="green.html#use-it-with-eventlet">Use it with eventlet:</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">Command Line</a></li>
@@ -140,6 +146,7 @@
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Full compatible HTTP client for HTTP 1.0 and 1.1</li>
+<li>Threadsafe</li>
 <li>Use pure socket calls and its own HTTP parser (It&#8217;s not based on httplib or urllib2)</li>
 <li>Map HTTP resources to Python objects</li>
 <li><strong>Read</strong> and <strong>Send</strong> on the fly</li>

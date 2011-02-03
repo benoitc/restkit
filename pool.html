@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Reuses connections &mdash; restkit v2.3.0 documentation</title>
+    <title>Reuses connections &mdash; restkit v3.0.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.3.0',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.3.0 documentation" href="index.html" />
+    <link rel="top" title="restkit v3.0.0 documentation" href="index.html" />
     <link rel="next" title="Authentication" href="authentication.html" />
     <link rel="prev" title="Build resource object" href="resource.html" />
 
@@ -87,32 +87,40 @@
             
   <div class="section" id="reuses-connections">
 <h1>Reuses connections<a class="headerlink" href="#reuses-connections" title="Permalink to this headline">¶</a></h1>
-<p>Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a connection manager instance inheriting <tt class="docutils literal"><span class="pre">reskit.conn.base.ConnManager</span></tt>. You can use our threadsafe pool in any application:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">TConnectionManager</span>
+<p>Reusing connections is good. Restkit can maintain for you the http connections and reuse them if the server allows it. To do that you can pass to any object a connection manager instance inheriting <tt class="docutils literal"><span class="pre">reskit.manager.Manager</span></tt>. By default the manager signaling to close iddle connections:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">Manager</span>
 
-<span class="n">manager</span> <span class="o">=</span> <span class="n">TConnectionManager</span><span class="p">(</span><span class="n">nb_connections</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">,</span> <span class="n">conn_manager</span><span class="o">=</span><span class="n">manager</span><span class="p">)</span>
+<span class="n">manager</span> <span class="o">=</span> <span class="n">TManager</span><span class="p">(</span><span class="n">max_conn</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">By default, restkit is using the threadsafe connections manager
-and keep 10 connections alive.</p>
+<p class="last">By default, restkit keep 10 connections alive.</p>
 </div>
 <p>Restkit provides also Pool working with <a class="reference external" href="http://eventlet.net">eventlet</a> or <a class="reference external" href="http://gevent.net">gevent</a>.</p>
 <p>Example of usage with Gevent:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
-<span class="kn">from</span> <span class="nn">restkit.conn.gevent_manager</span> <span class="kn">import</span> <span class="n">GeventConnectionManager</span>
-<span class="n">manager</span> <span class="o">=</span> <span class="n">GeventConnectionManager</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">nb_connections</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">,</span> <span class="n">conn_manager</span><span class="o">=</span><span class="n">manager</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gevent</span> <span class="kn">import</span> <span class="n">monkey</span><span class="p">;</span> <span class="n">monkey</span><span class="o">.</span><span class="n">patch_all</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">restkit.globals</span> <span class="kn">import</span> <span class="n">set_manager</span>
+<span class="kn">from</span> <span class="nn">restkit.manager.mgevent</span> <span class="kn">import</span> <span class="n">GeventManager</span>
+
+<span class="n">set_manager</span><span class="p">(</span><span class="n">GeventManager</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">))</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This is likely the same with Eventlet:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
-<span class="kn">from</span> <span class="nn">restkit.conn.eventlet_manager</span> <span class="kn">import</span> <span class="n">EventletConnectionManager</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">eventlet</span>
+<span class="n">eventlet</span><span class="o">.</span><span class="n">monkey_patch</span><span class="p">()</span> <span class="c">#we patch eventlet</span>
 
-<span class="n">manager</span> <span class="o">=</span> <span class="n">EventletConnectionManager</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">nb_connections</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">,</span> <span class="n">conn_manager</span><span class="o">=</span><span class="n">manager</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span>
+<span class="kn">from</span> <span class="nn">restkit.globals</span> <span class="kn">import</span> <span class="n">set_manager</span>
+<span class="kn">from</span> <span class="nn">restkit.manager.meventlet</span> <span class="kn">import</span> <span class="n">EventletManager</span>
+
+<span class="n">set_manager</span><span class="p">(</span><span class="n">EventletManager</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">))</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;http://friendpaste.com&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -7,19 +7,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Authentication &mdash; restkit v2.3.0 documentation</title>
+    <title>Authentication &mdash; restkit v3.0.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.3.0',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.3.0 documentation" href="index.html" />
+    <link rel="top" title="restkit v3.0.0 documentation" href="index.html" />
     <link rel="next" title="Stream you content" href="streaming.html" />
     <link rel="prev" title="Reuses connections" href="pool.html" />
 
@@ -91,7 +91,7 @@
 other authentication schema can easily be added using http filters.</p>
 <div class="section" id="basic-authentication">
 <h2>Basic authentication<a class="headerlink" href="#basic-authentication" title="Permalink to this headline">¶</a></h2>
-<p>Basic authentication is managed by the object <a class="reference external" href="api/restkit.filters-module.html#BasicAuth">BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="api/restkit-module.html#request">request</a> function and in <a class="reference external" href="api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
+<p>Basic authentication is managed by the object <a class="reference external" href="api/restkit.filters.BasicAuth-class.html">BasicAuth</a>. It&#8217;s handled automatically in <a class="reference external" href="api/restkit-module.html#request">request</a> function and in <a class="reference external" href="api/restkit.resource.Resource-class.html">Resource</a> object if <cite>basic_auth_url</cite> property is True.</p>
 <p>To use <cite>basic authentication</cite> in a <cite>Resource object</cite> you can do:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">BasicAuth</span>
 
@@ -106,11 +106,11 @@ other authentication schema can easily be added using http filters.</p>
 </div>
 <div class="section" id="oauth">
 <h2>OAuth<a class="headerlink" href="#oauth" title="Permalink to this headline">¶</a></h2>
-<p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use <a class="reference external" href="api/restkit-module.html#oauth2">oauth2</a> module in your applications).</p>
+<p>Restkit OAuth is based on <a class="reference external" href="http://github.com/simplegeo/python-oauth2">simplegeo python-oauth2 module</a> So you don&#8217;t need other installation to use OAuth (you can also simply use <a class="reference external" href="api/restkit.oauth2-module.html">restkit.oauth2</a> module in your applications).</p>
 <p>The OAuth filter <tt class="docutils literal"><span class="pre">restkit.oauth2.filter.OAuthFilter</span></tt> allow you to associate a consumer per resource (path). Initalize Oauth filter with:</p>
 <div class="highlight-python"><pre>path, consumer, token, signaturemethod)</pre>
 </div>
-<p><cite>token</cite> and <cite>method signature</cite> are optionnals. Consumer should be an instance of <tt class="docutils literal"><span class="pre">restkit.oauth2.Consumer</span></tt>, token an  instance of <tt class="docutils literal"><span class="pre">restkit.oauth2.Token</span></tt>  signature method an instance of <tt class="docutils literal"><span class="pre">oauth2.SignatureMethod</span></tt>  (<tt class="docutils literal"><span class="pre">restkit.oauth2.Token</span></tt> is only needed for three-legged requests.</p>
+<p><cite>token</cite> and <cite>method signature</cite> are optionnals. Consumer should be an instance of <a class="reference external" href="api/restkit.oauth2.Consumer-class.html">Consumer</a>, token an  instance of <a class="reference external" href="api/restkit.oauth2.Token-class.html">Token</a>  signature method an instance of <tt class="docutils literal"><span class="pre">oauth2.SignatureMethod</span></tt>  (<a class="reference external" href="api/restkit.oauth2.Token-class.html">Token</a> is only needed for three-legged requests.</p>
 <p>The filter is appleid if the path match. It allows you to maintain different authorization per path. A wildcard at the indicate to the filter to match all path behind.</p>
 <p>Example the rule <cite>/some/resource/*</cite> will match <cite>/some/resource/other</cite> and <cite>/some/resource/other2</cite>, while the rule <cite>/some/resource</cite> will only match the path <cite>/some/resource</cite>.</p>
 <div class="section" id="simple-client-example">

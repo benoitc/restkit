@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>restkit.manager.mgevent</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="restkit-module.html">Package&nbsp;restkit</a> ::
+        <a href="restkit.manager-module.html">Package&nbsp;manager</a> ::
+        Module&nbsp;mgevent
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="restkit.manager.mgevent-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="restkit.manager.mgevent-module.html">Module restkit.manager.mgevent</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of restkit released under the MIT license. </tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># See the NOTICE for more information.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">gevent connection manager. </tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">signal</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">gevent</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">gevent</tt><tt class="py-op">.</tt><tt class="py-name">coros</tt> <tt class="py-keyword">import</tt> <tt class="py-name">RLock</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Module restkit.manager.base=restkit.manager.base-module.html"><a title="restkit.manager.base" class="py-name" href="#" onclick="return doclink('link-0', 'base', 'link-0');">base</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class restkit.manager.base.Manager=restkit.manager.base.Manager-class.html"><a title="restkit.manager.base.Manager" class="py-name" href="#" onclick="return doclink('link-1', 'Manager', 'link-1');">Manager</a></tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"> </tt>
+<a name="GeventConnectionReaper"></a><div id="GeventConnectionReaper-def"><a name="L16"></a><tt class="py-lineno">16</tt> <a class="py-toggle" href="#" id="GeventConnectionReaper-toggle" onclick="return toggle('GeventConnectionReaper');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="restkit.manager.mgevent.GeventConnectionReaper-class.html">GeventConnectionReaper</a><tt class="py-op">(</tt><tt class="py-base-class">gevent</tt><tt class="py-op">.</tt><tt class="py-base-class">Greenlet</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GeventConnectionReaper-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="GeventConnectionReaper-expanded"><a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt id="link-2" class="py-name" targets="Variable restkit.manager.base.ConnectionReaper.running=restkit.manager.base.ConnectionReaper-class.html#running,Variable restkit.manager.meventlet.EventletConnectionReaper.running=restkit.manager.meventlet.EventletConnectionReaper-class.html#running,Variable restkit.manager.mgevent.GeventConnectionReaper.running=restkit.manager.mgevent.GeventConnectionReaper-class.html#running"><a title="restkit.manager.base.ConnectionReaper.running
+restkit.manager.meventlet.EventletConnectionReaper.running
+restkit.manager.mgevent.GeventConnectionReaper.running" class="py-name" href="#" onclick="return doclink('link-2', 'running', 'link-2');">running</a></tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="GeventConnectionReaper.__init__"></a><div id="GeventConnectionReaper.__init__-def"><a name="L20"></a><tt class="py-lineno">20</tt> <a class="py-toggle" href="#" id="GeventConnectionReaper.__init__-toggle" onclick="return toggle('GeventConnectionReaper.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.manager.mgevent.GeventConnectionReaper-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">manager</tt><tt class="py-op">,</tt> <tt class="py-param">delay</tt><tt class="py-op">=</tt><tt class="py-number">150</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GeventConnectionReaper.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="GeventConnectionReaper.__init__-expanded"><a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Package restkit.manager=restkit.manager-module.html"><a title="restkit.manager" class="py-name" href="#" onclick="return doclink('link-3', 'manager', 'link-3');">manager</a></tt> <tt class="py-op">=</tt> <tt id="link-4" class="py-name"><a title="restkit.manager" class="py-name" href="#" onclick="return doclink('link-4', 'manager', 'link-3');">manager</a></tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">delay</tt> <tt class="py-op">=</tt> <tt class="py-name">delay</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-name">gevent</tt><tt class="py-op">.</tt><tt class="py-name">Greenlet</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method restkit.client.BodyWrapper.__init__()=restkit.client.BodyWrapper-class.html#__init__,Method restkit.client.Client.__init__()=restkit.client.Client-class.html#__init__,Method restkit.client.ClientResponse.__init__()=restkit.client.ClientResponse-class.html#__init__,Method restkit.contrib.ipython_shell.JSON.__init__()=restkit.contrib.ipython_shell.JSON-class.html#__init__,Method restkit.contrib.ipython_shell.Shell.__init__()=restkit.contrib.ipython_shell.Shell-class.html#__init__,Method restkit.contrib.ipython_shell.ShellClient.__init__()=restkit.contrib.ipython_shell.ShellClient-class.html#__init__,Method restkit.contrib.webob_api.Method.__init__()=restkit.contrib.webob_api.Method-class.html#__init__,Method restkit.contrib.webob_helper.WebobResourceError.__init__()=restkit.contrib.webob_helper.WebobResourceError-class.html#__init__,Method restkit.contrib.wsgi_proxy.HostProxy.__init__()=restkit.contrib.wsgi_proxy.HostProxy-class.html#__init__,Method restkit.contrib.wsgi_proxy.Proxy.__init__()=restkit.contrib.wsgi_proxy.Proxy-class.html#__init__,Method restkit.datastructures.MultiDict.__init__()=restkit.datastructures.MultiDict-class.html#__init__,Method restkit.errors.ChunkMissingTerminator.__init__()=restkit.errors.ChunkMissingTerminator-class.html#__init__,Method restkit.errors.InvalidChunkSize.__init__()=restkit.errors.InvalidChunkSize-class.html#__init__,Method restkit.errors.InvalidHTTPStatus.__init__()=restkit.errors.InvalidHTTPStatus-class.html#__init__,Method restkit.errors.InvalidHTTPVersion.__init__()=restkit.errors.InvalidHTTPVersion-class.html#__init__,Method restkit.errors.InvalidHeader.__init__()=restkit.errors.InvalidHeader-class.html#__init__,Method restkit.errors.InvalidHeaderName.__init__()=restkit.errors.InvalidHeaderName-class.html#__init__,Method restkit.errors.InvalidRequestLine.__init__()=restkit.errors.InvalidRequestLine-class.html#__init__,Method restkit.errors.InvalidRequestMethod.__init__()=restkit.errors.InvalidRequestMethod-class.html#__init__,Method restkit.errors.NoMoreData.__init__()=restkit.errors.NoMoreData-class.html#__init__,Method restkit.errors.ResourceError.__init__()=restkit.errors.ResourceError-class.html#__init__,Method restkit.filters.BasicAuth.__init__()=restkit.filters.BasicAuth-class.html#__init__,Method restkit.filters.Filters.__init__()=restkit.filters.Filters-class.html#__init__,Method restkit.filters.OAuthFilter.__init__()=restkit.filters.OAuthFilter-class.html#__init__,Method restkit.forms.BoundaryItem.__init__()=restkit.forms.BoundaryItem-class.html#__init__,Method restkit.forms.MultipartForm.__init__()=restkit.forms.MultipartForm-class.html#__init__,Method restkit.http.Body.__init__()=restkit.http.Body-class.html#__init__,Method restkit.http.ChunkedReader.__init__()=restkit.http.ChunkedReader-class.html#__init__,Method restkit.http.DeflateBody.__init__()=restkit.http.DeflateBody-class.html#__init__,Method restkit.http.EOFReader.__init__()=restkit.http.EOFReader-class.html#__init__,Method restkit.http.GzipBody.__init__()=restkit.http.GzipBody-class.html#__init__,Method restkit.http.LengthReader.__init__()=restkit.http.LengthReader-class.html#__init__,Method restkit.http.Request.__init__()=restkit.http.Request-class.html#__init__,Method restkit.http.Unreader.__init__()=restkit.http.Unreader-class.html#__init__,Method restkit.manager.base.ConnectionReaper.__init__()=restkit.manager.base.ConnectionReaper-class.html#__init__,Method restkit.manager.base.Manager.__init__()=restkit.manager.base.Manager-class.html#__init__,Method restkit.manager.meventlet.EventletConnectionReaper.__init__()=restkit.manager.meventlet.EventletConnectionReaper-class.html#__init__,Method restkit.manager.mgevent.GeventConnectionReaper.__init__()=restkit.manager.mgevent.GeventConnectionReaper-class.html#__init__,Method restkit.oauth2.Consumer.__init__()=restkit.oauth2.Consumer-class.html#__init__,Method restkit.oauth2.Error.__init__()=restkit.oauth2.Error-class.html#__init__,Method restkit.oauth2.Request.__init__()=restkit.oauth2.Request-class.html#__init__,Method restkit.oauth2.Server.__init__()=restkit.oauth2.Server-class.html#__init__,Method restkit.oauth2.Token.__init__()=restkit.oauth2.Token-class.html#__init__,Method restkit.resource.Resource.__init__()=restkit.resource.Resource-class.html#__init__,Method restkit.tee.TeeInput.__init__()=restkit.tee.TeeInput-class.html#__init__,Method restkit.util.deprecated_property.__init__()=restkit.util.deprecated_property-class.html#__init__"><a title="restkit.client.BodyWrapper.__init__
+restkit.client.Client.__init__
+restkit.client.ClientResponse.__init__
+restkit.contrib.ipython_shell.JSON.__init__
+restkit.contrib.ipython_shell.Shell.__init__
+restkit.contrib.ipython_shell.ShellClient.__init__
+restkit.contrib.webob_api.Method.__init__
+restkit.contrib.webob_helper.WebobResourceError.__init__
+restkit.contrib.wsgi_proxy.HostProxy.__init__
+restkit.contrib.wsgi_proxy.Proxy.__init__
+restkit.datastructures.MultiDict.__init__
+restkit.errors.ChunkMissingTerminator.__init__
+restkit.errors.InvalidChunkSize.__init__
+restkit.errors.InvalidHTTPStatus.__init__
+restkit.errors.InvalidHTTPVersion.__init__
+restkit.errors.InvalidHeader.__init__
+restkit.errors.InvalidHeaderName.__init__
+restkit.errors.InvalidRequestLine.__init__
+restkit.errors.InvalidRequestMethod.__init__
+restkit.errors.NoMoreData.__init__
+restkit.errors.ResourceError.__init__
+restkit.filters.BasicAuth.__init__
+restkit.filters.Filters.__init__
+restkit.filters.OAuthFilter.__init__
+restkit.forms.BoundaryItem.__init__
+restkit.forms.MultipartForm.__init__
+restkit.http.Body.__init__
+restkit.http.ChunkedReader.__init__
+restkit.http.DeflateBody.__init__
+restkit.http.EOFReader.__init__
+restkit.http.GzipBody.__init__
+restkit.http.LengthReader.__init__
+restkit.http.Request.__init__
+restkit.http.Unreader.__init__
+restkit.manager.base.ConnectionReaper.__init__
+restkit.manager.base.Manager.__init__
+restkit.manager.meventlet.EventletConnectionReaper.__init__
+restkit.manager.mgevent.GeventConnectionReaper.__init__
+restkit.oauth2.Consumer.__init__
+restkit.oauth2.Error.__init__
+restkit.oauth2.Request.__init__
+restkit.oauth2.Server.__init__
+restkit.oauth2.Token.__init__
+restkit.resource.Resource.__init__
+restkit.tee.TeeInput.__init__
+restkit.util.deprecated_property.__init__" class="py-name" href="#" onclick="return doclink('link-5', '__init__', 'link-5');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt>   </tt>
+</div><a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"> </tt>
+<a name="GeventConnectionReaper._run"></a><div id="GeventConnectionReaper._run-def"><a name="L25"></a><tt class="py-lineno">25</tt> <a class="py-toggle" href="#" id="GeventConnectionReaper._run-toggle" onclick="return toggle('GeventConnectionReaper._run');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.manager.mgevent.GeventConnectionReaper-class.html#_run">_run</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GeventConnectionReaper._run-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="GeventConnectionReaper._run-expanded"><a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="restkit.manager.base.ConnectionReaper.running
+restkit.manager.meventlet.EventletConnectionReaper.running
+restkit.manager.mgevent.GeventConnectionReaper.running" class="py-name" href="#" onclick="return doclink('link-6', 'running', 'link-2');">running</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">            <tt class="py-name">gevent</tt><tt class="py-op">.</tt><tt class="py-name">sleep</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">delay</tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="restkit.manager" class="py-name" href="#" onclick="return doclink('link-7', 'manager', 'link-3');">manager</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method restkit.manager.base.Manager.murder_connections()=restkit.manager.base.Manager-class.html#murder_connections"><a title="restkit.manager.base.Manager.murder_connections" class="py-name" href="#" onclick="return doclink('link-8', 'murder_connections', 'link-8');">murder_connections</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="GeventConnectionReaper.ensure_started"></a><div id="GeventConnectionReaper.ensure_started-def"><a name="L31"></a><tt class="py-lineno">31</tt> <a class="py-toggle" href="#" id="GeventConnectionReaper.ensure_started-toggle" onclick="return toggle('GeventConnectionReaper.ensure_started');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.manager.mgevent.GeventConnectionReaper-class.html#ensure_started">ensure_started</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GeventConnectionReaper.ensure_started-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="GeventConnectionReaper.ensure_started-expanded"><a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="restkit.manager.base.ConnectionReaper.running
+restkit.manager.meventlet.EventletConnectionReaper.running
+restkit.manager.mgevent.GeventConnectionReaper.running" class="py-name" href="#" onclick="return doclink('link-9', 'running', 'link-2');">running</a></tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ready</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Method restkit.manager.base.Manager.start()=restkit.manager.base.Manager-class.html#start,Method restkit.manager.meventlet.EventletConnectionReaper.start()=restkit.manager.meventlet.EventletConnectionReaper-class.html#start,Method restkit.manager.meventlet.EventletManager.start()=restkit.manager.meventlet.EventletManager-class.html#start,Method restkit.manager.mgevent.GeventManager.start()=restkit.manager.mgevent.GeventManager-class.html#start"><a title="restkit.manager.base.Manager.start
+restkit.manager.meventlet.EventletConnectionReaper.start
+restkit.manager.meventlet.EventletManager.start
+restkit.manager.mgevent.GeventManager.start" class="py-name" href="#" onclick="return doclink('link-10', 'start', 'link-10');">start</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="GeventManager"></a><div id="GeventManager-def"><a name="L35"></a><tt class="py-lineno">35</tt> <a class="py-toggle" href="#" id="GeventManager-toggle" onclick="return toggle('GeventManager');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="restkit.manager.mgevent.GeventManager-class.html">GeventManager</a><tt class="py-op">(</tt><tt class="py-base-class">Manager</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GeventManager-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="GeventManager-expanded"><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"> </tt>
+<a name="GeventManager.get_lock"></a><div id="GeventManager.get_lock-def"><a name="L37"></a><tt class="py-lineno">37</tt> <a class="py-toggle" href="#" id="GeventManager.get_lock-toggle" onclick="return toggle('GeventManager.get_lock');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.manager.mgevent.GeventManager-class.html#get_lock">get_lock</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GeventManager.get_lock-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="GeventManager.get_lock-expanded"><a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">RLock</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">            </tt>
+<a name="GeventManager.start"></a><div id="GeventManager.start-def"><a name="L40"></a><tt class="py-lineno">40</tt> <a class="py-toggle" href="#" id="GeventManager.start-toggle" onclick="return toggle('GeventManager.start');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.manager.mgevent.GeventManager-class.html#start">start</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GeventManager.start-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="GeventManager.start-expanded"><a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">with_signaling</tt><tt class="py-op">:</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">            <tt class="py-name">signal</tt><tt class="py-op">.</tt><tt class="py-name">signal</tt><tt class="py-op">(</tt><tt class="py-name">signal</tt><tt class="py-op">.</tt><tt class="py-name">SIGALRM</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="restkit.manager.base.Manager.murder_connections" class="py-name" href="#" onclick="return doclink('link-11', 'murder_connections', 'link-8');">murder_connections</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">            <tt class="py-name">signal</tt><tt class="py-op">.</tt><tt class="py-name">alarm</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">timeout</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_reaper</tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name" targets="Class restkit.manager.mgevent.GeventConnectionReaper=restkit.manager.mgevent.GeventConnectionReaper-class.html"><a title="restkit.manager.mgevent.GeventConnectionReaper" class="py-name" href="#" onclick="return doclink('link-12', 'GeventConnectionReaper', 'link-12');">GeventConnectionReaper</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">delay</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">timeout</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_reaper</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method restkit.manager.base.ConnectionReaper.ensure_started()=restkit.manager.base.ConnectionReaper-class.html#ensure_started,Method restkit.manager.meventlet.EventletConnectionReaper.ensure_started()=restkit.manager.meventlet.EventletConnectionReaper-class.html#ensure_started,Method restkit.manager.mgevent.GeventConnectionReaper.ensure_started()=restkit.manager.mgevent.GeventConnectionReaper-class.html#ensure_started"><a title="restkit.manager.base.ConnectionReaper.ensure_started
+restkit.manager.meventlet.EventletConnectionReaper.ensure_started
+restkit.manager.mgevent.GeventConnectionReaper.ensure_started" class="py-name" href="#" onclick="return doclink('link-13', 'ensure_started', 'link-13');">ensure_started</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="restkit-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu Feb  3 16:04:20 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

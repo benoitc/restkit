@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Usage with Eventlet and Gevent &mdash; restkit v3.0.0 documentation</title>
+    <link rel="stylesheet" href="static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <link rel="top" title="restkit v3.0.0 documentation" href="index.html" />
+    <link rel="next" title="Command Line" href="client.html" />
+    <link rel="prev" title="Stream you content" href="streaming.html" />
+
+  <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
+  
+  <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
+  <link rel="stylesheet" href="static/blitzer/jquery-ui-custom.css"
+   type="text/css" />
+  <link rel="stylesheet" href="static/restkit.css"
+   type="text/css" />
+  
+   
+   
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAlwR2WqkJqSQkp3ltvd0NQxTdZZbkdkYaSGUN67ZRlKqnJX74gRQ-NQUM6HVgKkUT9t2gAa363uI1NA" type="text/javascript"></script>
+  
+  <script>
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+  </script
+  
+  <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+  </head>
+  <body>
+<div class="container">
+<div id="header">
+  <h1 class="logo"><a href="index.html">restkit</a></h1>
+  
+  <div id="links"> 
+    Get the source via
+    <a href="http://github.com/benoitc/restkit">git</a>, then
+    <a href="http://github.com/benoitc/restkit/issues">send feedback</a> 
+  </div>
+  
+  <div id="menu">
+    <div id="cse">
+      <form action="http://www.google.com/cse" id="cse-search-box">
+          <input type="hidden" name="cx" value="005434981105004447958:7wnbzt3zexa" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="25" />
+          <input type="submit" name="sa" value="Search" />
+      </form>
+      <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+    </div>
+    <ul id="actions">
+      <li><a href="index.html">Usage</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="api/index.html">Api</a></li>
+      <li><a href="news.html">News</a></li>
+    
+    </ul>
+
+  </div>
+  
+
+</div>
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usage-with-eventlet-and-gevent">
+<h1>Usage with Eventlet and Gevent<a class="headerlink" href="#usage-with-eventlet-and-gevent" title="Permalink to this headline">¶</a></h1>
+<p>Restkit can be used with <a class="reference external" href="http://eventlet.net">eventlet</a> or <a class="reference external" href="http://gevent.org">gevent</a> and provide specific
+connection manager to manage iddle connections for them.</p>
+<div class="section" id="use-it-with-gevent">
+<h2>Use it with gevent:<a class="headerlink" href="#use-it-with-gevent" title="Permalink to this headline">¶</a></h2>
+<p>Here is a quick crawler example using Gevent:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">timeit</span>
+
+<span class="c"># patch python to use replace replace functions and classes with</span>
+<span class="c"># cooperative ones</span>
+<span class="kn">from</span> <span class="nn">gevent</span> <span class="kn">import</span> <span class="n">monkey</span><span class="p">;</span> <span class="n">monkey</span><span class="o">.</span><span class="n">patch_all</span><span class="p">()</span>
+
+<span class="kn">import</span> <span class="nn">gevent</span>
+
+<span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">restkit.globals</span> <span class="kn">import</span> <span class="n">set_manager</span><span class="p">,</span> <span class="n">get_manager</span>
+<span class="kn">from</span> <span class="nn">restkit.manager.mgevent</span> <span class="kn">import</span> <span class="n">GeventManager</span>
+
+<span class="c"># set the gevent connection manager</span>
+<span class="n">set_manager</span><span class="p">(</span><span class="n">GeventManager</span><span class="p">())</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&quot;http://yahoo.fr&quot;</span><span class="p">,</span>
+        <span class="s">&quot;http://google.com&quot;</span><span class="p">,</span>
+        <span class="s">&quot;http://friendpaste.com&quot;</span><span class="p">,</span>
+        <span class="s">&quot;http://benoitc.io&quot;</span><span class="p">,</span>
+        <span class="s">&quot;http://couchdb.apache.org&quot;</span><span class="p">]</span>
+
+<span class="n">allurls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">allurls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">follow_redirect</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;RESULT: </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">body_string</span><span class="p">()))</span>
+
+<span class="k">def</span> <span class="nf">extract</span><span class="p">():</span>
+
+    <span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">gevent</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="n">fetch</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">allurls</span><span class="p">]</span>
+    <span class="n">gevent</span><span class="o">.</span><span class="n">joinall</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">extract</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="si">%.2f</span><span class="s"> s&quot;</span> <span class="o">%</span> <span class="n">t</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-it-with-eventlet">
+<h2>Use it with eventlet:<a class="headerlink" href="#use-it-with-eventlet" title="Permalink to this headline">¶</a></h2>
+<p>Same exemple as above but using eventlet:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">timeit</span>
+
+<span class="c"># patch python</span>
+<span class="kn">import</span> <span class="nn">eventlet</span>
+<span class="n">eventlet</span><span class="o">.</span><span class="n">monkey_patch</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">restkit.globals</span> <span class="kn">import</span> <span class="n">set_manager</span><span class="p">,</span> <span class="n">get_manager</span>
+<span class="kn">from</span> <span class="nn">restkit.manager.meventlet</span> <span class="kn">import</span> <span class="n">EventletManager</span>
+
+<span class="c"># set the connection manager</span>
+<span class="n">set_manager</span><span class="p">(</span><span class="n">EventletManager</span><span class="p">())</span>
+
+<span class="n">pool</span> <span class="o">=</span> <span class="n">eventlet</span><span class="o">.</span><span class="n">GreenPool</span><span class="p">()</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&quot;http://yahoo.fr&quot;</span><span class="p">,</span>
+        <span class="s">&quot;http://google.com&quot;</span><span class="p">,</span>
+        <span class="s">&quot;http://friendpaste.com&quot;</span><span class="p">,</span>
+        <span class="s">&quot;http://benoitc.io&quot;</span><span class="p">,</span>
+        <span class="s">&quot;http://couchdb.apache.org&quot;</span><span class="p">]</span>
+
+<span class="n">allurls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">allurls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">follow_redirect</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;RESULT: </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">body_string</span><span class="p">()))</span>
+
+<span class="k">def</span> <span class="nf">extract</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">allurls</span><span class="p">:</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">spawn_n</span><span class="p">(</span><span class="n">fetch</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">waitall</span><span class="p">()</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">extract</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="si">%.2f</span><span class="s"> s&quot;</span> <span class="o">%</span> <span class="n">t</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage with Eventlet and Gevent</a><ul>
+<li><a class="reference internal" href="#use-it-with-gevent">Use it with gevent:</a></li>
+<li><a class="reference internal" href="#use-it-with-eventlet">Use it with eventlet:</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="streaming.html"
+                        title="previous chapter">Stream you content</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="client.html"
+                        title="next chapter">Command Line</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/green.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </div>
+  <div id="apibox"></div>
+  <div id="footer">
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+    <p>Hosted on <a href="http://github.com/">Github</a> and generated with <a href="http://sphinx.pocoo.org/">Sphinx</a></p>
+  </div>
+
+
+  </body>
+</html>

@@ -3,6 +3,19 @@
 News
 ====
 
+3.0 / 2001-02-02
+----------------
+
+- New Connection management: Better concurrency handling and iddle
+  connections are now closed after a time.
+- Improved Client.
+- Fix redirect 
+- Better error handling
+- Timeout can now be set on each request.
+- Major refactoring. consolidation of some module, ease the HTTP parser
+  code.
+- Fix timeout errors.
+
 2.3.0 / 2010-11-25
 ------------------
  - Refactored Http Connections management (reuse connections).

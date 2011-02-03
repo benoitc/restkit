@@ -7,20 +7,20 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Stream you content &mdash; restkit v2.3.0 documentation</title>
+    <title>Stream you content &mdash; restkit v3.0.0 documentation</title>
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.3.0',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v2.3.0 documentation" href="index.html" />
-    <link rel="next" title="Command Line" href="client.html" />
+    <link rel="top" title="restkit v3.0.0 documentation" href="index.html" />
+    <link rel="next" title="Usage with Eventlet and Gevent" href="green.html" />
     <link rel="prev" title="Authentication" href="authentication.html" />
 
   <meta name="google-site-verification" content="3e4o1u-mjWhMBU3-KA8udnPZBow7ZqjY3i29eh87gTs" />
@@ -113,7 +113,7 @@
 </div>
 <div class="section" id="stream-from">
 <h2>Stream from<a class="headerlink" href="#stream-from" title="Permalink to this headline">¶</a></h2>
-<p>Each requests return a <a class="reference external" href="api/restkit.client-module.html#HttpResponse">HttpResponse</a> object. If you want to receive the content in a streaming fashion you just have to use the <cite>body_file</cite> member of the response. You can <cite>iter</cite> on it or just use as a file-like object (read, readline, readlines, ...).</p>
+<p>Each requests return a <a class="reference external" href="api/restkit.client-module.html#HttpResponse">HttpResponse</a> object. If you want to receive the content in a streaming fashion you just have to use the <cite>body_stream</cite> member of the response. You can <cite>iter</cite> on it or just use as a file-like object (read, readline, readlines, ...).</p>
 <p><strong>Attention</strong>: Since 2.0, response.body are just streamed and aren&#8217;t persistent. In previous version, the implementation may cause problem with memory or storage usage.</p>
 <p>Quick snippet with iteration:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
@@ -140,6 +140,33 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="tee-input">
+<h2>Tee input<a class="headerlink" href="#tee-input" title="Permalink to this headline">¶</a></h2>
+<p>While with body_stream you can only consume the input until the end, you
+may want to reuse this body later in your application. For that, restkit
+since the 3.0 version offer the <cite>tee</cite> method. It copy response input to
+standard output or a file if length &gt; sock.MAX_BODY. When all the input
+has been read, connection is released:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">&quot;http://e-engura.com/images/logo.gif&quot;</span><span class="p">)</span>
+<span class="n">fd</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s">&#39;.gif&#39;</span><span class="p">)</span>
+<span class="n">fd1</span><span class="p">,</span> <span class="n">fname1</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s">&#39;.gif&#39;</span><span class="p">)</span>
+
+<span class="n">body</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">tee</span><span class="p">()</span>
+<span class="c"># save first file</span>
+<span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="s">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+   <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">body</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+<span class="c"># reset</span>
+<span class="n">body</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c"># save second file.</span>
+<span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">fd1</span><span class="p">,</span> <span class="s">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+   <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">body</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -153,6 +180,7 @@
 <li><a class="reference internal" href="#">Stream you content</a><ul>
 <li><a class="reference internal" href="#stream-to">Stream to</a></li>
 <li><a class="reference internal" href="#stream-from">Stream from</a></li>
+<li><a class="reference internal" href="#tee-input">Tee input</a></li>
 </ul>
 </li>
 </ul>
@@ -161,8 +189,8 @@
   <p class="topless"><a href="authentication.html"
                         title="previous chapter">Authentication</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="client.html"
-                        title="next chapter">Command Line</a></p>
+  <p class="topless"><a href="green.html"
+                        title="next chapter">Usage with Eventlet and Gevent</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="sources/streaming.txt"
