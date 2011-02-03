@@ -68,7 +68,7 @@ class Manager(object):
 
     def murder_connections(self, *args):
         self._lock.acquire()
-        log.info("murder connections")
+        log.debug("murder connections")
         try:
             active_sockets = self.active_sockets.copy()
             for fno, (sock, t0, k) in active_sockets.items():
@@ -131,7 +131,7 @@ class Manager(object):
                         break
                 self.sockets[key] = socks
                 self.connections_count[key] -= 1
-                log.info("fetch sock from pool")
+                log.debug("fetch sock from pool")
                 return sck
             except (IndexError, KeyError,):
                 return None

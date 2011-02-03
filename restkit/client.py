@@ -590,7 +590,7 @@ class Client(object):
         method """
         unreader = http.Unreader(self._sock)
 
-        log.info("Start to parse response")
+        log.debug("Start to parse response")
         while True:
             resp = http.Request(unreader)
             if resp.status_int != 100:
@@ -598,8 +598,8 @@ class Client(object):
             resp.body.discard()
             log.debug("Go 100-Continue header")
 
-        log.info("Got response: %s" % resp.status)
-        log.info("headers: [%s]" % resp.headers)
+        log.debug("Got response: %s" % resp.status)
+        log.debug("headers: [%s]" % resp.headers)
         
         location = resp.headers.iget('location')
 
