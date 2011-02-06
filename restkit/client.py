@@ -523,7 +523,6 @@ class Client(object):
                 raise RequestError(str(e))
             except socket.timeout, e:
                 self.close_connection()
-                wait = wait * 2
                 if tries <= 0:
                     raise RequestTimeout(str(e))
             except socket.error, e:
@@ -542,7 +541,7 @@ class Client(object):
 
             # time until we retry.
             time.sleep(wait)
-            
+            wait = wait * 2
             tries = tries - 1
 
             # reset request
