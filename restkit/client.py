@@ -220,7 +220,7 @@ class Client(object):
             decompress=True, 
             manager=None,
             response_class=None,
-            timeout=MAX_CLIENT_TIMEOUT,
+            timeout=None,
             force_dns=False,
             max_tries=5,
             wait_tries=1.0,
@@ -322,7 +322,7 @@ class Client(object):
 
             try:
                 sck = socket.socket(af, socktype, proto)
-        
+       
                 sck.settimeout(self.timeout)
                 sck.connect(sa)
                     
