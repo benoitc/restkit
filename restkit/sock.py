@@ -8,13 +8,6 @@ import socket
 CHUNK_SIZE = (16 * 1024)
 MAX_BODY = 1024 * 112
 DNS_TIMEOUT = 60
-
-try:
-    import ssl # python 2.6
-    have_ssl = True
-except ImportError:
-    have_ssl = False
-
  
 _allowed_ssl_args = ('keyfile', 'certfile', 'server_side',
                     'cert_reqs', 'ssl_version', 'ca_certs', 
