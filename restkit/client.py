@@ -312,7 +312,7 @@ class Client(object):
         return (te is not None and te.lower() == "chunked")
 
     def req_is_ssl(self):
-        return self.parsed_url.scheme == "ssl"
+        return self.parsed_url.scheme == "https"
 
     def connect(self, addr, is_ssl):
         """ create a socket """
