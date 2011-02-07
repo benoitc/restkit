@@ -124,6 +124,7 @@ class ClientResponse(object):
 
         if client.method == "HEAD":
             """ no body on HEAD, release the connection now """
+            self.release_connection()
             self._body = StringIO()
 
     def __getitem__(self, key):
@@ -146,7 +147,7 @@ class ClientResponse(object):
         self._closed = True
 
     def can_read(self):
-        return not self._closed and not self._already_read
+        return not self._already_read
 
     def body_string(self, charset=None, unicode_errors="strict"):
         """ return body string, by default in bytestring """
