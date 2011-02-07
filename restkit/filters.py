@@ -62,7 +62,7 @@ class SimpleProxy(object):
     connect to the proxy and modify connection headers.
     """
 
-    def on_connect(self, client, sck, ssl):
+    def on_connect(self, client, addr, ssl):
         proxy_settings = os.environ.get('%s_proxy' %
                 self.client.parsed_url.scheme)
 
