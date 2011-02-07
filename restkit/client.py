@@ -591,7 +591,7 @@ class Client(object):
 
         log.debug("Start to parse response")
         while True:
-            resp = http.Request(unreader)
+            resp = http.Request(unreader, decompress=self.decompress)
             if resp.status_int != 100:
                 break
             resp.body.discard()
