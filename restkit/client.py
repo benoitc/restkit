@@ -436,14 +436,19 @@ class Client(object):
             httpver = "HTTP/1.0"
 
         ua = self.headers.iget('user_agent')
+        if not ua:
+            ua = USER_AGENT 
         host = self.host
+
         accept_encoding = self.headers.iget('accept-encoding')
+        if not accept_encoding:
+            accept_encoding = 'identity'
 
         headers = [
             "%s %s %s\r\n" % (self.method, self.path, httpver),
             "Host: %s\r\n" % host,
-            "User-Agent: %s\r\n" % ua or USER_AGENT,
-            "Accept-Encoding: %s\r\n" % accept_encoding or 'identity'
+            "User-Agent: %s\r\n" % ua,
+            "Accept-Encoding: %s\r\n" % accept_encoding
         ]
 
         headers.extend(["%s: %s\r\n" % (k, str(v)) for k, v in \
