@@ -21,7 +21,6 @@ Token
 from .sock import send
 from .util import parse_netloc
 
-
 class Filters(object):
     
     def __init__(self, filters=None):
@@ -62,42 +61,78 @@ class SimpleProxy(object):
     This filter find proxy from environment and if it exists it
     connect to the proxy and modify connection headers.
     """
-    
-    def on_connect(self, client, sck, ssl):
-        proxy = os.environ.get('https_proxy')
-        if proxy:
-            proxy_uri = urlparse.urlparse(proxy)
-            proxy_auth = _get_proxy_auth()
-            if proxy_auth:
-                proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-            proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' %  parse_netloc(proxy_uri)
 
-            user_agent = "User-Agent: restkit/%s\r\n" % __version__
-            proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, 
-                                    user_agent)
-                            
-            send(sck, proxy_pieces)
-            unreader = Unreader(sck)
-            resp = Request(unreader)
-            body = resp.body.read()
-            if resp.status_int != 200:
-                raise ProxyError("Tunnel connection failed: %d %s" %
-                        (resp.status_int, body))
-            
+    def on_connect(self, client, sck, ssl):
+        proxy_settings = os.environ.get('%s_proxy' %
+                self.client.parsed_url.scheme)
+
+        if not proxy_settings: 
+            return
+
+
+        if proxy_settings:
+            proxy_settings, proxy_auth =  _get_proxy_auth(proxy_setting)
+            addr = parse_netloc(proxy_settings)
+
+            if ssl:
+                if proxy_auth:
+                    proxy_auth = 'Proxy-authorization: %s' % proxy_auth
+                proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' %  parse_netloc(proxy_uri)
+
+                user_agent = client.headers.iget('user_agent')
+                if not user_agent:
+                    user_agent = "User-Agent: restkit/%s\r\n" % __version__
+
+                proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, 
+                        user_agent)
+
+                sck = client._manager.find_socket(addr, ssl)
+                if sck is None:
+                    sck = client.connect(addr, ssl)
+
+                send(sck, proxy_pieces)
+                unreader = Unreader(sck)
+                resp = Request(unreader)
+                body = resp.body.read()
+                if resp.status_int != 200:
+                    raise ProxyError("Tunnel connection failed: %d %s" %
+                            (resp.status_int, body))
+                    client._sock = sck
+                client._sock_key = (addr, ssl)
+            else:
+                if proxy_auth:
+                    client.headers['Proxy-authorization: %s'] = proxy_auth
+
+                sck = client._manager.find_socket(addr, ssl)
+                if sck is None:
+                    sck = client.connect(addr, ssl)
+                client._sock = sck
+                client._sock_key = (addr, ssl)
      
-def _get_proxy_auth():
+def _get_proxy_auth(proxy_settings):
     proxy_username = os.environ.get('proxy-username')
     if not proxy_username:
         proxy_username = os.environ.get('proxy_username')
     proxy_password = os.environ.get('proxy-password')
     if not proxy_password:
         proxy_password = os.environ.get('proxy_password')
+
+    proxy_password = proxy_password or ""
+
+    if not proxy_username:
+        u = urlparse.urlparse(proxy_settings)
+        if u.username:
+            proxy_password = u.password or proxy_password 
+            proxy_settings = urlparse.urlunparse((u.scheme, 
+                u.netloc.split("@")[-1], u.path, u.params, u.query, 
+                u.fragment))
+    
     if proxy_username:
         user_auth = base64.encodestring('%s:%s' % (proxy_username,
                                     proxy_password))
-        return 'Basic %s\r\n' % (user_auth.strip())
+        return proxy_settings, 'Basic %s\r\n' % (user_auth.strip())
     else:
-        return ''
+        return proxy_settings, ''
 
 def validate_consumer(consumer):
     """ validate a consumer agains oauth2.Consumer object """

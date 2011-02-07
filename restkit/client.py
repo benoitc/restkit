@@ -335,9 +335,6 @@ class Client(object):
                     validate_ssl_args(self.ssl_args)
                     sck = ssl.wrap_socket(sck, **self.ssl_args)
                 
-                # apply connect filters
-                self.filters.apply("on_connect", self, sck, ssl)
-
                 return sck
             except socket.error:
                 close(sck)
@@ -345,8 +342,15 @@ class Client(object):
 
     def get_connection(self):
         """ get a connection from the pool or create new one. """
+
         addr = parse_netloc(self.parsed_url)
         ssl = self.req_is_ssl()
+
+        # apply connect filters
+        self.filters.apply("on_connect", self, addr, ssl)
+        if self._sock is not None:
+            return self._sock
+ 
         self._sock_key = (addr, ssl)
 
         sock = self._manager.find_socket(addr, ssl)
@@ -364,6 +368,7 @@ class Client(object):
 
         log.debug("release connection")
         self._manager.store_socket(sck, key[0], key[1])
+        self._sock = None
 
     def close_connection(self):
         """ close a connection """
@@ -478,6 +483,8 @@ class Client(object):
 
         log.debug("Start to perform request: %s %s %s" % (self.method,
             self.host, self.path))
+
+        self._sock = None
 
         self._original = dict( 
                 url = self.url,
