@@ -69,7 +69,7 @@ class ChunkedReader(object):
         self.req = req
         self.parser = self.parse_chunked(unreader)
         self.buf = StringIO()
-    
+
     def read(self, size):
         if not isinstance(size, (int, long)):
             raise TypeError("size must be an integral type")
@@ -91,16 +91,16 @@ class ChunkedReader(object):
         self.buf.truncate(0)
         self.buf.write(rest)
         return ret
-    
+
     def parse_trailers(self, unreader, data, eof=False):
         buf = StringIO()
         buf.write(data)
-        
+
         idx = buf.getvalue().find("\r\n\r\n")
         done = buf.getvalue()[:2] == "\r\n"
 
         while idx < 0 and not done:
-            self.get_data(unreader, buf)  
+            self.get_data(unreader, buf)
             idx = buf.getvalue().find("\r\n\r\n")
             done = buf.getvalue()[:2] == "\r\n"
         if done:
@@ -125,7 +125,7 @@ class ChunkedReader(object):
                 rest += unreader.read()
             if rest[:2] != '\r\n':
                 raise ChunkMissingTerminator(rest[:2])
-            (size, rest) = self.parse_chunk_size(unreader, data=rest[2:])          
+            (size, rest) = self.parse_chunk_size(unreader, data=rest[2:])
 
     def parse_chunk_size(self, unreader, data=None):
         buf = StringIO()
@@ -139,7 +139,7 @@ class ChunkedReader(object):
 
         data = buf.getvalue()
         line, rest_chunk = data[:idx], data[idx+2:]
-    
+
         chunk_size = line.split(";", 1)[0].strip()
         try:
             chunk_size = int(chunk_size, 16)
@@ -159,6 +159,7 @@ class ChunkedReader(object):
         if not data:
             raise NoMoreData()
         buf.write(data)
+
 
 class LengthReader(object):
     def __init__(self, req, unreader, length):
