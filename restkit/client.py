@@ -515,6 +515,17 @@ class Client(object):
                 
                 # send body
                 if self.body is not None:
+                    # handle 100-Continue status
+                    # http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8.2.3
+                    hdr_expect = self.headers.iget("expect")
+                    if hdr_expect is not None and \
+                            hdr_expect.lower() == "100-continue":
+                        resp = http.Request(http.Unreader(self._sock))
+                        if resp.status_int != 100:
+                            self.reset_request()
+                            log.debug("return response class")
+                            return self.response_class(self, resp)
+
                     chunked = self.req_is_chunked()
                     log.debug("send body (chunked: %s) %s" % (chunked,
                         type(self.body)))
@@ -599,16 +610,13 @@ class Client(object):
     def get_response(self):
         """ return final respons, it is only accessible via peform
         method """
-        unreader = http.Unreader(self._sock)
-
         log.debug("Start to parse response")
+        unreader = http.Unreader(self._sock)
         while True:
             resp = http.Request(unreader, decompress=self.decompress)
             if resp.status_int != 100:
                 break
-            log.debug("Go 100-Continue header")
             resp.body.discard()
-            
 
         log.debug("Got response: %s" % resp.status)
         log.debug("headers: [%s]" % resp.headers)
