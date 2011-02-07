@@ -314,7 +314,7 @@ class Client(object):
     def req_is_ssl(self):
         return self.parsed_url.scheme == "ssl"
 
-    def connect(self, addr, ssl):
+    def connect(self, addr, is_ssl):
         """ create a socket """
         log.debug("create new connection")
         for res in socket.getaddrinfo(addr[0], addr[1], 0, 
@@ -327,7 +327,7 @@ class Client(object):
                 sck.settimeout(self.timeout)
                 sck.connect(sa)
                     
-                if ssl:
+                if is_ssl:
                     if not have_ssl:
                         raise ValueError("https isn't supported.  On python 2.5x,"
                                         + " https support requires ssl module "
@@ -345,18 +345,18 @@ class Client(object):
         """ get a connection from the pool or create new one. """
 
         addr = parse_netloc(self.parsed_url)
-        ssl = self.req_is_ssl()
+        is_ssl = self.req_is_ssl()
 
         # apply connect filters
-        self.filters.apply("on_connect", self, addr, ssl)
+        self.filters.apply("on_connect", self, addr, is_ssl)
         if self._sock is not None:
             return self._sock
  
-        self._sock_key = (addr, ssl)
+        self._sock_key = (addr, is_ssl)
 
-        sock = self._manager.find_socket(addr, ssl)
+        sock = self._manager.find_socket(addr, is_ssl)
         if sock is None:
-            sock = self.connect(addr, ssl)
+            sock = self.connect(addr, is_ssl)
         return sock
 
     def release_connection(self, key, sck, should_close=False):
