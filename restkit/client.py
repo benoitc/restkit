@@ -538,8 +538,8 @@ class Client(object):
                 if tries <= 0:
                     raise RequestTimeout(str(e))
             except socket.error, e:
-                self.close_connection()
                 log.debug("socket error: %s" % str(e))
+                self.close_connection()
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
                         errno.EPIPE, errno.ECONNREFUSED, 
                         errno.ECONNRESET, errno.EBADF) or tries <= 0:
@@ -606,8 +606,9 @@ class Client(object):
             resp = http.Request(unreader, decompress=self.decompress)
             if resp.status_int != 100:
                 break
-            resp.body.discard()
             log.debug("Go 100-Continue header")
+            resp.body.discard()
+            
 
         log.debug("Got response: %s" % resp.status)
         log.debug("headers: [%s]" % resp.headers)
