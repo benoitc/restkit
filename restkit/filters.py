@@ -62,9 +62,9 @@ class SimpleProxy(object):
     connect to the proxy and modify connection headers.
     """
 
-    def on_connect(self, client, addr, ssl):
+    def on_connect(self, client, client_addr, ssl):
         proxy_settings = os.environ.get('%s_proxy' %
-                self.client.parsed_url.scheme)
+                client.parsed_url.scheme)
 
         if not proxy_settings: 
             return
@@ -72,12 +72,12 @@ class SimpleProxy(object):
 
         if proxy_settings:
             proxy_settings, proxy_auth =  _get_proxy_auth(proxy_setting)
-            addr = parse_netloc(proxy_settings)
+            addr = parse_netloc(urlparse.urlparse(proxy_settings))
 
             if ssl:
                 if proxy_auth:
                     proxy_auth = 'Proxy-authorization: %s' % proxy_auth
-                proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' %  parse_netloc(proxy_uri)
+                proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % client_addr
 
                 user_agent = client.headers.iget('user_agent')
                 if not user_agent:
