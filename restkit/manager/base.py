@@ -6,6 +6,7 @@
 from __future__ import with_statement
 
 from collections import deque
+import select
 import signal
 import socket
 import threading
@@ -123,7 +124,14 @@ class Manager(object):
                     fno, sck = socks.pop()
                     if fno in self.active_sockets:
                         del self.active_sockets[fno]
-                        break
+                        try:
+                            ret = select.select([fno], [fno], [], 0)
+                            if ret[0] or ret[1]:
+                                # socket is still connected
+                                break
+                        except socket.error:
+                            pass
+
                 self.sockets[key] = socks
                 self.connections_count[key] -= 1
                 return sck
