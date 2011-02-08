@@ -323,8 +323,10 @@ class Client(object):
 
             try:
                 sck = socket.socket(af, socktype, proto)
-       
-                sck.settimeout(self.timeout)
+                
+                if self.timeout is not None:
+                    sck.settimeout(self.timeout)
+
                 sck.connect(sa)
                     
                 if is_ssl:
@@ -505,7 +507,8 @@ class Client(object):
                 self._sock = self.get_connection()
                 
                 # set socket timeout in case default has changed
-                self._sock.settimeout(self.timeout)
+                if self.timeout is not None:
+                    self._sock.settimeout(self.timeout)
                 
                 # apply on_request filters
                 self.filters.apply("on_request", self)
