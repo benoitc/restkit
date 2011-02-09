@@ -124,14 +124,7 @@ class Manager(object):
                     fno, sck = socks.pop()
                     if fno in self.active_sockets:
                         del self.active_sockets[fno]
-                        try:
-                            ret = select.select([fno], [fno], [], 0)
-                            if ret[0] or ret[1]:
-                                # socket is still connected
-                                break
-                        except socket.error:
-                            pass
-
+                        break  
                 self.sockets[key] = socks
                 self.connections_count[key] -= 1
                 return sck
