@@ -21,9 +21,20 @@ except ImportError:
 
 try:
     import ssl # python 2.6
+    _ssl_wrapper = ssl.wrap_socket
     have_ssl = True
 except ImportError:
-    have_ssl = False
+    if hasattr(socket, "ssl"):
+        from httplib import FakeSocket
+        from .sock import trust_all_certificates
+
+        @trust_all_certificates
+        def _ssl_wrapper(sck, **kwargs):
+            ssl_sck = socket.ssl(sck, **kwargs)
+            return FakeSocket(sck, ssl_sck)
+        have_ssl = True
+    else:
+        have_ssl = False
 
 from . import __version__ 
 from .datastructures import MultiDict
@@ -313,7 +324,7 @@ class Client(object):
 
     def req_is_ssl(self):
         return self.parsed_url.scheme == "https"
-
+ 
     def connect(self, addr, is_ssl):
         """ create a socket """
         log.debug("create new connection")
@@ -336,7 +347,7 @@ class Client(object):
                                         + "(http://pypi.python.org/pypi/ssl) "
                                         + "to be intalled.")
                     validate_ssl_args(self.ssl_args)
-                    sck = ssl.wrap_socket(sck, **self.ssl_args)
+                    sck = _ssl_wrapper(sck, **self.ssl_args)
                 
                 return sck
             except socket.error:
