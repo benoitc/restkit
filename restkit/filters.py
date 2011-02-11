@@ -186,7 +186,7 @@ class OAuthFilter(object):
         parsed_url = client.parsed_url
 
         if client.body and client.body is not None:
-            ctype = client.headers.iget('content-ype')
+            ctype = client.headers.iget('content-type')
             if ctype is not None and \
                     ctype.startswith('application/x-www-form-urlencoded'):
                 # we are in a form try to get oauth params from here
