@@ -361,7 +361,8 @@ class Client(object):
  
     def connect(self, addr, is_ssl):
         """ create a socket """
-        log.debug("create new connection")
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("create new connection")
         for res in socket.getaddrinfo(addr[0], addr[1], 0, 
                 socket.SOCK_STREAM):
             af, socktype, proto, canonname, sa = res
@@ -410,17 +411,19 @@ class Client(object):
         """ release a connection to the pool """
 
         if should_close:
-            log.debug("close connection")
+            if log.isEnabledFor(logging.DEBUG):
+                log.debug("close connection")
             close(sck)
             return
-
-        log.debug("release connection")
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("release connection")
         self._manager.store_socket(sck, key[0], key[1])
         self._sock = None
 
     def close_connection(self):
         """ close a connection """
-        log.debug("close connection")
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("close connection")
         close(self._sock)
         self._sock = None
 
@@ -507,8 +510,8 @@ class Client(object):
         headers.extend(["%s: %s\r\n" % (k, str(v)) for k, v in \
                 self.headers.items() if k.lower() not in \
                 ('user-agent', 'host', 'accept-encoding',)])
-
-        log.debug("Send headers: %s" % headers)
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("Send headers: %s" % headers)
         return "%s\r\n" % "".join(headers)
 
     def reset_request(self):
@@ -529,7 +532,8 @@ class Client(object):
         if not self.url:
             raise RequestError("url isn't set")
 
-        log.debug("Start to perform request: %s %s %s" % (self.method,
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("Start to perform request: %s %s %s" % (self.method,
             self.host, self.path))
 
         self._sock = None
@@ -572,11 +576,13 @@ class Client(object):
                         resp = http.Request(http.Unreader(self._sock))
                         if resp.status_int != 100:
                             self.reset_request()
-                            log.debug("return response class")
+                            if log.isEnabledFor(logging.DEBUG):
+                                log.debug("return response class")
                             return self.response_class(self, resp)
 
                     chunked = self.req_is_chunked()
-                    log.debug("send body (chunked: %s) %s" % (chunked,
+                    if log.isEnabledFor(logging.DEBUG):
+                        log.debug("send body (chunked: %s) %s" % (chunked,
                         type(self.body)))
 
                     if hasattr(self.body, 'read'):
@@ -598,7 +604,8 @@ class Client(object):
                 if tries <= 0:
                     raise RequestTimeout(str(e))
             except socket.error, e:
-                log.debug("socket error: %s" % str(e))
+                if log.isEnabledFor(logging.DEBUG):
+                    log.debug("socket error: %s" % str(e))
                 self.close_connection()
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
                         errno.EPIPE, errno.ECONNREFUSED, 
@@ -645,8 +652,9 @@ class Client(object):
 
         # make sure location follow rfc2616
         location = rewrite_location(self.url, location)
-        
-        log.debug("Redirect to %s" % location)
+       
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("Redirect to %s" % location)
 
         # change request url and method if needed
         self.url = location
@@ -659,7 +667,8 @@ class Client(object):
     def get_response(self):
         """ return final respons, it is only accessible via peform
         method """
-        log.debug("Start to parse response")
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("Start to parse response")
         unreader = http.Unreader(self._sock)
         while True:
             resp = http.Request(unreader, decompress=self.decompress,
@@ -668,9 +677,10 @@ class Client(object):
             if resp.status_int != 100:
                 break
             resp.body.discard()
-
-        log.debug("Got response: %s" % resp.status)
-        log.debug("headers: [%s]" % resp.headers)
+        
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("Got response: %s" % resp.status)
+            log.debug("headers: [%s]" % resp.headers)
         
         location = resp.headers.iget('location')
 
@@ -695,6 +705,7 @@ class Client(object):
         
         # reset request
         self.reset_request()
-
-        log.debug("return response class")
+        
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("return response class")
         return self.response_class(self, resp)
