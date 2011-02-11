@@ -6,7 +6,6 @@
 from __future__ import with_statement
 
 from collections import deque
-import logging
 import select
 import signal
 import socket
@@ -148,7 +147,7 @@ class Manager(object):
                 return False
         except socket.error:
             pass
-        sock.close(sck)
+        close(sck)
         return True
 
     def store_socket(self, sck, addr, ssl=False):
