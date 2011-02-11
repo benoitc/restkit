@@ -700,12 +700,19 @@ class Client(object):
             elif resp.status_int == 303 and self.method == "POST":
                 return self.redirect(resp, location, method="GET")
        
-        # apply final response
-        self.filters.apply("on_response", self, resp)
+        
         
         # reset request
         self.reset_request()
         
         if log.isEnabledFor(logging.DEBUG):
             log.debug("return response class")
-        return self.response_class(self, resp)
+
+        # create response object
+        resp = self.response_class(self, resp)
+
+        # apply filters
+        self.filters.apply("on_response", self, resp)
+        
+        # return final response
+        return resp
