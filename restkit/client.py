@@ -229,7 +229,9 @@ class Client(object):
             force_follow_redirect=False,
             max_follow_redirect=MAX_FOLLOW_REDIRECTS,
             filters=None, 
-            decompress=True, 
+            decompress=True,
+            max_status_line_garbage=None,
+            max_header_count=0,
             manager=None,
             response_class=None,
             timeout=None,
@@ -243,6 +245,8 @@ class Client(object):
         self.max_follow_redirect = max_follow_redirect 
         self.filters = Filters(filters)
         self.decompress = decompress
+        self.max_status_line_garbage = max_status_line_garbage
+        self.max_header_count = max_header_count
         
         # set manager
         if manager is None:
@@ -628,7 +632,9 @@ class Client(object):
         log.debug("Start to parse response")
         unreader = http.Unreader(self._sock)
         while True:
-            resp = http.Request(unreader, decompress=self.decompress)
+            resp = http.Request(unreader, decompress=self.decompress,
+                    max_status_line_garbage=self.max_status_line_garbage,
+                    max_header_count=self.max_header_count)
             if resp.status_int != 100:
                 break
             resp.body.discard()

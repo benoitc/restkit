@@ -17,7 +17,7 @@ except ImportError:
 from .datastructures import MultiDict
 from .errors import NoMoreData, ChunkMissingTerminator, \
 InvalidChunkSize, InvalidRequestLine, InvalidHTTPVersion, \
-InvalidHTTPStatus, InvalidHeader, InvalidHeaderName
+InvalidHTTPStatus, InvalidHeader, InvalidHeaderName, HeaderLimit
 
 
 class Unreader(object):
@@ -397,7 +397,9 @@ class DeflateBody(GzipBody):
 
 
 class Request(object):
-    def __init__(self, unreader, decompress=True):
+    def __init__(self, unreader, decompress=True,
+            max_status_line_garbage=None,
+            max_header_count=0):
         self.unreader = unreader
         self.version = None
         self.headers = MultiDict() 
@@ -408,6 +410,12 @@ class Request(object):
         self.reason = None
         self.status_int = None
         self.decompress = decompress
+
+        if max_status_line_garbage is None:
+            max_status_line_garbage = sys.maxint
+        self.max_status_line_garbage=max_status_line_garbage
+
+        self.max_header_count=max_header_count
 
         self.versre = re.compile("HTTP/(\d+).(\d+)")
         self.stare = re.compile("(\d{3})\s*(\w*)")
@@ -430,17 +438,37 @@ class Request(object):
 
         self.get_data(unreader, buf, stop=True)
         
-        # Request line
-        idx = buf.getvalue().find("\r\n")
-        while idx < 0:
-            self.get_data(unreader, buf)
+        # Parse request first line
+        # With HTTP/1.1 persistent connections, the problem arises 
+        # that broken scripts could return a wrong Content-Length 
+        # (there are more bytes sent than specified). Unfortunately,
+        # in some cases, this cannot be detected after the bad response,
+        # but only before the next one. So w retry to read the line
+        # until we go over max_status_line_garbage tries.
+        tries = 0
+        while True:
             idx = buf.getvalue().find("\r\n")
-        self.parse_first_line(buf.getvalue()[:idx])
-        rest = buf.getvalue()[idx+2:] # Skip \r\n
-        buf.truncate(0)
-        buf.write(rest)
-        
-        # Headers
+            while idx < 0:
+                self.get_data(unreader, buf)
+                idx = buf.getvalue().find("\r\n")
+
+            try:
+                self.parse_first_line(buf.getvalue()[:idx])
+                break
+            except (InvalidRequestLine, InvalidHTTPVersion,
+                    InvalidHTTPStatus), e:
+                if tries > self.max_status_line_garbage:
+                    raise InvalidRequestLine("Status line not found %s"
+                            % str(e))
+            finally:
+                rest = buf.getvalue()[idx+2:] # Skip \r\n
+                buf.truncate(0)
+                buf.write(rest)
+            
+            # increase number of tries
+            tries += 1
+                
+        # parse headers
         idx = buf.getvalue().find("\r\n\r\n")
         done = buf.getvalue()[:2] == "\r\n"
         while idx < 0 and not done:
@@ -485,7 +513,13 @@ class Request(object):
 
         # Parse headers into key/value pairs paying attention
         # to continuation lines.
+        hdr_count = 0
         while len(lines):
+            if self.max_header_count and \
+                    hdr_count > self.max_header_count:
+
+                raise HeaderLimit(self.max_header_count)
+
             # Parse initial header name : value pair.
             curr = lines.pop(0)
             if curr.find(":") < 0:
@@ -502,6 +536,8 @@ class Request(object):
             value = ''.join(value).rstrip()
             
             headers.add(name, value)
+            hdr_count += 1
+
         return headers
 
     def set_body_reader(self):

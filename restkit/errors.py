@@ -166,3 +166,8 @@ class ChunkMissingTerminator(ParseException):
     
     def __str__(self):
         return "Invalid chunk terminator is not '\\r\\n': %r" % self.term
+
+class HeaderLimit(ParseException):
+    """ exception raised when we gore more headers than 
+    max_header_count
+    """
