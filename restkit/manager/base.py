@@ -6,6 +6,7 @@
 from __future__ import with_statement
 
 from collections import deque
+import logging
 import select
 import signal
 import socket
@@ -44,12 +45,13 @@ class Manager(object):
     delay. Be aware that using signaling isn't thread-safe and works
     only on UNIX or UNIX like."""
 
-    def __init__(self, max_conn=10, timeout=150,
+    def __init__(self, max_conn=10, timeout=150, check_stale=True,
             reap_connections=True, with_signaling=False):
         self.max_conn = max_conn
         self.timeout = timeout
         self.reap_connections = reap_connections
         self.with_signaling = with_signaling
+        self.check_stale = check_stale
 
         self.sockets = dict()
         self.active_sockets = dict()
@@ -124,7 +126,8 @@ class Manager(object):
                     fno, sck = socks.pop()
                     if fno in self.active_sockets:
                         del self.active_sockets[fno]
-                        break  
+                        if not self.is_stale(sck):
+                            break 
                 self.sockets[key] = socks
                 self.connections_count[key] -= 1
                 return sck
@@ -132,6 +135,21 @@ class Manager(object):
                 return None
         finally:
             self._lock.release()
+
+    def is_stale(self, sck):
+        if not self.check_stale:
+            return False
+
+        if sck is None:
+            return True
+        try:
+            ret = select.select([], [sck], [], 0)
+            if ret[1]:
+                return False
+        except socket.error:
+            pass
+        sock.close(sck)
+        return True
 
     def store_socket(self, sck, addr, ssl=False):
         """ store a socket in the pool to reuse it across threads """
