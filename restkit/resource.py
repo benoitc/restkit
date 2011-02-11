@@ -36,7 +36,7 @@ class Resource(object):
         Resource represent an HTTP resource.
 
         :param uri: str, full uri to the server.
-        :param client_opts: `restkit.client.HttpRequest` Options
+        :param client_opts: `restkit.client.Client` Options
         """
         client_opts = client_opts or {} 
 

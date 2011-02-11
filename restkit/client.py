@@ -235,11 +235,41 @@ class Client(object):
             manager=None,
             response_class=None,
             timeout=None,
-            force_dns=False,
             max_tries=5,
             wait_tries=1.0,
             **ssl_args):
+        """
+        Client parameters
+        ~~~~~~~~~~~~~~~~~
+
+        :param follow_redirect: follow redirection, by default False
+        :param max_ollow_redirect: number of redirections available
+        :filters: http filters to pass
+        :param decompress: allows the client to decompress the response
+        body
+        :param max_status_line_garbage: defines the maximum number of ignorable
+        lines before we expect a HTTP response's status line. With
+        HTTP/1.1 persistent connections, the problem arises that broken
+        scripts could return a wrong Content-Length (there are more
+        bytes sent than specified).  Unfortunately, in some cases, this
+        cannot be detected after the bad response, but only before the
+        next one. So the client is abble to skip bad lines using this
+        limit. 0 disable garbage collection, None means unlimited number
+        of tries.
+        :param max_header_count:  determines the maximum HTTP header count
+        allowed. by default no limit.
+        :param manager: the manager to use. By default we use the global
+        one.
+        :parama response_class: the response class to use
+        :param timeout: the default timeout of the connection
+        (SO_TIMEOUT)
         
+        :param max_tries: the number of tries before we give up a
+        connection
+        :param wait_tries: number of time we wait between each tries.
+        :param ssl_args: named argument, see ssl module for more
+        informations
+        """
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
         self.max_follow_redirect = max_follow_redirect 
