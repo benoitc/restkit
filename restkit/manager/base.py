@@ -63,7 +63,7 @@ class Manager(object):
             self.start()
 
     def get_lock(self):
-        return threading.RLock()
+        return threading.Lock()
 
     def murder_connections(self, *args):
         self._lock.acquire()

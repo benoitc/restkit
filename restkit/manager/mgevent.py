@@ -9,7 +9,7 @@ gevent connection manager.
 import signal
 
 import gevent
-from gevent.coros import RLock
+from gevent.coros import Semaphore
 
 from .base import Manager
 
@@ -35,7 +35,7 @@ class GeventConnectionReaper(gevent.Greenlet):
 class GeventManager(Manager):
 
     def get_lock(self):
-        return RLock()
+        return Semaphore()
            
     def start(self):
         if self.with_signaling:
