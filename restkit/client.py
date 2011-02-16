@@ -617,7 +617,7 @@ class Client(object):
             except:
                 # unkown error
                 log.debug("unhandled exception %s" %
-                        traceback.format_exc()))
+                        traceback.format_exc())
                 self.close_connection()
                 raise
 
