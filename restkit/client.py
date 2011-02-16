@@ -10,6 +10,7 @@ import mimetypes
 import os
 import time
 import socket
+import traceback
 import types
 import urlparse
 import uuid
@@ -613,8 +614,10 @@ class Client(object):
                     raise RequestError(str(e))
             except (KeyboardInterrupt, SystemExit):
                 break
-            except Exception, e:
+            except:
                 # unkown error
+                log.debug("unhandled exception %s" %
+                        traceback.format_exc()))
                 self.close_connection()
                 raise
 
