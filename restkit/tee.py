@@ -26,12 +26,10 @@ class TeeInput(object):
     
     CHUNK_SIZE = sock.CHUNK_SIZE
     
-    def __init__(self, resp, client):
+    def __init__(self, resp, connection):
         self.buf = StringIO()
         self.resp = resp
-        self.client = client
-        self._sock = client._sock
-        self._sock_key = copy.copy(client._sock_key)
+        self.connection = connection
         self.eof = False
         
         # set temporary body
@@ -173,8 +171,7 @@ class TeeInput(object):
 
         if not self.eof:
             self.resp._body.discard()
-        self.client.release_connection(self._sock_key, self._sock,
-                self.resp.should_close)
+        self.connection.release()
             
     def _finalize(self):
         """ here we wil fetch final trailers

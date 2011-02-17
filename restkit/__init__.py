@@ -3,16 +3,17 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-version_info = (3, 1, 0)
+version_info = (3, 2, 0)
 __version__ =  ".".join(map(str, version_info))
 
 try:
     from .errors import ResourceNotFound, Unauthorized, RequestFailed,\
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceError
-    from .client import Client, ClientResponse, MAX_FOLLOW_REDIRECTS
+    from .client import Client, MAX_FOLLOW_REDIRECTS
+    from .wrappers import Request, Response, ClientResponse
     from .resource import Resource
     from .manager import Manager 
-    from .filters import BasicAuth, SimpleProxy, OAuthFilter
+    from .filters import BasicAuth, OAuthFilter
 except ImportError:
     import traceback
     traceback.print_exc()

@@ -226,16 +226,13 @@ def test_019(u, c):
     
 @t.client_request('/auth')
 def test_020(u, c):
-    auth_filter = BasicAuth("test", "test")
-    c.filters.add(auth_filter)
+    c.filters = [BasicAuth("test", "test")]
+    c.load_filters()
     r = c.request(u)
     t.eq(r.status_int, 200)
     
-    
-    c.filters.remove(auth_filter)
-    t.eq(len(c.filters.filters), 0)
-    auth_filter1 = BasicAuth("test", "test2")
-    c.filters.add(auth_filter1)
+    c.filters = [BasicAuth("test", "test2")]
+    c.load_filters()
     r = c.request(u)
     t.eq(r.status_int, 403)
    

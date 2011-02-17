@@ -13,11 +13,11 @@ This module provide a common interface for all HTTP request.
 from copy import copy
 import urlparse
 
-from .errors import ResourceNotFound, Unauthorized, RequestFailed,\
-ParserError, RequestError
-from .client import Client, ClientResponse
+from .errors import ResourceNotFound, Unauthorized, RequestFailed
+from .client import Client
 from .filters import BasicAuth
-import util as util
+from . import util
+from .wrappers import Response
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 
@@ -28,7 +28,7 @@ class Resource(object):
     encode_keys = True
     safe = "/:"
     basic_auth_url = True
-    response_class = ClientResponse
+    response_class = Response
     
     def __init__(self, uri, **client_opts):
         """Constructor for a `Resource` object.
