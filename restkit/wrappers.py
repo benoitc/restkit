@@ -151,7 +151,7 @@ class BodyWrapper(object):
 
     def close(self):
         """ release connection """ 
-        self.connection.release()
+        self.connection.release(self.resp.should_close)
     
     def __iter__(self):
         return self
@@ -224,12 +224,6 @@ class Response(object):
     def __iter__(self):
         return self.headers.iteritems()
 
-    def release_connection(self):
-        """ release the connection in the client or pool """
-        self.client.release_connection(self._sock_key, 
-                self._sock, self.should_close)
-        self._closed = True
-
     def can_read(self):
         return not self._already_read
 
@@ -243,7 +237,7 @@ class Response(object):
         self._already_read = True
         
         # release connection
-        self.connection.release()
+        self.connection.release(self.should_close)
 
         if charset is not None:
             try:
@@ -270,5 +264,6 @@ class Response(object):
             # head case
             return self._body
 
-        return TeeInput(self, self.connection)
+        return TeeInput(self, self.connection,
+                should_close=self.should_close)
 ClientResponse = Response
