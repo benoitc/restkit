@@ -76,10 +76,9 @@ class Request(object):
         return self.parsed_url.scheme == "https"
  
     def _set_body(self, body):
-        ctype = self.headers.iget('content-type')
-        clen = self.headers.iget('content-length')
+        ctype = self.headers.ipop('content-type', None)
+        clen = self.headers.ipop('content-length', None)
       
-        print self.headers
         if isinstance(body, dict):
             if ctype is not None and \
                     ctype.startswith("multipart/form-data"):
