@@ -25,7 +25,7 @@ Breaking changes:
   perform here. response filters accept now the response and request
   instances as arguments. There is no more on_connect filters (it was a
   bad idea)
-- Proxy support. Proxy are now supported by passing the argument
+- Proxy support. Proxies are now supported by passing the argument
   "use_proxy=True" to client, request and resources objects.
 
 3.0 / 2011-02-02
