@@ -332,7 +332,7 @@ class Client(object):
                 # send body
                 if request.body is not None:
                     chunked = request.is_chunked()
-                    if not request.headers.iget('content-length') and \
+                    if request.headers.iget('content-length') is None and \
                             not chunked:
                         raise RequestError(
                                 "Can't determine content length and " +

@@ -131,7 +131,6 @@ class Request(object):
     body = property(_get_body, _set_body, doc="request body")
 
 
-
 class BodyWrapper(object):
 
     def __init__(self, resp, connection):
