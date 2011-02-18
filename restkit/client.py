@@ -404,11 +404,11 @@ class Client(object):
                         if hasattr(request.body, 'read') and \
                                 not hasattr(request.body, 'seek'):
                             raise RequestError("connection closed and can't"
-                                            + "resend")
+                                            + "be resent")
                         elif not isinstance(request.body,
                                 types.StringTypes):
                             raise RequestError("connection closed and can't"
-                                    + "resend")
+                                    + "be resent")
 	    except:
                 # unkown error
                 log.debug("unhandled exception %s" %
