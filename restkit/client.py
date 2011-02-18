@@ -401,12 +401,8 @@ class Client(object):
                     raise
                 else:
                     if request.body is not None:
-                        if hasattr(request.body, 'read') and \
-                                not hasattr(request.body, 'seek'):
-                            raise RequestError("connection closed and can't"
-                                            + "be resent")
-                        elif not isinstance(request.body,
-                                types.StringTypes):
+                        if not hasattr(request.body, 'read') and \
+                                not isinstance(request.body, types.StringTypes):
                             raise RequestError("connection closed and can't"
                                     + "be resent")
 	    except:
