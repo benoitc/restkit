@@ -8,7 +8,7 @@ News
 - Some deep rewrite of the client. Requests and Connections are now
   maintened in their own instances, so we don't rely on client instance
   to close or release the connection Also we don't pass local variable
-  to handle a request. At the each requests are more isolated and we are
+  to handle a request. At the end each requests are more isolated and we are
   fully threadsafe.
 - Improve error report.
 - Handle case where the connection is closed but the OS still accept
