@@ -331,6 +331,14 @@ class Client(object):
                 
                 # send body
                 if request.body is not None:
+                    chunked = request.is_chunked()
+                    if not request.headers.iget('content-length') and \
+                            not chunked:
+                        raise RequestError(
+                                "Can't determine content length and " +
+                                "Transfer-Encoding header is not chunked")
+
+
                     # handle 100-Continue status
                     # http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8.2.3
                     hdr_expect = request.headers.iget("expect")
