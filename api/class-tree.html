@@ -64,11 +64,23 @@
     </li>
     <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>:
       <em class="summary">Allow embedding an IPython shell into a running program.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Shell-class.html">restkit.contrib.ipython_shell.Shell</a></strong>
     </li>
-    <li> <strong class="uidlink">webob.Response</strong>
+    </ul>
     </li>
     <li> <strong class="uidlink">StringIO.StringIO</strong>:
       <em class="summary">class StringIO([buffer])</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Stream-class.html">restkit.contrib.ipython_shell.Stream</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.JSON-class.html">restkit.contrib.ipython_shell.JSON</a></strong>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">javax.net.ssl.X509TrustManager</strong>
     </li>
     <li> <strong class="uidlink">object</strong>:
       <em class="summary">The most base type</em>
@@ -79,6 +91,10 @@
       <em class="summary">The default request implementation</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Request-class.html">restkit.contrib.webob_api.Request</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Request-class.html">restkit.contrib.ipython_shell.Request</a></strong>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
@@ -117,6 +133,9 @@
     <li> <strong class="uidlink"><a href="restkit.errors.ParseException-class.html">restkit.errors.ParseException</a></strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.errors.ChunkMissingTerminator-class.html">restkit.errors.ChunkMissingTerminator</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.HeaderLimit-class.html">restkit.errors.HeaderLimit</a></strong>:
+      <em class="summary">exception raised when we gore more headers than max_header_count</em>
     </li>
     <li> <strong class="uidlink"><a href="restkit.errors.InvalidChunkSize-class.html">restkit.errors.InvalidChunkSize</a></strong>
     </li>
@@ -203,6 +222,10 @@
       <em class="summary">The default request implementation</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Request-class.html">restkit.contrib.webob_api.Request</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Request-class.html">restkit.contrib.ipython_shell.Request</a></strong>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
@@ -221,7 +244,7 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.client.BodyWrapper-class.html">restkit.client.BodyWrapper</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.wrappers.BodyWrapper-class.html">restkit.wrappers.BodyWrapper</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.forms.BoundaryItem-class.html">restkit.forms.BoundaryItem</a></strong>
     </li>
@@ -230,7 +253,7 @@
     <li> <strong class="uidlink"><a href="restkit.client.Client-class.html">restkit.client.Client</a></strong>:
       <em class="summary">A client handle a connection at a time.</em>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.client.ClientResponse-class.html">restkit.client.ClientResponse</a></strong>
+    <li> <strong class="uidlink"><a href="restkit.conn.Connection-class.html">restkit.conn.Connection</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.oauth2.Consumer-class.html">restkit.oauth2.Consumer</a></strong>:
       <em class="summary">A consumer of OAuth-protected services.</em>
@@ -240,8 +263,6 @@
     <li> <strong class="uidlink"><a href="restkit.http.EOFReader-class.html">restkit.http.EOFReader</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.manager.meventlet.EventletConnectionReaper-class.html">restkit.manager.meventlet.EventletConnectionReaper</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.filters.Filters-class.html">restkit.filters.Filters</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.http.LengthReader-class.html">restkit.http.LengthReader</a></strong>
     </li>
@@ -272,15 +293,22 @@
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.wrappers.Request-class.html">restkit.wrappers.Request</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.http.Request-class.html">restkit.http.Request</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="restkit.resource.Resource-class.html">restkit.resource.Resource</a></strong>:
       <em class="summary">A class that can be instantiated for access to a RESTful resource, 
         including authentication.</em>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.wrappers.Response-class.html">restkit.wrappers.Response</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="webob.response.Response-class.html">webob.response.Response</a></strong>:
       <em class="summary">Represents a WSGI response</em>
     <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Response-class.html">restkit.contrib.ipython_shell.Response</a></strong>:
+      <em class="summary">Represents a WSGI response</em>
+    </li>
     <li> <strong class="uidlink">webob.exc.WSGIHTTPException</strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html">restkit.contrib.webob_helper.WebobResourceError</a></strong>:
@@ -305,10 +333,11 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="restkit.filters.SimpleProxy-class.html">restkit.filters.SimpleProxy</a></strong>:
-      <em class="summary">Simple proxy filter.</em>
-    </li>
     <li> <strong class="uidlink"><a href="restkit.tee.TeeInput-class.html">restkit.tee.TeeInput</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.tee.ResponseTeeInput-class.html">restkit.tee.ResponseTeeInput</a></strong>
+    </li>
+    </ul>
     </li>
     <li> <strong class="uidlink"><a href="restkit.oauth2.Token-class.html">restkit.oauth2.Token</a></strong>:
       <em class="summary">An OAuth credential used to request authorization or a protected 
@@ -362,6 +391,8 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     <li> <strong class="uidlink">property</strong>:
       <em class="summary">property(fget=None, fset=None, fdel=None, doc=None) -&gt; property attribute</em>
     <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.API-class.html">restkit.contrib.ipython_shell.API</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Method-class.html">restkit.contrib.webob_api.Method</a></strong>
     </li>
     </ul>
@@ -395,7 +426,7 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Feb  3 16:21:03 2011
+    Generated by Epydoc 3.0.1 on Fri Feb 18 18:09:09 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

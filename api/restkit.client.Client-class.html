@@ -71,8 +71,7 @@ A client handle a connection at a time. A client is threadsafe,
     
     &gt;&gt;&gt; from restkit import *
     &gt;&gt;&gt; c = Client()
-    &gt;&gt;&gt; c.url = &quot;http://google.com&quot;
-    &gt;&gt;&gt; r = c.perform()
+    &gt;&gt;&gt; r = c.request(&quot;http://google.com&quot;)
     r&gt;&gt;&gt; r.status
     '301 Moved Permanently'
     &gt;&gt;&gt; r.body_string()
@@ -84,7 +83,7 @@ The document has moved
 &lt;/BODY&gt;&lt;/HTML&gt;
 '
     &gt;&gt;&gt; c.follow_redirect = True
-    &gt;&gt;&gt; r = c.perform()
+    &gt;&gt;&gt; r = c.request(&quot;http://google.com&quot;)
     &gt;&gt;&gt; r.status
     '200 OK'
      
@@ -113,7 +112,7 @@ The document has moved
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="restkit.client.ClientResponse-class.html" class="summary-name">response_class</a>
+        <a href="restkit.wrappers.Response-class.html" class="summary-name">response_class</a>
     </td>
   </tr>
 </table>
@@ -146,130 +145,19 @@ The document has moved
         <span class="summary-sig-arg">max_follow_redirect</span>=<span class="summary-sig-default">5</span>,
         <span class="summary-sig-arg">filters</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">decompress</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">max_status_line_garbage</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">max_header_count</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">manager</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">response_class</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">300</span>,
-        <span class="summary-sig-arg">force_dns</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">use_proxy</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">max_tries</span>=<span class="summary-sig-default">5</span>,
         <span class="summary-sig-arg">wait_tries</span>=<span class="summary-sig-default">1.0</span>,
         <span class="summary-sig-arg">**ssl_args</span>)</span><br />
-      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
+      Client parameters
+~~~~~~~~~~~~~~~~~</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.client-pysrc.html#Client.__init__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_headers__get"></a><span class="summary-sig-name">_headers__get</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client._headers__get">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_headers__set"></a><span class="summary-sig-name">_headers__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client._headers__set">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_host__get"></a><span class="summary-sig-name">_host__get</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client._host__get">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_parsed_url__get"></a><span class="summary-sig-name">_parsed_url__get</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client._parsed_url__get">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_path__get"></a><span class="summary-sig-name">_path__get</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client._path__get">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_url__get"></a><span class="summary-sig-name">_url__get</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client._url__get">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_url__set"></a><span class="summary-sig-name">_url__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">string</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client._url__set">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -283,10 +171,10 @@ The document has moved
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="close_connection"></a><span class="summary-sig-name">close_connection</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      close a connection</td>
+          <td><span class="summary-sig"><a href="restkit.client.Client-class.html#load_filters" class="summary-sig-name">load_filters</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Populate filters from self.filters.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.close_connection">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client-pysrc.html#Client.load_filters">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -302,7 +190,7 @@ The document has moved
         <tr>
           <td><span class="summary-sig"><a name="connect"></a><span class="summary-sig-name">connect</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">addr</span>,
-        <span class="summary-sig-arg">ssl</span>)</span><br />
+        <span class="summary-sig-arg">is_ssl</span>)</span><br />
       create a socket</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.client-pysrc.html#Client.connect">source&nbsp;code</a></span>
@@ -319,7 +207,8 @@ The document has moved
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_connection"></a><span class="summary-sig-name">get_connection</span>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a name="get_connection"></a><span class="summary-sig-name">get_connection</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">request</span>)</span><br />
       get a connection from the pool or create new one.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.client-pysrc.html#Client.get_connection">source&nbsp;code</a></span>
@@ -336,10 +225,13 @@ The document has moved
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_response"></a><span class="summary-sig-name">get_response</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      return final respons, it is only accessible via peform method</td>
+          <td><span class="summary-sig"><a name="proxy_connection"></a><span class="summary-sig-name">proxy_connection</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">request</span>,
+        <span class="summary-sig-arg">req_addr</span>,
+        <span class="summary-sig-arg">ssl</span>)</span><br />
+      do the proxy connection</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.get_response">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client-pysrc.html#Client.proxy_connection">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -353,7 +245,9 @@ The document has moved
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="make_headers_string"></a><span class="summary-sig-name">make_headers_string</span>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a name="make_headers_string"></a><span class="summary-sig-name">make_headers_string</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">request</span>,
+        <span class="summary-sig-arg">extra_headers</span>=<span class="summary-sig-default">None</span>)</span><br />
       create final header string</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.client-pysrc.html#Client.make_headers_string">source&nbsp;code</a></span>
@@ -370,99 +264,11 @@ The document has moved
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="parse_body"></a><span class="summary-sig-name">parse_body</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      transform a body if needed and set appropriate headers</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.parse_body">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="restkit.client.Client-class.html#perform" class="summary-sig-name">perform</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a href="restkit.client.Client-class.html#perform" class="summary-sig-name">perform</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">request</span>)</span><br />
       perform the request.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.client-pysrc.html#Client.perform">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="redirect"></a><span class="summary-sig-name">redirect</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">resp</span>,
-        <span class="summary-sig-arg">location</span>,
-        <span class="summary-sig-arg">method</span>=<span class="summary-sig-default">None</span>)</span><br />
-      reset request, set new url of request and perform it</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.redirect">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="release_connection"></a><span class="summary-sig-name">release_connection</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">key</span>,
-        <span class="summary-sig-arg">sck</span>,
-        <span class="summary-sig-arg">should_close</span>=<span class="summary-sig-default">False</span>)</span><br />
-      release a connection to the pool</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.release_connection">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="req_is_chunked"></a><span class="summary-sig-name">req_is_chunked</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.req_is_chunked">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="req_is_ssl"></a><span class="summary-sig-name">req_is_ssl</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.req_is_ssl">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -497,10 +303,13 @@ The document has moved
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.client.Client-class.html#reset_request" class="summary-sig-name">reset_request</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      reset a client handle to its intial state before performing.</td>
+          <td><span class="summary-sig"><a name="redirect"></a><span class="summary-sig-name">redirect</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">resp</span>,
+        <span class="summary-sig-arg">location</span>,
+        <span class="summary-sig-arg">request</span>)</span><br />
+      reset request, set new url of request and perform it</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.reset_request">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client-pysrc.html#Client.redirect">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -514,10 +323,12 @@ The document has moved
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="write_callback"></a><span class="summary-sig-name">write_callback</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">cb</span>)</span></td>
+          <td><span class="summary-sig"><a name="get_response"></a><span class="summary-sig-name">get_response</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">request</span>,
+        <span class="summary-sig-arg">connection</span>)</span><br />
+      return final respons, it is only accessible via peform method</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.client-pysrc.html#Client.write_callback">source&nbsp;code</a></span>
+            <span class="codelink"><a href="restkit.client-pysrc.html#Client.get_response">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -586,43 +397,6 @@ The document has moved
     </table>
   </td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="restkit.client.Client-class.html#headers" class="summary-name">headers</a>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="restkit.client.Client-class.html#host" class="summary-name">host</a>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="restkit.client.Client-class.html#parsed_url" class="summary-name">parsed_url</a>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="restkit.client.Client-class.html#path" class="summary-name">path</a><br />
-      request path
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="restkit.client.Client-class.html#url" class="summary-name">url</a><br />
-      current url to request
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -662,10 +436,12 @@ The document has moved
         <span class="sig-arg">max_follow_redirect</span>=<span class="sig-default">5</span>,
         <span class="sig-arg">filters</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">decompress</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">max_status_line_garbage</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">max_header_count</span>=<span class="sig-default">0</span>,
         <span class="sig-arg">manager</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">response_class</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">timeout</span>=<span class="sig-default">300</span>,
-        <span class="sig-arg">force_dns</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">timeout</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">use_proxy</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">max_tries</span>=<span class="sig-default">5</span>,
         <span class="sig-arg">wait_tries</span>=<span class="sig-default">1.0</span>,
         <span class="sig-arg">**ssl_args</span>)</span>
@@ -676,13 +452,64 @@ The document has moved
     </td>
   </tr></table>
   
-  <p>x.__init__(...) initializes x; see x.__class__.__doc__ for 
-  signature</p>
+  <pre class="literalblock">
+
+Client parameters
+~~~~~~~~~~~~~~~~~
+
+:param follow_redirect: follow redirection, by default False
+:param max_ollow_redirect: number of redirections available
+:filters: http filters to pass
+:param decompress: allows the client to decompress the response
+body
+:param max_status_line_garbage: defines the maximum number of ignorable
+lines before we expect a HTTP response's status line. With
+HTTP/1.1 persistent connections, the problem arises that broken
+scripts could return a wrong Content-Length (there are more
+bytes sent than specified).  Unfortunately, in some cases, this
+cannot be detected after the bad response, but only before the
+next one. So the client is abble to skip bad lines using this
+limit. 0 disable garbage collection, None means unlimited number
+of tries.
+:param max_header_count:  determines the maximum HTTP header count
+allowed. by default no limit.
+:param manager: the manager to use. By default we use the global
+one.
+:parama response_class: the response class to use
+:param timeout: the default timeout of the connection
+(SO_TIMEOUT)
+
+:param max_tries: the number of tries before we give up a
+connection
+:param wait_tries: number of time we wait between each tries.
+:param ssl_args: named argument, see ssl module for more
+informations
+
+</pre>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="load_filters"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">load_filters</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="restkit.client-pysrc.html#Client.load_filters">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Populate filters from self.filters. Must be called each time 
+  self.filters is updated.</p>
+  <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
@@ -693,7 +520,8 @@ The document has moved
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">perform</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">perform</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">request</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="restkit.client-pysrc.html#Client.perform">source&nbsp;code</a></span>&nbsp;
@@ -703,123 +531,6 @@ The document has moved
   <p>perform the request. If an error happen it will first try to restart 
   it</p>
   <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="reset_request"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">reset_request</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.client-pysrc.html#Client.reset_request">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>reset a client handle to its intial state before performing. It 
-  doesn't handle case where body has already been consumed</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<br />
-<!-- ==================== PROPERTY DETAILS ==================== -->
-<a name="section-PropertyDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Property Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-PropertyDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-</table>
-<a name="headers"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">headers</h3>
-  
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="restkit.client.Client-class.html#_headers__get" class="summary-sig-name" onclick="show_private();">_headers__get</a>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="restkit.client.Client-class.html#_headers__set" class="summary-sig-name" onclick="show_private();">_headers__set</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="host"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">host</h3>
-  
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="restkit.client.Client-class.html#_host__get" class="summary-sig-name" onclick="show_private();">_host__get</a>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="parsed_url"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">parsed_url</h3>
-  
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="restkit.client.Client-class.html#_parsed_url__get" class="summary-sig-name" onclick="show_private();">_parsed_url__get</a>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="path"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">path</h3>
-  <p>request path</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="restkit.client.Client-class.html#_path__get" class="summary-sig-name" onclick="show_private();">_path__get</a>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="url"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">url</h3>
-  <p>current url to request</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="restkit.client.Client-class.html#_url__get" class="summary-sig-name" onclick="show_private();">_url__get</a>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="restkit.client.Client-class.html#_url__set" class="summary-sig-name" onclick="show_private();">_url__set</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">string</span>)</span>
-    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -850,7 +561,7 @@ The document has moved
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Feb  3 16:21:04 2011
+    Generated by Epydoc 3.0.1 on Fri Feb 18 18:09:09 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
