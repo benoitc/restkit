@@ -20,7 +20,7 @@ except ImportError:
 from webob import Response as BaseResponse
 import IPython
 
-from . import __version__
+from .. import __version__
 from .console import common_indent, json
 from .webob_api import Request as BaseRequest
 
