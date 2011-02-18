@@ -392,14 +392,23 @@ class Client(object):
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
                         errno.EPIPE, errno.ECONNREFUSED, 
                         errno.ECONNRESET, errno.EBADF) or tries <= 0:
-                    raise RequestError(str(e))
+                    raise RequestError("socker.error: %s" % str(e))
             except (KeyboardInterrupt, SystemExit):
                 break
             except (StopIteration, NoMoreData):
+                connection.close()
                 if tries <= 0:
                     raise
                 else:
-                    connection.close()
+                    if hasattr(request.body, 'read') and \
+                            not hasattr(request.body, 'seek'):
+                        raise RequestError("connection closed and can't"
+                                + "resend")
+                    elif not isinstance(request.body,
+                            types.StringTypes):
+                        raise RequestError("connection closed and can't"
+                                + "resend")
+
 
             except:
                 # unkown error
