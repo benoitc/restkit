@@ -59,14 +59,13 @@ class Client(object):
     
     >>> from restkit import *
     >>> c = Client()
-    >>> c.url = "http://google.com"
-    >>> r = c.perform()
+    >>> r = c.request("http://google.com")
     r>>> r.status
     '301 Moved Permanently'
     >>> r.body_string()
     '<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">\n<TITLE>301 Moved</TITLE></HEAD><BODY>\n<H1>301 Moved</H1>\nThe document has moved\n<A HREF="http://www.google.com/">here</A>.\r\n</BODY></HTML>\r\n'
     >>> c.follow_redirect = True
-    >>> r = c.perform()
+    >>> r = c.request("http://google.com")
     >>> r.status
     '200 OK'
      
@@ -368,16 +367,28 @@ class Client(object):
                 
                 return self.get_response(request, connection)
             except socket.gaierror, e:
-                connection.close()
+                try:
+                    connection.close()
+                except:
+                    pass
+
                 raise RequestError(str(e))
             except socket.timeout, e:
-                connection.close()
+                try:
+                    connection.close()
+                except:
+                    pass
+
                 if tries <= 0:
                     raise RequestTimeout(str(e))
             except socket.error, e:
                 if log.isEnabledFor(logging.DEBUG):
                     log.debug("socket error: %s" % str(e))
-                connection.close()
+                try:
+                    connection.close()
+                except:
+                    pass
+
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
                         errno.EPIPE, errno.ECONNREFUSED, 
                         errno.ECONNRESET, errno.EBADF) or tries <= 0:
