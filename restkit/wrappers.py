@@ -122,9 +122,6 @@ class Request(object):
 
         if clen is not None:
             self.headers['Content-Length'] = clen
-        elif not self.is_chunked():
-            raise RequestError("Can't determine content length and " +
-                    "Transfer-Encoding header is not chunked")
 
         if ctype is not None:
             self.headers['Content-Type'] = ctype
