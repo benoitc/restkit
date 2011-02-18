@@ -210,7 +210,6 @@ class ResponseTeeInput(TeeInput):
     
          
     def _close_unreader(self):
-
         if not self.eof:
             self.resp._body.discard()
         self.connection.release(self.should_close)
