@@ -400,15 +400,16 @@ class Client(object):
                 if tries <= 0:
                     raise
                 else:
-                    if hasattr(request.body, 'read') and \
-                            not hasattr(request.body, 'seek'):
-                        raise RequestError("connection closed and can't"
-                                + "resend")
-                    elif not isinstance(request.body,
-                            types.StringTypes):
-                        raise RequestError("connection closed and can't"
-                                + "resend")
-            except:
+                    if request.body is not None:
+                        if hasattr(request.body, 'read') and \
+                                not hasattr(request.body, 'seek'):
+                            raise RequestError("connection closed and can't"
+                                            + "resend")
+                        elif not isinstance(request.body,
+                                types.StringTypes):
+                            raise RequestError("connection closed and can't"
+                                    + "resend")
+	    except:
                 # unkown error
                 log.debug("unhandled exception %s" %
                         traceback.format_exc())
