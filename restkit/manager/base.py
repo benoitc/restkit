@@ -137,7 +137,7 @@ class Manager(object):
     def is_closed(self, sck):
         if sck is None:
             return True
-        return True
+        return False
 
     def store_socket(self, sck, addr, ssl=False):
         """ store a socket in the pool to reuse it across threads """
