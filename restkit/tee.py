@@ -156,7 +156,6 @@ class TeeInput(object):
             self.tmp.write(chunk)
             self.tmp.flush()
             self.tmp.seek(0, 2)
-            
             return chunk
                 
         self._finalize()
@@ -207,7 +206,6 @@ class ResponseTeeInput(TeeInput):
             # we didn't read until the end
             self._close_unreader()
         return self.tmp.close()
-    
          
     def _close_unreader(self):
         if not self.eof:
