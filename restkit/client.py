@@ -225,6 +225,7 @@ class Client(object):
         return connection 
 
     def proxy_connection(self, request, req_addr, ssl):
+        """ do the proxy connection """
         proxy_settings = os.environ.get('%s_proxy' %
                 request.parsed_url.scheme)
 
@@ -270,7 +271,6 @@ class Client(object):
 
     def make_headers_string(self, request, extra_headers=None):
         """ create final header string """
-
         headers = request.headers.copy()
         if extra_headers is not None:
             for k, v in extra_headers:
@@ -408,8 +408,6 @@ class Client(object):
                             types.StringTypes):
                         raise RequestError("connection closed and can't"
                                 + "resend")
-
-
             except:
                 # unkown error
                 log.debug("unhandled exception %s" %
