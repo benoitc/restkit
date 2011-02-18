@@ -15,7 +15,7 @@ import uuid
 from .datastructures import MultiDict
 from .errors import AlreadyRead, RequestError
 from .forms import multipart_form_encode, form_encode
-from .tee import TeeInput
+from .tee import ResponseTeeInput
 from .util import to_bytestring
 
 class Request(object):
@@ -259,6 +259,6 @@ class Response(object):
             # head case
             return self._body
 
-        return TeeInput(self, self.connection,
+        return ResponseTeeInput(self, self.connection,
                 should_close=self.should_close)
 ClientResponse = Response

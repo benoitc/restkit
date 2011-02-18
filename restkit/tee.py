@@ -26,30 +26,24 @@ class TeeInput(object):
     
     CHUNK_SIZE = sock.CHUNK_SIZE
     
-    def __init__(self, resp, connection, should_close=False):
+    def __init__(self, stream):
         self.buf = StringIO()
-        self.resp = resp
-        self.connection = connection
-        self.should_close = should_close
         self.eof = False
-        
-        # set temporary body
-        if isinstance(resp._body.reader, LengthReader):
-            clen = int(resp.headers.iget('content-length'))
-            
-            if (clen <= sock.MAX_BODY):
-                self.tmp = StringIO()
-            else:
-                self.tmp = tempfile.TemporaryFile()
+       
+        if isinstance(stream, basestring):
+            stream = StringIO(stream)
+            self.tmp = StringIO()
         else:
             self.tmp = tempfile.TemporaryFile()
+
+        self.stream = stream
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, traceback):
         return
-        
+
     def seek(self, offset, whence=0):
         """ naive implementation of seek """
         current_size = self._tmp_size()
@@ -157,7 +151,7 @@ class TeeInput(object):
         """ fetch partial body"""
         buf2 = self.buf
         buf2.seek(0, 2) 
-        chunk = self.resp._body.read(length)
+        chunk = self.stream.read(length)
         if chunk:
             self.tmp.write(chunk)
             self.tmp.flush()
@@ -168,17 +162,10 @@ class TeeInput(object):
         self._finalize()
         return ""
         
-    def _close_unreader(self):
-
-        if not self.eof:
-            self.resp._body.discard()
-        self.connection.release(self.should_close)
-            
     def _finalize(self):
         """ here we wil fetch final trailers
         if any."""
         self.eof = True
-        self._close_unreader()
 
     def _tmp_size(self):
         if hasattr(self.tmp, 'fileno'):
@@ -191,3 +178,45 @@ class TeeInput(object):
             data = self._tee(length - len(dest.getvalue()))
             dest.write(data)
         return dest.getvalue()
+
+class ResponseTeeInput(TeeInput):
+    
+    CHUNK_SIZE = sock.CHUNK_SIZE
+    
+    def __init__(self, resp, connection, should_close=False):
+        self.buf = StringIO()
+        self.resp = resp
+        self.stream =resp._body
+        self.connection = connection
+        self.should_close = should_close
+        self.eof = False
+        
+        # set temporary body
+        if isinstance(resp._body.reader, LengthReader):
+            clen = int(resp.headers.iget('content-length'))
+            
+            if (clen <= sock.MAX_BODY):
+                self.tmp = StringIO()
+            else:
+                self.tmp = tempfile.TemporaryFile()
+        else:
+            self.tmp = tempfile.TemporaryFile()
+
+    def close(self):
+        if not self.eof:
+            # we didn't read until the end
+            self._close_unreader()
+        return self.tmp.close()
+    
+         
+    def _close_unreader(self):
+
+        if not self.eof:
+            self.resp._body.discard()
+        self.connection.release(self.should_close)
+            
+    def _finalize(self):
+        """ here we wil fetch final trailers
+        if any."""
+        self.eof = True
+        self._close_unreader()

@@ -405,7 +405,6 @@ class Client(object):
                 # unkown error
                 log.debug("unhandled exception %s" %
                         traceback.format_exc())
-                connection.close()
                 raise
             
             # time until we retry.
@@ -475,7 +474,7 @@ class Client(object):
             if resp.status_int != 100:
                 break
             resp.body.discard()
-        
+
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Got response: %s" % resp.status)
             log.debug("headers: [%s]" % resp.headers)
