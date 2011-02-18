@@ -44,13 +44,12 @@ class Manager(object):
     delay. Be aware that using signaling isn't thread-safe and works
     only on UNIX or UNIX like."""
 
-    def __init__(self, max_conn=10, timeout=150, check_stale=True,
-            reap_connections=True, with_signaling=False):
+    def __init__(self, max_conn=10, timeout=150, reap_connections=True, 
+            with_signaling=False):
         self.max_conn = max_conn
         self.timeout = timeout
         self.reap_connections = reap_connections
         self.with_signaling = with_signaling
-        self.check_stale = check_stale
 
         self.sockets = dict()
         self.active_sockets = dict()
@@ -125,7 +124,7 @@ class Manager(object):
                     fno, sck = socks.pop()
                     if fno in self.active_sockets:
                         del self.active_sockets[fno]
-                        if not self.is_stale(sck):
+                        if not self.is_closed(sck):
                             break 
                 self.sockets[key] = socks
                 self.connections_count[key] -= 1
@@ -135,19 +134,9 @@ class Manager(object):
         finally:
             self._lock.release()
 
-    def is_stale(self, sck):
-        if not self.check_stale:
-            return False
-
+    def is_closed(self, sck):
         if sck is None:
             return True
-        try:
-            ret = select.select([], [sck], [], 0)
-            if ret[1]:
-                return False
-        except socket.error:
-            pass
-        close(sck)
         return True
 
     def store_socket(self, sck, addr, ssl=False):
