@@ -444,11 +444,7 @@ class Client(object):
         if request.initial_url is None:
             request.initial_url = self.url
 
-        # discard response body and reset request informations
-        if hasattr(resp, "_body"):
-            resp._body.discard()
-        else:
-            resp.body.discard()
+
 
         # make sure location follow rfc2616
         location = rewrite_location(request.url, location)
@@ -470,9 +466,9 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Start to parse response")
 
-        unreader = http.Unreader(connection.socket())
         while True:
-            resp = http.Request(unreader, decompress=self.decompress,
+            resp = http.Request(connection, 
+                    decompress=self.decompress,
                     max_status_line_garbage=self.max_status_line_garbage,
                     max_header_count=self.max_header_count)
             if resp.status_int != 100:

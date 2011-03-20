@@ -19,187 +19,152 @@ from .errors import NoMoreData, ChunkMissingTerminator, \
 InvalidChunkSize, InvalidRequestLine, InvalidHTTPVersion, \
 InvalidHTTPStatus, InvalidHeader, InvalidHeaderName, HeaderLimit
 
+MAXAMOUNT = 1048576
 
-class Unreader(object):
-    def __init__(self, sock, max_chunk=8192):
-        self.buf = StringIO()
-        self.sock = sock
-        self.max_chunk = max_chunk
-
-    def _data(self):
-        return self.sock.recv(self.max_chunk)
-    
-    def read(self, size=None):
-        if size is not None and not isinstance(size, (int, long)):
-            raise TypeError("size parameter must be an int or long.")
-        if size == 0:
-            return ""
-        if size < 0:
-            size = None
-
-        self.buf.seek(0, os.SEEK_END)
-
-        if size is None and self.buf.tell():
-            ret = self.buf.getvalue()
-            self.buf.truncate(0)
-            return ret
-        if size is None:
-            return self._data()
-
-        while self.buf.tell() < size:
-            data = self._data()
-            if not len(data):
-                ret = self.buf.getvalue()
-                self.buf.truncate(0)
-                return ret
-            self.buf.write(data)
-
-        data = self.buf.getvalue()
-        self.buf.truncate(0)
-        self.buf.write(data[size:])
-        return data[:size]
-    
-    def unread(self, data):
-        self.buf.seek(0, os.SEEK_END)
-        self.buf.write(data)
         
 class ChunkedReader(object):
-    def __init__(self, req, unreader):
-        self.unreader = unreader
+    def __init__(self, req, fp):
+        self.fp = fp
         self.req = req
-        self.parser = self.parse_chunked(unreader)
         self.buf = StringIO()
+        self.chunk_left = None
 
     def read(self, size):
-        if not isinstance(size, (int, long)):
-            raise TypeError("size must be an integral type")
-        if size <= 0:
-            raise ValueError("Size must be positive.")
-        if size == 0:
-            return ""
+        if self.fp is None:
+            return ''
 
-        if self.parser:
-            while self.buf.tell() < size:
+        chunk_left = self.chunk_left
+        value = []
+        while True:
+            if chunk_left is None:
+                line = self.fp.readline()
+                i = line.find(';')
+                if i >= 0:
+                    line = line[:i] # strip chunk-extensions
                 try:
-                    self.buf.write(self.parser.next())
-                except StopIteration:
-                    self.parser = None
+                    chunk_left = int(line, 16)
+                except ValueError:
+                    # close the connection as protocol synchronisation is
+                    # probably lost
+                    self.close()
+                    raise NoMoreData(''.join(value))
+                if chunk_left == 0:
                     break
+            if size is None:
+                value.append(self._read(chunk_left))
+            elif size < chunk_left:
+                value.append(self._read(size))
+                self.chunk_left = chunk_left - size
+                return ''.join(value)
+            elif size == chunk_left:
+                value.append(self._read(size))
+                self._read(2)  # toss the CRLF at the end of the chunk
+                self.chunk_left = None
+                return ''.join(value)
+            else:
+                value.append(self._read(chunk_left))
+                size -= chunk_left
 
-        data = self.buf.getvalue()
-        ret, rest = data[:size], data[size:]
-        self.buf.truncate(0)
-        self.buf.write(rest)
-        return ret
+            # we read the whole chunk, get another
+            self._read(2)      # toss the CRLF at the end of the chunk
+            chunk_left = None
 
-    def parse_trailers(self, unreader, data, eof=False):
-        buf = StringIO()
-        buf.write(data)
+        # read and discard trailer up to the CRLF terminator
+        ### note: we shouldn't have any trailers!
+        while True:
+            line = self.fp.readline()
+            if not line:
+                # a vanishingly small number of sites EOF without
+                # sending the trailer
+                break
+            if line == '\r\n':
+                break
 
-        idx = buf.getvalue().find("\r\n\r\n")
-        done = buf.getvalue()[:2] == "\r\n"
+        # we read everything; close the "file"
+        self.close()
 
-        while idx < 0 and not done:
-            self.get_data(unreader, buf)
-            idx = buf.getvalue().find("\r\n\r\n")
-            done = buf.getvalue()[:2] == "\r\n"
-        if done:
-            unreader.unread(buf.getvalue()[2:])
-            return ""
-        self.req.trailers = self.req.parse_headers(buf.getvalue()[:idx])
-        unreader.unread(buf.getvalue()[idx+4:])
+        return ''.join(value)
 
-    def parse_chunked(self, unreader):
-        (size, rest) = self.parse_chunk_size(unreader)
+    def _read(self, size):
+        s = []
         while size > 0:
-            while size > len(rest):
-                size -= len(rest)
-                yield rest
-                rest = unreader.read()
-                if not rest:
-                    raise NoMoreData()
-            yield rest[:size]
-            # Remove \r\n after chunk
-            rest = rest[size:]
-            while len(rest) < 2:
-                rest += unreader.read()
-            if rest[:2] != '\r\n':
-                raise ChunkMissingTerminator(rest[:2])
-            (size, rest) = self.parse_chunk_size(unreader, data=rest[2:])
+            chunk = self.fp.read(min(size, MAXAMOUNT))
+            if not chunk:
+                raise NoMoreData(''.join(s))
+            s.append(chunk)
+            size -= len(chunk)
+        return ''.join(s)
 
-    def parse_chunk_size(self, unreader, data=None):
-        buf = StringIO()
-        if data is not None:
-            buf.write(data)
-
-        idx = buf.getvalue().find("\r\n")
-        while idx < 0:
-            self.get_data(unreader, buf)
-            idx = buf.getvalue().find("\r\n")
-
-        data = buf.getvalue()
-        line, rest_chunk = data[:idx], data[idx+2:]
-
-        chunk_size = line.split(";", 1)[0].strip()
-        try:
-            chunk_size = int(chunk_size, 16)
-        except ValueError:
-            raise InvalidChunkSize(chunk_size)
-
-        if chunk_size == 0:
-            try:
-                self.parse_trailers(unreader, rest_chunk)
-            except NoMoreData:
-                pass
-            return (0, None)
-        return (chunk_size, rest_chunk)
-
-    def get_data(self, unreader, buf):
-        data = unreader.read()
-        if not data:
-            raise NoMoreData()
-        buf.write(data)
-
+    def close(self):
+        if self.fp:
+            self.fp.close()
+            self.fp = None
 
 class LengthReader(object):
-    def __init__(self, req, unreader, length):
+    def __init__(self, req, fp, length):
         self.req = req
-        self.unreader = unreader
+        self.fp = fp
         self.length = length
+
+    def close(self):
+        if self.fp:
+            self.fp.close()
+            self.fp = None
+
     
-    def read(self, size):
+    def read(self, size=None):
+        if self.fp is None:
+            return ''
+
+        if size is None:
+            size = self.length
+            s = []
+            while size > 0:
+                chunk = self.fp.read(min(size, MAXAMOUNT))
+                if not chunk:
+                    raise NoMoreData(''.join(s))
+                s.append(chunk)
+                size -= len(chunk)
+            self.close()
+            return ''.join(s)
+
         if not isinstance(size, (int, long)):
             raise TypeError("size must be an integral type")
-            
+
         size = min(self.length, size)
         if size < 0:
             raise ValueError("Size must be positive.")
         if size == 0:
-            return ""       
+            return ""    
 
-        buf = StringIO()
-        data = self.unreader.read()
-        while data:
-            buf.write(data)
-            if buf.tell() >= size:
-                break
-            data = self.unreader.read()
-        
-        
-        buf = buf.getvalue()
-        ret, rest = buf[:size], buf[size:]
-        self.unreader.unread(rest)
-        self.length -= size
-        return ret
+        s = self.fp.read(size)
+        self.length -= len(s)
+        if not self.length:
+            self.close() 
+
+        return s
+
 
 class EOFReader(object):
-    def __init__(self, req, unreader):
+    def __init__(self, req, fp):
         self.req = req
-        self.unreader = unreader
-        self.buf = StringIO()
-        self.finished = False
-    
-    def read(self, size):
+        self.fp = fp
+        print "ici"
+
+    def close(self):
+        if self.fp:
+            self.fp.close()
+            self.fp = None
+
+    def read(self, size=None):
+        if not self.fp:
+            return ''
+
+        if size is None:
+            s = self.fp.read()
+            self.close()
+            return s
+
         if not isinstance(size, (int, long)):
             raise TypeError("size must be an integral type")
         if size < 0:
@@ -207,29 +172,13 @@ class EOFReader(object):
         if size == 0:
             return ""
 
-        if self.finished:
-            data = self.buf.getvalue()
-            ret, rest = data[:size], data[size:]
-            self.buf.truncate(0)
-            self.buf.write(rest)
-            return ret
-         
-        data = self.unreader.read()
-        while data:
-            self.buf.write(data)
-            if self.buf.tell() > size:
-                break
-            data = self.unreader.read()
+        s = self.fp.read(min(size, sys.maxint))
+        if not s:
+            self.fp.close()
+            self.fp = None
 
-        if not data:
-            self.finished = True
-            
-        data = self.buf.getvalue()
-        ret, rest = data[:size], data[size:]
-        self.buf.truncate(0)
-        self.buf.write(rest)
-        return ret
-
+        return s
+        
 class Body(object):
     def __init__(self, reader):
         self.reader = reader
@@ -246,9 +195,7 @@ class Body(object):
         return ret
 
     def discard(self):
-        data = self.read(8192)
-        while data:
-            data = self.read()
+        self.read()
 
     def getsize(self, size):
         if size is None:
@@ -260,51 +207,22 @@ class Body(object):
         return size
     
     def read(self, size=None):
-        size = self.getsize(size)
-        if size == 0:
-            return ""
+        return self.reader.read(size)
 
-        if size < self.buf.tell():
-            data = self.buf.getvalue()
-            ret, rest = data[:size], data[size:]
-            self.buf.truncate(0)
-            self.buf.write(rest)
-            return ret
-
-        while size > self.buf.tell():
-            data = self.reader.read(1024)
-            if not len(data):
-                self.closed = True
-                break
-            self.buf.write(data)
-
-        data = self.buf.getvalue()
-        ret, rest = data[:size], data[size:]
-        self.buf.truncate(0)
-        self.buf.write(rest)
-        return ret
-    
     def readline(self, size=None):
         size = self.getsize(size)
         if size == 0:
             return ""
         
-        line = self.buf.getvalue()
-        idx = line.find("\n")
-        if idx >= 0:
-            ret = line[:idx+1]
-            self.buf.truncate(0)
-            self.buf.write(line[idx+1:])
-            return ret
-
-        self.buf.truncate(0)
-        ch = ""
-        buf = [line]
-        lsize = len(line)
-        while lsize < size and ch != "\n":
+        buf = []
+        lsize = 0 
+        while lsize < size:
             ch = self.reader.read(1)
             if not len(ch):
                 self.closed = True
+                break
+
+            if ch == "\n":
                 break
             lsize += 1
             buf.append(ch)
@@ -397,10 +315,11 @@ class DeflateBody(GzipBody):
 
 
 class Request(object):
-    def __init__(self, unreader, decompress=True,
+    def __init__(self, conn, decompress=True,
             max_status_line_garbage=None,
             max_header_count=0):
-        self.unreader = unreader
+        self.fp = conn.makefile("rb")
+
         self.version = None
         self.headers = MultiDict() 
         self.trailers = []
@@ -421,23 +340,11 @@ class Request(object):
         self.stare = re.compile("(\d{3})\s*(\w*)")
         self.hdrre = re.compile("[\x00-\x1F\x7F()<>@,;:\[\]={} \t\\\\\"]")
 
-        unused = self.parse(self.unreader)
-        self.unreader.unread(unused)
+        self.parse()
         self.set_body_reader()
         
-    def get_data(self, unreader, buf, stop=False):
-        data = unreader.read()
-        if not data:
-            if stop:
-                raise StopIteration()
-            raise NoMoreData(buf.getvalue())
-        buf.write(data)
-        
-    def parse(self, unreader):
-        buf = StringIO()
-
-        self.get_data(unreader, buf, stop=True)
-        
+    
+    def parse(self):
         # Parse request first line
         # With HTTP/1.1 persistent connections, the problem arises 
         # that broken scripts could return a wrong Content-Length 
@@ -447,46 +354,29 @@ class Request(object):
         # until we go over max_status_line_garbage tries.
         tries = 0
         while True:
-            idx = buf.getvalue().find("\r\n")
-            while idx < 0:
-                self.get_data(unreader, buf)
-                idx = buf.getvalue().find("\r\n")
-
             try:
-                self.parse_first_line(buf.getvalue()[:idx])
+                self.parse_first_line(self.fp.readline())
                 break
             except (InvalidRequestLine, InvalidHTTPVersion,
                     InvalidHTTPStatus), e:
                 if tries > self.max_status_line_garbage:
                     raise InvalidRequestLine("Status line not found %s"
                             % str(e))
-            finally:
-                rest = buf.getvalue()[idx+2:] # Skip \r\n
-                buf.truncate(0)
-                buf.write(rest)
-            
+
             # increase number of tries
             tries += 1
-                
-        # parse headers
-        idx = buf.getvalue().find("\r\n\r\n")
-        done = buf.getvalue()[:2] == "\r\n"
-        while idx < 0 and not done:
-            self.get_data(unreader, buf)
-            idx = buf.getvalue().find("\r\n\r\n")
-            done = buf.getvalue()[:2] == "\r\n"
-        if done:
-            self.unreader.unread(buf.getvalue()[2:])
-            return ""
+               
+        headers = []
+        while True:
+            line = self.fp.readline()
+            if line in ('\r\n', '\n', ''):
+                break
+            headers.append(line)
 
-        self.headers = self.parse_headers(buf.getvalue()[:idx])
-
-        ret = buf.getvalue()[idx+4:]
-        buf.truncate(0)
-        return ret
+        self.headers = self.parse_headers(headers)
     
     def parse_first_line(self, line):
-        bits = line.split(None, 1)
+        bits = line.rstrip().split(None, 1)
         if len(bits) != 2:
             raise InvalidRequestLine(line)
             
@@ -505,11 +395,8 @@ class Request(object):
         self.status_int = int(matchs.group(1))
         self.reason = matchs.group(2)
 
-    def parse_headers(self, data):
+    def parse_headers(self, lines):
         headers = MultiDict()
-
-        # Split lines on \r\n keeping the \r\n on each line
-        lines = [line + "\r\n" for line in data.split("\r\n")]
 
         # Parse headers into key/value pairs paying attention
         # to continuation lines.
@@ -559,11 +446,11 @@ class Request(object):
             self.encoding = encoding.lower()
 
         if chunked:
-            reader = ChunkedReader(self, self.unreader)
+            reader = ChunkedReader(self, self.fp)
         elif clength is not None:
-            reader = LengthReader(self, self.unreader, clength)
+            reader = LengthReader(self, self.fp, clength)
         else:
-            reader = EOFReader(self, self.unreader)
+            reader = EOFReader(self, self.fp)
 
         if self.decompress and self.encoding in ('gzip', 'deflate',):
             if self.encoding == "gzip":

@@ -13,25 +13,32 @@ import random
 from StringIO import StringIO
 import urlparse
 
+from restkit.conn import Connection
 from restkit.datastructures import MultiDict 
 from restkit.errors import ParseException
-from restkit.http import Request, Unreader
+from restkit.http import Request
 
-class IterUnreader(Unreader):
+
+class FakeConn(object):
 
     def __init__(self, iterable, **kwargs):
         self.buf = StringIO()
-        self.iter = iter(iterable)
-        
+        self.get_data(iterable)
 
-    def _data(self):
-        if not self.iter:
-            return ""
-        try:
-            return self.iter.next()
-        except StopIteration:
-            self.iter = None
-            return ""
+    def get_data(self, iterable):
+        if not iterable:
+            return 
+        iterable = iter(iterable)
+        data = []
+        while True:
+            try:
+                self.buf.write(iterable.next())
+            except StopIteration:
+                break
+        self.buf.seek(0)
+
+    def makefile(self, mode='rb'):
+        return self.buf
      
 
 dirname = os.path.dirname(__file__)
@@ -111,7 +118,7 @@ class response(object):
     # read functions will read with.
 
     def size_all(self):
-        return -1
+        return None
     
     def size_bytes(self):
         return 1
@@ -199,7 +206,9 @@ class response(object):
         """\
         This skips sizes because there's its not part of the iter api.
         """
+
         for line in req.body:
+            print "line [%s]" % line
             if '\n' in line[:-1]:
                 raise AssertionError("Embedded new line: %r" % line)
             if line != body[:len(line)]:
@@ -245,7 +254,7 @@ class response(object):
     def check(self, sender, sizer, matcher):
         cases = self.expect[:]
 
-        unreader = IterUnreader(sender())
+        unreader = FakeConn(sender())
         resp = Request(unreader)
         self.same(resp, sizer, matcher, cases.pop(0))
         t.eq(len(cases), 0)

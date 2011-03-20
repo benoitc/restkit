@@ -5,7 +5,6 @@ X-Powered-By: Servlet/2.5 JSP/2.1\r\n
 Content-Type: text/xml; charset=utf-8\r\n
 Connection: close\r\n
 \r\n
-
 <?xml version="1.0" encoding="UTF-8"?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
   <SOAP-ENV:Body>

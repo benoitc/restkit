@@ -17,10 +17,17 @@ class Connection(object):
         self.manager = manager
         self.addr = addr
         self.ssl = ssl
+        self._fp = None
         self.extra_headers = extra_headers
-        
+
+    def makefile(self, mode):
+        self._fp = self._sock.makefile(mode)
+        return self._fp
 
     def release(self, should_close=False):
+        if self._fp is not None:
+            self._fp.close()
+
         if should_close:
             self.close() 
         else:
@@ -31,6 +38,10 @@ class Connection(object):
     def close(self):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("close connection")
+        
+        if self._fp is not None:
+            self._fp.close()
+
         sock.close(self._sock)
 
     def socket(self):
