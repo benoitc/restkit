@@ -2,6 +2,7 @@
 #
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
+import datetime
 import base64
 import errno
 import logging
@@ -319,15 +320,25 @@ class Client(object):
         wait = self.wait_tries
         while tries > 0:
             try:
+                start = datetime.datetime.now()
                 # get or create a connection to the remote host
                 connection = self.get_connection(request)
                 sck = connection.socket()
-
+                
+                end = datetime.datetime.now()
+                print "get connection %s" % (end - start)
+   
+                start = datetime.datetime.now()
                 # send headers
                 headers_str = self.make_headers_string(request,
                         connection.extra_headers)
                 sck.sendall(headers_str)
                 
+                end = datetime.datetime.now()
+                print "send headers %s" % (end - start)
+   
+
+                start = datetime.datetime.now()
                 # send body
                 if request.body is not None:
                     chunked = request.is_chunked()
@@ -364,7 +375,9 @@ class Client(object):
                         sendlines(sck, request.body, chunked)
                     if chunked:
                         send_chunk(sck, "")
-                
+                end = datetime.datetime.now()
+                print "send body %s" % (end - start)
+
                 return self.get_response(request, connection)
             except socket.gaierror, e:
                 try:
@@ -470,6 +483,7 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Start to parse response")
 
+        start = datetime.datetime.now()
         unreader = http.Unreader(connection.socket())
         while True:
             resp = http.Request(unreader, decompress=self.decompress,
@@ -478,6 +492,8 @@ class Client(object):
             if resp.status_int != 100:
                 break
             resp.body.discard()
+        end = datetime.datetime.now()
+        print "get headers %s" % (end - start)
 
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Got response: %s" % resp.status)

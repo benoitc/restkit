@@ -10,6 +10,7 @@ restkit.resource
 
 This module provide a common interface for all HTTP request. 
 """
+import datetime
 from copy import copy
 import urlparse
 
@@ -178,6 +179,7 @@ class Resource(object):
         params = params or {}
         params.update(params_dict or {})
 
+        start = datetime.datetime.now()
         while True:
             uri = util.make_uri(self.uri, path, charset=self.charset, 
                         safe=self.safe, encode_keys=self.encode_keys,
@@ -207,6 +209,9 @@ class Resource(object):
                                 response=resp)
             else:
                 break
+
+        end = datetime.datetime.now()
+        print "request time %s" % (end - start)
 
         return resp
 

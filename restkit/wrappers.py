@@ -3,6 +3,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+import datetime
 import cgi
 import copy
 import mimetypes
@@ -228,6 +229,7 @@ class Response(object):
         if not self.can_read():
             raise AlreadyRead() 
 
+        start = datetime.datetime.now()
         body = self._body.read()
         self._already_read = True
         
@@ -239,6 +241,9 @@ class Response(object):
                 body = body.decode(charset, unicode_errors)
             except UnicodeDecodeError:
                 pass
+        end = datetime.datetime.now()
+        print "get body time %s" % (end - start)
+
         return body
 
     def body_stream(self):
