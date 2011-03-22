@@ -3,7 +3,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-version_info = (3, 2, 0)
+version_info = (3, 2, 1)
 __version__ =  ".".join(map(str, version_info))
 
 try:
