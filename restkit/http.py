@@ -41,7 +41,7 @@ class Unreader(object):
 
         if size is None and self.buf.tell():
             ret = self.buf.getvalue()
-            self.buf.truncate(0)
+            self.buf = StringIO()
             return ret
         if size is None:
             return self._data()
@@ -50,12 +50,12 @@ class Unreader(object):
             data = self._data()
             if not len(data):
                 ret = self.buf.getvalue()
-                self.buf.truncate(0)
+                self.buf = StringIO()
                 return ret
             self.buf.write(data)
 
         data = self.buf.getvalue()
-        self.buf.truncate(0)
+        self.buf = StringIO()
         self.buf.write(data[size:])
         return data[:size]
     

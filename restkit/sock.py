@@ -6,7 +6,7 @@
 import socket
 import sys
 
-CHUNK_SIZE = (16 * 1024)
+CHUNK_SIZE = 16 * 1024 
 MAX_BODY = 1024 * 112
 DNS_TIMEOUT = 60
  

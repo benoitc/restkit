@@ -324,9 +324,8 @@ class Client(object):
                 sck = connection.socket()
 
                 # send headers
-                headers_str = self.make_headers_string(request,
+                msg = self.make_headers_string(request,
                         connection.extra_headers)
-                sck.sendall(headers_str)
                 
                 # send body
                 if request.body is not None:
@@ -343,6 +342,8 @@ class Client(object):
                     hdr_expect = request.headers.iget("expect")
                     if hdr_expect is not None and \
                             hdr_expect.lower() == "100-continue":
+                        sck.sendall(msg)
+                        msg = None
                         resp = http.Request(http.Unreader(self._sock))
                         if resp.status_int != 100:
                             self.reset_request()
@@ -355,15 +356,25 @@ class Client(object):
                     if log.isEnabledFor(logging.DEBUG):
                         log.debug("send body (chunked: %s)" % chunked)
 
-                    if hasattr(request.body, 'read'):
-                        if hasattr(request.body, 'seek'): request.body.seek(0)
-                        sendfile(sck, request.body, chunked)
-                    elif isinstance(request.body, types.StringTypes):
-                        send(sck, request.body, chunked)
+
+                    if isinstance(request.body, types.StringTypes):
+                        if msg is not None:
+                            send(sck, msg + request.body, chunked)
+                        else:
+                            send(sck, request.body, chunked)
                     else:
-                        sendlines(sck, request.body, chunked)
+                        if msg is not None:
+                            sck.sendall(msg)
+
+                        if hasattr(request.body, 'read'):
+                            if hasattr(request.body, 'seek'): request.body.seek(0)
+                            sendfile(sck, request.body, chunked)
+                        else:
+                            sendlines(sck, request.body, chunked)
                     if chunked:
                         send_chunk(sck, "")
+                else:
+                    sck.sendall(msg)
                 
                 return self.get_response(request, connection)
             except socket.gaierror, e:
