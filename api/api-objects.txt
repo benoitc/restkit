@@ -48,8 +48,8 @@ restkit.contrib.console.common_indent	restkit.contrib.console-module.html#common
 restkit.contrib.console.locate_program	restkit.util-module.html#locate_program
 restkit.contrib.console.options	restkit.contrib.console-module.html#options
 restkit.contrib.ipython_shell	restkit.contrib.ipython_shell-module.html
-restkit.contrib.ipython_shell.main	restkit.contrib.ipython_shell-module.html#main
 restkit.contrib.ipython_shell.HELP	restkit.contrib.ipython_shell-module.html#HELP
+restkit.contrib.ipython_shell.main	restkit.contrib.ipython_shell-module.html#main
 restkit.contrib.ipython_shell.ctypes	restkit.contrib.ipython_shell-module.html#ctypes
 restkit.contrib.ipython_shell.__package__	restkit.contrib.ipython_shell-module.html#__package__
 restkit.contrib.webob_api	restkit.contrib.webob_api-module.html
