@@ -199,7 +199,7 @@ class Client(object):
                 return sck
             except socket.error:
                 close(sck)
-        raise socket.error, "getaddrinfo returns an empty list" 
+        raise socket.error, "Can't connect to %s" % addr 
 
     def get_connection(self, request):
         """ get a connection from the pool or create new one. """
