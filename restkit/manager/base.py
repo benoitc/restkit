@@ -9,6 +9,7 @@ from collections import deque
 import select
 import signal
 import socket
+import select
 import threading
 import time
 
@@ -137,7 +138,12 @@ class Manager(object):
     def is_closed(self, sck):
         if sck is None:
             return True
-        return False
+	r, _, _ = select.select([sck], [], [], 0)
+	if not r:
+	    return False
+	read = sck.recv(1024)
+	sck.close()
+	return True
 
     def store_socket(self, sck, addr, ssl=False):
         """ store a socket in the pool to reuse it across threads """
