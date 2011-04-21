@@ -9,10 +9,14 @@ from collections import deque
 import select
 import signal
 import socket
+import select
 import threading
 import time
 
 from ..sock import close
+
+import logging
+log = logging.getLogger(__name__)
 
 class ConnectionReaper(threading.Thread):
     """ connection reaper thread. Open a thread that will murder iddle
@@ -137,7 +141,19 @@ class Manager(object):
     def is_closed(self, sck):
         if sck is None:
             return True
-        return False
+	log.debug("Testing socket %d for connectedness:", sck.fileno())
+	if True:
+		r, _, _ = select.select([sck], [], [], 0)
+		if not r:
+			return False
+		read = sck.recv(1024)
+		log.debug("Read from socket: %r", read)
+		assert read == '', "Unread data found on socket"
+		if read == '':
+			return True
+		else:
+			sck.close()
+			return True
 
     def store_socket(self, sck, addr, ssl=False):
         """ store a socket in the pool to reuse it across threads """
