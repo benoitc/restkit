@@ -210,7 +210,8 @@ class Client(object):
         extra_headers = []
         sck = None
         if self.use_proxy:
-            sck, addr, extra_headers = self.proxy_connection(request, addr, ssl)
+            sck, addr, extra_headers = self.proxy_connection(request,
+                    addr, is_ssl)
         if not sck:
             sck = self._manager.find_socket(addr, is_ssl)
             if sck is None:
@@ -224,7 +225,7 @@ class Client(object):
                 ssl=is_ssl, extra_headers=extra_headers)
         return connection 
 
-    def proxy_connection(self, request, req_addr, ssl):
+    def proxy_connection(self, request, req_addr, is_ssl):
         """ do the proxy connection """
         proxy_settings = os.environ.get('%s_proxy' %
                 request.parsed_url.scheme)
@@ -233,7 +234,7 @@ class Client(object):
             proxy_settings, proxy_auth =  _get_proxy_auth(proxy_settings)
             addr = parse_netloc(urlparse.urlparse(proxy_settings))
 
-            if ssl:
+            if is_ssl:
                 if proxy_auth:
                     proxy_auth = 'Proxy-authorization: %s' % proxy_auth
                 proxy_connect = 'CONNECT %s:%s HTTP/1.0\r\n' % req_addr
