@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 import base64
 import errno
@@ -33,7 +33,7 @@ from . import __version__
 from .conn import Connection
 from .errors import RequestError, RequestTimeout, RedirectLimit, \
 NoMoreData, ProxyError
-from .globals import get_manager 
+from .globals import get_manager
 from . import http
 
 from .sock import close, send, sendfile, sendlines, send_chunk, \
@@ -55,8 +55,8 @@ class Client(object):
 
     """ A client handle a connection at a time. A client is threadsafe,
     but an handled shouldn't be shared between threads. All connections
-    are shared between threads via a pool. 
-    
+    are shared between threads via a pool.
+
     >>> from restkit import *
     >>> c = Client()
     >>> r = c.request("http://google.com")
@@ -68,7 +68,7 @@ class Client(object):
     >>> r = c.request("http://google.com")
     >>> r.status
     '200 OK'
-     
+
     """
 
     version = (1, 1)
@@ -78,7 +78,7 @@ class Client(object):
             follow_redirect=False,
             force_follow_redirect=False,
             max_follow_redirect=MAX_FOLLOW_REDIRECTS,
-            filters=None, 
+            filters=None,
             decompress=True,
             max_status_line_garbage=None,
             max_header_count=0,
@@ -114,7 +114,7 @@ class Client(object):
         :parama response_class: the response class to use
         :param timeout: the default timeout of the connection
         (SO_TIMEOUT)
-        
+
         :param max_tries: the number of tries before we give up a
         connection
         :param wait_tries: number of time we wait between each tries.
@@ -123,7 +123,7 @@ class Client(object):
         """
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
-        self.max_follow_redirect = max_follow_redirect  
+        self.max_follow_redirect = max_follow_redirect
         self.decompress = decompress
         self.filters = filters or []
         self.max_status_line_garbage = max_status_line_garbage
@@ -133,14 +133,14 @@ class Client(object):
         self.request_filters = []
         self.response_filters = []
         self.load_filters()
-        
-                
+
+
         # set manager
         if manager is None:
             manager = get_manager()
         self._manager = manager
 
-        # change default response class 
+        # change default response class
         if response_class is not None:
             self.response_class = response_class
 
@@ -152,7 +152,7 @@ class Client(object):
         self._url = None
         self._initial_url = None
         self._write_cb = None
-        self._headers = None 
+        self._headers = None
         self._sock_key = None
         self._sock = None
         self._original = None
@@ -160,7 +160,7 @@ class Client(object):
         self.method = 'GET'
         self.body = None
         self.ssl_args = ssl_args or {}
-        
+
     def load_filters(self):
         """ Populate filters from self.filters.
         Must be called each time self.filters is updated.
@@ -175,18 +175,18 @@ class Client(object):
         """ create a socket """
         if log.isEnabledFor(logging.DEBUG):
             log.debug("create new connection")
-        for res in socket.getaddrinfo(addr[0], addr[1], 0, 
+        for res in socket.getaddrinfo(addr[0], addr[1], 0,
                 socket.SOCK_STREAM):
             af, socktype, proto, canonname, sa = res
 
             try:
                 sck = socket.socket(af, socktype, proto)
-                
+
                 if self.timeout is not None:
                     sck.settimeout(self.timeout)
 
                 sck.connect(sa)
-                    
+
                 if is_ssl:
                     if not have_ssl:
                         raise ValueError("https isn't supported.  On python 2.5x,"
@@ -195,10 +195,13 @@ class Client(object):
                                         + "to be intalled.")
                     validate_ssl_args(self.ssl_args)
                     sck = _ssl_wrapper(sck, **self.ssl_args)
-                
+
                 return sck
-            except socket.error:
-                close(sck)
+            except socket.error, ex:
+                if ex == 24: # too many open files
+                    raise
+                else:
+                    close(sck)
         raise socket.error, "Can't connect to %s" % str(addr)
 
     def get_connection(self, request):
@@ -223,7 +226,7 @@ class Client(object):
 
         connection = Connection(sck, self._manager, addr,
                 ssl=is_ssl, extra_headers=extra_headers)
-        return connection 
+        return connection
 
     def proxy_connection(self, request, req_addr, is_ssl):
         """ do the proxy connection """
@@ -243,7 +246,7 @@ class Client(object):
                 if not user_agent:
                     user_agent = "User-Agent: restkit/%s\r\n" % __version__
 
-                proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth, 
+                proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth,
                         user_agent)
 
                 sck = self._manager.find_socket(addr, ssl)
@@ -287,7 +290,7 @@ class Client(object):
 
         ua = headers.iget('user_agent')
         if not ua:
-            ua = USER_AGENT 
+            ua = USER_AGENT
         host = request.host
 
         accept_encoding = headers.iget('accept-encoding')
@@ -307,7 +310,7 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Send headers: %s" % lheaders)
         return "%s\r\n" % "".join(lheaders)
-        
+
     def perform(self, request):
         """ perform the request. If an error happen it will first try to
         restart it """
@@ -315,7 +318,7 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Start to perform request: %s %s %s" %
                     (request.host, request.method, request.path))
-                
+
         tries = self.max_tries
         wait = self.wait_tries
         while tries > 0:
@@ -327,7 +330,7 @@ class Client(object):
                 # send headers
                 msg = self.make_headers_string(request,
                         connection.extra_headers)
-                
+
                 # send body
                 if request.body is not None:
                     chunked = request.is_chunked()
@@ -376,7 +379,7 @@ class Client(object):
                         send_chunk(sck, "")
                 else:
                     sck.sendall(msg)
-                
+
                 return self.get_response(request, connection)
             except socket.gaierror, e:
                 try:
@@ -401,8 +404,8 @@ class Client(object):
                 except:
                     pass
 
-                if e[0] not in (errno.EAGAIN, errno.ECONNABORTED, 
-                        errno.EPIPE, errno.ECONNREFUSED, 
+                if e[0] not in (errno.EAGAIN, errno.ECONNABORTED,
+                        errno.EPIPE, errno.ECONNREFUSED,
                         errno.ECONNRESET, errno.EBADF) or tries <= 0:
                     raise RequestError("socker.error: %s" % str(e))
             except (KeyboardInterrupt, SystemExit):
@@ -422,7 +425,7 @@ class Client(object):
                 log.debug("unhandled exception %s" %
                         traceback.format_exc())
                 raise
-            
+
             # time until we retry.
             time.sleep(wait)
             wait = wait * 2
@@ -434,7 +437,7 @@ class Client(object):
 
         request = Request(url, method=method, body=body,
                 headers=headers)
-        
+
         # apply request filters
         # They are applied only once time.
         for f in self.request_filters:
@@ -464,7 +467,7 @@ class Client(object):
 
         # make sure location follow rfc2616
         location = rewrite_location(request.url, location)
-       
+
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Redirect to %s" % location)
 
@@ -494,7 +497,7 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Got response: %s" % resp.status)
             log.debug("headers: [%s]" % resp.headers)
-        
+
         location = resp.headers.iget('location')
 
         if self.follow_redirect:
@@ -545,11 +548,11 @@ def _get_proxy_auth(proxy_settings):
     if not proxy_username:
         u = urlparse.urlparse(proxy_settings)
         if u.username:
-            proxy_password = u.password or proxy_password 
-            proxy_settings = urlparse.urlunparse((u.scheme, 
-                u.netloc.split("@")[-1], u.path, u.params, u.query, 
+            proxy_password = u.password or proxy_password
+            proxy_settings = urlparse.urlunparse((u.scheme,
+                u.netloc.split("@")[-1], u.path, u.params, u.query,
                 u.fragment))
-    
+
     if proxy_username:
         user_auth = base64.encodestring('%s:%s' % (proxy_username,
                                     proxy_password))
