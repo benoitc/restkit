@@ -44,6 +44,12 @@ class Unauthorized(ResourceError):
     the resource specified.
     """
 
+class ResourceGone(ResourceError):
+    """
+    http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.11
+    """
+    status_int = 410
+
 class RequestFailed(ResourceError):
     """Exception raised when an unexpected HTTP error is received in response
     to a request.

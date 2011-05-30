@@ -8,7 +8,8 @@ __version__ =  ".".join(map(str, version_info))
 
 try:
     from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
-RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, ResourceError
+RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, \
+ResourceError, ResourceGone
     from restkit.client import Client, MAX_FOLLOW_REDIRECTS
     from restkit.wrappers import Request, Response, ClientResponse
     from restkit.resource import Resource

@@ -13,7 +13,8 @@ This module provide a common interface for all HTTP request.
 from copy import copy
 import urlparse
 
-from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed
+from restkit.errors import ResourceNotFound, Unauthorized, \
+RequestFailed, ResourceGone
 from restkit.client import Client
 from restkit.filters import BasicAuth
 from restkit import util
@@ -201,6 +202,8 @@ class Resource(object):
                         raise Unauthorized(resp.body_string(), 
                                 http_code=resp.status_int, 
                                 response=resp)
+                elif resp.status_int == 410:
+                    raise ResouceGone(resp.body_string(), response=resp)
                 else:
                     raise RequestFailed(resp.body_string(), 
                                 http_code=resp.status_int,
