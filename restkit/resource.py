@@ -13,11 +13,11 @@ This module provide a common interface for all HTTP request.
 from copy import copy
 import urlparse
 
-from .errors import ResourceNotFound, Unauthorized, RequestFailed
-from .client import Client
-from .filters import BasicAuth
-from . import util
-from .wrappers import Response
+from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed
+from restkit.client import Client
+from restkit.filters import BasicAuth
+from restkit import util
+from restkit.wrappers import Response
 
 class Resource(object):
     """A class that can be instantiated for access to a RESTful resource, 

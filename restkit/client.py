@@ -19,7 +19,7 @@ try:
 except ImportError:
     if hasattr(socket, "ssl"):
         from httplib import FakeSocket
-        from .sock import trust_all_certificates
+        from restkit.sock import trust_all_certificates
 
         @trust_all_certificates
         def _ssl_wrapper(sck, **kwargs):
@@ -29,17 +29,17 @@ except ImportError:
     else:
         have_ssl = False
 
-from . import __version__
-from .conn import Connection
-from .errors import RequestError, RequestTimeout, RedirectLimit, \
-NoMoreData, ProxyError
-from .globals import get_manager
-from . import http
+from restkit import __version__
+from restkit import http
 
-from .sock import close, send, sendfile, sendlines, send_chunk, \
+from restkit.conn import Connection
+from restkit.errors import RequestError, RequestTimeout, RedirectLimit, \
+NoMoreData, ProxyError
+from restkit.globals import get_manager
+from restkit.sock import close, send, sendfile, sendlines, send_chunk, \
 validate_ssl_args
-from .util import parse_netloc, rewrite_location
-from .wrappers import Request, Response
+from restkit.util import parse_netloc, rewrite_location
+from restkit.wrappers import Request, Response
 
 
 MAX_CLIENT_TIMEOUT=300

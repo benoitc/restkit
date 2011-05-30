@@ -6,7 +6,7 @@
 
 import webob.exc
 
-from .. import errors
+from restkit import errors
 
 class WebobResourceError(webob.exc.WSGIHTTPException):
     """

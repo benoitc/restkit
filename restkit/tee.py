@@ -19,8 +19,8 @@ except ImportError:
 import tempfile
 
 
-from .http import LengthReader
-from . import sock
+from restkit.http import LengthReader
+from restkit import sock
 
 class TeeInput(object):
     

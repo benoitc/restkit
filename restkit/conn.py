@@ -5,7 +5,7 @@
 
 import logging
 
-from . import sock
+from restkit import sock
 
 log = logging.getLogger(__name__)
 

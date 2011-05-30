@@ -10,10 +10,10 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from ..client import Client 
-from ..globals import _manager 
-from ..sock import MAX_BODY
-from ..util import rewrite_location
+from restkit.client import Client 
+from restkit.globals import _manager 
+from restkit.sock import MAX_BODY
+from restkit.util import rewrite_location
 
 ALLOWED_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
 

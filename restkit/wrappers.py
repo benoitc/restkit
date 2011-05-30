@@ -12,11 +12,11 @@ import types
 import urlparse
 import uuid
 
-from .datastructures import MultiDict
-from .errors import AlreadyRead, RequestError
-from .forms import multipart_form_encode, form_encode
-from .tee import ResponseTeeInput
-from .util import to_bytestring
+from restkit.datastructures import MultiDict
+from restkit.errors import AlreadyRead, RequestError
+from restkit.forms import multipart_form_encode, form_encode
+from restkit.tee import ResponseTeeInput
+from restkit.util import to_bytestring
 
 class Request(object):
 

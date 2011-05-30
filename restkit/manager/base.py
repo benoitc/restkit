@@ -13,7 +13,7 @@ import select
 import threading
 import time
 
-from ..sock import close
+from restkit.sock import close
 
 class ConnectionReaper(threading.Thread):
     """ connection reaper thread. Open a thread that will murder iddle

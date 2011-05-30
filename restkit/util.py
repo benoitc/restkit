@@ -10,7 +10,7 @@ import urllib
 import urlparse
 import warnings
 
-from .errors import InvalidUrl
+from restkit.errors import InvalidUrl
 
 absolute_http_url_re = re.compile(r"^https?://", re.I)
 

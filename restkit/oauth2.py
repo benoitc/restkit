@@ -16,7 +16,7 @@ try:
 except ImportError:
     from cgi import parse_qs, parse_qsl
 
-from .util import to_bytestring
+from restkit.util import to_bytestring
 
 
 VERSION = '1.0'  # Hi Blaine!

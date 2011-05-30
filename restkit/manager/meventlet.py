@@ -11,7 +11,7 @@ import signal
 import eventlet
 from eventlet.semaphore import Semaphore
 
-from .base import Manager
+from restkit.manager.base import Manager
 
 class EventletConnectionReaper(object):
 

@@ -11,7 +11,7 @@ import signal
 import gevent
 from gevent.coros import Semaphore
 
-from .base import Manager
+from restkit.manager.base import Manager
 
 class GeventConnectionReaper(gevent.Greenlet):
 

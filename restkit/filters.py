@@ -11,7 +11,7 @@ except ImportError:
     from cgi import parse_qsl
 from urlparse import urlunparse
 
-from .oauth2 import Request, SignatureMethod_HMAC_SHA1
+from restkit.oauth2 import Request, SignatureMethod_HMAC_SHA1
 
 class BasicAuth(object):
     """ Simple filter to manage basic authentification"""
