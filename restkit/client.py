@@ -407,7 +407,7 @@ class Client(object):
                 if e[0] not in (errno.EAGAIN, errno.ECONNABORTED,
                         errno.EPIPE, errno.ECONNREFUSED,
                         errno.ECONNRESET, errno.EBADF) or tries <= 0:
-                    raise RequestError("socker.error: %s" % str(e))
+                    raise RequestError("socket.error: %s" % str(e))
             except (KeyboardInterrupt, SystemExit):
                 break
             except (StopIteration, NoMoreData):
