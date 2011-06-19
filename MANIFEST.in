@@ -3,6 +3,7 @@ include LICENSE
 include README.rst
 include TODO.txt
 include THANKS
+include requirements.txt
 include bootstrap.py
 include buildout.cfg
 recursive-include debian *

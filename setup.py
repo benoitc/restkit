@@ -95,12 +95,14 @@ def main():
         )
 
     if use_setuptools:
-        options['entry_points'] = {
-            'paste.app_factory': [
-                    'proxy = restkit.contrib.wsgi_proxy:make_proxy',
-                    'host_proxy = restkit.contrib.wsgi_proxy:make_host_proxy',
-                    'couchdb_proxy = restkit.contrib.wsgi_proxy:make_couchdb_proxy',
-                ]}
+        options.update({
+            'entry_points': {
+                'paste.app_factory': [
+                        'proxy = restkit.contrib.wsgi_proxy:make_proxy',
+                        'host_proxy = restkit.contrib.wsgi_proxy:make_host_proxy',
+                        'couchdb_proxy = restkit.contrib.wsgi_proxy:make_couchdb_proxy',
+                    ]},
+            'install_requires': ['http-parser']})
 
 
     # Python 3: run 2to3
