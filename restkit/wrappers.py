@@ -207,6 +207,9 @@ class Response(object):
             self.connection.release()
             self._body = StringIO()
 
+        else:
+            self._body = resp.body_file()
+
     def __getitem__(self, key):
         try:
             return getattr(self, key)
@@ -230,7 +233,7 @@ class Response(object):
             raise AlreadyRead() 
 
         
-        body = self._resp.body_string()
+        body = self._body.read()
         self._already_read = True
         
         # release connection
@@ -243,16 +246,14 @@ class Response(object):
                 pass
         return body
 
-    def body_stream(self, buffering=None, binary=True, encoding=None,
-            errors=None, newline=None):
+    def body_stream(self):
         """ stream body """ 
         if not self.can_read():
             raise AlreadyRead()
 
         self._already_read = True
 
-        return self._resp.body_file(buffering=buffering, binary=binary,
-                encoding=encoding, errors=errors, newline=newline)
+        return self._body
 
 
     def tee(self):
