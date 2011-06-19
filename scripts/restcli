@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# This file is part of restkit released under the MIT license. 
+# See the NOTICE for more information.
+
+from restkit.contrib.console import main
+
+if __name__ == '__main__':
+    main()

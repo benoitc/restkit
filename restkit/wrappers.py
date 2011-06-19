@@ -158,20 +158,20 @@ class BodyWrapper(object):
             self.close() 
             raise
 
-    def read(self, size=None):
-        data = self.body.read(size=size)
+    def read(self, n=-1):
+        data = self.body.read(n)
         if not data:
             self.close()
         return data
 
-    def readline(self, size=None):
-        line = self.body.readline(size=size)
+    def readline(self, limit=-1):
+        line = self.body.readline(limit)
         if not line: 
             self.close()
         return line
 
-    def readlines(self, size=None):
-        lines = self.body.readlines(size=size)
+    def readlines(self, hint=None):
+        lines = self.body.readlines(hint)
         if self.body.close:
             self.close()
         return lines
@@ -253,7 +253,7 @@ class Response(object):
 
         self._already_read = True
 
-        return self._body
+        return BodyWrapper(self, self.connection)
 
 
     def tee(self):

@@ -149,7 +149,6 @@ class TeeInput(object):
         """ fetch partial body"""
         buf2 = self.buf
         buf2.seek(0, 2) 
-        print length
         chunk = self.stream.read(length)
         if chunk:
             self.tmp.write(chunk)
