@@ -426,7 +426,7 @@ class Client(object):
                                 not isinstance(request.body, types.StringTypes):
                             raise RequestError("connection closed and can't"
                                     + "be resent")
-	    except:
+            except:
                 # unkown error
                 log.debug("unhandled exception %s" %
                         traceback.format_exc())

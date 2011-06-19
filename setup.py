@@ -47,7 +47,8 @@ MODULES = [
 SCRIPTS = ['scripts/restcli']
 
 def main():
-    import restkit 
+    version = load_source("version", os.path.join("restkit",
+        "version.py"))
 
     # read long description
     with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
@@ -64,38 +65,23 @@ def main():
 
     options=dict(
             name = 'restkit',
-            version = restkit.__version__,
+            version = version.__version__,
             description = 'Python REST kit',
             long_description = long_description,
             author = 'Benoit Chesneau',
             author_email = 'benoitc@e-engura.org',
             license = 'BSD',
             url = 'http://benoitc.github.com/restkit',
-            zip_safe = True,
-
             classifiers = CLASSIFIERS,
-
             packages = PACKAGES.keys(),
             package_dir = PACKAGES,
             data_files = DATA_FILES,
-
-            scripts = SCRIPTS,
-
-            entry_points = {
-                'console_scripts': [
-                    'restcli = restkit.contrib.console:main',
-                ],
-                'paste.app_factory': [
-                    'proxy = restkit.contrib.wsgi_proxy:make_proxy',
-                    'host_proxy = restkit.contrib.wsgi_proxy:make_host_proxy',
-                    'couchdb_proxy = restkit.contrib.wsgi_proxy:make_couchdb_proxy',
-                ],
-            },
-
+            scripts = SCRIPTS
         )
 
     if use_setuptools:
         options.update({
+            'zip_safe': False,
             'entry_points': {
                 'paste.app_factory': [
                         'proxy = restkit.contrib.wsgi_proxy:make_proxy',
