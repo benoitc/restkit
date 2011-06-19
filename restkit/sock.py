@@ -6,6 +6,13 @@
 import socket
 import sys
 
+try:
+    from http_parser.util import b
+except ImportError:
+    raise ImportError("""http-parser isn't installed.
+        
+        pip install http-parser""")
+
 CHUNK_SIZE = 16 * 1024 
 MAX_BODY = 1024 * 112
 DNS_TIMEOUT = 60
@@ -28,12 +35,12 @@ def close(skt):
         
 def send_chunk(sock, data):
     chunk = "".join(("%X\r\n" % len(data), data, "\r\n"))
-    sock.sendall(chunk)
+    sock.sendall(b(chunk))
 
 def send(sock, data, chunked=False):
     if chunked:
         return send_chunk(sock, data)
-    sock.sendall(data)
+    sock.sendall(b(data))
         
 def send_nonblock(sock, data, chunked=False):
     timeout = sock.gettimeout()

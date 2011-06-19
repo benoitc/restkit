@@ -3,10 +3,9 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from UserDict import DictMixin
 
 
-class MultiDict(DictMixin):
+class MultiDict(dict):
     """
         An ordered dictionary that can have multiple values for each key.
         Adds the methods getall, getone, mixed and extend and add to the normal

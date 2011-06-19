@@ -12,6 +12,13 @@ import types
 import urlparse
 import uuid
 
+try:
+    from http_parser.util import bytes_to_str
+except ImportError:
+    raise ImportError("""http-parser isn't installed.
+        
+        pip install http-parser""")
+
 from restkit.datastructures import MultiDict
 from restkit.errors import AlreadyRead, RequestError
 from restkit.forms import multipart_form_encode, form_encode
@@ -64,8 +71,8 @@ class Request(object):
         
         hdr_host = self.headers.iget("host")
         if not hdr_host:
-            return h
-        return hdr_host
+            return bytes_to_str(h)
+        return bytes_to_str(hdr_host)
     host = property(_host__get)
 
     def is_chunked(self):
