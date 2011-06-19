@@ -29,8 +29,15 @@ except ImportError:
     else:
         have_ssl = False
 
+try:
+    from http_parser.http import HttpStream
+    from http_parser.reader import SocketReader
+except ImportError:
+    raise ImportError("""http-parser isn't installed.
+        
+        pip install http-parser""")
+
 from restkit import __version__
-from restkit import http
 
 from restkit.conn import Connection
 from restkit.errors import RequestError, RequestTimeout, RedirectLimit, \
@@ -40,7 +47,6 @@ from restkit.sock import close, send, sendfile, sendlines, send_chunk, \
 validate_ssl_args
 from restkit.util import parse_netloc, rewrite_location
 from restkit.wrappers import Request, Response
-
 
 MAX_CLIENT_TIMEOUT=300
 MAX_CLIENT_CONNECTIONS = 5
@@ -459,12 +465,6 @@ class Client(object):
         if request.initial_url is None:
             request.initial_url = self.url
 
-        # discard response body and reset request informations
-        if hasattr(resp, "_body"):
-            resp._body.discard()
-        else:
-            resp.body.discard()
-
         # make sure location follow rfc2616
         location = rewrite_location(request.url, location)
 
@@ -485,23 +485,17 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Start to parse response")
 
-        unreader = http.Unreader(connection.socket())
-        while True:
-            resp = http.Request(unreader, decompress=self.decompress,
-                    max_status_line_garbage=self.max_status_line_garbage,
-                    max_header_count=self.max_header_count)
-            if resp.status_int != 100:
-                break
-            resp.body.discard()
+        p = HttpStream(SocketReader(connection.socket()), kind=1, 
+                decompress=self.decompress)
 
         if log.isEnabledFor(logging.DEBUG):
-            log.debug("Got response: %s" % resp.status)
-            log.debug("headers: [%s]" % resp.headers)
+            log.debug("Got response: %s" % p.status)
+            log.debug("headers: [%s]" % p.headers)
 
-        location = resp.headers.iget('location')
+        location = p.headers().get('location')
 
         if self.follow_redirect:
-            if resp.status_int in (301, 302, 307,):
+            if p.status_code() in (301, 302, 307,):
                 if request.method in ('GET', 'HEAD',) or \
                         self.force_follow_redirect:
                     if hasattr(self.body, 'read'):
@@ -513,16 +507,16 @@ class Client(object):
                                     "because body has already been read"
                                     % (self.url, location))
                     connection.release()
-                    return self.redirect(resp, location, request)
+                    return self.redirect(p, location, request)
 
-            elif resp.status_int == 303 and self.method == "POST":
+            elif p.status_code() == 303 and self.method == "POST":
                 connection.release()
                 request.method = "GET"
                 request.body = None
-                return self.redirect(resp, location, request)
+                return self.redirect(p, location, request)
 
         # create response object
-        resp = self.response_class(connection, request, resp)
+        resp = self.response_class(connection, request, p)
 
         # apply response filters
         for f in self.response_filters:

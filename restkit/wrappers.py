@@ -185,17 +185,18 @@ class Response(object):
     def __init__(self, connection, request, resp):
         self.request = request
         self.connection = connection 
-        self._body = resp.body
         
+        self._resp = resp
+
         # response infos
-        self.headers = resp.headers
-        self.status = resp.status
-        self.status_int = resp.status_int
-        self.version = resp.version
-        self.headerslist = resp.headers.items()
-        self.location = resp.headers.iget('location')
+        self.headers = resp.headers()
+        self.status = resp.status()
+        self.status_int = resp.status_code()
+        self.version = resp.version()
+        self.headerslist = self.headers.items()
+        self.location = self.headers.get('location')
         self.final_url = request.url
-        self.should_close = resp.should_close()
+        self.should_close = not resp.should_keep_alive()
 
 
         self._closed = False
@@ -211,10 +212,10 @@ class Response(object):
             return getattr(self, key)
         except AttributeError:
             pass
-        return self.headers.iget(key)
+        return self.headers.get(key)
     
     def __contains__(self, key):
-        return (self.headers.iget(key) is not None)
+        return key in self.headers
 
     def __iter__(self):
         return self.headers.iteritems()
@@ -228,7 +229,8 @@ class Response(object):
         if not self.can_read():
             raise AlreadyRead() 
 
-        body = self._body.read()
+        
+        body = self._resp.body_string()
         self._already_read = True
         
         # release connection
@@ -241,24 +243,23 @@ class Response(object):
                 pass
         return body
 
-    def body_stream(self):
+    def body_stream(self, buffering=None, binary=True, encoding=None,
+            errors=None, newline=None):
         """ stream body """ 
         if not self.can_read():
             raise AlreadyRead()
 
         self._already_read = True
 
-        return BodyWrapper(self, self.connection) 
+        return self._resp.body_file(buffering=buffering, binary=binary,
+                encoding=encoding, errors=errors, newline=newline)
+
 
     def tee(self):
         """ copy response input to standard output or a file if length >
         sock.MAX_BODY. This make possible to reuse it in your
         appplication. When all the input has been read, connection is
         released """
-        if not hasattr(self._body, "reader"):
-            # head case
-            return self._body
-
         return ResponseTeeInput(self, self.connection,
                 should_close=self.should_close)
 ClientResponse = Response

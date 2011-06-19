@@ -18,8 +18,6 @@ except ImportError:
     from StringIO import StringIO
 import tempfile
 
-
-from restkit.http import LengthReader
 from restkit import sock
 
 class TeeInput(object):
@@ -151,6 +149,7 @@ class TeeInput(object):
         """ fetch partial body"""
         buf2 = self.buf
         buf2.seek(0, 2) 
+        print length
         chunk = self.stream.read(length)
         if chunk:
             self.tmp.write(chunk)
@@ -185,15 +184,14 @@ class ResponseTeeInput(TeeInput):
     def __init__(self, resp, connection, should_close=False):
         self.buf = StringIO()
         self.resp = resp
-        self.stream =resp._body
+        self.stream =resp.body_stream()
         self.connection = connection
         self.should_close = should_close
         self.eof = False
         
         # set temporary body
-        if isinstance(resp._body.reader, LengthReader):
-            clen = int(resp.headers.iget('content-length'))
-            
+        clen = int(resp.headers.get('content-length') or -1)
+        if clen >= 0:
             if (clen <= sock.MAX_BODY):
                 self.tmp = StringIO()
             else:
@@ -209,7 +207,7 @@ class ResponseTeeInput(TeeInput):
          
     def _close_unreader(self):
         if not self.eof:
-            self.resp._body.discard()
+            self.stream.close()
         self.connection.release(self.should_close)
             
     def _finalize(self):
