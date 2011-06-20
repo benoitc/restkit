@@ -13,7 +13,7 @@ Requirements
 Installation
 ------------
 
-To install restkit using easy_install you must make sure you have a
+To install restkit using pip you must make sure you have a
 recent version of distribute installed::
 
     $ curl -O http://python-distribute.org/distribute_setup.py

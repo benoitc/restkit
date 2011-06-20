@@ -9,7 +9,7 @@ Homepage: http://benoitc.github.com/restkit
 Package: python-restkit
 Architecture: all
 Depends: ${python:Depends}, ${shlibs:Depends}, ${misc:Depends},
-python-http-parser(>=0.5.4)
+python-http-parser(>=0.6.0)
 Provides: ${python:Provides}
 Description: Python REST kit
  An HTTP resource kit for Python
