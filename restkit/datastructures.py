@@ -72,10 +72,7 @@ class MultiDict(DictMixin):
         """
         Return a list of all values matching the key (may be an empty list)
         """
-        result = []
-        for k, v in self._items:
-            if key == k:
-                result.append(v)
+        return [v for k, v in self._items if k == key]
 
     def iget(self, key):
         """like get but case insensitive """
