@@ -138,9 +138,12 @@ class Manager(object):
     def is_closed(self, sck):
         if sck is None:
             return True
-        r, _, _ = select.select([sck], [], [], 0)
-        if not r:
-            return False
+        try:
+            r, _, _ = select.select([sck], [], [], 0)
+            if not r:
+                return False
+        except (ValueError, select.error,):
+            return True
         read = sck.recv(1024)
         sck.close()
         return True
