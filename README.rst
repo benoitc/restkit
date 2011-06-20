@@ -8,15 +8,26 @@ Restkit is a full HTTP client using pure socket calls and its own HTTP parser. I
 Installation
 ------------
 
-Restkit requires Python 2.x superior to 2.5.
+Restkit requires Python 2.x superior to 2.5 and http-parser 0.5.3 or
+sup.
 
-Install from sources::
+To install restkit using pip you must make sure you have a
+recent version of distribute installed::
 
-  $ python setup.py install
+    $ curl -O http://python-distribute.org/distribute_setup.py
+    $ sudo python distribute_setup.py
+    $ easy_install pip
 
-Or from Pypi::
+To install or upgrade to the latest released version of restkit::
 
-  $ easy_install -U restkit
+    $ pip install http-parser
+    $ pip install restkit
+
+
+Note: if you get an error on MacOSX try to install with the following
+arguments::
+
+    $ env ARCHFLAGS="-arch i386 -arch x86_64" pip install http-parser
   
 Usage
 =====
