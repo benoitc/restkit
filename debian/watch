@@ -10,7 +10,7 @@ version=3
 # <Webpage URL> <string match>
 #http://www.example.com/downloads.php python-couchdbkit-(.*)\.tar\.gz
 opts=dversionmangle=s/\+dfsg$// \
-  http://pypi.python.org/packages/source/c/couchdbkit/couchdbkit-(.*).tar.gz
+  http://pypi.python.org/packages/source/c/restkit/restkit-(.*).tar.gz
 #  http://github.com/benoitc/couchdbkit/downloads/ /benoitc/couchdbkit/tarball/([0-9].*)
 
 # Uncomment to examine a Webserver directory
