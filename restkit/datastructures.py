@@ -3,7 +3,10 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from UserDict import DictMixin
+try:
+    from UserDict import DictMixin
+except ImportError:    
+    from collections import MutableMapping as DictMixin
  
  
 class MultiDict(DictMixin):
