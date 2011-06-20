@@ -88,7 +88,7 @@ def main():
                         'host_proxy = restkit.contrib.wsgi_proxy:make_host_proxy',
                         'couchdb_proxy = restkit.contrib.wsgi_proxy:make_couchdb_proxy',
                     ]},
-            'install_requires': ['http-parser>=0.5.3']})
+            'install_requires': ['http-parser>=0.5.4']})
 
 
     # Python 3: run 2to3

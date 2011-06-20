@@ -493,7 +493,7 @@ class Client(object):
             log.debug("headers: [%s]" % p.headers())
 
         location = p.headers().get('location')
-
+        
         if self.follow_redirect:
             if p.status_code() in (301, 302, 307,):
                 if request.method in ('GET', 'HEAD',) or \
