@@ -96,6 +96,7 @@ class OAuthFilter(object):
         
         if form:
             request.body = oauth_req.to_postdata()
+            
             request.headers['Content-Length'] = len(request.body)
         elif request.method in ('GET', 'HEAD'):
             request.original_url = request.url
@@ -103,3 +104,4 @@ class OAuthFilter(object):
         else:
             oauth_headers = oauth_req.to_header()
             request.headers.update(oauth_headers)
+            print request.headers

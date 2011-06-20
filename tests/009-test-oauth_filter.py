@@ -74,7 +74,7 @@ def test_003(o, u, b):
     import sys
     print >>sys.stderr, r.body_string()
     t.eq(r.status_int, 200)
-    
+
 @oauth_request('two_legged')
 def test_004(o, u, b):
     r = request(u, "GET", filters=[o])

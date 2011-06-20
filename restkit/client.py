@@ -32,7 +32,6 @@ except ImportError:
 try:
     from http_parser.http import HttpStream
     from http_parser.reader import SocketReader
-    from http_parser.util import b
 except ImportError:
     raise ImportError("""http-parser isn't installed.
         
@@ -353,7 +352,7 @@ class Client(object):
                     hdr_expect = request.headers.iget("expect")
                     if hdr_expect is not None and \
                             hdr_expect.lower() == "100-continue":
-                        sck.sendall(b(msg))
+                        sck.sendall(msg)
                         msg = None
                         resp = http.Request(http.Unreader(self._sock))
                         if resp.status_int != 100:
@@ -375,7 +374,7 @@ class Client(object):
                             send(sck, request.body, chunked)
                     else:
                         if msg is not None:
-                            sck.sendall(b(msg))
+                            sck.sendall(msg)
 
                         if hasattr(request.body, 'read'):
                             if hasattr(request.body, 'seek'): request.body.seek(0)
@@ -385,7 +384,7 @@ class Client(object):
                     if chunked:
                         send_chunk(sck, "")
                 else:
-                    sck.sendall(b(msg))
+                    sck.sendall(msg)
 
                 return self.get_response(request, connection)
             except socket.gaierror, e:
@@ -490,8 +489,8 @@ class Client(object):
                 decompress=self.decompress)
 
         if log.isEnabledFor(logging.DEBUG):
-            log.debug("Got response: %s" % p.status)
-            log.debug("headers: [%s]" % p.headers)
+            log.debug("Got response: %s" % p.status())
+            log.debug("headers: [%s]" % p.headers())
 
         location = p.headers().get('location')
 

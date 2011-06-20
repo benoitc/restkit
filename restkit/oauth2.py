@@ -3,7 +3,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-
+import base64
 import urllib
 import time
 import random
@@ -19,7 +19,16 @@ except ImportError:
 from restkit.util import to_bytestring
 
 
-VERSION = '1.0'  # Hi Blaine!
+try:
+    from hashlib import sha1
+    sha = sha1
+except ImportError:
+    # hashlib was added in Python 2.5
+    import sha
+
+from restkit.version import __version__
+
+OAUTH_VERSION = '1.0'  # Hi Blaine!
 HTTP_METHOD = 'GET'
 SIGNATURE_METHOD = 'PLAINTEXT'
 
@@ -64,10 +73,68 @@ def build_xoauth_string(url, consumer, token=None):
     return "%s %s %s" % ("GET", url, ','.join(params))
 
 
+def to_unicode(s):
+    """ Convert to unicode, raise exception with instructive error
+    message if s is not unicode, ascii, or utf-8. """
+    if not isinstance(s, unicode):
+        if not isinstance(s, str):
+            raise TypeError('You are required to pass either unicode or string here, not: %r (%s)' % (type(s), s))
+        try:
+            s = s.decode('utf-8')
+        except UnicodeDecodeError, le:
+            raise TypeError('You are required to pass either a unicode object or a utf-8 string here. You passed a Python string object which contained non-utf-8: %r. The UnicodeDecodeError that resulted from attempting to interpret it as utf-8 was: %s' % (s, le,))
+    return s
+
+def to_utf8(s):
+    return to_unicode(s).encode('utf-8')
+
+def to_unicode_if_string(s):
+    if isinstance(s, basestring):
+        return to_unicode(s)
+    else:
+        return s
+
+def to_utf8_if_string(s):
+    if isinstance(s, basestring):
+        return to_utf8(s)
+    else:
+        return s
+
+def to_unicode_optional_iterator(x):
+    """
+    Raise TypeError if x is a str containing non-utf8 bytes or if x is
+    an iterable which contains such a str.
+    """
+    if isinstance(x, basestring):
+        return to_unicode(x)
+
+    try:
+        l = list(x)
+    except TypeError, e:
+        assert 'is not iterable' in str(e)
+        return x
+    else:
+        return [ to_unicode(e) for e in l ]
+
+def to_utf8_optional_iterator(x):
+    """
+    Raise TypeError if x is a str or if x is an iterable which
+    contains a str.
+    """
+    if isinstance(x, basestring):
+        return to_utf8(x)
+
+    try:
+        l = list(x)
+    except TypeError, e:
+        assert 'is not iterable' in str(e)
+        return x
+    else:
+        return [ to_utf8_if_string(e) for e in l ]
+
 def escape(s):
     """Escape a URL including any /."""
-    return urllib.quote(s, safe='~')
-
+    return urllib.quote(s.encode('utf-8'), safe='~')
 
 def generate_timestamp():
     """Get seconds since epoch (UTC)."""
@@ -249,14 +316,22 @@ class Request(dict):
  
     """
  
-    version = VERSION
- 
-    def __init__(self, method=HTTP_METHOD, url=None, parameters=None):
+    version = OAUTH_VERSION
+
+    def __init__(self, method=HTTP_METHOD, url=None, parameters=None,
+                 body='', is_form_encoded=False):
+        if url is not None:
+            self.url = to_unicode(url)
         self.method = method
-        self.url = url
         if parameters is not None:
-            self.update(parameters)
- 
+            for k, v in parameters.iteritems():
+                k = to_unicode(k)
+                v = to_unicode_optional_iterator(v)
+                self[k] = v
+        self.body = body
+        self.is_form_encoded = is_form_encoded
+
+
     @setter
     def url(self, value):
         self.__dict__['url'] = value
@@ -305,10 +380,14 @@ class Request(dict):
  
     def to_postdata(self):
         """Serialize as post data for a POST request."""
+        d = {}
+        for k, v in self.iteritems():
+            d[k.encode('utf-8')] = to_utf8_optional_iterator(v)
+
         # tell urlencode to deal with sequence values and map them correctly
         # to resulting querystring. for example self["k"] = ["v1", "v2"] will
         # result in 'k=v1&k=v2' and not k=%5B%27v1%27%2C+%27v2%27%5D
-        return urllib.urlencode(self, True).replace('+', '%20')
+        return urllib.urlencode(d, True).replace('+', '%20')
  
     def to_url(self):
         """Serialize as a URL for a GET request."""
@@ -346,7 +425,7 @@ class Request(dict):
             raise Error('Parameter not found: %s' % parameter)
 
         return ret
- 
+
     def get_normalized_parameters(self):
         """Return a string that contains the parameters that must be signed."""
         items = []
@@ -355,27 +434,42 @@ class Request(dict):
                 continue
             # 1.0a/9.1.1 states that kvp must be sorted by key, then by value,
             # so we unpack sequence values into multiple items for sorting.
-            if hasattr(value, '__iter__'):
-                items.extend((key, item) for item in value)
+            if isinstance(value, basestring):
+                items.append((to_utf8_if_string(key), to_utf8(value)))
             else:
-                items.append((key, value))
+                try:
+                    value = list(value)
+                except TypeError, e:
+                    assert 'is not iterable' in str(e)
+                    items.append((to_utf8_if_string(key), to_utf8_if_string(value)))
+                else:
+                    items.extend((to_utf8_if_string(key), to_utf8_if_string(item)) for item in value)
 
         # Include any query string parameters from the provided URL
         query = urlparse.urlparse(self.url)[4]
-        
-        url_items = self._split_url_string(query).items()
-        non_oauth_url_items = list([(k, v) for k, v in url_items  if not k.startswith('oauth_')])
-        items.extend(non_oauth_url_items)
 
-        encoded_str = urllib.urlencode(sorted(items))
+        url_items = self._split_url_string(query).items()
+        url_items = [(to_utf8(k), to_utf8(v)) for k, v in url_items if k != 'oauth_signature' ]
+        items.extend(url_items)
+
+        items.sort()
+        encoded_str = urllib.urlencode(items)
         # Encode signature parameters per Oauth Core 1.0 protocol
         # spec draft 7, section 3.6
         # (http://tools.ietf.org/html/draft-hammer-oauth-07#section-3.6)
         # Spaces must be encoded with "%20" instead of "+"
         return encoded_str.replace('+', '%20').replace('%7E', '~')
- 
+
     def sign_request(self, signature_method, consumer, token):
         """Set the signature parameter to the result of sign."""
+
+        if not self.is_form_encoded:
+            # according to
+            # http://oauth.googlecode.com/svn/spec/ext/body_hash/1.0/oauth-bodyhash.html
+            # section 4.1.1 "OAuth Consumers MUST NOT include an
+            # oauth_body_hash parameter on requests with form-encoded
+            # request bodies."
+            self['oauth_body_hash'] = base64.b64encode(sha(self.body).digest())
 
         if 'oauth_consumer_key' not in self:
             self['oauth_consumer_key'] = consumer.key
@@ -434,7 +528,8 @@ class Request(dict):
  
     @classmethod
     def from_consumer_and_token(cls, consumer, token=None,
-            http_method=HTTP_METHOD, http_url=None, parameters=None):
+            http_method=HTTP_METHOD, http_url=None, parameters=None,
+            body='', is_form_encoded=False):
         if not parameters:
             parameters = {}
  
@@ -453,7 +548,8 @@ class Request(dict):
             if token.verifier:
                 parameters['oauth_verifier'] = token.verifier
  
-        return Request(http_method, http_url, parameters)
+        return Request(http_method, http_url, parameters, body=body, 
+                       is_form_encoded=is_form_encoded)
  
     @classmethod
     def from_token_and_callback(cls, token, callback=None, 
@@ -489,104 +585,10 @@ class Request(dict):
     @staticmethod
     def _split_url_string(param_str):
         """Turn URL string into parameters."""
-        parameters = parse_qs(param_str, keep_blank_values=False)
+        parameters = parse_qs(param_str.encode('utf-8'), keep_blank_values=True)
         for k, v in parameters.iteritems():
             parameters[k] = urllib.unquote(v[0])
         return parameters
-
-class Server(object):
-    """A skeletal implementation of a service provider, providing protected
-    resources to requests from authorized consumers.
- 
-    This class implements the logic to check requests for authorization. You
-    can use it with your web server or web framework to protect certain
-    resources with OAuth.
-    """
-
-    timestamp_threshold = 300 # In seconds, five minutes.
-    version = VERSION
-    signature_methods = None
-
-    def __init__(self, signature_methods=None):
-        self.signature_methods = signature_methods or {}
-
-    def add_signature_method(self, signature_method):
-        self.signature_methods[signature_method.name] = signature_method
-        return self.signature_methods
-
-    def verify_request(self, request, consumer, token):
-        """Verifies an api call and checks all the parameters."""
-
-        version = self._get_version(request)
-        self._check_signature(request, consumer, token)
-        parameters = request.get_nonoauth_parameters()
-        return parameters
-
-    def build_authenticate_header(self, realm=''):
-        """Optional support for the authenticate header."""
-        return {'WWW-Authenticate': 'OAuth realm="%s"' % realm}
-
-    def _get_version(self, request):
-        """Verify the correct version request for this server."""
-        try:
-            version = request.get_parameter('oauth_version')
-        except:
-            version = VERSION
-
-        if version and version != self.version:
-            raise Error('OAuth version %s not supported.' % str(version))
-
-        return version
-
-    def _get_signature_method(self, request):
-        """Figure out the signature with some defaults."""
-        try:
-            signature_method = request.get_parameter('oauth_signature_method')
-        except:
-            signature_method = SIGNATURE_METHOD
-
-        try:
-            # Get the signature method object.
-            signature_method = self.signature_methods[signature_method]
-        except:
-            signature_method_names = ', '.join(self.signature_methods.keys())
-            raise Error('Signature method %s not supported try one of the following: %s' % (signature_method, signature_method_names))
-
-        return signature_method
-
-    def _get_verifier(self, request):
-        return request.get_parameter('oauth_verifier')
-
-    def _check_signature(self, request, consumer, token):
-        timestamp, nonce = request._get_timestamp_nonce()
-        self._check_timestamp(timestamp)
-        signature_method = self._get_signature_method(request)
-
-        try:
-            signature = request.get_parameter('oauth_signature')
-        except:
-            raise MissingSignature('Missing oauth_signature.')
-
-        # Validate the signature.
-        valid = signature_method.check(request, consumer, token, signature)
-
-        if not valid:
-            key, base = signature_method.signing_base(request, consumer, token)
-
-            raise Error('Invalid signature. Expected signature base ' 
-                'string: %s' % base)
-
-        built = signature_method.sign(request, consumer, token)
-
-    def _check_timestamp(self, timestamp):
-        """Verify that timestamp is recentish."""
-        timestamp = int(timestamp)
-        now = int(time.time())
-        lapsed = now - timestamp
-        if lapsed > self.timestamp_threshold:
-            raise Error('Expired timestamp: given %d and now %s has a '
-                'greater difference than threshold %d' % (timestamp, now, 
-                    self.timestamp_threshold))
 
 
 class SignatureMethod(object):
@@ -627,9 +629,9 @@ class SignatureMethod(object):
 
 class SignatureMethod_HMAC_SHA1(SignatureMethod):
     name = 'HMAC-SHA1'
-        
+
     def signing_base(self, request, consumer, token):
-        if request.normalized_url is None:
+        if not hasattr(request, 'normalized_url') or request.normalized_url is None:
             raise ValueError("Base URL for request is not set.")
 
         sig = (
@@ -648,13 +650,7 @@ class SignatureMethod_HMAC_SHA1(SignatureMethod):
         """Builds the base signature string."""
         key, raw = self.signing_base(request, consumer, token)
 
-        # HMAC object.
-        try:
-            from hashlib import sha1 as sha
-        except ImportError:
-            import sha # Deprecated
-
-        hashed = hmac.new(key, raw, sha)
+        hashed = hmac.new(to_bytestring(key), raw, sha)
 
         # Calculate the digest base 64.
         return binascii.b2a_base64(hashed.digest())[:-1]
