@@ -2,6 +2,18 @@
 
 News
 ====
+
+3.3.0 / 2011-06-20
+------------------
+
+- New HTTP parser, using python `http-parser
+  https://github.com/benoitc/http-parser`_ in C based on  http-parser
+  from Ryan Dahl.
+- Fix UnboundLocalError
+- Sync oauth with last python-oauth2 (fix POST & encoding issues)
+- Improve sending
+
+
 3.2.1 / 2011-03-22
 ------------------
 
