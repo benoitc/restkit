@@ -56,7 +56,11 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module oauth2</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.oauth2-pysrc.html">source&nbsp;code</a></span></p>
-<!-- ==================== CLASSES ==================== -->
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        3.3.0
+      </p>
+</div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
@@ -112,15 +116,6 @@
         <a href="restkit.oauth2.Request-class.html" class="summary-name">Request</a><br />
       The parameters and information for an HTTP request, suitable for 
         authorizing with OAuth credentials.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="restkit.oauth2.Server-class.html" class="summary-name">Server</a><br />
-      A skeletal implementation of a service provider, providing 
-        protected resources to requests from authorized consumers.
     </td>
   </tr>
 <tr>
@@ -192,6 +187,108 @@
       Build an XOAUTH string for use in SMTP/IMPA authentication.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.oauth2-pysrc.html#build_xoauth_string">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="to_unicode"></a><span class="summary-sig-name">to_unicode</span>(<span class="summary-sig-arg">s</span>)</span><br />
+      Convert to unicode, raise exception with instructive error message if
+      s is not unicode, ascii, or utf-8.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.oauth2-pysrc.html#to_unicode">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="to_utf8"></a><span class="summary-sig-name">to_utf8</span>(<span class="summary-sig-arg">s</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.oauth2-pysrc.html#to_utf8">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="to_unicode_if_string"></a><span class="summary-sig-name">to_unicode_if_string</span>(<span class="summary-sig-arg">s</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.oauth2-pysrc.html#to_unicode_if_string">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="to_utf8_if_string"></a><span class="summary-sig-name">to_utf8_if_string</span>(<span class="summary-sig-arg">s</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.oauth2-pysrc.html#to_utf8_if_string">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="to_unicode_optional_iterator"></a><span class="summary-sig-name">to_unicode_optional_iterator</span>(<span class="summary-sig-arg">x</span>)</span><br />
+      Raise TypeError if x is a str containing non-utf8 bytes or if x is an
+      iterable which contains such a str.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.oauth2-pysrc.html#to_unicode_optional_iterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="to_utf8_optional_iterator"></a><span class="summary-sig-name">to_utf8_optional_iterator</span>(<span class="summary-sig-arg">x</span>)</span><br />
+      Raise TypeError if x is a str or if x is an iterable which contains a
+      str.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit.oauth2-pysrc.html#to_utf8_optional_iterator">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -305,7 +402,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="VERSION"></a><span class="summary-name">VERSION</span> = <code title="'1.0'"><code class="variable-quote">'</code><code class="variable-string">1.0</code><code class="variable-quote">'</code></code>
+        <a name="OAUTH_VERSION"></a><span class="summary-name">OAUTH_VERSION</span> = <code title="'1.0'"><code class="variable-quote">'</code><code class="variable-string">1.0</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
@@ -356,7 +453,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 22 22:35:30 2011
+    Generated by Epydoc 3.0.1 on Mon Jun 20 17:34:31 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

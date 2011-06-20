@@ -59,19 +59,11 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class Request</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.contrib.ipython_shell-pysrc.html#Request">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-                  object --+            
-                           |            
-webob.request.AdhocAttrMixin --+        
-                               |        
-                  object --+   |        
-                           |   |        
-   webob.request.BaseRequest --+        
-                               |        
-           <a href="webob.request.Request-class.html">webob.request.Request</a> --+    
-                                   |    
-                   <a href="restkit.contrib.webob_api.Request-class.html">webob_api.Request</a> --+
-                                       |
-                                      <strong class="uidshort">Request</strong>
+webob.Request --+    
+                |    
+webob_api.Request --+
+                    |
+                   <strong class="uidshort">Request</strong>
 </pre>
 
 <hr />
@@ -96,8 +88,7 @@ webob.request.AdhocAttrMixin --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="restkit.contrib.ipython_shell.Response-class.html" class="summary-name">ResponseClass</a><br />
-      Represents a WSGI response
+        <a href="restkit.contrib.ipython_shell.Response-class.html" class="summary-name">ResponseClass</a>
     </td>
   </tr>
 </table>
@@ -126,9 +117,7 @@ webob.request.AdhocAttrMixin --+
         <tr>
           <td><span class="summary-sig"><a href="restkit.contrib.ipython_shell.Request-class.html#get_response" class="summary-sig-name">get_response</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*args</span>,
-        <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Like ``.call_application(application)``, except returns a response 
-      object with ``.status``, ``.headers``, and ``.body`` attributes.</td>
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.contrib.ipython_shell-pysrc.html#Request.get_response">source&nbsp;code</a></span>
             
@@ -144,9 +133,8 @@ webob.request.AdhocAttrMixin --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.contrib.ipython_shell.Request-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">skip_body</span>=<span class="summary-sig-default">True</span>)</span><br />
-      Return HTTP string representing this request.</td>
+          <td><span class="summary-sig"><a name="__str__"></a><span class="summary-sig-name">__str__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">skip_body</span>=<span class="summary-sig-default">True</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.contrib.ipython_shell-pysrc.html#Request.__str__">source&nbsp;code</a></span>
             
@@ -174,96 +162,8 @@ webob.request.AdhocAttrMixin --+
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.contrib.webob_api.Request-class.html">webob_api.Request</a></code></b>:
-      <code><a href="restkit.contrib.webob_api.Request-class.html#set_url">set_url</a></code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.request.AdhocAttrMixin</code></b>:
-      <code>__delattr__</code>,
-      <code>__getattr__</code>,
-      <code>__setattr__</code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.request.BaseRequest</code></b>:
-      <code>__init__</code>,
-      <code>__repr__</code>,
-      <code>as_string</code>,
-      <code>call_application</code>,
-      <code>copy</code>,
-      <code>copy_body</code>,
-      <code>copy_get</code>,
-      <code>make_body_seekable</code>,
-      <code>make_tempfile</code>,
-      <code>path_info_peek</code>,
-      <code>path_info_pop</code>,
-      <code>relative_url</code>,
-      <code>remove_conditional_headers</code>
-      </p>
-    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.request.BaseRequest</code></b> (private):
-      <code>_body__del</code>,
-      <code>_body__get</code>,
-      <code>_body__set</code>,
-      <code>_body_file__del</code>,
-      <code>_body_file__get</code>,
-      <code>_body_file__set</code>,
-      <code>_cache_control__del</code>,
-      <code>_cache_control__get</code>,
-      <code>_cache_control__set</code>,
-      <code>_charset__del</code>,
-      <code>_charset__get</code>,
-      <code>_charset__set</code>,
-      <code>_content_type__del</code>,
-      <code>_content_type__get</code>,
-      <code>_content_type__set</code>,
-      <code>_copy_body_tempfile</code>,
-      <code>_headers__get</code>,
-      <code>_headers__set</code>,
-      <code>_host__del</code>,
-      <code>_host__get</code>,
-      <code>_host__set</code>,
-      <code>_update_cache_control</code>,
-      <code>_update_get</code>,
-      <code>_urlargs__del</code>,
-      <code>_urlargs__get</code>,
-      <code>_urlargs__set</code>,
-      <code>_urlvars__del</code>,
-      <code>_urlvars__get</code>,
-      <code>_urlvars__set</code>
-      </p></div>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__format__</code>,
-      <code>__getattribute__</code>,
-      <code>__hash__</code>,
-      <code>__new__</code>,
-      <code>__reduce__</code>,
-      <code>__reduce_ex__</code>,
-      <code>__sizeof__</code>,
-      <code>__subclasshook__</code>
-      </p>
-    </td>
-  </tr>
-</table>
-<!-- ==================== CLASS METHODS ==================== -->
-<a name="section-ClassMethods"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Class Methods</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-ClassMethods"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.request.BaseRequest</code></b>:
-      <code>blank</code>,
-      <code>from_file</code>,
-      <code>from_string</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webob_api.Request</code></b>:
+      <code>set_url</code>
       </p>
     </td>
   </tr>
@@ -287,109 +187,12 @@ webob.request.AdhocAttrMixin --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.request.BaseRequest</code></b>:
-      <code>decode_param_names</code>,
-      <code>postvars</code>,
-      <code>queryvars</code>,
-      <code>request_body_tempfile_limit</code>,
-      <code>str_postvars</code>,
-      <code>str_queryvars</code>,
-      <code>unicode_errors</code>
-      </p>
-    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.request.BaseRequest</code></b> (private):
-      <code>_charset_cache</code>,
-      <code>_headers</code>
-      </p></div>
-    </td>
-  </tr>
-</table>
-<!-- ==================== PROPERTIES ==================== -->
-<a name="section-Properties"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Properties</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Properties"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.contrib.webob_api.Request-class.html">webob_api.Request</a></code></b>:
-      <code><a href="restkit.contrib.webob_api.Request-class.html#delete">delete</a></code>,
-      <code><a href="restkit.contrib.webob_api.Request-class.html#get">get</a></code>,
-      <code><a href="restkit.contrib.webob_api.Request-class.html#head">head</a></code>,
-      <code><a href="restkit.contrib.webob_api.Request-class.html#post">post</a></code>,
-      <code><a href="restkit.contrib.webob_api.Request-class.html#put">put</a></code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>webob.request.BaseRequest</code></b>:
-      <code>GET</code>,
-      <code>POST</code>,
-      <code>accept</code>,
-      <code>accept_charset</code>,
-      <code>accept_encoding</code>,
-      <code>accept_language</code>,
-      <code>application_url</code>,
-      <code>authorization</code>,
-      <code>body</code>,
-      <code>body_file</code>,
-      <code>body_file_raw</code>,
-      <code>body_file_seekable</code>,
-      <code>cache_control</code>,
-      <code>charset</code>,
-      <code>content_length</code>,
-      <code>content_type</code>,
-      <code>cookies</code>,
-      <code>date</code>,
-      <code>headers</code>,
-      <code>host</code>,
-      <code>host_url</code>,
-      <code>http_version</code>,
-      <code>if_match</code>,
-      <code>if_modified_since</code>,
-      <code>if_none_match</code>,
-      <code>if_range</code>,
-      <code>if_unmodified_since</code>,
-      <code>is_body_seekable</code>,
-      <code>is_xhr</code>,
-      <code>max_forwards</code>,
-      <code>method</code>,
-      <code>params</code>,
-      <code>path</code>,
-      <code>path_info</code>,
-      <code>path_qs</code>,
-      <code>path_url</code>,
-      <code>pragma</code>,
-      <code>query_string</code>,
-      <code>range</code>,
-      <code>referer</code>,
-      <code>referrer</code>,
-      <code>remote_addr</code>,
-      <code>remote_user</code>,
-      <code>scheme</code>,
-      <code>script_name</code>,
-      <code>server_name</code>,
-      <code>server_port</code>,
-      <code>str_GET</code>,
-      <code>str_POST</code>,
-      <code>str_cookies</code>,
-      <code>str_params</code>,
-      <code>upath_info</code>,
-      <code>url</code>,
-      <code>urlargs</code>,
-      <code>urlvars</code>,
-      <code>uscript_name</code>,
-      <code>user_agent</code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__class__</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webob_api.Request</code></b>:
+      <code>delete</code>,
+      <code>get</code>,
+      <code>head</code>,
+      <code>post</code>,
+      <code>put</code>
       </p>
     </td>
   </tr>
@@ -428,41 +231,10 @@ webob.request.AdhocAttrMixin --+
     </td>
   </tr></table>
   
-  <p>Like ``.call_application(application)``, except returns a response 
-  object with ``.status``, ``.headers``, and ``.body`` attributes.</p>
-  <p>This will use ``self.ResponseClass`` to figure out the class of the 
-  response object to return.</p>
-  <dl class="fields">
-    <dt>Overrides:
-        webob.request.BaseRequest.get_response
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="__str__"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">skip_body</span>=<span class="sig-default">True</span>)</span>
-    <br /><em class="fname">(Informal representation operator)</em>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.contrib.ipython_shell-pysrc.html#Request.__str__">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
   
-  <p>Return HTTP string representing this request. If skip_body is True, 
-  exclude the body. If skip_body is an integer larger than one, skip body 
-  only if its length is bigger than that number.</p>
   <dl class="fields">
     <dt>Overrides:
-        object.__str__
-        <dd><em class="note">(inherited documentation)</em></dd>
+        <a href="restkit.contrib.webob_api.Request-class.html#get_response">webob_api.Request.get_response</a>
     </dt>
   </dl>
 </td></tr></table>
@@ -517,7 +289,7 @@ webob.request.AdhocAttrMixin --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 22 22:35:30 2011
+    Generated by Epydoc 3.0.1 on Mon Jun 20 17:34:31 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -56,7 +56,7 @@
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class ChunkedReader</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.http-pysrc.html#ChunkedReader">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class ChunkedReader</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
 object --+
          |
@@ -92,7 +92,7 @@ object --+
         <span class="summary-sig-arg">unreader</span>)</span><br />
       x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.http-pysrc.html#ChunkedReader.__init__">source&nbsp;code</a></span>
+            
             
           </td>
         </tr>
@@ -106,10 +106,46 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="read"></a><span class="summary-sig-name">read</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">size</span>)</span></td>
+          <td><span class="summary-sig"><a name="get_data"></a><span class="summary-sig-name">get_data</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">unreader</span>,
+        <span class="summary-sig-arg">buf</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.http-pysrc.html#ChunkedReader.read">source&nbsp;code</a></span>
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="parse_chunk_size"></a><span class="summary-sig-name">parse_chunk_size</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">unreader</span>,
+        <span class="summary-sig-arg">data</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="parse_chunked"></a><span class="summary-sig-name">parse_chunked</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">unreader</span>)</span></td>
+          <td align="right" valign="top">
+            
             
           </td>
         </tr>
@@ -128,7 +164,7 @@ object --+
         <span class="summary-sig-arg">data</span>,
         <span class="summary-sig-arg">eof</span>=<span class="summary-sig-default">False</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.http-pysrc.html#ChunkedReader.parse_trailers">source&nbsp;code</a></span>
+            
             
           </td>
         </tr>
@@ -142,46 +178,10 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="parse_chunked"></a><span class="summary-sig-name">parse_chunked</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">unreader</span>)</span></td>
+          <td><span class="summary-sig"><a name="read"></a><span class="summary-sig-name">read</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">size</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.http-pysrc.html#ChunkedReader.parse_chunked">source&nbsp;code</a></span>
             
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="parse_chunk_size"></a><span class="summary-sig-name">parse_chunk_size</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">unreader</span>,
-        <span class="summary-sig-arg">data</span>=<span class="summary-sig-default">None</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.http-pysrc.html#ChunkedReader.parse_chunk_size">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="get_data"></a><span class="summary-sig-name">get_data</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">unreader</span>,
-        <span class="summary-sig-arg">buf</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="restkit.http-pysrc.html#ChunkedReader.get_data">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -264,7 +264,7 @@ object --+
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.http-pysrc.html#ChunkedReader.__init__">source&nbsp;code</a></span>&nbsp;
+    >&nbsp;
     </td>
   </tr></table>
   
@@ -304,7 +304,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 22 22:35:31 2011
+    Generated by Epydoc 3.0.1 on Mon Jun 20 17:34:32 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

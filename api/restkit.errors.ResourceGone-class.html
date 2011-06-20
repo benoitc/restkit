@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>greenlet.error</title>
+  <title>restkit.errors.ResourceGone</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -37,9 +37,9 @@
   <tr valign="top">
     <td width="100%">
       <span class="breadcrumbs">
-        greenlet ::
-        error ::
-        Class&nbsp;error
+        <a href="restkit-module.html">Package&nbsp;restkit</a> ::
+        <a href="restkit.errors-module.html">Module&nbsp;errors</a> ::
+        Class&nbsp;ResourceGone
       </span>
     </td>
     <td>
@@ -49,25 +49,29 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="greenlet.error-class.html"
+            >]&nbsp;|&nbsp;<a href="restkit.errors.ResourceGone-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class error</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class ResourceGone</h1><p class="nomargin-top"><span class="codelink"><a href="restkit.errors-pysrc.html#ResourceGone">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-              object --+        
-                       |        
-exceptions.BaseException --+    
-                           |    
-        exceptions.Exception --+
-                               |
-                              <strong class="uidshort">error</strong>
+              object --+            
+                       |            
+exceptions.BaseException --+        
+                           |        
+        exceptions.Exception --+    
+                               |    
+                   <a href="restkit.errors.ResourceError-class.html">ResourceError</a> --+
+                                   |
+                                  <strong class="uidshort">ResourceGone</strong>
 </pre>
 
 <hr />
+<p>http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.11</p>
+
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -87,8 +91,15 @@ exceptions.BaseException --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.errors.ResourceError-class.html">ResourceError</a></code></b>:
+      <code><a href="restkit.errors.ResourceError-class.html#__init__">__init__</a></code>,
+      <code><a href="restkit.errors.ResourceError-class.html#__str__">__str__</a></code>
+      </p>
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.errors.ResourceError-class.html">ResourceError</a></code></b> (private):
+      <code><a href="restkit.errors.ResourceError-class.html#_get_message" onclick="show_private();">_get_message</a></code>,
+      <code><a href="restkit.errors.ResourceError-class.html#_set_message" onclick="show_private();">_set_message</a></code>
+      </p></div>
     <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.Exception</code></b>:
-      <code>__init__</code>,
       <code>__new__</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
@@ -100,7 +111,6 @@ exceptions.BaseException --+
       <code>__repr__</code>,
       <code>__setattr__</code>,
       <code>__setstate__</code>,
-      <code>__str__</code>,
       <code>__unicode__</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -110,6 +120,32 @@ exceptions.BaseException --+
       <code>__sizeof__</code>,
       <code>__subclasshook__</code>
       </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="status_int"></a><span class="summary-name">status_int</span> = <code title="410">410</code><br />
+      hash(x)
     </td>
   </tr>
 </table>
@@ -132,9 +168,11 @@ exceptions.BaseException --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="restkit.errors.ResourceError-class.html">ResourceError</a></code></b>:
+      <code><a href="restkit.errors.ResourceError-class.html#message">message</a></code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
-      <code>args</code>,
-      <code>message</code>
+      <code>args</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
@@ -168,7 +206,7 @@ exceptions.BaseException --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 22 22:35:30 2011
+    Generated by Epydoc 3.0.1 on Mon Jun 20 17:34:32 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

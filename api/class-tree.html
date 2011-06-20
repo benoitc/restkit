@@ -62,23 +62,14 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>:
-      <em class="summary">Allow embedding an IPython shell into a running program.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Shell-class.html">restkit.contrib.ipython_shell.Shell</a></strong>
+    <li> <strong class="uidlink">gevent.Greenlet</strong>
     </li>
-    </ul>
+    <li> <strong class="uidlink">IPython.Shell.IPShellEmbed</strong>
+    </li>
+    <li> <strong class="uidlink">webob.Response</strong>
     </li>
     <li> <strong class="uidlink">StringIO.StringIO</strong>:
       <em class="summary">class StringIO([buffer])</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Stream-class.html">restkit.contrib.ipython_shell.Stream</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.JSON-class.html">restkit.contrib.ipython_shell.JSON</a></strong>
-    </li>
-    </ul>
-    </li>
-    </ul>
     </li>
     <li> <strong class="uidlink">javax.net.ssl.X509TrustManager</strong>
     </li>
@@ -91,10 +82,6 @@
       <em class="summary">The default request implementation</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Request-class.html">restkit.contrib.webob_api.Request</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Request-class.html">restkit.contrib.ipython_shell.Request</a></strong>
-    </li>
-    </ul>
     </li>
     </ul>
     </li>
@@ -111,8 +98,6 @@
     </li>
     <li> <strong class="uidlink"><a href="restkit.errors.BadStatusLine-class.html">restkit.errors.BadStatusLine</a></strong>:
       <em class="summary">Exception returned by the parser when the status line is invalid</em>
-    </li>
-    <li> <strong class="uidlink"><a href="greenlet.GreenletExit-class.html">greenlet.GreenletExit</a></strong>
     </li>
     <li> <strong class="uidlink">webob.exc.HTTPException</strong>:
       <em class="summary">Exception used on pre-Python-2.5, where new-style classes cannot be
@@ -176,6 +161,9 @@
       <em class="summary">Exception raised when an unexpected HTTP error is received in 
         response to a request.</em>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.errors.ResourceGone-class.html">restkit.errors.ResourceGone</a></strong>:
+      <em class="summary">http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.11</em>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.errors.ResourceNotFound-class.html">restkit.errors.ResourceNotFound</a></strong>:
       <em class="summary">Exception raised when no resource was found at the given url.</em>
     </li>
@@ -210,8 +198,6 @@
     <li> <strong class="uidlink"><a href="restkit.errors.UnexpectedEOF-class.html">restkit.errors.UnexpectedEOF</a></strong>:
       <em class="summary">exception raised when remote closed the connection</em>
     </li>
-    <li> <strong class="uidlink"><a href="greenlet.error-class.html">greenlet.error</a></strong>
-    </li>
     </ul>
     </li>
     </ul>
@@ -222,10 +208,6 @@
       <em class="summary">The default request implementation</em>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Request-class.html">restkit.contrib.webob_api.Request</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Request-class.html">restkit.contrib.ipython_shell.Request</a></strong>
-    </li>
-    </ul>
     </li>
     </ul>
     </li>
@@ -266,15 +248,13 @@
     </li>
     <li> <strong class="uidlink"><a href="restkit.http.LengthReader-class.html">restkit.http.LengthReader</a></strong>
     </li>
+    <li> <strong class="uidlink">restkit.manager.base.Manager</strong>:
+      <em class="summary">Connection mager, it keeps a pool of opened connections and reap 
+        them after a delay if reap_connection is True.</em>
+    </li>
     <li> <strong class="uidlink"><a href="restkit.manager.base.Manager-class.html">restkit.manager.base.Manager</a></strong>:
       <em class="summary">Connection mager, it keeps a pool of opened connections and reap 
         them after a delay if reap_connection is True.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.manager.meventlet.EventletManager-class.html">restkit.manager.meventlet.EventletManager</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.manager.mgevent.GeventManager-class.html">restkit.manager.mgevent.GeventManager</a></strong>
-    </li>
-    </ul>
     </li>
     <li> <strong class="uidlink"><a href="restkit.forms.MultipartForm-class.html">restkit.forms.MultipartForm</a></strong>
     </li>
@@ -301,12 +281,11 @@
       <em class="summary">A class that can be instantiated for access to a RESTful resource, 
         including authentication.</em>
     </li>
+    <li> <strong class="uidlink"><a href="restkit.wrappers.Response-class.html">restkit.wrappers.Response</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="webob.response.Response-class.html">webob.response.Response</a></strong>:
       <em class="summary">Represents a WSGI response</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.Response-class.html">restkit.contrib.ipython_shell.Response</a></strong>:
-      <em class="summary">Represents a WSGI response</em>
-    </li>
     <li> <strong class="uidlink">webob.exc.WSGIHTTPException</strong>
     <ul>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html">restkit.contrib.webob_helper.WebobResourceError</a></strong>:
@@ -315,12 +294,6 @@
     </ul>
     </li>
     </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.wrappers.Response-class.html">restkit.wrappers.Response</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="restkit.oauth2.Server-class.html">restkit.oauth2.Server</a></strong>:
-      <em class="summary">A skeletal implementation of a service provider, providing 
-        protected resources to requests from authorized consumers.</em>
     </li>
     <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.ShellClient-class.html">restkit.contrib.ipython_shell.ShellClient</a></strong>
     </li>
@@ -376,23 +349,9 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink">greenlet.greenlet</strong>:
-      <em class="summary">greenlet(run=None, parent=None) -&gt; greenlet</em>
-    <ul>
-    <li> <strong class="uidlink">gevent.greenlet.Greenlet</strong>:
-      <em class="summary">A light-weight cooperatively-scheduled execution unit.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="restkit.manager.mgevent.GeventConnectionReaper-class.html">restkit.manager.mgevent.GeventConnectionReaper</a></strong>
-    </li>
-    </ul>
-    </li>
-    </ul>
-    </li>
     <li> <strong class="uidlink">property</strong>:
       <em class="summary">property(fget=None, fset=None, fdel=None, doc=None) -&gt; property attribute</em>
     <ul>
-    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell.API-class.html">restkit.contrib.ipython_shell.API</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="restkit.contrib.webob_api.Method-class.html">restkit.contrib.webob_api.Method</a></strong>
     </li>
     </ul>
@@ -426,7 +385,7 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 22 22:35:30 2011
+    Generated by Epydoc 3.0.1 on Mon Jun 20 17:34:31 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
