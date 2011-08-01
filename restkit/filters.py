@@ -104,4 +104,3 @@ class OAuthFilter(object):
         else:
             oauth_headers = oauth_req.to_header()
             request.headers.update(oauth_headers)
-            print request.headers
