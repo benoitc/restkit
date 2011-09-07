@@ -89,8 +89,8 @@ class Request(object):
             else:
                 ctype = "application/x-www-form-urlencoded; charset=utf-8"
                 self._body = form_encode(body)
-        elif hasattr(body, "boundary"):
-            ctype = "multipart/form-data; boundary=%s" % self.body.boundary
+        elif hasattr(body, "boundary") and hasattr(body, "get_size"):
+            ctype = "multipart/form-data; boundary=%s" % body.boundary
             clen = body.get_size()
             self._body = body
         else:
