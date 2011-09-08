@@ -414,8 +414,6 @@ class Client(object):
                         errno.EPIPE, errno.ECONNREFUSED,
                         errno.ECONNRESET, errno.EBADF) or tries <= 0:
                     raise RequestError("socket.error: %s" % str(e))
-            except (KeyboardInterrupt, SystemExit):
-                break
             except (StopIteration, NoMoreData):
                 connection.close()
                 if tries <= 0:
@@ -426,7 +424,7 @@ class Client(object):
                                 not isinstance(request.body, types.StringTypes):
                             raise RequestError("connection closed and can't"
                                     + "be resent")
-            except:
+            except Exception:
                 # unkown error
                 log.debug("unhandled exception %s" %
                         traceback.format_exc())
