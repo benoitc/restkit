@@ -18,15 +18,20 @@ class Connection(object):
         self.addr = addr
         self.ssl = ssl
         self.extra_headers = extra_headers
-        
+        self._released = False
 
     def release(self, should_close=False):
+        if self._released:
+            return
+
         if should_close:
             self.close() 
         else:
             if log.isEnabledFor(logging.DEBUG):
                 log.debug("release connection")
             self.manager.store_socket(self._sock, self.addr, self.ssl)
+
+        self._released = True
 
     def close(self):
         if log.isEnabledFor(logging.DEBUG):
