@@ -67,7 +67,7 @@ object --+
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li>exc.WSGIHTTPException</li>  </ul>
+<li><a href="restkit.contrib.ipython_shell.Response-class.html">restkit.contrib.ipython_shell.Response</a></li><li>, exc.WSGIHTTPException</li>  </ul>
 </dd></dl>
 
 <hr />
@@ -270,22 +270,6 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_body__del"></a><span class="summary-sig-name">_body__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
           <td><span class="summary-sig"><a href="webob.response.Response-class.html#_body__get" class="summary-sig-name" onclick="show_private();">_body__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
       The body of the response, as a ``str``.</td>
           <td align="right" valign="top">
@@ -304,7 +288,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_body__set"></a><span class="summary-sig-name">_body__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
+        <span class="summary-sig-arg">value</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -353,6 +337,23 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a name="_body_file__set"></a><span class="summary-sig-name">_body_file__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">file</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="_cache_control__del"></a><span class="summary-sig-name">_cache_control__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             
@@ -370,7 +371,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_cache_control__get"></a><span class="summary-sig-name">_cache_control__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Get/set/modify the Cache-Control header (section `14.9 
+      Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
       &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)</td>
           <td align="right" valign="top">
             
@@ -826,7 +827,7 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_unicode_body__del"></a><span class="summary-sig-name">_unicode_body__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="_text__del"></a><span class="summary-sig-name">_text__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -842,7 +843,7 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_unicode_body__get"></a><span class="summary-sig-name">_unicode_body__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a name="_text__get"></a><span class="summary-sig-name">_text__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
       Get/set the unicode value of the body (using the charset of the 
       Content-Type)</td>
           <td align="right" valign="top">
@@ -860,7 +861,7 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_unicode_body__set"></a><span class="summary-sig-name">_unicode_body__set</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a name="_text__set"></a><span class="summary-sig-name">_text__set</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span></td>
           <td align="right" valign="top">
             
@@ -1213,7 +1214,7 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#status_code" class="summary-name">status_code</a> = <code title="&lt;Deprecated attribute status_code: &lt;property object at 0x102492998&gt;&gt;">&lt;Deprecated attribute status_code: &lt;property obj<code class="variable-ellipsis">...</code></code>
+        <a name="status_code"></a><span class="summary-name">status_code</span> = <code title="&lt;Deprecated attribute status_code&gt;">&lt;Deprecated attribute status_code&gt;</code>
     </td>
   </tr>
 <tr>
@@ -1246,7 +1247,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#accept_ranges" class="summary-name">accept_ranges</a><br />
-      Gets and sets and deletes the Accept-Ranges header.
+      Gets and sets the ``Accept-Ranges`` header (`HTTP spec section 14.5 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1254,7 +1256,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#age" class="summary-name">age</a><br />
-      Gets and sets and deletes the Age header.
+      Gets and sets the ``Age`` header (`HTTP spec section 14.6 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1262,7 +1265,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#allow" class="summary-name">allow</a><br />
-      Gets and sets and deletes the Allow header.
+      Gets and sets the ``Allow`` header (`HTTP spec section 14.7 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.7&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1294,7 +1298,7 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#cache_control" class="summary-name">cache_control</a><br />
-      Get/set/modify the Cache-Control header (section `14.9 
+      Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
       &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)
     </td>
   </tr>
@@ -1318,7 +1322,9 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#content_disposition" class="summary-name">content_disposition</a><br />
-      Gets and sets and deletes the Content-Disposition header.
+      Gets and sets the ``Content-Disposition`` header (`HTTP spec section 
+      19.5.1 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.5.1&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1326,7 +1332,9 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#content_encoding" class="summary-name">content_encoding</a><br />
-      Gets and sets and deletes the Content-Encoding header.
+      Gets and sets the ``Content-Encoding`` header (`HTTP spec section 
+      14.11 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.11&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1334,7 +1342,9 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#content_language" class="summary-name">content_language</a><br />
-      Gets and sets and deletes the Content-Language header.
+      Gets and sets the ``Content-Language`` header (`HTTP spec section 
+      14.12 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.12&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1342,7 +1352,9 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#content_length" class="summary-name">content_length</a><br />
-      Gets and sets and deletes the Content-Length header.
+      Gets and sets the ``Content-Length`` header (`HTTP spec section 14.17
+      
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1350,7 +1362,9 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#content_location" class="summary-name">content_location</a><br />
-      Gets and sets and deletes the Content-Location header.
+      Gets and sets the ``Content-Location`` header (`HTTP spec section 
+      14.14 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.14&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1358,7 +1372,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#content_md5" class="summary-name">content_md5</a><br />
-      Gets and sets and deletes the Content-MD5 header.
+      Gets and sets the ``Content-MD5`` header (`HTTP spec section 14.14 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.14&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1366,7 +1381,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#content_range" class="summary-name">content_range</a><br />
-      Gets and sets and deletes the Content-Range header.
+      Gets and sets the ``Content-Range`` header (`HTTP spec section 14.16 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.16&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1391,7 +1407,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#date" class="summary-name">date</a><br />
-      Gets and sets and deletes the Date header.
+      Gets and sets the ``Date`` header (`HTTP spec section 14.18 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1407,7 +1424,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#etag" class="summary-name">etag</a><br />
-      Gets and sets and deletes the ETag header.
+      Gets and sets the ``ETag`` header (`HTTP spec section 14.19 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1415,7 +1433,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#expires" class="summary-name">expires</a><br />
-      Gets and sets and deletes the Expires header.
+      Gets and sets the ``Expires`` header (`HTTP spec section 14.21 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1439,7 +1458,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#last_modified" class="summary-name">last_modified</a><br />
-      Gets and sets and deletes the Last-Modified header.
+      Gets and sets the ``Last-Modified`` header (`HTTP spec section 14.29 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1447,7 +1467,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#location" class="summary-name">location</a><br />
-      Gets and sets and deletes the Location header.
+      Gets and sets the ``Location`` header (`HTTP spec section 14.30 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1455,7 +1476,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#pragma" class="summary-name">pragma</a><br />
-      Gets and sets and deletes the Pragma header.
+      Gets and sets the ``Pragma`` header (`HTTP spec section 14.32 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1471,7 +1493,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#retry_after" class="summary-name">retry_after</a><br />
-      Gets and sets and deletes the Retry-After header.
+      Gets and sets the ``Retry-After`` header (`HTTP spec section 14.37 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.37&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1479,7 +1502,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#server" class="summary-name">server</a><br />
-      Gets and sets and deletes the Server header.
+      Gets and sets the ``Server`` header (`HTTP spec section 14.38 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.38&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1502,15 +1526,7 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#ubody" class="summary-name">ubody</a><br />
-      Alias for unicode_body
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#unicode_body" class="summary-name">unicode_body</a><br />
+        <a href="webob.response.Response-class.html#text" class="summary-name">text</a><br />
       Get/set the unicode value of the body (using the charset of the 
       Content-Type)
     </td>
@@ -1519,8 +1535,25 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="webob.response.Response-class.html#ubody" class="summary-name">ubody</a><br />
+      Deprecated alias for .text
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#unicode_body" class="summary-name">unicode_body</a><br />
+      Deprecated alias for .text
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="webob.response.Response-class.html#vary" class="summary-name">vary</a><br />
-      Gets and sets and deletes the Vary header.
+      Gets and sets the ``Vary`` header (`HTTP spec section 14.44 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1528,7 +1561,9 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="webob.response.Response-class.html#www_authenticate" class="summary-name">www_authenticate</a><br />
-      Gets and sets and deletes the WWW-Authenticate header.
+      Gets and sets the ``WWW-Authenticate`` header (`HTTP spec section 
+      14.47 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47&gt;`_).
     </td>
   </tr>
   <tr>
@@ -1891,43 +1926,6 @@ object --+
 </td></tr></table>
 </div>
 <br />
-<!-- ==================== CLASS VARIABLE DETAILS ==================== -->
-<a name="section-ClassVariableDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Class Variable Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-ClassVariableDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-</table>
-<a name="status_code"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">status_code</h3>
-  
-  <dl class="fields">
-  </dl>
-  <dl class="fields">
-    <dt>Value:</dt>
-      <dd><table><tr><td><pre class="variable">
-&lt;Deprecated attribute status_code: &lt;property object at 0x102492998&gt;&gt;
-</pre></td></tr></table>
-</dd>
-  </dl>
-</td></tr></table>
-</div>
-<br />
 <!-- ==================== PROPERTY DETAILS ==================== -->
 <a name="section-PropertyDetails"></a>
 <table class="details" border="1" cellpadding="3"
@@ -1952,9 +1950,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">accept_ranges</h3>
-  <p>Gets and sets and deletes the Accept-Ranges header. For more 
-  information on Accept-Ranges see `section 14.5 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5&gt;`_.</p>
+  <p>Gets and sets the ``Accept-Ranges`` header (`HTTP spec section 14.5 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5&gt;`_).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -1975,9 +1972,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">age</h3>
-  <p>Gets and sets and deletes the Age header. For more information on Age 
-  see `section 14.6 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6&gt;`_.
+  <p>Gets and sets the ``Age`` header (`HTTP spec section 14.6 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6&gt;`_).
   Converts it using int.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -1999,9 +1995,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">allow</h3>
-  <p>Gets and sets and deletes the Allow header. For more information on 
-  Allow see `section 14.7 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.7&gt;`_.
+  <p>Gets and sets the ``Allow`` header (`HTTP spec section 14.7 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.7&gt;`_).
   Converts it using list.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2056,10 +2051,11 @@ object --+
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">_body__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
+        <span class="summary-sig-arg">value</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
     </dd>
     <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_body__del(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig">_body__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
     </dd>
   </dl>
 </td></tr></table>
@@ -2077,6 +2073,10 @@ object --+
     <dd class="value"><span class="summary-sig">_body_file__get(<span class="summary-sig-arg">self</span>)</span>
         - A file-like object that can be used to write to the body.
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_body_file__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">file</span>)</span>
+    </dd>
     <dt>Delete Method:</dt>
     <dd class="value"><span class="summary-sig">_body_file__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
@@ -2089,12 +2089,12 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">cache_control</h3>
-  <p>Get/set/modify the Cache-Control header (section `14.9 
+  <p>Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
   &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">_cache_control__get(<span class="summary-sig-arg">self</span>)</span>
-        - Get/set/modify the Cache-Control header (section `14.9 
+        - Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
       &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)
     </dd>
     <dt>Set Method:</dt>
@@ -2155,9 +2155,9 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">content_disposition</h3>
-  <p>Gets and sets and deletes the Content-Disposition header. For more 
-  information on Content-Disposition see `section 19.5.1 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.5.1&gt;`_.</p>
+  <p>Gets and sets the ``Content-Disposition`` header (`HTTP spec section 
+  19.5.1 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.5.1&gt;`_).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2178,9 +2178,9 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">content_encoding</h3>
-  <p>Gets and sets and deletes the Content-Encoding header. For more 
-  information on Content-Encoding see `section 14.11 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.11&gt;`_.</p>
+  <p>Gets and sets the ``Content-Encoding`` header (`HTTP spec section 
+  14.11 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.11&gt;`_).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2201,9 +2201,9 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">content_language</h3>
-  <p>Gets and sets and deletes the Content-Language header. For more 
-  information on Content-Language see `section 14.12 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.12&gt;`_.
+  <p>Gets and sets the ``Content-Language`` header (`HTTP spec section 
+  14.12 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.12&gt;`_).
   Converts it using list.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2225,9 +2225,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">content_length</h3>
-  <p>Gets and sets and deletes the Content-Length header. For more 
-  information on Content-Length see `section 14.17 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17&gt;`_.
+  <p>Gets and sets the ``Content-Length`` header (`HTTP spec section 14.17 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17&gt;`_).
   Converts it using int.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2249,9 +2248,9 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">content_location</h3>
-  <p>Gets and sets and deletes the Content-Location header. For more 
-  information on Content-Location see `section 14.14 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.14&gt;`_.</p>
+  <p>Gets and sets the ``Content-Location`` header (`HTTP spec section 
+  14.14 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.14&gt;`_).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2272,9 +2271,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">content_md5</h3>
-  <p>Gets and sets and deletes the Content-MD5 header. For more information
-  on Content-MD5 see `section 14.14 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.14&gt;`_.</p>
+  <p>Gets and sets the ``Content-MD5`` header (`HTTP spec section 14.14 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.14&gt;`_).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2295,9 +2293,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">content_range</h3>
-  <p>Gets and sets and deletes the Content-Range header. For more 
-  information on Content-Range see `section 14.16 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.16&gt;`_.
+  <p>Gets and sets the ``Content-Range`` header (`HTTP spec section 14.16 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.16&gt;`_).
   Converts it using ContentRange object.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2370,9 +2367,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">date</h3>
-  <p>Gets and sets and deletes the Date header. For more information on 
-  Date see `section 14.18 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18&gt;`_.
+  <p>Gets and sets the ``Date`` header (`HTTP spec section 14.18 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18&gt;`_).
   Converts it using HTTP date.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2416,9 +2412,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">etag</h3>
-  <p>Gets and sets and deletes the ETag header. For more information on 
-  ETag see `section 14.19 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19&gt;`_.
+  <p>Gets and sets the ``ETag`` header (`HTTP spec section 14.19 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19&gt;`_).
   Converts it using Entity tag.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2440,9 +2435,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">expires</h3>
-  <p>Gets and sets and deletes the Expires header. For more information on 
-  Expires see `section 14.21 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21&gt;`_.
+  <p>Gets and sets the ``Expires`` header (`HTTP spec section 14.21 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21&gt;`_).
   Converts it using HTTP date.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2505,9 +2499,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">last_modified</h3>
-  <p>Gets and sets and deletes the Last-Modified header. For more 
-  information on Last-Modified see `section 14.29 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29&gt;`_.
+  <p>Gets and sets the ``Last-Modified`` header (`HTTP spec section 14.29 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29&gt;`_).
   Converts it using HTTP date.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2529,9 +2522,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">location</h3>
-  <p>Gets and sets and deletes the Location header. For more information on
-  Location see `section 14.30 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30&gt;`_.</p>
+  <p>Gets and sets the ``Location`` header (`HTTP spec section 14.30 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30&gt;`_).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2552,9 +2544,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">pragma</h3>
-  <p>Gets and sets and deletes the Pragma header. For more information on 
-  Pragma see `section 14.32 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32&gt;`_.</p>
+  <p>Gets and sets the ``Pragma`` header (`HTTP spec section 14.32 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32&gt;`_).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2597,9 +2588,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">retry_after</h3>
-  <p>Gets and sets and deletes the Retry-After header. For more information
-  on Retry-After see `section 14.37 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.37&gt;`_.
+  <p>Gets and sets the ``Retry-After`` header (`HTTP spec section 14.37 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.37&gt;`_).
   Converts it using HTTP date or delta seconds.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2621,9 +2611,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">server</h3>
-  <p>Gets and sets and deletes the Server header. For more information on 
-  Server see `section 14.38 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.38&gt;`_.</p>
+  <p>Gets and sets the ``Server`` header (`HTTP spec section 14.38 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.38&gt;`_).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2676,25 +2665,49 @@ object --+
   </dl>
 </td></tr></table>
 </div>
+<a name="text"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">text</h3>
+  <p>Get/set the unicode value of the body (using the charset of the 
+  Content-Type)</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the unicode value of the body (using the charset of the 
+      Content-Type)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="ubody"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">ubody</h3>
-  <p>Alias for unicode_body</p>
+  <p>Deprecated alias for .text</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_unicode_body__get(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
         - Get/set the unicode value of the body (using the charset of the 
       Content-Type)
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_unicode_body__set(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span>
     </dd>
     <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_unicode_body__del(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
@@ -2705,20 +2718,19 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">unicode_body</h3>
-  <p>Get/set the unicode value of the body (using the charset of the 
-  Content-Type)</p>
+  <p>Deprecated alias for .text</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_unicode_body__get(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
         - Get/set the unicode value of the body (using the charset of the 
       Content-Type)
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_unicode_body__set(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span>
     </dd>
     <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_unicode_body__del(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
@@ -2729,9 +2741,8 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">vary</h3>
-  <p>Gets and sets and deletes the Vary header. For more information on 
-  Vary see `section 14.44 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44&gt;`_.
+  <p>Gets and sets the ``Vary`` header (`HTTP spec section 14.44 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44&gt;`_).
   Converts it using list.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
@@ -2753,10 +2764,10 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">www_authenticate</h3>
-  <p>Gets and sets and deletes the WWW-Authenticate header. For more 
-  information on WWW-Authenticate see `section 14.47 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47&gt;`_.
-  Converts it using 'parse_auth' and 'serialize_auth'.</p>
+  <p>Gets and sets the ``WWW-Authenticate`` header (`HTTP spec section 
+  14.47 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47&gt;`_).
+  Converts it using ``parse_auth`` and ``serialize_auth``.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2798,7 +2809,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun 30 11:14:04 2011
+    Generated by Epydoc 3.0.1 on Mon Sep 19 18:05:35 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

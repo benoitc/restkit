@@ -3,6 +3,15 @@
 News
 ====
 
+3.3.1 / 2001-09-18
+------------------
+
+- Add `hook <https://github.com/benoitc/restkit/commit/eb90afd661e126966e948c6e780199269fd7bdfc>`_ for BoundaryItem subclasses to handle unreadable values
+- Add realm support to restkit
+- Fix restcli --shell, upgrade it for IPython 0.11
+- Stop catching KeyboardInterrupt and SystemExit exceptions
+- Make sure we don't release the socket twice
+
 3.3.0 / 2011-06-20
 ------------------
 

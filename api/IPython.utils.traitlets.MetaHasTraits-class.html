@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>restkit.http.ChunkedReader</title>
+  <title>IPython.utils.traitlets.MetaHasTraits</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -37,9 +37,11 @@
   <tr valign="top">
     <td width="100%">
       <span class="breadcrumbs">
-        <a href="restkit-module.html">Package&nbsp;restkit</a> ::
-        <a href="restkit.http-module.html">Module&nbsp;http</a> ::
-        Class&nbsp;ChunkedReader
+        IPython ::
+        utils ::
+        traitlets ::
+        MetaHasTraits ::
+        Class&nbsp;MetaHasTraits
       </span>
     </td>
     <td>
@@ -49,21 +51,27 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="restkit.http.ChunkedReader-class.html"
+            >]&nbsp;|&nbsp;<a href="IPython.utils.traitlets.MetaHasTraits-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
-<!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class ChunkedReader</h1><p class="nomargin-top"></p>
+<!-- ==================== TYPE DESCRIPTION ==================== -->
+<h1 class="epydoc">Type MetaHasTraits</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-object --+
-         |
-        <strong class="uidshort">ChunkedReader</strong>
+object --+    
+         |    
+      type --+
+             |
+            <strong class="uidshort">MetaHasTraits</strong>
 </pre>
 
 <hr />
+<p>A metaclass for HasTraits.</p>
+  <p>This metaclass makes sure that any TraitType class attributes are 
+  instantiated and sets their name attribute.</p>
+
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -83,103 +91,15 @@ object --+
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type">the object's type</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.http.ChunkedReader-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">req</span>,
-        <span class="summary-sig-arg">unreader</span>)</span><br />
-      x.__init__(...) initializes x; see help(type(x)) for signature</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="get_data"></a><span class="summary-sig-name">get_data</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">unreader</span>,
-        <span class="summary-sig-arg">buf</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="parse_chunk_size"></a><span class="summary-sig-name">parse_chunk_size</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">unreader</span>,
-        <span class="summary-sig-arg">data</span>=<span class="summary-sig-default">None</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="parse_chunked"></a><span class="summary-sig-name">parse_chunked</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">unreader</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="parse_trailers"></a><span class="summary-sig-name">parse_trailers</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">unreader</span>,
-        <span class="summary-sig-arg">data</span>,
-        <span class="summary-sig-arg">eof</span>=<span class="summary-sig-default">False</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="read"></a><span class="summary-sig-name">read</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">size</span>)</span></td>
+          <td><span class="summary-sig"><a href="IPython.utils.traitlets.MetaHasTraits-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">bases</span>,
+        <span class="summary-sig-arg">classdict</span>)</span><br />
+      Finish initializing the HasTraits class.</td>
           <td align="right" valign="top">
             
             
@@ -191,20 +111,70 @@ object --+
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+    <p class="indent-wrapped-lines"><b>Inherited from <code>type</code></b>:
+      <code>__call__</code>,
       <code>__delattr__</code>,
-      <code>__format__</code>,
+      <code>__eq__</code>,
+      <code>__ge__</code>,
       <code>__getattribute__</code>,
+      <code>__gt__</code>,
       <code>__hash__</code>,
-      <code>__new__</code>,
-      <code>__reduce__</code>,
-      <code>__reduce_ex__</code>,
+      <code>__instancecheck__</code>,
+      <code>__le__</code>,
+      <code>__lt__</code>,
+      <code>__ne__</code>,
       <code>__repr__</code>,
       <code>__setattr__</code>,
+      <code>__subclasscheck__</code>,
+      <code>__subclasses__</code>,
+      <code>mro</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__format__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
       <code>__sizeof__</code>,
       <code>__str__</code>,
       <code>__subclasshook__</code>
       </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== STATIC METHODS ==================== -->
+<a name="section-StaticMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Static Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-StaticMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">a new object with type S, a subtype of T</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="IPython.utils.traitlets.MetaHasTraits-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">mcls</span>,
+        <span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">bases</span>,
+        <span class="summary-sig-arg">classdict</span>)</span><br />
+      Create the HasTraits class.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
     </td>
   </tr>
 </table>
@@ -227,6 +197,18 @@ object --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>type</code></b>:
+      <code>__abstractmethods__</code>,
+      <code>__base__</code>,
+      <code>__bases__</code>,
+      <code>__basicsize__</code>,
+      <code>__dictoffset__</code>,
+      <code>__flags__</code>,
+      <code>__itemsize__</code>,
+      <code>__mro__</code>,
+      <code>__name__</code>,
+      <code>__weakrefoffset__</code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
       </p>
@@ -251,6 +233,35 @@ object --+
   </td>
 </tr>
 </table>
+<a name="__new__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__new__</span>(<span class="sig-arg">mcls</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">bases</span>,
+        <span class="sig-arg">classdict</span>)</span>
+    <br /><em class="fname">Static Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create the HasTraits class.</p>
+  <p>This instantiates all TraitTypes in the class dict and sets their 
+  :attr:`name` attribute.</p>
+  <dl class="fields">
+    <dt>Returns: a new object with type S, a subtype of T</dt>
+    <dt>Overrides:
+        object.__new__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
 <a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -258,9 +269,10 @@ object --+
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">req</span>,
-        <span class="sig-arg">unreader</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">cls</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">bases</span>,
+        <span class="sig-arg">classdict</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -268,11 +280,13 @@ object --+
     </td>
   </tr></table>
   
-  <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
+  <p>Finish initializing the HasTraits class.</p>
+  <p>This sets the :attr:`this_class` attribute of each TraitType in the 
+  class dict to the newly created class ``cls``.</p>
   <dl class="fields">
+    <dt>Returns: the object's type</dt>
     <dt>Overrides:
         object.__init__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -304,7 +318,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun 30 11:14:04 2011
+    Generated by Epydoc 3.0.1 on Mon Sep 19 18:05:35 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
