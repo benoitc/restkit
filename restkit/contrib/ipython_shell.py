@@ -4,12 +4,13 @@
 # See the NOTICE for more information.
 
 from StringIO import StringIO
-
+import urlparse
 
 try:
-    from IPython.Shell import IPShellEmbed
+    from IPython.config.loader import Config
+    from IPython.frontend.terminal.embed  import InteractiveShellEmbed
 except ImportError:
-    raise ImportError('IPython (http://pypi.python.org/pypi/ipython) ' +\
+    raise ImportError('IPython (http://pypi.python.org/pypi/ipython) >=0.11' +\
                     'is required.')
                     
 try:
@@ -18,7 +19,6 @@ except ImportError:
     raise ImportError('webob (http://pythonpaste.org/webob/) is required.')
 
 from webob import Response as BaseResponse
-import IPython
 
 from restkit import __version__
 from restkit.contrib.console import common_indent, json
@@ -105,23 +105,19 @@ for k in common_indent:
 del k, attr
 
 
-class API(property):
-    def __get__(self, *args):
-        return IPython.ipapi.get() or __IPYTHON__.api
+class RestShell(InteractiveShellEmbed):
+    def __init__(self, user_ns={}):
 
+        cfg = Config()
+        shell_config = cfg.InteractiveShellEmbed
+        shell_config.prompt_in1 = '\C_Blue\#) \C_Greenrestcli\$ '
 
-class Shell(IPShellEmbed):
-    def __init__(self, kwargs):
-        argv = [
-                 '-prompt_in1','\C_Blue\#) \C_Greenrestcli\$ ',
-               ]
-        IPShellEmbed.__init__(self,argv,banner='restkit shell %s' % __version__,
-                              exit_msg=None,rc_override=None,
-                              user_ns=kwargs)
-
+        super(RestShell, self).__init__(config = cfg,
+                banner1= 'restkit shell %s' % __version__,
+                exit_msg="quit restcli shell", user_ns=user_ns)
+        
 
 class ShellClient(object):
-    api = API()
     methods = dict(
             get='[req|url|path_info], **query_string',
             post='[req|url|path_info], [Stream()|**query_string_body]',
@@ -133,10 +129,10 @@ class ShellClient(object):
         self.options = options
         self.url = url or '/'
         self.ns = {}
-        ipshell = Shell(self.ns)
+        self.shell = RestShell(user_ns=self.ns)
         self.update_ns(self.ns)
         self.help()
-        ipshell(header='', global_ns={}, local_ns={})
+        self.shell(header='', global_ns={}, local_ns={})
 
     def update_ns(self, ns):
         for k in self.methods:
@@ -158,6 +154,7 @@ class ShellClient(object):
         del req.content_type
         if stream:
             req.body_file = stream
+
         req.headers = headers
         req.set_url(self.url)
         ns.update(
@@ -174,7 +171,8 @@ class ShellClient(object):
     def request_meth(self, k):
         def req(*args, **kwargs):
             resp = self.request(k.upper(), *args, **kwargs)
-            self.api.to_user_ns(dict(resp=resp))
+            self.shell.user_ns.update(dict(resp=resp))
+
             print resp
             return resp
         req.func_name = k
@@ -191,11 +189,12 @@ class ShellClient(object):
                 args = [a for a in args if a is not req]
                 break
         if req is None:
-            req = self.api.user_ns.get('req')
+            req = self.shell.user_ns.get('req')
             if not isinstance(req, Request):
                 req = Request.blank('/')
                 del req.content_type
         req.method = meth
+
         req.set_url(self.url)
         resp = req.get_response(*args, **kwargs)
         self.url = req.url

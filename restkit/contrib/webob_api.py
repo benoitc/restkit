@@ -4,6 +4,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
+import base64
 from StringIO import StringIO
 import urlparse
 import urllib
@@ -55,6 +56,7 @@ class Request(BaseRequest):
     put = Method('put')
     head = Method('head')
     delete = Method('delete')
+    
     def get_response(self):
         if self.content_length < 0:
             self.content_length = 0
@@ -73,14 +75,30 @@ class Request(BaseRequest):
 
     __call__ = get_response
 
-    def set_url(self, url_or_path):
-        path = url_or_path.lstrip('/')
-        if '?' in path:
-            path, self.query_string = path.split('?', 1)
-        if path.startswith('http'):
-            url = path
+    def set_url(self, url):
+
+        path = url.lstrip('/')
+
+        if url.startswith("http://") or url.startswith("https://"):
+            u = urlparse.urlsplit(url)
+            if u.username is not None:
+                password = u.password or ""
+                encode = base64.b64encode("%s:%s" % (u.username, password))
+                self.headers['Authorization'] = 'Basic %s' %  encode
+
+            self.scheme = u.scheme,
+            self.host = u.netloc.split("@")[-1]
+            self.path_info = u.path or "/"
+            self.query_string = u.query
+            url = urlparse.urlunsplit((u.scheme, u.netloc.split("@")[-1], 
+                u.path, u.query, u.fragment))
         else:
-            self.path_info = '/'+path
+        
+            if '?' in path:
+                path, self.query_string = path.split('?', 1)
+            self.path_info = '/' + path
+            
+
             url = self.url
         self.scheme, self.host, self.path_info = urlparse.urlparse(url)[0:3]
 
