@@ -39,7 +39,8 @@ def validate_token(token):
 class OAuthFilter(object):
     """ oauth filter """
 
-    def __init__(self, path, consumer, token=None, method=None):
+    def __init__(self, path, consumer, token=None, method=None, 
+            realm=""):
         """ Init OAuthFilter
         
         :param path: path or regexp. * mean all path on wicth oauth can be
@@ -61,6 +62,7 @@ class OAuthFilter(object):
         self.consumer = validate_consumer(consumer)
         self.token = validate_token(token)
         self.method = method or SignatureMethod_HMAC_SHA1()
+        self.realm = realm
   
     def on_path(self, request):
         path = request.parsed_url.path or "/"
@@ -102,5 +104,5 @@ class OAuthFilter(object):
             request.original_url = request.url
             request.url = oauth_req.to_url()
         else:
-            oauth_headers = oauth_req.to_header()
+            oauth_headers = oauth_req.to_header(realm=self.realm)
             request.headers.update(oauth_headers)
