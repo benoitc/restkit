@@ -10,17 +10,14 @@ import re
 import urllib
 
 
-from restkit.util import to_bytestring, url_quote
+from restkit.util import to_bytestring, url_quote, url_encode
 
 MIME_BOUNDARY = 'END_OF_PART'
 CRLF = '\r\n'
 
-def form_encode(obj, charser="utf8"):
-    tmp = []
-    for key, value in obj.items():
-        tmp.append("%s=%s" % (url_quote(key), 
-                url_quote(value)))
-    return to_bytestring("&".join(tmp))
+def form_encode(obj, charset="utf8"):
+    encoded = url_encode(obj, charset=charset)
+    return to_bytestring(encoded)
 
 
 class BoundaryItem(object):
