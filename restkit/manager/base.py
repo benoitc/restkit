@@ -84,7 +84,7 @@ class Manager(object):
         try:
             active_sockets = self.active_sockets.copy()
 
-            for fno, (sock, t0) in active_sockets.items():
+            for fno, (sock, t0, k) in active_sockets.items():
                 close(sock)
                 del self.active_sockets[fno]
         finally:
