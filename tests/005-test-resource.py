@@ -139,3 +139,8 @@ def test_020():
     u = "http://test:test2@%s:%s/auth" % (HOST, PORT)
     res = Resource(u)
     t.raises(Unauthorized, res.get)
+
+@t.resource_request()
+def test_021(res):
+    r = res.post('/multivalueform', payload={ "a": ["a", "c"], "b": "b" })
+    t.eq(r.status_int, 200)
