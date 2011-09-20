@@ -220,6 +220,18 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self._respond(200, extra_headers, str(len(f)))
             else:
                 self.error_Response()
+        elif path == "/multipart3":
+            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
+            content_length = int(self.headers.get('Content-length', 0))
+            if ctype == 'multipart/form-data':
+                req = cgi.parse_multipart(self.rfile, pdict)
+                f = req['f'][0]
+                if not req['a'] == ['aa'] and not req['b'] == ['bb']:
+                    self.error_Response()
+                extra_headers = [('Content-type', 'text/plain')]
+                self._respond(200, extra_headers, str(len(f)))
+            else:
+                self.error_Response()
         elif path == "/1M":
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))

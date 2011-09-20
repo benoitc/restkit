@@ -22,3 +22,17 @@ def test_001():
     r = request(u, method='POST', body=body, headers=headers)
     t.eq(r.status_int, 200)
     t.eq(int(r.body_string()), l)
+    
+
+def test_002():
+    u = "http://%s:%s/multipart3" % (HOST, PORT)
+    fn = os.path.join(os.path.dirname(__file__), "1M")
+    f = open(fn, 'rb')
+    l = int(os.fstat(f.fileno())[6])
+    b = {'a':'aa','b':'bb', 'f':f}
+    h = {'content-type':"multipart/form-data"}
+    body, headers = multipart_form_encode(b, h, uuid.uuid4().hex)
+    r = request(u, method='POST', body=body, headers=headers)
+    t.eq(r.status_int, 200)
+    t.eq(int(r.body_string()), l)
+    
