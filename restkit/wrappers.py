@@ -86,6 +86,11 @@ class Request(object):
                 boundary = opts.get('boundary', uuid.uuid4().hex)
                 self._body, self.headers = multipart_form_encode(body, 
                                             self.headers, boundary)
+                # at this point content-type is "multipart/form-data"
+                # we need to set the content type according to the
+                # correct boundary like
+                # "multipart/form-data; boundary=%s" % boundary
+                ctype = self.headers.ipop('content-type', None)
             else:
                 ctype = "application/x-www-form-urlencoded; charset=utf-8"
                 self._body = form_encode(body)
@@ -123,6 +128,9 @@ class Request(object):
         if clen is not None:
             self.headers['Content-Length'] = clen
 
+        # TODO: maybe it's more relevant
+        # to check if Content-Type is already set in self.headers
+        # before overiding it
         if ctype is not None:
             self.headers['Content-Type'] = ctype
 

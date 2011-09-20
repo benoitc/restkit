@@ -144,3 +144,27 @@ def test_020():
 def test_021(res):
     r = res.post('/multivalueform', payload={ "a": ["a", "c"], "b": "b" })
     t.eq(r.status_int, 200)
+
+@t.resource_request()
+def test_021(res):
+    import os
+    fn = os.path.join(os.path.dirname(__file__), "1M")
+    f = open(fn, 'rb')
+    l = int(os.fstat(f.fileno())[6])
+    b = {'a':'aa','b':['bb','cc'], 'f':f}
+    h = {'content-type':"multipart/form-data"}
+    r = res.post('/multipart2', payload=b, headers=h)
+    t.eq(r.status_int, 200)
+    t.eq(int(r.body_string()), l)
+
+@t.resource_request()
+def test_022(res):
+    import os
+    fn = os.path.join(os.path.dirname(__file__), "1M")
+    f = open(fn, 'rb')
+    l = int(os.fstat(f.fileno())[6])
+    b = {'a':'aa','b':'bb', 'f':f}
+    h = {'content-type':"multipart/form-data"}
+    r = res.post('/multipart3', payload=b, headers=h)
+    t.eq(r.status_int, 200)
+    t.eq(int(r.body_string()), l)
