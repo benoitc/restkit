@@ -7,7 +7,7 @@
 import t
 
 from restkit.errors import RequestFailed, ResourceNotFound, \
-Unauthorized, RequestError
+Unauthorized
 from restkit.resource import Resource
 from _server_test import HOST, PORT
 
@@ -139,3 +139,57 @@ def test_020():
     u = "http://test:test2@%s:%s/auth" % (HOST, PORT)
     res = Resource(u)
     t.raises(Unauthorized, res.get)
+
+@t.resource_request()
+def test_021(res):
+    r = res.post('/multivalueform', payload={ "a": ["a", "c"], "b": "b" })
+    t.eq(r.status_int, 200)
+
+@t.resource_request()
+def test_022(res):
+    import os
+    fn = os.path.join(os.path.dirname(__file__), "1M")
+    f = open(fn, 'rb')
+    l = int(os.fstat(f.fileno())[6])
+    b = {'a':'aa','b':['bb','éàù@'], 'f':f}
+    h = {'content-type':"multipart/form-data"}
+    r = res.post('/multipart2', payload=b, headers=h)
+    t.eq(r.status_int, 200)
+    t.eq(int(r.body_string()), l)
+
+@t.resource_request()
+def test_023(res):
+    import os
+    fn = os.path.join(os.path.dirname(__file__), "1M")
+    f = open(fn, 'rb')
+    l = int(os.fstat(f.fileno())[6])
+    b = {'a':'aa','b':'éàù@', 'f':f}
+    h = {'content-type':"multipart/form-data"}
+    r = res.post('/multipart3', payload=b, headers=h)
+    t.eq(r.status_int, 200)
+    t.eq(int(r.body_string()), l)
+
+@t.resource_request()
+def test_024(res):
+    import os
+    fn = os.path.join(os.path.dirname(__file__), "1M")
+    f = open(fn, 'rb')
+    content = f.read()
+    f.seek(0)
+    b = {'a':'aa','b':'éàù@', 'f':f}
+    h = {'content-type':"multipart/form-data"}
+    r = res.post('/multipart4', payload=b, headers=h)
+    t.eq(r.status_int, 200)
+    t.eq(r.body_string(), content)
+
+@t.resource_request()
+def test_025(res):
+    import StringIO
+    content = 'éàù@'
+    f = StringIO.StringIO('éàù@')
+    f.name = 'test.txt'
+    b = {'a':'aa','b':'éàù@', 'f':f}
+    h = {'content-type':"multipart/form-data"}
+    r = res.post('/multipart4', payload=b, headers=h)
+    t.eq(r.status_int, 200)
+    t.eq(r.body_string(), content)

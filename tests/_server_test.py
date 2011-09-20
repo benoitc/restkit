@@ -188,6 +188,16 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self._respond(200, extra_headers, "ok")
             else:
                 self.error_Response()
+        elif path == "/multivalueform":
+            content_type = self.headers.get('content-type', 'text/plain')
+            extra_headers.append(('Content-type', content_type))
+            content_length = int(self.headers.get('Content-length', 0))
+            body = self.rfile.read(content_length)
+            form = parse_qs(body)
+            if form['a'] == ["a", "c"] and form["b"] == ["b"]:
+                self._respond(200, extra_headers, "ok")
+            else:
+                self.error_Response()
         elif path == "/multipart":
             ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
             content_length = int(self.headers.get('Content-length', 0))
@@ -196,6 +206,48 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 body = req['t'][0]
                 extra_headers = [('Content-type', 'text/plain')]
                 self._respond(200, extra_headers, body)
+            else:
+                self.error_Response()
+        elif path == "/multipart2":
+            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
+            content_length = int(self.headers.get('Content-length', 0))
+            if ctype == 'multipart/form-data':
+                req = cgi.parse_multipart(self.rfile, pdict)
+                f = req['f'][0]
+                if not req['a'] == ['aa']:
+                    self.error_Response()
+                if not req['b'] == ['bb','éàù@']:
+                    self.error_Response()
+                extra_headers = [('Content-type', 'text/plain')]
+                self._respond(200, extra_headers, str(len(f)))
+            else:
+                self.error_Response()
+        elif path == "/multipart3":
+            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
+            content_length = int(self.headers.get('Content-length', 0))
+            if ctype == 'multipart/form-data':
+                req = cgi.parse_multipart(self.rfile, pdict)
+                f = req['f'][0]
+                if not req['a'] == ['aa']:
+                    self.error_Response()
+                if not req['b'] == ['éàù@']:
+                    self.error_Response()
+                extra_headers = [('Content-type', 'text/plain')]
+                self._respond(200, extra_headers, str(len(f)))
+            else:
+                self.error_Response()
+        elif path == "/multipart4":
+            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
+            content_length = int(self.headers.get('Content-length', 0))
+            if ctype == 'multipart/form-data':
+                req = cgi.parse_multipart(self.rfile, pdict)
+                f = req['f'][0]
+                if not req['a'] == ['aa']:
+                    self.error_Response()
+                if not req['b'] == ['éàù@']:
+                    self.error_Response()
+                extra_headers = [('Content-type', 'text/plain')]
+                self._respond(200, extra_headers, f)
             else:
                 self.error_Response()
         elif path == "/1M":

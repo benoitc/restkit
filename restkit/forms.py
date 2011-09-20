@@ -89,9 +89,9 @@ class BoundaryItem(object):
                     yield CRLF
                     return
                 yield block
-
+                
     def encode_unreadable_value(self, value):
-        return url_quote(value)
+            return value
 
 
 class MultipartForm(object):
@@ -116,9 +116,14 @@ class MultipartForm(object):
                     value = value.read()
                     
                 boundary = bitem_cls(name, value, fname, filetype)
+                self.boundaries.append(boundary)
+            elif isinstance(value, list):
+                for v in value:
+                    boundary = bitem_cls(name, v)
+                    self.boundaries.append(boundary)
             else:
                 boundary = bitem_cls(name, value)
-            self.boundaries.append(boundary)
+                self.boundaries.append(boundary)
 
     def get_size(self):
         if self._clen is None:
