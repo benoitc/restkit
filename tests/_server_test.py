@@ -214,7 +214,9 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             if ctype == 'multipart/form-data':
                 req = cgi.parse_multipart(self.rfile, pdict)
                 f = req['f'][0]
-                if not req['a'] == ['aa'] and not req['b'] == ['bb','cc']:
+                if not req['a'] == ['aa']:
+                    self.error_Response()
+                if not req['b'] == ['bb','éàù@']:
                     self.error_Response()
                 extra_headers = [('Content-type', 'text/plain')]
                 self._respond(200, extra_headers, str(len(f)))
@@ -226,7 +228,9 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             if ctype == 'multipart/form-data':
                 req = cgi.parse_multipart(self.rfile, pdict)
                 f = req['f'][0]
-                if not req['a'] == ['aa'] and not req['b'] == ['bb']:
+                if not req['a'] == ['aa']:
+                    self.error_Response()
+                if not req['b'] == ['éàù@']:
                     self.error_Response()
                 extra_headers = [('Content-type', 'text/plain')]
                 self._respond(200, extra_headers, str(len(f)))

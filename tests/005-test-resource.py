@@ -151,7 +151,7 @@ def test_021(res):
     fn = os.path.join(os.path.dirname(__file__), "1M")
     f = open(fn, 'rb')
     l = int(os.fstat(f.fileno())[6])
-    b = {'a':'aa','b':['bb','cc'], 'f':f}
+    b = {'a':'aa','b':['bb','éàù@'], 'f':f}
     h = {'content-type':"multipart/form-data"}
     r = res.post('/multipart2', payload=b, headers=h)
     t.eq(r.status_int, 200)
@@ -163,7 +163,7 @@ def test_022(res):
     fn = os.path.join(os.path.dirname(__file__), "1M")
     f = open(fn, 'rb')
     l = int(os.fstat(f.fileno())[6])
-    b = {'a':'aa','b':'bb', 'f':f}
+    b = {'a':'aa','b':'éàù@', 'f':f}
     h = {'content-type':"multipart/form-data"}
     r = res.post('/multipart3', payload=b, headers=h)
     t.eq(r.status_int, 200)

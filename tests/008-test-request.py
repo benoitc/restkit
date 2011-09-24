@@ -94,7 +94,7 @@ def test_004():
     fn = os.path.join(os.path.dirname(__file__), "1M")
     f = open(fn, 'rb')
     l = int(os.fstat(f.fileno())[6])
-    b = {'a':'aa','b':['bb','cc'], 'f':f}
+    b = {'a':'aa','b':['bb','éàù@'], 'f':f}
     h = {'content-type':"multipart/form-data"}
     body, headers = multipart_form_encode(b, h, uuid.uuid4().hex)
     r = request(u, method='POST', body=body, headers=headers)
@@ -106,7 +106,7 @@ def test_005():
     fn = os.path.join(os.path.dirname(__file__), "1M")
     f = open(fn, 'rb')
     l = int(os.fstat(f.fileno())[6])
-    b = {'a':'aa','b':'bb', 'f':f}
+    b = {'a':'aa','b':'éàù@', 'f':f}
     h = {'content-type':"multipart/form-data"}
     body, headers = multipart_form_encode(b, h, uuid.uuid4().hex)
     r = request(u, method='POST', body=body, headers=headers)
