@@ -24,7 +24,6 @@ class BoundaryItem(object):
     def __init__(self, name, value, fname=None, filetype=None, filesize=None):
         self.name = url_quote(name)
         if value is not None and not hasattr(value, 'read'):
-            value = self.encode_unreadable_value(value)
             self.size = len(value)
         self.value = value
         if fname is not None:
@@ -89,9 +88,6 @@ class BoundaryItem(object):
                     yield CRLF
                     return
                 yield block
-
-    def encode_unreadable_value(self, value):
-        return url_quote(value)
 
 
 class MultipartForm(object):
