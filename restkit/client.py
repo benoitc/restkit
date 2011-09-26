@@ -240,6 +240,8 @@ class Client(object):
                 request.parsed_url.scheme)
 
         if proxy_settings and proxy_settings is not None:
+            request.is_proxied = True
+
             proxy_settings, proxy_auth =  _get_proxy_auth(proxy_settings)
             addr = parse_netloc(urlparse.urlparse(proxy_settings))
 
@@ -303,8 +305,13 @@ class Client(object):
         if not accept_encoding:
             accept_encoding = 'identity'
 
+        if request.is_proxied:
+            full_path = ("https://" if request.is_ssl() else "http://") + request.host + request.path
+        else:
+            full_path = request.path
+
         lheaders = [
-            "%s %s %s\r\n" % (request.method, request.path, httpver),
+            "%s %s %s\r\n" % (request.method, full_path, httpver),
             "Host: %s\r\n" % host,
             "User-Agent: %s\r\n" % ua,
             "Accept-Encoding: %s\r\n" % accept_encoding
