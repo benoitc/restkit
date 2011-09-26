@@ -28,6 +28,8 @@ class Request(object):
 
         self._headers = None
         self._body = None
+
+        self.is_proxied = False
         
         # set parsed uri
         self.headers = headers

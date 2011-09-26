@@ -240,6 +240,8 @@ class Client(object):
                 request.parsed_url.scheme)
 
         if proxy_settings and proxy_settings is not None:
+            request.is_proxied = True
+
             proxy_settings, proxy_auth =  _get_proxy_auth(proxy_settings)
             addr = parse_netloc(urlparse.urlparse(proxy_settings))
 
@@ -255,9 +257,9 @@ class Client(object):
                 proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth,
                         user_agent)
 
-                sck = self._manager.find_socket(addr, ssl)
+                sck = self._manager.find_socket(addr, is_ssl)
                 if sck is None:
-                    self = self.connect(addr, ssl)
+                    sck = self.connect(addr, is_ssl)
 
                 send(sck, proxy_pieces)
                 unreader = http.Unreader(sck)
@@ -273,9 +275,9 @@ class Client(object):
                 if proxy_auth:
                     headers = [('Proxy-authorization', proxy_auth)]
 
-                sck = self._manager.find_socket(addr, ssl)
+                sck = self._manager.find_socket(addr, is_ssl)
                 if sck is None:
-                    sck = self.connect(addr, ssl)
+                    sck = self.connect(addr, is_ssl)
                 return sck, addr, headers
         return None, req_addr, []
 
@@ -303,8 +305,13 @@ class Client(object):
         if not accept_encoding:
             accept_encoding = 'identity'
 
+        if request.is_proxied:
+            full_path = ("https://" if request.is_ssl() else "http://") + request.host + request.path
+        else:
+            full_path = request.path
+
         lheaders = [
-            "%s %s %s\r\n" % (request.method, request.path, httpver),
+            "%s %s %s\r\n" % (request.method, full_path, httpver),
             "Host: %s\r\n" % host,
             "User-Agent: %s\r\n" % ua,
             "Accept-Encoding: %s\r\n" % accept_encoding
