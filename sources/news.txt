@@ -2,8 +2,14 @@
 
 News
 ====
+3.3.2 / 2011-09-30
+------------------
 
-3.3.1 / 2001-09-18
+- add support for multivalue field in multipart
+- form_encode can now accept arbitrary items
+- fix proxy handling in client
+
+  3.3.1 / 2011-09-18
 ------------------
 
 - Add `hook <https://github.com/benoitc/restkit/commit/eb90afd661e126966e948c6e780199269fd7bdfc>`_ for BoundaryItem subclasses to handle unreadable values
