@@ -83,6 +83,7 @@ restkit.forms.MIME_BOUNDARY	restkit.forms-module.html#MIME_BOUNDARY
 restkit.forms.__package__	restkit.forms-module.html#__package__
 restkit.forms.form_encode	restkit.forms-module.html#form_encode
 restkit.forms.CRLF	restkit.forms-module.html#CRLF
+restkit.forms.url_encode	restkit.util-module.html#url_encode
 restkit.forms.multipart_form_encode	restkit.forms-module.html#multipart_form_encode
 restkit.globals	restkit.globals-module.html
 restkit.globals._manager	restkit.globals-module.html#_manager
