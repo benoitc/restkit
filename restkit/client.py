@@ -34,7 +34,7 @@ try:
     from http_parser.reader import SocketReader
 except ImportError:
     raise ImportError("""http-parser isn't installed.
-        
+
         pip install http-parser""")
 
 from restkit import __version__
@@ -263,7 +263,7 @@ class Client(object):
 
                 send(sck, proxy_pieces)
                 unreader = http.Unreader(sck)
-                resp = http.Request(unreader)
+                resp = Request(unreader)
                 body = resp.body.read()
                 if resp.status_int != 200:
                     raise ProxyError("Tunnel connection failed: %d %s" %
@@ -361,7 +361,7 @@ class Client(object):
                             hdr_expect.lower() == "100-continue":
                         sck.sendall(msg)
                         msg = None
-                        resp = http.Request(http.Unreader(self._sock))
+                        resp = Request(http.Unreader(self._sock))
                         if resp.status_int != 100:
                             self.reset_request()
                             if log.isEnabledFor(logging.DEBUG):
@@ -490,7 +490,7 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Start to parse response")
 
-        p = HttpStream(SocketReader(connection.socket()), kind=1, 
+        p = HttpStream(SocketReader(connection.socket()), kind=1,
                 decompress=self.decompress)
 
         if log.isEnabledFor(logging.DEBUG):
@@ -498,7 +498,7 @@ class Client(object):
             log.debug("headers: [%s]" % p.headers())
 
         location = p.headers().get('location')
-        
+
         if self.follow_redirect:
             if p.status_code() in (301, 302, 307,):
                 if request.method in ('GET', 'HEAD',) or \
