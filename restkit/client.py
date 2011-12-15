@@ -262,8 +262,7 @@ class Client(object):
                     sck = self.connect(addr, is_ssl)
 
                 send(sck, proxy_pieces)
-                unreader = http.Unreader(sck)
-                resp = Request(unreader)
+                resp = self.get_response(request, connection)
                 body = resp.body.read()
                 if resp.status_int != 200:
                     raise ProxyError("Tunnel connection failed: %d %s" %
@@ -353,21 +352,23 @@ class Client(object):
                                 "Can't determine content length and " +
                                 "Transfer-Encoding header is not chunked")
 
-
                     # handle 100-Continue status
                     # http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8.2.3
                     hdr_expect = request.headers.iget("expect")
                     if hdr_expect is not None and \
                             hdr_expect.lower() == "100-continue":
                         sck.sendall(msg)
-                        msg = None
-                        resp = Request(http.Unreader(self._sock))
-                        if resp.status_int != 100:
+                        stream = SocketReader(connection.socket())
+                        raw_resp = list()
+                        stream.readinto(raw_resp)
+                        raw_resp = ''.join(raw_resp).split()
+                        if len(raw_resp) < 3 or raw_resp[1]!='100':
                             self.reset_request()
                             if log.isEnabledFor(logging.DEBUG):
                                 log.debug("return response class")
                             return self.response_class(connection,
-                                    request, resp)
+                                    request, Response(raw_resp))
+                        msg = None
 
                     chunked = request.is_chunked()
                     if log.isEnabledFor(logging.DEBUG):
@@ -441,7 +442,6 @@ class Client(object):
             time.sleep(wait)
             wait = wait * 2
             tries = tries - 1
-
 
     def request(self, url, method='GET', body=None, headers=None):
         """ perform immediatly a new request """
