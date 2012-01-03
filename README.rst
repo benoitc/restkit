@@ -73,7 +73,7 @@ Here is the snippet::
         
       def request(self, *args, **kwargs):
           resp = super(TwitterSearch, self).request(*args, **kwargs)
-          return json.loads(resp.body)
+          return json.loads(resp.body_string())
         
   if __name__ == "__main__":
       s = TwitterSearch()
