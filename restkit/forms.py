@@ -64,9 +64,10 @@ class BoundaryItem(object):
             if self.filetype:
                 filetype = self.filetype
             else:
-                filetype = "text/plain; charset=utf-8"
-            headers.append("Content-Type: %s" % filetype)
-            headers.append("Content-Length: %i" % self.size)
+                pass
+                #filetype = "text/plain; charset=utf-8"
+            #headers.append("Content-Type: %s" % filetype)
+            #headers.append("Content-Length: %i" % self.size)
             headers.append("")
             headers.append("")
             self._encoded_hdr = CRLF.join(headers)
