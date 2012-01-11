@@ -21,8 +21,10 @@ def form_encode(obj, charset="utf8"):
 
 
 class BoundaryItem(object):
-    def __init__(self, name, value, fname=None, filetype=None, filesize=None):
-        self.name = url_quote(name)
+    def __init__(self, name, value, fname=None, filetype=None, filesize=None,
+                 quote=url_quote):
+        self.quote = quote
+        self.name = quote(name)
         if value is not None and not hasattr(value, 'read'):
             value = self.encode_unreadable_value(value)
             self.size = len(value)
@@ -36,7 +38,7 @@ class BoundaryItem(object):
         if filetype is not None:
             filetype = to_bytestring(filetype)
         self.filetype = filetype
-        
+
         if isinstance(value, file) and filesize is None:
             try:
                 value.flush()
@@ -50,7 +52,7 @@ class BoundaryItem(object):
     def encode_hdr(self, boundary):
         """Returns the header of the encoding of this parameter"""
         if not self._encoded_hdr or self._encoded_bdr != boundary:
-            boundary = url_quote(boundary)
+            boundary = self.quote(boundary)
             self._encoded_bdr = boundary
             headers = ["--%s" % boundary]
             if self.fname:
@@ -62,9 +64,10 @@ class BoundaryItem(object):
             if self.filetype:
                 filetype = self.filetype
             else:
-                filetype = "text/plain; charset=utf-8"
-            headers.append("Content-Type: %s" % filetype)
-            headers.append("Content-Length: %i" % self.size)
+                pass
+                #filetype = "text/plain; charset=utf-8"
+            #headers.append("Content-Type: %s" % filetype)
+            #headers.append("Content-Length: %i" % self.size)
             headers.append("")
             headers.append("")
             self._encoded_hdr = CRLF.join(headers)
@@ -77,7 +80,7 @@ class BoundaryItem(object):
             raise ValueError("boundary found in encoded string")
 
         return "%s%s%s" % (self.encode_hdr(boundary), value, CRLF)
-        
+
     def iter_encode(self, boundary, blocksize=16384):
         if not hasattr(self.value, "read"):
             yield self.encode(boundary)
@@ -89,18 +92,19 @@ class BoundaryItem(object):
                     yield CRLF
                     return
                 yield block
-                
+
     def encode_unreadable_value(self, value):
             return value
 
 
 class MultipartForm(object):
-    def __init__(self, params, boundary, headers, bitem_cls=BoundaryItem):
+    def __init__(self, params, boundary, headers, bitem_cls=BoundaryItem,
+                 quote=url_quote):
         self.boundary = boundary
         self.tboundary = "--%s--%s" % (boundary, CRLF)
         self.boundaries = []
         self._clen = headers.get('Content-Length')
-        
+
         if hasattr(params, 'items'):
             params = params.items()
 
@@ -114,19 +118,19 @@ class MultipartForm(object):
                     filetype = None
                 if not isinstance(value, file) and self._clen is None:
                     value = value.read()
-                    
-                boundary = bitem_cls(name, value, fname, filetype)
+
+                boundary = bitem_cls(name, value, fname, filetype, quote=quote)
                 self.boundaries.append(boundary)
             elif isinstance(value, list):
                 for v in value:
-                    boundary = bitem_cls(name, v)
+                    boundary = bitem_cls(name, v, quote=quote)
                     self.boundaries.append(boundary)
             else:
-                boundary = bitem_cls(name, value)
+                boundary = bitem_cls(name, value, quote=quote)
                 self.boundaries.append(boundary)
 
-    def get_size(self):
-        if self._clen is None:
+    def get_size(self, recalc=False):
+        if self._clen is None or recalc:
             self._clen = 0
             for boundary in self.boundaries:
                 self._clen += boundary.size
@@ -134,18 +138,33 @@ class MultipartForm(object):
                 self._clen += len(CRLF)
             self._clen += len(self.tboundary)
         return int(self._clen)
-        
+
     def __iter__(self):
         for boundary in self.boundaries:
             for block in boundary.iter_encode(self.boundary):
                 yield block
         yield self.tboundary
-                    
 
-def multipart_form_encode(params, headers, boundary):
+
+def multipart_form_encode(params, headers, boundary, quote=url_quote):
+    """Creates a tuple with MultipartForm instance as body and dict as headers
+
+    params
+      dict with fields for the body
+
+    headers
+      dict with fields for the header
+
+    boundary
+      string to use as boundary
+
+    quote (default: url_quote)
+      some callable expecting a string an returning a string. Use for quoting of
+      boundary and form-data keys (names).
+    """
     headers = headers or {}
-    boundary = urllib.quote_plus(boundary)
-    body = MultipartForm(params, boundary, headers)
+    boundary = quote(boundary)
+    body = MultipartForm(params, boundary, headers, quote=quote)
     headers['Content-Type'] = "multipart/form-data; boundary=%s" % boundary
     headers['Content-Length'] = str(body.get_size())
     return body, headers
