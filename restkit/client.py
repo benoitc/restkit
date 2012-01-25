@@ -402,7 +402,7 @@ class Client(object):
         self._nb_redirections = self.max_follow_redirect
         return self.perform(request)
 
-    def redirect(self, resp, location, request):
+    def redirect(self, location, request):
         """ reset request, set new url of request and perform it """
         if self._nb_redirections <= 0:
             raise RedirectLimit("Redirection limit is reached")
@@ -441,24 +441,23 @@ class Client(object):
 
         if self.follow_redirect:
             if p.status_code() in (301, 302, 307,):
+                connection.close()
                 if request.method in ('GET', 'HEAD',) or \
                         self.force_follow_redirect:
                     if hasattr(self.body, 'read'):
                         try:
                             self.body.seek(0)
                         except AttributeError:
-                            connection.release()
                             raise RequestError("Can't redirect %s to %s "
                                     "because body has already been read"
                                     % (self.url, location))
-                    connection.release()
-                    return self.redirect(p, location, request)
+                    return self.redirect(location, request)
 
             elif p.status_code() == 303 and self.method == "POST":
-                connection.release()
+                connection.close()
                 request.method = "GET"
                 request.body = None
-                return self.redirect(p, location, request)
+                return self.redirect(location, request)
 
         # create response object
         resp = self.response_class(connection, request, p)
