@@ -4,6 +4,7 @@
 # See the NOTICE for more information.
 
 import logging
+import select
 import socket
 import ssl
 import time
@@ -17,17 +18,17 @@ DNS_TIMEOUT = 60
 
 class Connection(Connector):
 
-    def __init__(self, host, port, pool=None, ssl=False,
+    def __init__(self, host, port, pool=None, is_ssl=False,
             extra_headers=[], backend_mod=None, **ssl_args):
         self._s = backend_mod.Socket(socket.AF_INET, socket.SOCK_STREAM)
         self._s.connect((host, port))
 
-        if ssl:
-            ssl.wrap_socket(self._s, **ssl_args)
+        if is_ssl:
+            self._s = ssl.wrap_socket(self._s, **ssl_args)
 
         self.pool = pool
         self.extra_headers = extra_headers
-        self.ssl = ssl
+        self.is_ssl = is_ssl
         self.host = host
         self.port = port
         self._connected = True

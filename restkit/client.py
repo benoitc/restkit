@@ -183,7 +183,7 @@ class Client(object):
                     addr, is_ssl)
         if not conn:
             conn = self._session.get(host=addr[0], port=addr[1],
-                    pool=self._session, ssl=is_ssl,
+                    pool=self._session, is_ssl=is_ssl,
                     extra_headers=extra_headers, **self.ssl_args)
 
 
@@ -214,7 +214,7 @@ class Client(object):
 
 
                 conn = self._session.get(host=addr[0], port=addr[1],
-                    pool=self._session, ssl=is_ssl,
+                    pool=self._session, is_ssl=is_ssl,
                     extra_headers=[], **self.ssl_args)
 
 
@@ -234,7 +234,7 @@ class Client(object):
                     headers = [('Proxy-authorization', proxy_auth)]
 
                 conn = self._session.get(host=addr[0], port=addr[1],
-                        pool=self._session, ssl=False,
+                        pool=self._session, is_ssl=False,
                         extra_headers=[], **self.ssl_args)
             return conn
 
