@@ -290,7 +290,7 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Start to perform request: %s %s %s" %
                     (request.host, request.method, request.path))
-
+        conn = None
 
         try:
             # get or create a connection to the remote host
@@ -354,19 +354,22 @@ class Client(object):
 
             return self.get_response(request, conn)
         except socket.gaierror, e:
-            conn.close()
+            if conn is not None:
+                conn.close()
             raise RequestError(str(e))
         except socket.timeout, e:
-            conn.close()
+            if conn is not None:
+                conn.close()
             raise RequestTimeout(str(e))
         except socket.error, e:
             if log.isEnabledFor(logging.DEBUG):
                 log.debug("socket error: %s" % str(e))
-            conn.close()
-
+            if conn is not None:
+                conn.close()
             raise RequestError("socket.error: %s" % str(e))
         except (StopIteration, NoMoreData):
-            conn.close()
+            if conn is not None:
+                conn.close()
             if request.body is not None:
                 if not hasattr(request.body, 'read') and \
                         not isinstance(request.body, types.StringTypes):

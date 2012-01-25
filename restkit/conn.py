@@ -40,7 +40,16 @@ class Connection(Connector):
         return target_host == self.host and target_port == self.port
 
     def is_connected(self):
-        return self._connected
+        if self._connected:
+            try:
+                r, _, _ = select.select([self._s], [], [], 0)
+                if not r:
+                    return True
+            except (ValueError, select.error,):
+
+                return False
+            self.close()
+        return False
 
     def handle_exception(self, exception):
         raise
@@ -66,7 +75,6 @@ class Connection(Connector):
             self._s.close()
         except socket.error:
             pass
-
 
     def socket(self):
         return self._s
