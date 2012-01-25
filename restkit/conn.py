@@ -33,6 +33,7 @@ class Connection(Connector):
         self.port = port
         self._connected = True
         self._life = time.time()
+        self._released = False
 
     def matches(self, **match_options):
         target_host = match_options.get('host')
@@ -63,6 +64,10 @@ class Connection(Connector):
         self._life = -1
 
     def release(self, should_close=False):
+        if self._released:
+            return
+
+        self._released = True
         if should_close:
             self.close()
         else:
@@ -73,7 +78,7 @@ class Connection(Connector):
             return
         try:
             self._s.close()
-        except socket.error:
+        except:
             pass
 
     def socket(self):

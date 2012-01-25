@@ -215,8 +215,7 @@ class Response(object):
         if request.method == "HEAD":
             """ no body on HEAD, release the connection now """
             self.connection.release()
-            self._body = StringIO()
-
+            self._body = StringIO("")
         else:
             self._body = resp.body_file()
 
