@@ -6,6 +6,7 @@
 from restkit.version import version_info, __version__
 
 try:
+    from restkit.conn import Connection
     from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, \
 ResourceError, ResourceGone

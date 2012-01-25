@@ -26,3 +26,18 @@ def get_session(backend_name, **options):
         else:
             pool = _default_session.get(backend_name)
     return pool
+
+def set_session(backend_name, **options):
+
+    global _default_session
+
+    if not _default_session:
+        _default_session = {}
+
+    if backend_name in _default_session:
+        pool = _default_session.get(backend_name)
+    else:
+        pool = ConnectionPool(factory=Connection,
+                backend=backend_name, **options)
+        _default_session[backend_name] = pool
+    return pool
