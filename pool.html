@@ -109,11 +109,12 @@ You can change its settings by using the
 </div>
 <p>Restkit provides also Pool working with <a class="reference external" href="http://eventlet.net">eventlet</a> or <a class="reference external" href="http://gevent.net">gevent</a>.</p>
 <p>Example of usage with Gevent:</p>
-<div class="highlight-python"><pre> from restkit import *
-from socketpool import ConnectionPool
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">socketpool</span> <span class="kn">import</span> <span class="n">ConnectionPool</span>
 
-# set a pool with a gevent packend
-pool = ConnectionPool(factory=Connection, backend="gevent")</pre>
+<span class="c"># set a pool with a gevent packend</span>
+<span class="n">pool</span> <span class="o">=</span> <span class="n">ConnectionPool</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="n">Connection</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s">&quot;gevent&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
 <p>Replace <strong>gevent</strong> by <strong>eventlet</strong> for eventlet support.</p>
 </div>
