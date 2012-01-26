@@ -24,9 +24,9 @@ Restkit provides also Pool working with `eventlet <http://eventlet.net>`_ or `ge
 Example of usage with Gevent::
 
      from restkit import *
-    from socketpool import ConnectionPool
-
-    # set a pool with a gevent packend
-    pool = ConnectionPool(factory=Connection, backend="gevent")
+     from socketpool import ConnectionPool
+     
+     # set a pool with a gevent packend
+     pool = ConnectionPool(factory=Connection, backend="gevent")
 
 Replace **gevent** by **eventlet** for eventlet support.
