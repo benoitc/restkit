@@ -67,38 +67,12 @@ object --+
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li><a href="restkit.contrib.ipython_shell.Response-class.html">restkit.contrib.ipython_shell.Response</a></li><li>, exc.WSGIHTTPException</li>  </ul>
+<li>exc.WSGIHTTPException</li>  </ul>
 </dd></dl>
 
 <hr />
 <p>Represents a WSGI response</p>
 
-<!-- ==================== NESTED CLASSES ==================== -->
-<a name="section-NestedClasses"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Nested Classes</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-NestedClasses"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.request.Request-class.html" class="summary-name">RequestClass</a><br />
-      The default request implementation
-    </td>
-  </tr>
-</table>
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -122,10 +96,15 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">environ</span>,
-        <span class="summary-sig-arg">start_response</span>)</span><br />
-      WSGI application interface</td>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">body</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">status</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">headerlist</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">app_iter</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">content_type</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">conditional_response</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kw</span>)</span><br />
+      x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
             
             
@@ -141,16 +120,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">body</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">status</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">headerlist</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">app_iter</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">request</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">content_type</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">conditional_response</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">**kw</span>)</span><br />
-      x.__init__(...) initializes x; see help(type(x)) for signature</td>
+          <td><span class="summary-sig"><a name="copy"></a><span class="summary-sig-name">copy</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Makes a copy of the response</td>
           <td align="right" valign="top">
             
             
@@ -186,564 +157,6 @@ object --+
           <td><span class="summary-sig"><a href="webob.response.Response-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">skip_body</span>=<span class="summary-sig-default">False</span>)</span><br />
       str(x)</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_abs_headerlist"></a><span class="summary-sig-name">_abs_headerlist</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">environ</span>)</span><br />
-      Returns a headerlist, with the Location header possibly made absolute
-      given the request environ.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_app_iter__del"></a><span class="summary-sig-name">_app_iter__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_app_iter__get" class="summary-sig-name" onclick="show_private();">_app_iter__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns the app_iter of the response.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_app_iter__set"></a><span class="summary-sig-name">_app_iter__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_body__get" class="summary-sig-name" onclick="show_private();">_body__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      The body of the response, as a ``str``.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_body__set"></a><span class="summary-sig-name">_body__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_body_file__del"></a><span class="summary-sig-name">_body_file__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_body_file__get" class="summary-sig-name" onclick="show_private();">_body_file__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      A file-like object that can be used to write to the body.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_body_file__set"></a><span class="summary-sig-name">_body_file__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">file</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_cache_control__del"></a><span class="summary-sig-name">_cache_control__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_cache_control__get"></a><span class="summary-sig-name">_cache_control__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_cache_control__set"></a><span class="summary-sig-name">_cache_control__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_cache_expires" class="summary-sig-name" onclick="show_private();">_cache_expires</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">seconds</span>=<span class="summary-sig-default">0</span>,
-        <span class="summary-sig-arg">**kw</span>)</span><br />
-      Set expiration on this request.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_charset__del"></a><span class="summary-sig-name">_charset__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_charset__get"></a><span class="summary-sig-name">_charset__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Get/set the charset (in the Content-Type)</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_charset__set"></a><span class="summary-sig-name">_charset__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">charset</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_content_type__del"></a><span class="summary-sig-name">_content_type__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_content_type__get" class="summary-sig-name" onclick="show_private();">_content_type__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Get/set the Content-Type header (or None), *without* the charset or 
-      any parameters.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_content_type__set"></a><span class="summary-sig-name">_content_type__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_content_type_params__del"></a><span class="summary-sig-name">_content_type_params__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_content_type_params__get" class="summary-sig-name" onclick="show_private();">_content_type_params__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      A dictionary of all the parameters in the content type.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_content_type_params__set"></a><span class="summary-sig-name">_content_type_params__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value_dict</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_environ__del"></a><span class="summary-sig-name">_environ__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_environ__get"></a><span class="summary-sig-name">_environ__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Get/set the request environ associated with this response, if any.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_environ__set"></a><span class="summary-sig-name">_environ__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_headerlist__del"></a><span class="summary-sig-name">_headerlist__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_headerlist__get"></a><span class="summary-sig-name">_headerlist__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      The list of response headers</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_headerlist__set"></a><span class="summary-sig-name">_headerlist__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_headers__get"></a><span class="summary-sig-name">_headers__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      The headers in a dictionary-like object</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_headers__set"></a><span class="summary-sig-name">_headers__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_request__del"></a><span class="summary-sig-name">_request__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_request__get"></a><span class="summary-sig-name">_request__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return the request associated with this response if any.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_request__set"></a><span class="summary-sig-name">_request__set</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -827,7 +240,109 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_text__del"></a><span class="summary-sig-name">_text__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="_headerlist__get"></a><span class="summary-sig-name">_headerlist__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      The list of response headers</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headerlist__set"></a><span class="summary-sig-name">_headerlist__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headerlist__del"></a><span class="summary-sig-name">_headerlist__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headers__get"></a><span class="summary-sig-name">_headers__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      The headers in a dictionary-like object</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_headers__set"></a><span class="summary-sig-name">_headers__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_body__get" class="summary-sig-name" onclick="show_private();">_body__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      The body of the response, as a ``str``.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_body__set"></a><span class="summary-sig-name">_body__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -844,7 +359,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_text__get"></a><span class="summary-sig-name">_text__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Get/set the unicode value of the body (using the charset of the 
+      Get/set the text value of the body (using the charset of the 
       Content-Type)</td>
           <td align="right" valign="top">
             
@@ -878,8 +393,57 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_update_cache_control"></a><span class="summary-sig-name">_update_cache_control</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">prop_dict</span>)</span></td>
+          <td><span class="summary-sig"><a name="_text__del"></a><span class="summary-sig-name">_text__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_body_file__get" class="summary-sig-name" onclick="show_private();">_body_file__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      A file-like object that can be used to write to the body.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_body_file__set"></a><span class="summary-sig-name">_body_file__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">file</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_body_file__del"></a><span class="summary-sig-name">_body_file__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -895,11 +459,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="app_iter_range"></a><span class="summary-sig-name">app_iter_range</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">start</span>,
-        <span class="summary-sig-arg">stop</span>)</span><br />
-      Return a new app_iter built from the response app_iter, that serves 
-      up only the given ``start:stop`` range.</td>
+          <td><span class="summary-sig"><a name="write"></a><span class="summary-sig-name">write</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">text</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -909,16 +470,14 @@ object --+
       
     </td>
   </tr>
-<tr>
+<tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#conditional_response_app" class="summary-sig-name">conditional_response_app</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">environ</span>,
-        <span class="summary-sig-arg">start_response</span>)</span><br />
-      Like the normal __call__ interface, but checks conditional headers:</td>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_app_iter__get" class="summary-sig-name" onclick="show_private();">_app_iter__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the app_iter of the response.</td>
           <td align="right" valign="top">
             
             
@@ -928,14 +487,14 @@ object --+
       
     </td>
   </tr>
-<tr>
+<tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="copy"></a><span class="summary-sig-name">copy</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Makes a copy of the response</td>
+          <td><span class="summary-sig"><a name="_app_iter__set"></a><span class="summary-sig-name">_app_iter__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -945,13 +504,13 @@ object --+
       
     </td>
   </tr>
-<tr>
+<tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="decode_content"></a><span class="summary-sig-name">decode_content</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="_app_iter__del"></a><span class="summary-sig-name">_app_iter__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -961,17 +520,14 @@ object --+
       
     </td>
   </tr>
-<tr>
+<tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#delete_cookie" class="summary-sig-name">delete_cookie</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">key</span>,
-        <span class="summary-sig-arg">path</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">domain</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Delete a cookie from the client.</td>
+          <td><span class="summary-sig"><a name="_charset__get"></a><span class="summary-sig-name">_charset__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get/set the charset (in the Content-Type)</td>
           <td align="right" valign="top">
             
             
@@ -981,17 +537,14 @@ object --+
       
     </td>
   </tr>
-<tr>
+<tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="encode_content"></a><span class="summary-sig-name">encode_content</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">encoding</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">gzip</code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">lazy</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Encode the content with the given encoding (only gzip and identity 
-      are supported).</td>
+          <td><span class="summary-sig"><a name="_charset__set"></a><span class="summary-sig-name">_charset__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">charset</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -1001,17 +554,13 @@ object --+
       
     </td>
   </tr>
-<tr>
+<tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#md5_etag" class="summary-sig-name">md5_etag</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">body</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">set_content_md5</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Generate an etag for the response object using an MD5 hash of the 
-      body (the body parameter, or ``self.body`` if not given)</td>
+          <td><span class="summary-sig"><a name="_charset__del"></a><span class="summary-sig-name">_charset__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -1021,16 +570,98 @@ object --+
       
     </td>
   </tr>
-<tr>
+<tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="webob.response.Response-class.html#merge_cookies" class="summary-sig-name">merge_cookies</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">resp</span>)</span><br />
-      Merge the cookies that were set on this response with the given 
-      `resp` object (which can be any WSGI application).</td>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_content_type__get" class="summary-sig-name" onclick="show_private();">_content_type__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get/set the Content-Type header (or None), *without* the charset or 
+      any parameters.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_content_type__set"></a><span class="summary-sig-name">_content_type__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_content_type__del"></a><span class="summary-sig-name">_content_type__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_content_type_params__get" class="summary-sig-name" onclick="show_private();">_content_type_params__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      A dictionary of all the parameters in the content type.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_content_type_params__set"></a><span class="summary-sig-name">_content_type_params__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value_dict</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_content_type_params__del"></a><span class="summary-sig-name">_content_type_params__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -1073,6 +704,26 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#delete_cookie" class="summary-sig-name">delete_cookie</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">path</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">domain</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Delete a cookie from the client.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="unset_cookie"></a><span class="summary-sig-name">unset_cookie</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">key</span>,
         <span class="summary-sig-arg">strict</span>=<span class="summary-sig-default">True</span>)</span><br />
@@ -1092,8 +743,230 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="write"></a><span class="summary-sig-name">write</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">text</span>)</span></td>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#merge_cookies" class="summary-sig-name">merge_cookies</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">resp</span>)</span><br />
+      Merge the cookies that were set on this response with the given 
+      `resp` object (which can be any WSGI application).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_cache_control__get"></a><span class="summary-sig-name">_cache_control__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_cache_control__set"></a><span class="summary-sig-name">_cache_control__set</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_cache_control__del"></a><span class="summary-sig-name">_cache_control__del</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_update_cache_control"></a><span class="summary-sig-name">_update_cache_control</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">prop_dict</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#_cache_expires" class="summary-sig-name" onclick="show_private();">_cache_expires</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">seconds</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">**kw</span>)</span><br />
+      Set expiration on this request.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="encode_content"></a><span class="summary-sig-name">encode_content</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">encoding</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">gzip</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">lazy</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Encode the content with the given encoding (only gzip and identity 
+      are supported).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="decode_content"></a><span class="summary-sig-name">decode_content</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#md5_etag" class="summary-sig-name">md5_etag</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">body</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">set_content_md5</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Generate an etag for the response object using an MD5 hash of the 
+      body (the body parameter, or ``self.body`` if not given)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">environ</span>,
+        <span class="summary-sig-arg">start_response</span>)</span><br />
+      WSGI application interface</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_abs_headerlist"></a><span class="summary-sig-name">_abs_headerlist</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">environ</span>)</span><br />
+      Returns a headerlist, with the Location header possibly made absolute
+      given the request environ.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="webob.response.Response-class.html#conditional_response_app" class="summary-sig-name">conditional_response_app</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">environ</span>,
+        <span class="summary-sig-arg">start_response</span>)</span><br />
+      Like the normal __call__ interface, but checks conditional headers:</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="app_iter_range"></a><span class="summary-sig-name">app_iter_range</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">start</span>,
+        <span class="summary-sig-arg">stop</span>)</span><br />
+      Return a new app_iter built from the response app_iter, that serves 
+      up only the given ``start:stop`` range.</td>
           <td align="right" valign="top">
             
             
@@ -1174,19 +1047,11 @@ object --+
     </table>
   </td>
 </tr>
-<tr class="private">
+<tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="_cache_control_obj"></a><span class="summary-name">_cache_control_obj</span> = <code title="None">None</code><br />
-      hash(x)
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="_safe_methods"></a><span class="summary-name">_safe_methods</span> = <code title="('GET', 'HEAD')"><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">GET</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">HEAD</code><code class="variable-quote">'</code><code class="variable-group">)</code></code>
+        <a name="default_content_type"></a><span class="summary-name">default_content_type</span> = <code title="'text/html'"><code class="variable-quote">'</code><code class="variable-string">text/html</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
@@ -1200,6 +1065,13 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="unicode_errors"></a><span class="summary-name">unicode_errors</span> = <code title="'strict'"><code class="variable-quote">'</code><code class="variable-string">strict</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="default_conditional_response"></a><span class="summary-name">default_conditional_response</span> = <code title="False">False</code>
     </td>
   </tr>
@@ -1207,21 +1079,31 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="default_content_type"></a><span class="summary-name">default_content_type</span> = <code title="'text/html'"><code class="variable-quote">'</code><code class="variable-string">text/html</code><code class="variable-quote">'</code></code>
+        <a name="request"></a><span class="summary-name">request</span> = <code title="None">None</code><br />
+      hash(x)
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="status_code"></a><span class="summary-name">status_code</span> = <code title="&lt;Deprecated attribute status_code&gt;">&lt;Deprecated attribute status_code&gt;</code>
+        <a name="environ"></a><span class="summary-name">environ</span> = <code title="None">None</code><br />
+      hash(x)
     </td>
   </tr>
-<tr>
+<tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="unicode_errors"></a><span class="summary-name">unicode_errors</span> = <code title="'strict'"><code class="variable-quote">'</code><code class="variable-string">strict</code><code class="variable-quote">'</code></code>
+        <a name="_cache_control_obj"></a><span class="summary-name">_cache_control_obj</span> = <code title="None">None</code><br />
+      hash(x)
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_safe_methods"></a><span class="summary-name">_safe_methods</span> = <code title="('GET', 'HEAD')"><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">GET</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">HEAD</code><code class="variable-quote">'</code><code class="variable-group">)</code></code>
     </td>
   </tr>
 </table>
@@ -1246,18 +1128,81 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#accept_ranges" class="summary-name">accept_ranges</a><br />
-      Gets and sets the ``Accept-Ranges`` header (`HTTP spec section 14.5 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5&gt;`_).
+        <a href="webob.response.Response-class.html#status" class="summary-name">status</a><br />
+      The status string
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#age" class="summary-name">age</a><br />
-      Gets and sets the ``Age`` header (`HTTP spec section 14.6 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6&gt;`_).
+        <a href="webob.response.Response-class.html#status_int" class="summary-name">status_int</a><br />
+      The status as an integer
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#headerlist" class="summary-name">headerlist</a><br />
+      The list of response headers
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#headers" class="summary-name">headers</a><br />
+      The headers in a dictionary-like object
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#body" class="summary-name">body</a><br />
+      The body of the response, as a ``str``.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#text" class="summary-name">text</a><br />
+      Get/set the text value of the body (using the charset of the 
+      Content-Type)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#ubody" class="summary-name">ubody</a><br />
+      Deprecated alias for .text
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#unicode_body" class="summary-name">unicode_body</a><br />
+      Deprecated alias for .text
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#body_file" class="summary-name">body_file</a><br />
+      A file-like object that can be used to write to the body.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#app_iter" class="summary-name">app_iter</a><br />
+      Returns the app_iter of the response.
     </td>
   </tr>
 <tr>
@@ -1273,58 +1218,19 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#app_iter" class="summary-name">app_iter</a><br />
-      Returns the app_iter of the response.
+        <a href="webob.response.Response-class.html#vary" class="summary-name">vary</a><br />
+      Gets and sets the ``Vary`` header (`HTTP spec section 14.44 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44&gt;`_).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#body" class="summary-name">body</a><br />
-      The body of the response, as a ``str``.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#body_file" class="summary-name">body_file</a><br />
-      A file-like object that can be used to write to the body.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#cache_control" class="summary-name">cache_control</a><br />
-      Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#cache_expires" class="summary-name">cache_expires</a>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#charset" class="summary-name">charset</a><br />
-      Get/set the charset (in the Content-Type)
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#content_disposition" class="summary-name">content_disposition</a><br />
-      Gets and sets the ``Content-Disposition`` header (`HTTP spec section 
-      19.5.1 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.5.1&gt;`_).
+        <a href="webob.response.Response-class.html#content_length" class="summary-name">content_length</a><br />
+      Gets and sets the ``Content-Length`` header (`HTTP spec section 14.17
+      
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1351,16 +1257,6 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#content_length" class="summary-name">content_length</a><br />
-      Gets and sets the ``Content-Length`` header (`HTTP spec section 14.17
-      
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17&gt;`_).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="webob.response.Response-class.html#content_location" class="summary-name">content_location</a><br />
       Gets and sets the ``Content-Location`` header (`HTTP spec section 
       14.14 
@@ -1380,26 +1276,28 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="webob.response.Response-class.html#content_disposition" class="summary-name">content_disposition</a><br />
+      Gets and sets the ``Content-Disposition`` header (`HTTP spec section 
+      19.5.1 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.5.1&gt;`_).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#accept_ranges" class="summary-name">accept_ranges</a><br />
+      Gets and sets the ``Accept-Ranges`` header (`HTTP spec section 14.5 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5&gt;`_).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="webob.response.Response-class.html#content_range" class="summary-name">content_range</a><br />
       Gets and sets the ``Content-Range`` header (`HTTP spec section 14.16 
       &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.16&gt;`_).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#content_type" class="summary-name">content_type</a><br />
-      Get/set the Content-Type header (or None), *without* the charset or 
-      any parameters.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#content_type_params" class="summary-name">content_type_params</a><br />
-      A dictionary of all the parameters in the content type.
     </td>
   </tr>
 <tr>
@@ -1415,8 +1313,27 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#environ" class="summary-name">environ</a><br />
-      Get/set the request environ associated with this response, if any.
+        <a href="webob.response.Response-class.html#expires" class="summary-name">expires</a><br />
+      Gets and sets the ``Expires`` header (`HTTP spec section 14.21 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21&gt;`_).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#last_modified" class="summary-name">last_modified</a><br />
+      Gets and sets the ``Last-Modified`` header (`HTTP spec section 14.29 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29&gt;`_).
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#_etag_raw" class="summary-name" onclick="show_private();">_etag_raw</a><br />
+      Gets and sets the ``ETag`` header (`HTTP spec section 14.19 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1432,34 +1349,7 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#expires" class="summary-name">expires</a><br />
-      Gets and sets the ``Expires`` header (`HTTP spec section 14.21 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21&gt;`_).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#headerlist" class="summary-name">headerlist</a><br />
-      The list of response headers
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#headers" class="summary-name">headers</a><br />
-      The headers in a dictionary-like object
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#last_modified" class="summary-name">last_modified</a><br />
-      Gets and sets the ``Last-Modified`` header (`HTTP spec section 14.29 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29&gt;`_).
+        <a href="webob.response.Response-class.html#etag_strong" class="summary-name">etag_strong</a>
     </td>
   </tr>
 <tr>
@@ -1484,8 +1374,9 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#request" class="summary-name">request</a><br />
-      Return the request associated with this response if any.
+        <a href="webob.response.Response-class.html#age" class="summary-name">age</a><br />
+      Gets and sets the ``Age`` header (`HTTP spec section 14.6 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6&gt;`_).
     </td>
   </tr>
 <tr>
@@ -1510,60 +1401,51 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="webob.response.Response-class.html#status" class="summary-name">status</a><br />
-      The status string
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#status_int" class="summary-name">status_int</a><br />
-      The status as an integer
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#text" class="summary-name">text</a><br />
-      Get/set the unicode value of the body (using the charset of the 
-      Content-Type)
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#ubody" class="summary-name">ubody</a><br />
-      Deprecated alias for .text
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#unicode_body" class="summary-name">unicode_body</a><br />
-      Deprecated alias for .text
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="webob.response.Response-class.html#vary" class="summary-name">vary</a><br />
-      Gets and sets the ``Vary`` header (`HTTP spec section 14.44 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44&gt;`_).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="webob.response.Response-class.html#www_authenticate" class="summary-name">www_authenticate</a><br />
       Gets and sets the ``WWW-Authenticate`` header (`HTTP spec section 
       14.47 
       &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47&gt;`_).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#charset" class="summary-name">charset</a><br />
+      Get/set the charset (in the Content-Type)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#content_type" class="summary-name">content_type</a><br />
+      Get/set the Content-Type header (or None), *without* the charset or 
+      any parameters.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#content_type_params" class="summary-name">content_type_params</a><br />
+      A dictionary of all the parameters in the content type.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#cache_control" class="summary-name">cache_control</a><br />
+      Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="webob.response.Response-class.html#cache_expires" class="summary-name">cache_expires</a>
     </td>
   </tr>
   <tr>
@@ -1604,7 +1486,6 @@ object --+
         <span class="sig-arg">status</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">headerlist</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">app_iter</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">request</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">content_type</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">conditional_response</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">**kw</span>)</span>
@@ -1621,6 +1502,33 @@ object --+
         object.__init__
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="from_file"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">from_file</span>(<span class="sig-arg">cls</span>,
+        <span class="sig-arg">fp</span>)</span>
+    <br /><em class="fname">Class Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Reads a response from a file-like object (it must implement 
+  ``.read(size)`` and ``.readline()``).</p>
+  <p>It will read up to the end of the response, not the end of the 
+  file.</p>
+  <p>This reads the response as represented by ``str(resp)``; it may not 
+  read every valid HTTP response properly.  Responses must have a 
+  ``Content-Length``</p>
+  <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
@@ -1673,27 +1581,6 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="_app_iter__get"></a>
-<div class="private">
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_app_iter__get</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Returns the app_iter of the response.</p>
-  <p>If body was set, this will create an app_iter from that body (a 
-  single-item list)</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
 <a name="_body__get"></a>
 <div class="private">
 <table class="details" border="1" cellpadding="3"
@@ -1734,25 +1621,23 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="_cache_expires"></a>
+<a name="_app_iter__get"></a>
 <div class="private">
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_cache_expires</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">seconds</span>=<span class="sig-default">0</span>,
-        <span class="sig-arg">**kw</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_app_iter__get</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Set expiration on this request.  This sets the response to expire in 
-  the given seconds, and any other attributes are used for cache_control 
-  (e.g., private=True, etc).</p>
+  <p>Returns the app_iter of the response.</p>
+  <p>If body was set, this will create an app_iter from that body (a 
+  single-item list)</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1801,31 +1686,6 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="conditional_response_app"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">conditional_response_app</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">environ</span>,
-        <span class="sig-arg">start_response</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Like the normal __call__ interface, but checks conditional 
-  headers:</p>
-  <p>* If-Modified-Since   (304 Not Modified; only on GET, HEAD) * 
-  If-None-Match       (304 Not Modified; only on GET, HEAD) * Range
-  (406 Partial Content; only on GET, HEAD)</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
 <a name="delete_cookie"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1851,29 +1711,48 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="from_file"></a>
+<a name="merge_cookies"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">from_file</span>(<span class="sig-arg">cls</span>,
-        <span class="sig-arg">fp</span>)</span>
-    <br /><em class="fname">Class Method</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">merge_cookies</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">resp</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Reads a response from a file-like object (it must implement 
-  ``.read(size)`` and ``.readline()``).</p>
-  <p>It will read up to the end of the response, not the end of the 
-  file.</p>
-  <p>This reads the response as represented by ``str(resp)``; it may not 
-  read every valid HTTP response properly.  Responses must have a 
-  ``Content-Length``</p>
+  <p>Merge the cookies that were set on this response with the given `resp`
+  object (which can be any WSGI application).</p>
+  <p>If the `resp` is a :class:`webob.Response` object, then the other 
+  object will be modified in-place.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_cache_expires"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_cache_expires</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">seconds</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">**kw</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Set expiration on this request.  This sets the response to expire in 
+  the given seconds, and any other attributes are used for cache_control 
+  (e.g., private=True, etc).</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1902,25 +1781,27 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="merge_cookies"></a>
+<a name="conditional_response_app"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">merge_cookies</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">resp</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">conditional_response_app</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">environ</span>,
+        <span class="sig-arg">start_response</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Merge the cookies that were set on this response with the given `resp`
-  object (which can be any WSGI application).</p>
-  <p>If the `resp` is a :class:`webob.Response` object, then the other 
-  object will be modified in-place.</p>
+  <p>Like the normal __call__ interface, but checks conditional 
+  headers:</p>
+  <p>* If-Modified-Since   (304 Not Modified; only on GET, HEAD) * 
+  If-None-Match       (304 Not Modified; only on GET, HEAD) * Range
+  (406 Partial Content; only on GET, HEAD)</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1944,94 +1825,81 @@ object --+
   </td>
 </tr>
 </table>
-<a name="accept_ranges"></a>
+<a name="status"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">accept_ranges</h3>
-  <p>Gets and sets the ``Accept-Ranges`` header (`HTTP spec section 14.5 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5&gt;`_).</p>
+  <h3 class="epydoc">status</h3>
+  <p>The status string</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    <dd class="value"><span class="summary-sig">_status__get(<span class="summary-sig-arg">self</span>)</span>
+        - The status string
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+    <dd class="value"><span class="summary-sig">_status__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="status_int"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">status_int</h3>
+  <p>The status as an integer</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_status_int__get(<span class="summary-sig-arg">self</span>)</span>
+        - The status as an integer
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_status_int__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">code</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="headerlist"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">headerlist</h3>
+  <p>The list of response headers</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_headerlist__get(<span class="summary-sig-arg">self</span>)</span>
+        - The list of response headers
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_headerlist__set(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span>
     </dd>
     <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    <dd class="value"><span class="summary-sig">_headerlist__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
 </div>
-<a name="age"></a>
+<a name="headers"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">age</h3>
-  <p>Gets and sets the ``Age`` header (`HTTP spec section 14.6 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6&gt;`_).
-  Converts it using int.</p>
+  <h3 class="epydoc">headers</h3>
+  <p>The headers in a dictionary-like object</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    <dd class="value"><span class="summary-sig">_headers__get(<span class="summary-sig-arg">self</span>)</span>
+        - The headers in a dictionary-like object
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="allow"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">allow</h3>
-  <p>Gets and sets the ``Allow`` header (`HTTP spec section 14.7 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.7&gt;`_).
-  Converts it using list.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="app_iter"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">app_iter</h3>
-  <p>Returns the app_iter of the response.</p>
-  <p>If body was set, this will create an app_iter from that body (a 
-  single-item list)</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_app_iter__get(<span class="summary-sig-arg">self</span>)</span>
-        - Returns the app_iter of the response.
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_app_iter__set(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">_headers__set(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_app_iter__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
@@ -2060,6 +1928,76 @@ object --+
   </dl>
 </td></tr></table>
 </div>
+<a name="text"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">text</h3>
+  <p>Get/set the text value of the body (using the charset of the 
+  Content-Type)</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the text value of the body (using the charset of the 
+      Content-Type)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ubody"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">ubody</h3>
+  <p>Deprecated alias for .text</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the text value of the body (using the charset of the 
+      Content-Type)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="unicode_body"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">unicode_body</h3>
+  <p>Deprecated alias for .text</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the text value of the body (using the charset of the 
+      Content-Type)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="body_file"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -2083,88 +2021,92 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="cache_control"></a>
+<a name="app_iter"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">cache_control</h3>
-  <p>Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)</p>
+  <h3 class="epydoc">app_iter</h3>
+  <p>Returns the app_iter of the response.</p>
+  <p>If body was set, this will create an app_iter from that body (a 
+  single-item list)</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_cache_control__get(<span class="summary-sig-arg">self</span>)</span>
-        - Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
-      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)
+    <dd class="value"><span class="summary-sig">_app_iter__get(<span class="summary-sig-arg">self</span>)</span>
+        - Returns the app_iter of the response.
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_cache_control__set(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">_app_iter__set(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span>
     </dd>
     <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_cache_control__del(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig">_app_iter__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
 </div>
-<a name="cache_expires"></a>
+<a name="allow"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">cache_expires</h3>
-  
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_cache_expires(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">seconds</span>=<span class="summary-sig-default">0</span>,
-        <span class="summary-sig-arg">**kw</span>)</span>
-        - Set expiration on this request.
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="charset"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">charset</h3>
-  <p>Get/set the charset (in the Content-Type)</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_charset__get(<span class="summary-sig-arg">self</span>)</span>
-        - Get/set the charset (in the Content-Type)
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_charset__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">charset</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_charset__del(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="content_disposition"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">content_disposition</h3>
-  <p>Gets and sets the ``Content-Disposition`` header (`HTTP spec section 
-  19.5.1 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.5.1&gt;`_).</p>
+  <h3 class="epydoc">allow</h3>
+  <p>Gets and sets the ``Allow`` header (`HTTP spec section 14.7 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.7&gt;`_).
+  Converts it using list.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">value</span>)</span>
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="vary"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">vary</h3>
+  <p>Gets and sets the ``Vary`` header (`HTTP spec section 14.44 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44&gt;`_).
+  Converts it using list.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="content_length"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">content_length</h3>
+  <p>Gets and sets the ``Content-Length`` header (`HTTP spec section 14.17 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17&gt;`_).
+  Converts it using int.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
     </dd>
     <dt>Delete Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
@@ -2205,29 +2147,6 @@ object --+
   14.12 
   &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.12&gt;`_).
   Converts it using list.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="content_length"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">content_length</h3>
-  <p>Gets and sets the ``Content-Length`` header (`HTTP spec section 14.17 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17&gt;`_).
-  Converts it using int.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
@@ -2287,6 +2206,51 @@ object --+
   </dl>
 </td></tr></table>
 </div>
+<a name="content_disposition"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">content_disposition</h3>
+  <p>Gets and sets the ``Content-Disposition`` header (`HTTP spec section 
+  19.5.1 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.5.1&gt;`_).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="accept_ranges"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">accept_ranges</h3>
+  <p>Gets and sets the ``Accept-Ranges`` header (`HTTP spec section 14.5 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5&gt;`_).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="content_range"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -2306,6 +2270,292 @@ object --+
     </dd>
     <dt>Delete Method:</dt>
     <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="date"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">date</h3>
+  <p>Gets and sets the ``Date`` header (`HTTP spec section 14.18 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18&gt;`_).
+  Converts it using HTTP date.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="expires"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">expires</h3>
+  <p>Gets and sets the ``Expires`` header (`HTTP spec section 14.21 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21&gt;`_).
+  Converts it using HTTP date.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="last_modified"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">last_modified</h3>
+  <p>Gets and sets the ``Last-Modified`` header (`HTTP spec section 14.29 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29&gt;`_).
+  Converts it using HTTP date.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_etag_raw"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_etag_raw</h3>
+  <p>Gets and sets the ``ETag`` header (`HTTP spec section 14.19 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19&gt;`_).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="etag"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">etag</h3>
+  <p>Gets and sets the ``ETag`` header (`HTTP spec section 14.19 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19&gt;`_).
+  Converts it using Entity tag.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="etag_strong"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">etag_strong</h3>
+  
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.etag_strong(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="location"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">location</h3>
+  <p>Gets and sets the ``Location`` header (`HTTP spec section 14.30 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30&gt;`_).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="pragma"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">pragma</h3>
+  <p>Gets and sets the ``Pragma`` header (`HTTP spec section 14.32 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32&gt;`_).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="age"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">age</h3>
+  <p>Gets and sets the ``Age`` header (`HTTP spec section 14.6 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6&gt;`_).
+  Converts it using int.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="retry_after"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">retry_after</h3>
+  <p>Gets and sets the ``Retry-After`` header (`HTTP spec section 14.37 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.37&gt;`_).
+  Converts it using HTTP date or delta seconds.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="server"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">server</h3>
+  <p>Gets and sets the ``Server`` header (`HTTP spec section 14.38 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.38&gt;`_).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="www_authenticate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">www_authenticate</h3>
+  <p>Gets and sets the ``WWW-Authenticate`` header (`HTTP spec section 
+  14.47 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47&gt;`_).
+  Converts it using ``parse_auth`` and ``serialize_auth``.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
+        <span class="summary-sig-arg">val</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="charset"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">charset</h3>
+  <p>Get/set the charset (in the Content-Type)</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">_charset__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set the charset (in the Content-Type)
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">_charset__set(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">charset</span>)</span>
+    </dd>
+    <dt>Delete Method:</dt>
+    <dd class="value"><span class="summary-sig">_charset__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
@@ -2361,423 +2611,46 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="date"></a>
+<a name="cache_control"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">date</h3>
-  <p>Gets and sets the ``Date`` header (`HTTP spec section 14.18 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18&gt;`_).
-  Converts it using HTTP date.</p>
+  <h3 class="epydoc">cache_control</h3>
+  <p>Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
+  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    <dd class="value"><span class="summary-sig">_cache_control__get(<span class="summary-sig-arg">self</span>)</span>
+        - Get/set/modify the Cache-Control header (`HTTP spec section 14.9 
+      &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9&gt;`_)
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="environ"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">environ</h3>
-  <p>Get/set the request environ associated with this response, if any.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_environ__get(<span class="summary-sig-arg">self</span>)</span>
-        - Get/set the request environ associated with this response, if any.
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_environ__set(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">_cache_control__set(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span>
     </dd>
     <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_environ__del(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig">_cache_control__del(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
 </div>
-<a name="etag"></a>
+<a name="cache_expires"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">etag</h3>
-  <p>Gets and sets the ``ETag`` header (`HTTP spec section 14.19 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19&gt;`_).
-  Converts it using Entity tag.</p>
+  <h3 class="epydoc">cache_expires</h3>
+  
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="expires"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">expires</h3>
-  <p>Gets and sets the ``Expires`` header (`HTTP spec section 14.21 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21&gt;`_).
-  Converts it using HTTP date.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="headerlist"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">headerlist</h3>
-  <p>The list of response headers</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_headerlist__get(<span class="summary-sig-arg">self</span>)</span>
-        - The list of response headers
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_headerlist__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_headerlist__del(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="headers"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">headers</h3>
-  <p>The headers in a dictionary-like object</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_headers__get(<span class="summary-sig-arg">self</span>)</span>
-        - The headers in a dictionary-like object
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_headers__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="last_modified"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">last_modified</h3>
-  <p>Gets and sets the ``Last-Modified`` header (`HTTP spec section 14.29 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29&gt;`_).
-  Converts it using HTTP date.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="location"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">location</h3>
-  <p>Gets and sets the ``Location`` header (`HTTP spec section 14.30 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30&gt;`_).</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="pragma"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">pragma</h3>
-  <p>Gets and sets the ``Pragma`` header (`HTTP spec section 14.32 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32&gt;`_).</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="request"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">request</h3>
-  <p>Return the request associated with this response if any.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_request__get(<span class="summary-sig-arg">self</span>)</span>
-        - Return the request associated with this response if any.
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_request__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_request__del(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="retry_after"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">retry_after</h3>
-  <p>Gets and sets the ``Retry-After`` header (`HTTP spec section 14.37 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.37&gt;`_).
-  Converts it using HTTP date or delta seconds.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="server"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">server</h3>
-  <p>Gets and sets the ``Server`` header (`HTTP spec section 14.38 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.38&gt;`_).</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="status"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">status</h3>
-  <p>The status string</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_status__get(<span class="summary-sig-arg">self</span>)</span>
-        - The status string
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_status__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="status_int"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">status_int</h3>
-  <p>The status as an integer</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_status_int__get(<span class="summary-sig-arg">self</span>)</span>
-        - The status as an integer
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_status_int__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">code</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="text"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">text</h3>
-  <p>Get/set the unicode value of the body (using the charset of the 
-  Content-Type)</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
-        - Get/set the unicode value of the body (using the charset of the 
-      Content-Type)
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="ubody"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">ubody</h3>
-  <p>Deprecated alias for .text</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
-        - Get/set the unicode value of the body (using the charset of the 
-      Content-Type)
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="unicode_body"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">unicode_body</h3>
-  <p>Deprecated alias for .text</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__get(<span class="summary-sig-arg">self</span>)</span>
-        - Get/set the unicode value of the body (using the charset of the 
-      Content-Type)
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__set(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">value</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig">_text__del(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="vary"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">vary</h3>
-  <p>Gets and sets the ``Vary`` header (`HTTP spec section 14.44 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44&gt;`_).
-  Converts it using list.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="www_authenticate"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">www_authenticate</h3>
-  <p>Gets and sets the ``WWW-Authenticate`` header (`HTTP spec section 
-  14.47 
-  &lt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47&gt;`_).
-  Converts it using ``parse_auth`` and ``serialize_auth``.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fget(<span class="summary-sig-arg">r</span>)</span>
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fset(<span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">val</span>)</span>
-    </dd>
-    <dt>Delete Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fdel(<span class="summary-sig-arg">r</span>)</span>
+    <dd class="value"><span class="summary-sig">_cache_expires(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">seconds</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">**kw</span>)</span>
+        - Set expiration on this request.
     </dd>
   </dl>
 </td></tr></table>
@@ -2809,7 +2682,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Sep 30 21:17:30 2011
+    Generated by Epydoc 3.0.1 on Wed Jan 25 16:11:15 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

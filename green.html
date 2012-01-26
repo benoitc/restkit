@@ -3,23 +3,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Usage with Eventlet and Gevent &mdash; restkit v3.3.2 documentation</title>
+    <title>Usage with Eventlet and Gevent &mdash; restkit 4.0.0 documentation</title>
+    
     <link rel="stylesheet" href="static/basic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.3.2',
+        VERSION:     '4.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <link rel="top" title="restkit v3.3.2 documentation" href="index.html" />
+    <link rel="top" title="restkit 4.0.0 documentation" href="index.html" />
     <link rel="next" title="Command Line" href="client.html" />
     <link rel="prev" title="Stream you content" href="streaming.html" />
 
@@ -99,13 +102,11 @@ connection manager to manage iddle connections for them.</p>
 <span class="kn">from</span> <span class="nn">gevent</span> <span class="kn">import</span> <span class="n">monkey</span><span class="p">;</span> <span class="n">monkey</span><span class="o">.</span><span class="n">patch_all</span><span class="p">()</span>
 
 <span class="kn">import</span> <span class="nn">gevent</span>
-
 <span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">restkit.globals</span> <span class="kn">import</span> <span class="n">set_manager</span><span class="p">,</span> <span class="n">get_manager</span>
-<span class="kn">from</span> <span class="nn">restkit.manager.mgevent</span> <span class="kn">import</span> <span class="n">GeventManager</span>
+<span class="kn">from</span> <span class="nn">socketpool</span> <span class="kn">import</span> <span class="n">ConnectionPool</span>
 
-<span class="c"># set the gevent connection manager</span>
-<span class="n">set_manager</span><span class="p">(</span><span class="n">GeventManager</span><span class="p">())</span>
+<span class="c"># set a pool with a gevent packend</span>
+<span class="n">pool</span> <span class="o">=</span> <span class="n">ConnectionPool</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="n">Connection</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s">&quot;gevent&quot;</span><span class="p">)</span>
 
 <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s">&quot;http://yahoo.fr&quot;</span><span class="p">,</span>
@@ -119,7 +120,7 @@ connection manager to manage iddle connections for them.</p>
     <span class="n">allurls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">follow_redirect</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">follow_redirect</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">Pool</span><span class="p">)</span>
     <span class="k">print</span> <span class="s">&quot;RESULT: </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">body_string</span><span class="p">()))</span>
 
 <span class="k">def</span> <span class="nf">extract</span><span class="p">():</span>
@@ -129,6 +130,12 @@ connection manager to manage iddle connections for them.</p>
 
 <span class="n">t</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">extract</span><span class="p">)</span>
 <span class="k">print</span> <span class="s">&quot;</span><span class="si">%.2f</span><span class="s"> s&quot;</span> <span class="o">%</span> <span class="n">t</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also set a global pool and use it transparently  in your
+application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit.session</span> <span class="kn">import</span> <span class="n">set_session</span>
+<span class="n">set_session</span><span class="p">(</span><span class="s">&quot;gevent&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -142,13 +149,12 @@ connection manager to manage iddle connections for them.</p>
 <span class="n">eventlet</span><span class="o">.</span><span class="n">monkey_patch</span><span class="p">()</span>
 
 <span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">restkit.globals</span> <span class="kn">import</span> <span class="n">set_manager</span><span class="p">,</span> <span class="n">get_manager</span>
-<span class="kn">from</span> <span class="nn">restkit.manager.meventlet</span> <span class="kn">import</span> <span class="n">EventletManager</span>
+<span class="kn">from</span> <span class="nn">socketpool</span> <span class="kn">import</span> <span class="n">ConnectionPool</span>
 
-<span class="c"># set the connection manager</span>
-<span class="n">set_manager</span><span class="p">(</span><span class="n">EventletManager</span><span class="p">())</span>
+<span class="c"># set a pool with a gevent packend</span>
+<span class="n">pool</span> <span class="o">=</span> <span class="n">ConnectionPool</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="n">Connection</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s">&quot;eventlet&quot;</span><span class="p">)</span>
 
-<span class="n">pool</span> <span class="o">=</span> <span class="n">eventlet</span><span class="o">.</span><span class="n">GreenPool</span><span class="p">()</span>
+<span class="n">epool</span> <span class="o">=</span> <span class="n">eventlet</span><span class="o">.</span><span class="n">GreenPool</span><span class="p">()</span>
 
 <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s">&quot;http://yahoo.fr&quot;</span><span class="p">,</span>
@@ -162,13 +168,13 @@ connection manager to manage iddle connections for them.</p>
     <span class="n">allurls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">follow_redirect</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">follow_redirect</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
     <span class="k">print</span> <span class="s">&quot;RESULT: </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">body_string</span><span class="p">()))</span>
 
 <span class="k">def</span> <span class="nf">extract</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">allurls</span><span class="p">:</span>
-        <span class="n">pool</span><span class="o">.</span><span class="n">spawn_n</span><span class="p">(</span><span class="n">fetch</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
-    <span class="n">pool</span><span class="o">.</span><span class="n">waitall</span><span class="p">()</span>
+        <span class="n">epool</span><span class="o">.</span><span class="n">spawn_n</span><span class="p">(</span><span class="n">fetch</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="n">epool</span><span class="o">.</span><span class="n">waitall</span><span class="p">()</span>
 
 <span class="n">t</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">extract</span><span class="p">)</span>
 <span class="k">print</span> <span class="s">&quot;</span><span class="si">%.2f</span><span class="s"> s&quot;</span> <span class="o">%</span> <span class="n">t</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -206,7 +212,7 @@ connection manager to manage iddle connections for them.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
