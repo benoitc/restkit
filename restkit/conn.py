@@ -29,6 +29,7 @@ class Connection(Connector):
         self.pool = pool
         self.extra_headers = extra_headers
         self.is_ssl = is_ssl
+        self.backend_mod = backend_mod
         self.host = host
         self.port = port
         self._connected = True
@@ -43,11 +44,10 @@ class Connection(Connector):
     def is_connected(self):
         if self._connected:
             try:
-                r, _, _ = select.select([self._s], [], [], 0)
+                r, _, _ = self.backend_mod.Select([self._s], [], [], 0)
                 if not r:
                     return True
             except (ValueError, select.error,):
-
                 return False
             self.close()
         return False
