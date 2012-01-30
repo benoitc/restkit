@@ -434,7 +434,7 @@ class Client(object):
                 decompress=self.decompress)
 
         if log.isEnabledFor(logging.DEBUG):
-            log.debug("Got response: %s" % p.status())
+            log.debug("Got response: %s %s" % (p.version(), p.status()))
             log.debug("headers: [%s]" % p.headers())
 
         location = p.headers().get('location')

@@ -6,9 +6,9 @@ from restkit import *
 
 urls = [
         "http://yahoo.fr",
-        "http://google.com", 
-        "http://friendpaste.com", 
-        "http://benoitc.io", 
+        "http://google.com",
+        "http://friendpaste.com",
+        "http://benoitc.io",
         "http://couchdb.apache.org"]
 
 allurls = []
