@@ -23,7 +23,7 @@ for i in range(10):
     allurls.extend(urls)
 
 def fetch(u):
-    r = request(u, follow_redirect=True)
+    r = request(u, follow_redirect=True, pool=pool)
     print "RESULT: %s: %s (%s)" % (u, r.status, len(r.body_string()))
 
 def extract():

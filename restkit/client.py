@@ -70,7 +70,7 @@ class Client(object):
             decompress=True,
             max_status_line_garbage=None,
             max_header_count=0,
-            session=None,
+            pool=None,
             response_class=None,
             timeout=None,
             use_proxy=False,
@@ -132,9 +132,9 @@ class Client(object):
                 timeout = timeout)
 
 
-        if session is None:
-            session = get_session(backend, **session_options)
-        self._session = session
+        if pool is None:
+            pool = get_session(backend, **session_options)
+        self._pool = pool
         self.backend = backend
 
         # change default response class
@@ -182,8 +182,8 @@ class Client(object):
             conn = self.proxy_connection(request,
                     addr, is_ssl)
         if not conn:
-            conn = self._session.get(host=addr[0], port=addr[1],
-                    pool=self._session, is_ssl=is_ssl,
+            conn = self._pool.get(host=addr[0], port=addr[1],
+                    pool=self._pool, is_ssl=is_ssl,
                     extra_headers=extra_headers, **self.ssl_args)
 
 
@@ -213,8 +213,8 @@ class Client(object):
                         user_agent)
 
 
-                conn = self._session.get(host=addr[0], port=addr[1],
-                    pool=self._session, is_ssl=is_ssl,
+                conn = self._pool.get(host=addr[0], port=addr[1],
+                    pool=self._pool, is_ssl=is_ssl,
                     extra_headers=[], **self.ssl_args)
 
 
@@ -233,8 +233,8 @@ class Client(object):
                 if proxy_auth:
                     headers = [('Proxy-authorization', proxy_auth)]
 
-                conn = self._session.get(host=addr[0], port=addr[1],
-                        pool=self._session, is_ssl=False,
+                conn = self._pool.get(host=addr[0], port=addr[1],
+                        pool=self._pool, is_ssl=False,
                         extra_headers=[], **self.ssl_args)
             return conn
 
