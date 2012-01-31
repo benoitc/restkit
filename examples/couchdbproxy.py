@@ -8,13 +8,13 @@ import urlparse
 from webob import Request
 from restkit.contrib.wsgi_proxy import HostProxy
 
+import restkit
 from restkit.conn import Connection
 from socketpool import ConnectionPool
 
-#set_logging("debug")
+restkit.set_logging("debug")
 
 pool = ConnectionPool(factory=Connection, max_size=10, backend="thread")
-
 proxy = HostProxy("http://127.0.0.1:5984", pool=pool)
 
 

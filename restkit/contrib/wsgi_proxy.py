@@ -78,10 +78,15 @@ class Proxy(object):
                 k = k[5:].replace('_', '-').title()
                 new_headers[k] = v
 
-        for k, v in (('CONTENT_TYPE', None), ('CONTENT_LENGTH', '0')):
-            v = environ.get(k, None)
-            if v is not None:
-                new_headers[k.replace('_', '-').title()] = v
+
+        ctype = environ.get("CONTENT_TYPE")
+        if ctype and ctype is not None:
+            new_headers['Content-Type'] = ctype
+
+        clen = environ.get('CONTENT_LENGTH')
+        te =  environ.get('transfer-encoding', '').lower()
+        if not clen and te != 'chunked':
+            new_headers['transfer-encoding'] = 'chunked'
 
         if new_headers.get('Content-Length', '0') == '-1':
             raise ValueError(WEBOB_ERROR)
@@ -155,12 +160,10 @@ def get_config(local_config):
 def make_proxy(global_config, **local_config):
     """TransparentProxy entry_point"""
     config = get_config(local_config)
-    print 'Running TransparentProxy with %s' % config
     return TransparentProxy(**config)
 
 def make_host_proxy(global_config, uri=None, **local_config):
     """HostProxy entry_point"""
     uri = uri.rstrip('/')
     config = get_config(local_config)
-    print 'Running HostProxy on %s with %s' % (uri, config)
     return HostProxy(uri, **config)
