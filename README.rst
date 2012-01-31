@@ -88,6 +88,7 @@ instance inheriting `reskit.pool.PoolInterface`. By default a threadsafe pool is
 used in any application:
 
 ::
+
     from restkit import *
     from socketpool import ConnectionPool
      
