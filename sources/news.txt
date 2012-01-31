@@ -3,6 +3,14 @@
 News
 ====
 
+4.1.0 / 2012-01-31
+------------------
+
+- fix connection reusing. When connection is closed or an EPIPE/EAGAIN
+  error happen, we now retry it.
+- fix wgsi_proxy contrib
+- fix examples
+
 4.0.0 / 2012-01-25
 ------------------
 

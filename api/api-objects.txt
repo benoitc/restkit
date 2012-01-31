@@ -579,6 +579,7 @@ restkit.wrappers.Request._parsed_url	restkit.wrappers.Request-class.html#_parsed
 restkit.wrappers.Request.is_chunked	restkit.wrappers.Request-class.html#is_chunked
 restkit.wrappers.Request._get_body	restkit.wrappers.Request-class.html#_get_body
 restkit.wrappers.Request._headers__get	restkit.wrappers.Request-class.html#_headers__get
+restkit.wrappers.Request.maybe_rewind	restkit.wrappers.Request-class.html#maybe_rewind
 restkit.wrappers.Request._path__get	restkit.wrappers.Request-class.html#_path__get
 restkit.wrappers.Request.body	restkit.wrappers.Request-class.html#body
 restkit.wrappers.Request.host	restkit.wrappers.Request-class.html#host
