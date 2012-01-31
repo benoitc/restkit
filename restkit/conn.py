@@ -21,6 +21,7 @@ class Connection(Connector):
     def __init__(self, host, port, pool=None, is_ssl=False,
             extra_headers=[], backend_mod=None, **ssl_args):
         self._s = backend_mod.Socket(socket.AF_INET, socket.SOCK_STREAM)
+
         self._s.connect((host, port))
 
         if is_ssl:
@@ -44,7 +45,7 @@ class Connection(Connector):
     def is_connected(self):
         if self._connected:
             try:
-                r, _, _ = self.backend_mod.Select([self._s], [], [], 0)
+                r, _, _ = self.backend_mod.Select([self._s], [], [], 0.0)
                 if not r:
                     return True
             except (ValueError, select.error,):

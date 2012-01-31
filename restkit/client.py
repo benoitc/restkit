@@ -14,7 +14,7 @@ import types
 import urlparse
 
 try:
-    from http_parser.http import HttpStream
+    from http_parser.http import HttpStream, BadStatusLine
     from http_parser.reader import SocketReader
 except ImportError:
     raise ImportError("""http-parser isn't installed.
@@ -75,7 +75,7 @@ class Client(object):
             timeout=None,
             use_proxy=False,
             max_tries=3,
-            wait_tries=1.0,
+            wait_tries=0.3,
             backend="thread",
             **ssl_args):
         """
@@ -290,98 +290,107 @@ class Client(object):
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Start to perform request: %s %s %s" %
                     (request.host, request.method, request.path))
-        conn = None
+        tries = 0
+        while True:
+            conn = None
+            try:
+                # get or create a connection to the remote host
+                conn = self.get_connection(request)
 
-        try:
-            # get or create a connection to the remote host
-            conn = self.get_connection(request)
+                # send headers
+                msg = self.make_headers_string(request,
+                        conn.extra_headers)
 
-            # send headers
-            msg = self.make_headers_string(request,
-                    conn.extra_headers)
-
-            # send body
-            if request.body is not None:
-                chunked = request.is_chunked()
-                if request.headers.iget('content-length') is None and \
-                        not chunked:
-                    raise RequestError(
-                            "Can't determine content length and " +
-                            "Transfer-Encoding header is not chunked")
-
-
-                # handle 100-Continue status
-                # http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8.2.3
-                hdr_expect = request.headers.iget("expect")
-                if hdr_expect is not None and \
-                        hdr_expect.lower() == "100-continue":
-                    conn.send(msg)
-                    msg = None
-                    p = HttpStream(SocketReader(conn.socket()), kind=1,
-                            decompress=True)
+                # send body
+                if request.body is not None:
+                    chunked = request.is_chunked()
+                    if request.headers.iget('content-length') is None and \
+                            not chunked:
+                        raise RequestError(
+                                "Can't determine content length and " +
+                                "Transfer-Encoding header is not chunked")
 
 
-                    if p.status_code != 100:
-                        self.reset_request()
-                        if log.isEnabledFor(logging.DEBUG):
-                            log.debug("return response class")
-                        return self.response_class(conn, request, p)
-
-                chunked = request.is_chunked()
-                if log.isEnabledFor(logging.DEBUG):
-                    log.debug("send body (chunked: %s)" % chunked)
-
-
-                if isinstance(request.body, types.StringTypes):
-                    if msg is not None:
-                        conn.send(msg + request.body, chunked)
-                    else:
-                        conn.send(request.body, chunked)
-                else:
-                    if msg is not None:
+                    # handle 100-Continue status
+                    # http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8.2.3
+                    hdr_expect = request.headers.iget("expect")
+                    if hdr_expect is not None and \
+                            hdr_expect.lower() == "100-continue":
                         conn.send(msg)
+                        msg = None
+                        p = HttpStream(SocketReader(conn.socket()), kind=1,
+                                decompress=True)
 
-                    if hasattr(request.body, 'read'):
-                        if hasattr(request.body, 'seek'):
-                            request.body.seek(0)
-                        conn.sendfile(request.body, chunked)
+
+                        if p.status_code != 100:
+                            self.reset_request()
+                            if log.isEnabledFor(logging.DEBUG):
+                                log.debug("return response class")
+                            return self.response_class(conn, request, p)
+
+                    chunked = request.is_chunked()
+                    if log.isEnabledFor(logging.DEBUG):
+                        log.debug("send body (chunked: %s)" % chunked)
+
+
+                    if isinstance(request.body, types.StringTypes):
+                        if msg is not None:
+                            conn.send(msg + request.body, chunked)
+                        else:
+                            conn.send(request.body, chunked)
                     else:
-                        conn.sendlines(request.body, chunked)
-                if chunked:
-                    conn.send_chunk("")
-            else:
-                conn.send(msg)
+                        if msg is not None:
+                            conn.send(msg)
 
-            return self.get_response(request, conn)
-        except socket.gaierror, e:
-            if conn is not None:
-                conn.close()
-            raise RequestError(str(e))
-        except socket.timeout, e:
-            if conn is not None:
-                conn.close()
-            raise RequestTimeout(str(e))
-        except socket.error, e:
-            if log.isEnabledFor(logging.DEBUG):
-                log.debug("socket error: %s" % str(e))
-            if conn is not None:
-                conn.close()
-            raise RequestError("socket.error: %s" % str(e))
-        except (StopIteration, NoMoreData):
-            if conn is not None:
-                conn.close()
-            if request.body is not None:
-                if not hasattr(request.body, 'read') and \
-                        not isinstance(request.body, types.StringTypes):
-                    raise RequestError("connection closed and can't"
-                            + "be resent")
-            else:
+                        if hasattr(request.body, 'read'):
+                            if hasattr(request.body, 'seek'):
+                                request.body.seek(0)
+                            conn.sendfile(request.body, chunked)
+                        else:
+                            conn.sendlines(request.body, chunked)
+                    if chunked:
+                        conn.send_chunk("")
+                else:
+                    conn.send(msg)
+
+                return self.get_response(request, conn)
+            except socket.gaierror, e:
+                if conn is not None:
+                    conn.close()
+                raise RequestError(str(e))
+            except socket.timeout, e:
+                if conn is not None:
+                    conn.close()
+                raise RequestTimeout(str(e))
+            except socket.error, e:
+                if log.isEnabledFor(logging.DEBUG):
+                    log.debug("socket error: %s" % str(e))
+                if conn is not None:
+                    conn.close()
+
+                if e[0] not in (errno.EAGAIN, errno.EPIPE, errno.EBADF) or \
+                                tries >= self.max_tries:
+                    raise RequestError("socket.error: %s" % str(e))
+
+                # should raised an exception in other cases
+                request.maybe_rewind(msg=str(e))
+
+            except BadStatusLine:
+                if conn is not None:
+                    conn.close()
+
+                # should raised an exception in other cases
+                request.maybe_rewind(msg="bad status line")
+
+                if tries >= self.max_tries:
+                    raise
+            except Exception:
+                # unkown error
+                log.debug("unhandled exception %s" %
+                        traceback.format_exc())
                 raise
-        except Exception:
-            # unkown error
-            log.debug("unhandled exception %s" %
-                    traceback.format_exc())
-            raise
+            tries += 1
+            self._pool.backend_mod.sleep(self.wait_tries)
 
     def request(self, url, method='GET', body=None, headers=None):
         """ perform immediatly a new request """

@@ -140,6 +140,13 @@ class Request(object):
         return self._body
     body = property(_get_body, _set_body, doc="request body")
 
+    def maybe_rewind(self, msg=""):
+        if self.body is not None:
+            if not hasattr(self.body, 'seek') and \
+                    not isinstance(self.body, types.StringTypes):
+                raise RequestError("error: '%s', body can't be rewind."
+                        % msg)
+
 
 class BodyWrapper(object):
 
