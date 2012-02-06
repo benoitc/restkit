@@ -87,6 +87,8 @@ class Proxy(object):
         te =  environ.get('transfer-encoding', '').lower()
         if not clen and te != 'chunked':
             new_headers['transfer-encoding'] = 'chunked'
+        elif clen:
+            new_headers['Content-Length'] = clen
 
         if new_headers.get('Content-Length', '0') == '-1':
             raise ValueError(WEBOB_ERROR)
