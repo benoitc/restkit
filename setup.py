@@ -64,7 +64,7 @@ def main():
                     'couchdb_proxy = restkit.contrib.wsgi_proxy:make_couchdb_proxy',
                 ]},
             install_requires = [
-                'http-parser>=0.5.4',
+                'http-parser>=0.7.4',
                 'socketpool']
         )
 
