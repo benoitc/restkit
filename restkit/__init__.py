@@ -1,25 +1,25 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 from restkit.version import version_info, __version__
 
 try:
+    from restkit.conn import Connection
     from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
 RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, \
 ResourceError, ResourceGone
     from restkit.client import Client, MAX_FOLLOW_REDIRECTS
     from restkit.wrappers import Request, Response, ClientResponse
     from restkit.resource import Resource
-    from restkit.manager import Manager 
     from restkit.filters import BasicAuth, OAuthFilter
 except ImportError:
     import traceback
     traceback.print_exc()
 
 import urlparse
-import logging    
+import logging
 
 LOG_LEVELS = {
     "critical": logging.CRITICAL,
@@ -31,7 +31,7 @@ LOG_LEVELS = {
 
 def set_logging(level, handler=None):
     """
-    Set level of logging, and choose where to display/save logs 
+    Set level of logging, and choose where to display/save logs
     (file or standard output).
     """
     if not handler:
@@ -42,18 +42,18 @@ def set_logging(level, handler=None):
     logger.setLevel(loglevel)
     format = r"%(asctime)s [%(process)d] [%(levelname)s] %(message)s"
     datefmt = r"%Y-%m-%d %H:%M:%S"
-    
+
     handler.setFormatter(logging.Formatter(format, datefmt))
     logger.addHandler(handler)
-    
-    
-def request(url, 
-        method='GET', 
-        body=None, 
-        headers=None,  
+
+
+def request(url,
+        method='GET',
+        body=None,
+        headers=None,
         **kwargs):
     """ Quick shortcut method to pass a request
-    
+
     :param url: str, url string
     :param method: str, by default GET. http verbs
     :param body: the body, could be a string, an iterator or a file-like object
@@ -83,11 +83,11 @@ def request(url,
     :parama response_class: the response class to use
     :param timeout: the default timeout of the connection
     (SO_TIMEOUT)
-    
+
     :param max_tries: the number of tries before we give up a
     connection
     :param wait_tries: number of time we wait between each tries.
-    :param ssl_args: ssl named arguments, 
+    :param ssl_args: ssl named arguments,
     See http://docs.python.org/library/ssl.html informations
     """
 
@@ -99,9 +99,9 @@ def request(url,
         url = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
             u.path, u.params, u.query, u.fragment))
         filters.append(BasicAuth(u.username, password))
-  
+
         kwargs['filters'] = filters
-    
+
     http_client = Client(**kwargs)
-    return http_client.request(url, method=method, body=body, 
+    return http_client.request(url, method=method, body=body,
             headers=headers)

@@ -73,7 +73,7 @@ Here is the snippet::
         
       def request(self, *args, **kwargs):
           resp = super(TwitterSearch, self).request(*args, **kwargs)
-          return json.loads(resp.body)
+          return json.loads(resp.body_string())
         
   if __name__ == "__main__":
       s = TwitterSearch()
@@ -89,25 +89,29 @@ used in any application:
 
 ::
 
-  from restkit import Resource, Manager
-  
-  manager = TManager(max_conn=10)
-  res = Resource('http://friendpaste.com', manager=manager)
+    from restkit import *
+    from socketpool import ConnectionPool
+     
+    # set a pool 
+    pool = ConnectionPool(factory=Connection, max_size=10)
+
+    # do the connection
+    res = Resource('http://friendpaste.com', pool=pool)
 
 
 or if you use `Gevent <http://gevent.org>`_:
 
 ::
 
-  from gevent import monkey; monkey.patch_all()
+    from restkit import *
+    from socketpool import ConnectionPool
+     
+    # set a pool 
+    pool = ConnectionPool(factory=Connection, backend="gevent",
+                    max_size=10)
 
-  from restkit import request
-  from restkit.globals import set_manager
-  from restkit.manager.mgevent import GeventManager
-
-  set_manager(GeventManager(timeout=300))
-
-  r = request('http://friendpaste.com')
+    # do the connection
+    res = Resource('http://friendpaste.com', pool=pool)
 
 
 Authentication

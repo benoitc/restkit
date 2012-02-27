@@ -10,9 +10,8 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from restkit.client import Client 
-from restkit.globals import _manager 
-from restkit.sock import MAX_BODY
+from restkit.client import Client
+from restkit.conn import MAX_BODY
 from restkit.util import rewrite_location
 
 ALLOWED_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
@@ -30,10 +29,10 @@ class Proxy(object):
     and send HTTP_HOST header"""
 
     def __init__(self, manager=None, allowed_methods=ALLOWED_METHODS,
-            strip_script_name=True, **kwargs):
+            strip_script_name=True,  **kwargs):
         self.allowed_methods = allowed_methods
         self.strip_script_name = strip_script_name
-        self.client = Client(manager=manager)
+        self.client = Client(**kwargs)
 
     def extract_uri(self, environ):
         port = None
@@ -79,15 +78,22 @@ class Proxy(object):
                 k = k[5:].replace('_', '-').title()
                 new_headers[k] = v
 
-        for k, v in (('CONTENT_TYPE', None), ('CONTENT_LENGTH', '0')):
-            v = environ.get(k, None)
-            if v is not None:
-                new_headers[k.replace('_', '-').title()] = v
+
+        ctype = environ.get("CONTENT_TYPE")
+        if ctype and ctype is not None:
+            new_headers['Content-Type'] = ctype
+
+        clen = environ.get('CONTENT_LENGTH')
+        te =  environ.get('transfer-encoding', '').lower()
+        if not clen and te != 'chunked':
+            new_headers['transfer-encoding'] = 'chunked'
+        elif clen:
+            new_headers['Content-Length'] = clen
 
         if new_headers.get('Content-Length', '0') == '-1':
             raise ValueError(WEBOB_ERROR)
 
-        response = self.client.request(uri, method, body=environ['wsgi.input'], 
+        response = self.client.request(uri, method, body=environ['wsgi.input'],
                 headers=new_headers)
 
         if 'location' in response:
@@ -96,11 +102,11 @@ class Proxy(object):
 
             new_location = rewrite_location(host_uri, response.location,
                     prefix_path=prefix_path)
-       
+
             headers = []
             for k, v in response.headerslist:
                 if k.lower() == 'location':
-                    v = new_location 
+                    v = new_location
                 headers.append((k, v))
         else:
             headers = response.headerslist
@@ -140,7 +146,7 @@ class HostProxy(Proxy):
     def extract_uri(self, environ):
         environ['HTTP_HOST'] = self.net_loc
         return self.uri
-        
+
 def get_config(local_config):
     """parse paste config"""
     config = {}
@@ -156,12 +162,10 @@ def get_config(local_config):
 def make_proxy(global_config, **local_config):
     """TransparentProxy entry_point"""
     config = get_config(local_config)
-    print 'Running TransparentProxy with %s' % config
     return TransparentProxy(**config)
 
 def make_host_proxy(global_config, uri=None, **local_config):
     """HostProxy entry_point"""
     uri = uri.rstrip('/')
     config = get_config(local_config)
-    print 'Running HostProxy on %s with %s' % (uri, config)
     return HostProxy(uri, **config)

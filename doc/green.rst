@@ -16,19 +16,17 @@ Here is a quick crawler example using Gevent::
     from gevent import monkey; monkey.patch_all()
 
     import gevent
-
     from restkit import *
-    from restkit.globals import set_manager, get_manager
-    from restkit.manager.mgevent import GeventManager
+    from socketpool import ConnectionPool
 
-    # set the gevent connection manager
-    set_manager(GeventManager())
+    # set a pool with a gevent packend
+    pool = ConnectionPool(factory=Connection, backend="gevent")
 
     urls = [
             "http://yahoo.fr",
-            "http://google.com", 
-            "http://friendpaste.com", 
-            "http://benoitc.io", 
+            "http://google.com",
+            "http://friendpaste.com",
+            "http://benoitc.io",
             "http://couchdb.apache.org"]
 
     allurls = []
@@ -36,11 +34,11 @@ Here is a quick crawler example using Gevent::
         allurls.extend(urls)
 
     def fetch(u):
-        r = request(u, follow_redirect=True)
+        r = request(u, follow_redirect=True, pool=Pool)
         print "RESULT: %s: %s (%s)" % (u, r.status, len(r.body_string()))
 
     def extract():
-        
+
         jobs = [gevent.spawn(fetch, url) for url in allurls]
         gevent.joinall(jobs)
 
@@ -48,9 +46,15 @@ Here is a quick crawler example using Gevent::
     print "%.2f s" % t.timeit(number=1)
 
 .. NOTE:
-    
-    You have to set the manager in the main thread so it can be used
+
+    You have to set the pool in the main thread so it can be used
     everywhere in your application.
+
+You can also set a global pool and use it transparently  in your
+application::
+
+    from restkit.session import set_session
+    set_session("gevent")
 
 Use it with eventlet:
 ---------------------
@@ -60,23 +64,22 @@ Same exemple as above but using eventlet::
     import timeit
 
     # patch python
-    import eventlet 
+    import eventlet
     eventlet.monkey_patch()
 
     from restkit import *
-    from restkit.globals import set_manager, get_manager
-    from restkit.manager.meventlet import EventletManager
+    from socketpool import ConnectionPool
 
-    # set the connection manager
-    set_manager(EventletManager())
+    # set a pool with a gevent packend
+    pool = ConnectionPool(factory=Connection, backend="eventlet")
 
-    pool = eventlet.GreenPool()
+    epool = eventlet.GreenPool()
 
     urls = [
             "http://yahoo.fr",
-            "http://google.com", 
-            "http://friendpaste.com", 
-            "http://benoitc.io", 
+            "http://google.com",
+            "http://friendpaste.com",
+            "http://benoitc.io",
             "http://couchdb.apache.org"]
 
     allurls = []
@@ -84,13 +87,13 @@ Same exemple as above but using eventlet::
         allurls.extend(urls)
 
     def fetch(u):
-        r = request(u, follow_redirect=True)
+        r = request(u, follow_redirect=True, pool=pool)
         print "RESULT: %s: %s (%s)" % (u, r.status, len(r.body_string()))
 
     def extract():
         for url in allurls:
-            pool.spawn_n(fetch, url)
-        pool.waitall()
+            epool.spawn_n(fetch, url)
+        epool.waitall()
 
     t = timeit.Timer(stmt=extract)
     print "%.2f s" % t.timeit(number=1)

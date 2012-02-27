@@ -3,7 +3,26 @@
 News
 ====
 
-3.3.1 / 2001-09-18
+4.1.0 / 2012-01-31
+------------------
+
+- fix connection reusing. When connection is closed or an EPIPE/EAGAIN
+  error happen, we now retry it.
+- fix wgsi_proxy contrib
+- fix examples
+
+4.0.0 / 2012-01-25
+------------------
+
+- Replace the socket pool by `socketpool
+  <https://github.com/benoitc/socketpool>`_ improve connection handling
+  and better management of gevent & eventlet.
+- Fix NoMoreData issue
+- Fix SSL connections
+- multipart forms: quote is now configurable & flush size cache
+
+
+3.3.1 / 2011-09-18
 ------------------
 
 - Add `hook <https://github.com/benoitc/restkit/commit/eb90afd661e126966e948c6e780199269fd7bdfc>`_ for BoundaryItem subclasses to handle unreadable values
