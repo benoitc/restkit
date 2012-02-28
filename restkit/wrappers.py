@@ -17,6 +17,7 @@ from restkit.errors import AlreadyRead, RequestError
 from restkit.forms import multipart_form_encode, form_encode
 from restkit.tee import ResponseTeeInput
 from restkit.util import to_bytestring
+from restkit.util import parse_cookie
 
 class Request(object):
 
@@ -194,7 +195,6 @@ class BodyWrapper(object):
         return lines
 
 
-from util import parse_cookie
 class Response(object):
 
     charset = "utf8"

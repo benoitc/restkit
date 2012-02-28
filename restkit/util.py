@@ -9,6 +9,7 @@ import time
 import urllib
 import urlparse
 import warnings
+import Cookie
 
 from restkit.errors import InvalidUrl
 
@@ -226,6 +227,27 @@ def replace_headers(new_headers, headers):
     return headers
 
 
+def parse_cookie(cookie, final_url):
+    if cookie == '':
+        return {}
+
+    if not isinstance(cookie, Cookie.BaseCookie):
+        try:
+            c = Cookie.SimpleCookie()
+            c.load(cookie)
+        except Cookie.CookieError:
+            # Invalid cookie
+            return {}
+    else:
+        c = cookie
+    
+    cookiedict = {}
+
+    for key in c.keys():
+        cook = c.get(key)
+        cookiedict[key] = cook.value
+    return cookiedict
+    
 
 class deprecated_property(object):
     """
@@ -265,39 +287,4 @@ class deprecated_property(object):
                 'The attribute %s is deprecated: %s' % (self.attr, self.message),
                 DeprecationWarning,
                 stacklevel=3)
-
-##################################
-import Cookie
-def parse_cookie(cookie, final_url):
-    """\
     
-    """
-    if cookie == '':
-        return {}
-        
-    if not isinstance(cookie, Cookie.BaseCookie):
-        try:
-            c = Cookie.SimpleCookie()
-            c.load(cookie)
-        except Cookie.CookieError:
-            # Invalid cookie
-            return {}
-    else:
-        c = cookie
-    
-    cookiedict = {}
-    
-    for key in c.keys():
-        cook = c.get(key)
-        # check path
-        o = urlparse.urlparse(final_url)
-        if o.path:
-            cook_path = cook['path'].rstrip(',')
-            # requested path is not in cookie path
-            # don't add the cookie to the list
-            if not o.path.startswith(cook_path):
-                continue
-        # check expiration date
-        # TODO
-        cookiedict[key] = cook.value
-    return cookiedict
