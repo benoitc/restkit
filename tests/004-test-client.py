@@ -258,6 +258,7 @@ def test_023(u, c):
     r = c.request(u)
     t.eq(r.cookies.get('fig'), 'newton')
     t.eq(r.status_int, 200)
+    
 
 @t.client_request("/cookies")
 def test_024(u, c):
@@ -265,4 +266,5 @@ def test_024(u, c):
     t.eq(r.cookies.get('fig'), 'newton')
     t.eq(r.cookies.get('sugar'), 'wafer')
     t.eq(r.status_int, 200)
+    
 

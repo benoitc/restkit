@@ -123,15 +123,18 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         
         elif path == "/cookie":
             c = Cookie.SimpleCookie()
-            c["fig"] = u"newton"
+            c["fig"] = "newton"
+            c['fig']['path'] = "/"
             for k in c.keys():
                 extra_headers = [('Set-Cookie', str(c[k].output(header='')))]
             self._respond(200, extra_headers, "ok")
         
         elif path == "/cookies":
             c = Cookie.SimpleCookie()
-            c["fig"] = u"newton"
-            c["sugar"] = u"wafer"
+            c["fig"] = "newton"
+            c['fig']['path'] = "/"
+            c["sugar"] = "wafer"
+            c['sugar']['path'] = "/"
             extra_headers = []
             for k in c.keys():
                 extra_headers.append(('Set-Cookie', str(c[k].output(header=''))))
