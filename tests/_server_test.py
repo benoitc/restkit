@@ -127,7 +127,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             C['fig']['expires'] = 30 * 24 * 60 * 60
             C['fig']['path'] = "/"
             for k in C.keys():
-                extra_headers = [('Set-Cookie', str(C[k].output(header='')).strip())]
+                extra_headers = [('Set-Cookie', str(C[k].output(header='')))]
             self._respond(200, extra_headers, "ok")
         
         elif path == "/cookies":
@@ -139,7 +139,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             C['sugar']['expires'] = 30 * 24 * 60 * 60
             C['sugar']['path'] = "/"
             for k in C.keys():
-                extra_headers = [('Set-Cookie', str(C[k].output(header='')).strip())]
+                extra_headers = [('Set-Cookie', str(C[k].output(header='')))]
             self._respond(200, extra_headers, "ok")
         
         else:
