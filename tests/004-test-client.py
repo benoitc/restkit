@@ -253,5 +253,16 @@ def test_022(u, c):
     t.eq(r.status_int, 200)
     t.eq(r.body_string(), '7\r\nline 1\n\r\n7\r\n line2\n\r\n0\r\n\r\n')
     
+@t.client_request("/cookie")
+def test_023(u, c):
+    r = c.request(u)
+    t.eq(r.cookies.get('fig'), 'newton')
+    t.eq(r.status_int, 200)
 
+@t.client_request("/cookies")
+def test_024(u, c):
+    r = c.request(u)
+    t.eq(r.cookies.get('fig'), 'newton')
+    t.eq(r.cookies.get('sugar'), 'wafer')
+    t.eq(r.status_int, 200)
 

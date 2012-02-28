@@ -194,6 +194,7 @@ class BodyWrapper(object):
         return lines
 
 
+from util import parse_cookie
 class Response(object):
 
     charset = "utf8"
@@ -214,6 +215,11 @@ class Response(object):
         self.location = self.headers.get('location')
         self.final_url = request.url
         self.should_close = not resp.should_keep_alive()
+        
+        # cookies
+        if 'set-cookie' in self.headers:
+            cookie_header = self.headers.get('set-cookie')
+            self.cookies = parse_cookie(cookie_header, self.final_url)
 
 
         self._closed = False
