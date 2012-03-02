@@ -269,6 +269,7 @@ class Response(object):
         if not self.can_read():
             raise AlreadyRead()
 
+        self.should_close = True
         self._already_read = True
 
         return BodyWrapper(self, self.connection)
