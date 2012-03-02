@@ -214,7 +214,7 @@ class Response(object):
         self.location = self.headers.get('location')
         self.final_url = request.url
         self.should_close = not resp.should_keep_alive()
-
+        self.should_release = True
 
         self._closed = False
         self._already_read = False
@@ -222,6 +222,7 @@ class Response(object):
         if request.method == "HEAD":
             """ no body on HEAD, release the connection now """
             self.connection.release()
+            self.should_release = False
             self._body = StringIO("")
         else:
             self._body = resp.body_file()
@@ -253,7 +254,8 @@ class Response(object):
         self._already_read = True
 
         # release connection
-        self.connection.release(self.should_close)
+        if self.should_release:
+            self.connection.release(self.should_close)
 
         if charset is not None:
             try:
