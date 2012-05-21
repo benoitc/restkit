@@ -50,7 +50,7 @@ def main():
             long_description = long_description,
             author = 'Benoit Chesneau',
             author_email = 'benoitc@e-engura.org',
-            license = 'BSD',
+            license = 'MIT',
             url = 'http://benoitc.github.com/restkit',
             classifiers = CLASSIFIERS,
             packages = find_packages(),
