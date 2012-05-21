@@ -24,6 +24,7 @@ import tempfile
 import threading
 import unittest
 import urlparse
+import Cookie
 
 try:
     from urlparse import parse_qsl, parse_qs
@@ -119,6 +120,26 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         elif path == "/pool":
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "ok")
+        
+        elif path == "/cookie":
+            c = Cookie.SimpleCookie()
+            c["fig"] = "newton"
+            c['fig']['path'] = "/"
+            for k in c.keys():
+                extra_headers = [('Set-Cookie', str(c[k].output(header='')))]
+            self._respond(200, extra_headers, "ok")
+        
+        elif path == "/cookies":
+            c = Cookie.SimpleCookie()
+            c["fig"] = "newton"
+            c['fig']['path'] = "/"
+            c["sugar"] = "wafer"
+            c['sugar']['path'] = "/"
+            extra_headers = []
+            for k in c.keys():
+                extra_headers.append(('Set-Cookie', str(c[k].output(header=''))))
+            self._respond(200, extra_headers, "ok")
+        
         else:
             self._respond(404, 
                 [('Content-type', 'text/plain')], "Not Found" )

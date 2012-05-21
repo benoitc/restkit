@@ -17,6 +17,7 @@ from restkit.errors import AlreadyRead, RequestError
 from restkit.forms import multipart_form_encode, form_encode
 from restkit.tee import ResponseTeeInput
 from restkit.util import to_bytestring
+from restkit.util import parse_cookie
 
 class Request(object):
 
@@ -214,6 +215,11 @@ class Response(object):
         self.location = self.headers.get('location')
         self.final_url = request.url
         self.should_close = not resp.should_keep_alive()
+        
+        # cookies
+        if 'set-cookie' in self.headers:
+            cookie_header = self.headers.get('set-cookie')
+            self.cookies = parse_cookie(cookie_header, self.final_url)
 
 
         self._closed = False
