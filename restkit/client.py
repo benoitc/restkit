@@ -27,7 +27,7 @@ from restkit.conn import Connection
 from restkit.errors import RequestError, RequestTimeout, RedirectLimit, \
 NoMoreData, ProxyError
 from restkit.session import get_session
-from restkit.util import parse_netloc, rewrite_location
+from restkit.util import parse_netloc, rewrite_location, to_bytestring
 from restkit.wrappers import Request, Response
 
 MAX_CLIENT_TIMEOUT=300
@@ -341,9 +341,10 @@ class Client(object):
 
                     if isinstance(request.body, types.StringTypes):
                         if msg is not None:
-                            conn.send(msg + request.body, chunked)
+                            conn.send(msg + to_bytestring(request.body),
+                                    chunked)
                         else:
-                            conn.send(request.body, chunked)
+                            conn.send(to_bytestring(request.body), chunked)
                     else:
                         if msg is not None:
                             conn.send(msg)
