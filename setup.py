@@ -65,7 +65,7 @@ def main():
                 ]},
             install_requires = [
                 'http-parser>=0.7.5',
-                'socketpool',
+                'socketpool>=0.4.1',
                 'nose',
                 'webob'],
             test_suite = 'nose.collector'
