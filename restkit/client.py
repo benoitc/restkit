@@ -76,6 +76,8 @@ class Client(object):
             use_proxy=False,
             max_tries=3,
             wait_tries=0.3,
+            max_conn=150,
+            pool_size=10,
             backend="thread",
             **ssl_args):
         """
@@ -128,6 +130,8 @@ class Client(object):
 
         session_options = dict(
                 retry_delay=wait_tries,
+                max_size = pool_size,
+                max_conn = max_conn,
                 retry_max = max_tries,
                 timeout = timeout)
 
@@ -143,6 +147,8 @@ class Client(object):
 
         self.max_tries = max_tries
         self.wait_tries = wait_tries
+        self.max_conn = max_conn
+        self.pool_size = pool_size
         self.timeout = timeout
 
         self._nb_redirections = self.max_follow_redirect
