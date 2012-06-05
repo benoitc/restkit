@@ -4,6 +4,7 @@
 # See the NOTICE for more information.
 
 import logging
+import random
 import select
 import socket
 import ssl
@@ -18,23 +19,25 @@ DNS_TIMEOUT = 60
 
 class Connection(Connector):
 
-    def __init__(self, host, port, pool=None, is_ssl=False,
-            extra_headers=[], backend_mod=None, **ssl_args):
+    def __init__(self, host, port, backend_mod=None, pool=None,
+            is_ssl=False, extra_headers=[],  **ssl_args):
+
+        # connect the socket, if we are using an SSL connection, we wrap
+        # the socket.
         self._s = backend_mod.Socket(socket.AF_INET, socket.SOCK_STREAM)
-
         self._s.connect((host, port))
-
         if is_ssl:
             self._s = ssl.wrap_socket(self._s, **ssl_args)
 
-        self.pool = pool
+
         self.extra_headers = extra_headers
         self.is_ssl = is_ssl
         self.backend_mod = backend_mod
         self.host = host
         self.port = port
         self._connected = True
-        self._life = time.time()
+        self._life =  time.time() - random.randint(0, 10)
+        self._pool = pool
         self._released = False
 
     def matches(self, **match_options):
@@ -45,12 +48,11 @@ class Connection(Connector):
     def is_connected(self):
         if self._connected:
             try:
-                r, _, _ = self.backend_mod.Select([self._s], [], [], 0.0)
+                r, _, _ = self.backend_mod.Select([self._s], [], [], 0)
                 if not r:
                     return True
             except (ValueError, select.error,):
                 return False
-            self.close()
         return False
 
     def handle_exception(self, exception):
@@ -68,11 +70,14 @@ class Connection(Connector):
         if self._released:
             return
 
-        self._released = True
         if should_close:
             self.close()
-        else:
-            self.pool.release_connection(self)
+        elif self._pool is not None:
+            if self._connected:
+                self._pool.release_connection(self)
+                self._released = True
+            else:
+                self._pool = None
 
     def close(self):
         if not self._s or not hasattr(self._s, "close"):
