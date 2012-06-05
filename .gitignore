@@ -27,3 +27,4 @@ dist/
 doc/_build/
 distribute-*
 .coverage
+.tox
