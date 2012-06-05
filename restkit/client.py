@@ -17,7 +17,7 @@ try:
     from http_parser.http import HttpStream, BadStatusLine
     from http_parser.reader import SocketReader
 except ImportError:
-    raise ImportError("""http-parser isn't installed.
+    raise ImportError("""http-parser isn't installed or out of data.
 
         pip install http-parser""")
 
