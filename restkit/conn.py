@@ -67,17 +67,16 @@ class Connection(Connector):
         self._life = -1
 
     def release(self, should_close=False):
-        if self._released:
-            return
 
-        if should_close:
-            self.close()
-        elif self._pool is not None:
+        if self._pool is not None:
             if self._connected:
+                if should_close:
+                    self.invalidate()
                 self._pool.release_connection(self)
-                self._released = True
             else:
                 self._pool = None
+        elif self._connected:
+            self.invalidate()
 
     def close(self):
         if not self._s or not hasattr(self._s, "close"):

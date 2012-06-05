@@ -362,11 +362,11 @@ class Client(object):
                 return self.get_response(request, conn)
             except socket.gaierror, e:
                 if conn is not None:
-                    conn.close()
+                    conn.release(True)
                 raise RequestError(str(e))
             except socket.timeout, e:
                 if conn is not None:
-                    conn.close()
+                    conn.release(True)
                 raise RequestTimeout(str(e))
             except socket.error, e:
                 if log.isEnabledFor(logging.DEBUG):
@@ -383,7 +383,7 @@ class Client(object):
 
             except BadStatusLine:
                 if conn is not None:
-                    conn.close()
+                    conn.release(True)
 
                 # should raised an exception in other cases
                 request.maybe_rewind(msg="bad status line")
@@ -394,6 +394,9 @@ class Client(object):
                 # unkown error
                 log.debug("unhandled exception %s" %
                         traceback.format_exc())
+                if conn is not None:
+                    conn.release(True)
+
                 raise
             tries += 1
             self._pool.backend_mod.sleep(self.wait_tries)

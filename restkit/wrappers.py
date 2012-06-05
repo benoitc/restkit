@@ -215,7 +215,7 @@ class Response(object):
         self.location = self.headers.get('location')
         self.final_url = request.url
         self.should_close = not resp.should_keep_alive()
-        
+
         # cookies
         if 'set-cookie' in self.headers:
             cookie_header = self.headers.get('set-cookie')
@@ -227,7 +227,7 @@ class Response(object):
 
         if request.method == "HEAD":
             """ no body on HEAD, release the connection now """
-            self.connection.release()
+            self.connection.release(True)
             self._body = StringIO("")
         else:
             self._body = resp.body_file()
@@ -248,6 +248,10 @@ class Response(object):
     def can_read(self):
         return not self._already_read
 
+
+    def close(self):
+        self.connection.release(True)
+
     def body_string(self, charset=None, unicode_errors="strict"):
         """ return body string, by default in bytestring """
 
@@ -258,7 +262,6 @@ class Response(object):
         body = self._body.read()
         self._already_read = True
 
-        # release connection
         self.connection.release(self.should_close)
 
         if charset is not None:
