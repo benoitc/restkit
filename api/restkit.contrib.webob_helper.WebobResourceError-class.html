@@ -130,7 +130,7 @@ exceptions.BaseException --+       |
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_status_int__get" class="summary-sig-name" onclick="show_private();">_status_int__get</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a name="_status_int__get"></a><span class="summary-sig-name">_status_int__get</span>(<span class="summary-sig-arg">self</span>)</span><br />
       The status as an integer</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._status_int__get">source&nbsp;code</a></span>
@@ -147,7 +147,7 @@ exceptions.BaseException --+       |
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="restkit.contrib.webob_helper.WebobResourceError-class.html#_status_int__set" class="summary-sig-name" onclick="show_private();">_status_int__set</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a name="_status_int__set"></a><span class="summary-sig-name">_status_int__set</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._status_int__set">source&nbsp;code</a></span>
@@ -245,8 +245,13 @@ exceptions.BaseException --+       |
       <code><a href="webob.response.Response-class.html#_headerlist__set" onclick="show_private();">_headerlist__set</a></code>,
       <code><a href="webob.response.Response-class.html#_headers__get" onclick="show_private();">_headers__get</a></code>,
       <code><a href="webob.response.Response-class.html#_headers__set" onclick="show_private();">_headers__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_json_body__del" onclick="show_private();">_json_body__del</a></code>,
+      <code><a href="webob.response.Response-class.html#_json_body__get" onclick="show_private();">_json_body__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_json_body__set" onclick="show_private();">_json_body__set</a></code>,
       <code><a href="webob.response.Response-class.html#_status__get" onclick="show_private();">_status__get</a></code>,
       <code><a href="webob.response.Response-class.html#_status__set" onclick="show_private();">_status__set</a></code>,
+      <code><a href="webob.response.Response-class.html#_status_code__get" onclick="show_private();">_status_code__get</a></code>,
+      <code><a href="webob.response.Response-class.html#_status_code__set" onclick="show_private();">_status_code__set</a></code>,
       <code><a href="webob.response.Response-class.html#_text__del" onclick="show_private();">_text__del</a></code>,
       <code><a href="webob.response.Response-class.html#_text__get" onclick="show_private();">_text__get</a></code>,
       <code><a href="webob.response.Response-class.html#_text__set" onclick="show_private();">_text__set</a></code>,
@@ -405,12 +410,15 @@ exceptions.BaseException --+       |
       <code><a href="webob.response.Response-class.html#expires">expires</a></code>,
       <code><a href="webob.response.Response-class.html#headerlist">headerlist</a></code>,
       <code><a href="webob.response.Response-class.html#headers">headers</a></code>,
+      <code><a href="webob.response.Response-class.html#json">json</a></code>,
+      <code><a href="webob.response.Response-class.html#json_body">json_body</a></code>,
       <code><a href="webob.response.Response-class.html#last_modified">last_modified</a></code>,
       <code><a href="webob.response.Response-class.html#location">location</a></code>,
       <code><a href="webob.response.Response-class.html#pragma">pragma</a></code>,
       <code><a href="webob.response.Response-class.html#retry_after">retry_after</a></code>,
       <code><a href="webob.response.Response-class.html#server">server</a></code>,
       <code><a href="webob.response.Response-class.html#status">status</a></code>,
+      <code><a href="webob.response.Response-class.html#status_code">status_code</a></code>,
       <code><a href="webob.response.Response-class.html#text">text</a></code>,
       <code><a href="webob.response.Response-class.html#ubody">ubody</a></code>,
       <code><a href="webob.response.Response-class.html#unicode_body">unicode_body</a></code>,
@@ -473,51 +481,6 @@ exceptions.BaseException --+       |
     <dt>Overrides:
         object.__init__
         <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="_status_int__get"></a>
-<div class="private">
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_status_int__get</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._status_int__get">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>The status as an integer</p>
-  <dl class="fields">
-    <dt>Overrides:
-        webob.response.Response._status_int__get
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="_status_int__set"></a>
-<div class="private">
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_status_int__set</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">value</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="restkit.contrib.webob_helper-pysrc.html#WebobResourceError._status_int__set">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Overrides:
-        webob.response.Response._status_int__set
     </dt>
   </dl>
 </td></tr></table>
@@ -605,7 +568,7 @@ exceptions.BaseException --+       |
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jan 31 01:25:13 2012
+    Generated by Epydoc 3.0.1 on Wed Jun  6 00:23:24 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

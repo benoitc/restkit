@@ -211,10 +211,11 @@ restkit.wrappers.BodyWrapper.readline" class="py-name" href="#" onclick="return 
 </div><div id="TeeInput.close-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="TeeInput.close-expanded"><a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">eof</tt><tt class="py-op">:</tt> </tt>
 <a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt class="py-comment"># we didn't read until the end</tt> </tt>
 <a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name" targets="Method restkit.tee.ResponseTeeInput._close_unreader()=restkit.tee.ResponseTeeInput-class.html#_close_unreader"><a title="restkit.tee.ResponseTeeInput._close_unreader" class="py-name" href="#" onclick="return doclink('link-34', '_close_unreader', 'link-34');">_close_unreader</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
-<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmp</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name" targets="Method restkit.conn.Connection.close()=restkit.conn.Connection-class.html#close,Method restkit.tee.ResponseTeeInput.close()=restkit.tee.ResponseTeeInput-class.html#close,Method restkit.tee.TeeInput.close()=restkit.tee.TeeInput-class.html#close,Method restkit.wrappers.BodyWrapper.close()=restkit.wrappers.BodyWrapper-class.html#close"><a title="restkit.conn.Connection.close
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmp</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name" targets="Method restkit.conn.Connection.close()=restkit.conn.Connection-class.html#close,Method restkit.tee.ResponseTeeInput.close()=restkit.tee.ResponseTeeInput-class.html#close,Method restkit.tee.TeeInput.close()=restkit.tee.TeeInput-class.html#close,Method restkit.wrappers.BodyWrapper.close()=restkit.wrappers.BodyWrapper-class.html#close,Method restkit.wrappers.Response.close()=restkit.wrappers.Response-class.html#close"><a title="restkit.conn.Connection.close
 restkit.tee.ResponseTeeInput.close
 restkit.tee.TeeInput.close
-restkit.wrappers.BodyWrapper.close" class="py-name" href="#" onclick="return doclink('link-35', 'close', 'link-35');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+restkit.wrappers.BodyWrapper.close
+restkit.wrappers.Response.close" class="py-name" href="#" onclick="return doclink('link-35', 'close', 'link-35');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 </div><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
 <a name="TeeInput.next"></a><div id="TeeInput.next-def"><a name="L138"></a><tt class="py-lineno">138</tt> <a class="py-toggle" href="#" id="TeeInput.next-toggle" onclick="return toggle('TeeInput.next');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.tee.TeeInput-class.html#next">next</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="TeeInput.next-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="TeeInput.next-expanded"><a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="restkit.tee.TeeInput.readline
@@ -295,14 +296,16 @@ restkit.resource.Resource.get" class="py-name" href="#" onclick="return doclink(
 <a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmp</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="restkit.conn.Connection.close
 restkit.tee.ResponseTeeInput.close
 restkit.tee.TeeInput.close
-restkit.wrappers.BodyWrapper.close" class="py-name" href="#" onclick="return doclink('link-53', 'close', 'link-35');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+restkit.wrappers.BodyWrapper.close
+restkit.wrappers.Response.close" class="py-name" href="#" onclick="return doclink('link-53', 'close', 'link-35');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 </div><a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"> </tt>
 <a name="ResponseTeeInput._close_unreader"></a><div id="ResponseTeeInput._close_unreader-def"><a name="L207"></a><tt class="py-lineno">207</tt> <a class="py-toggle" href="#" id="ResponseTeeInput._close_unreader-toggle" onclick="return toggle('ResponseTeeInput._close_unreader');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.tee.ResponseTeeInput-class.html#_close_unreader">_close_unreader</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="ResponseTeeInput._close_unreader-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ResponseTeeInput._close_unreader-expanded"><a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">eof</tt><tt class="py-op">:</tt> </tt>
 <a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">stream</tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="restkit.conn.Connection.close
 restkit.tee.ResponseTeeInput.close
 restkit.tee.TeeInput.close
-restkit.wrappers.BodyWrapper.close" class="py-name" href="#" onclick="return doclink('link-54', 'close', 'link-35');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+restkit.wrappers.BodyWrapper.close
+restkit.wrappers.Response.close" class="py-name" href="#" onclick="return doclink('link-54', 'close', 'link-35');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">connection</tt><tt class="py-op">.</tt><tt id="link-55" class="py-name" targets="Method restkit.conn.Connection.release()=restkit.conn.Connection-class.html#release"><a title="restkit.conn.Connection.release" class="py-name" href="#" onclick="return doclink('link-55', 'release', 'link-55');">release</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">should_close</tt><tt class="py-op">)</tt> </tt>
 </div><a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line"> </tt>
 <a name="ResponseTeeInput._finalize"></a><div id="ResponseTeeInput._finalize-def"><a name="L212"></a><tt class="py-lineno">212</tt> <a class="py-toggle" href="#" id="ResponseTeeInput._finalize-toggle" onclick="return toggle('ResponseTeeInput._finalize');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="restkit.tee.ResponseTeeInput-class.html#_finalize">_finalize</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
@@ -343,7 +346,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jan 31 01:25:14 2012
+    Generated by Epydoc 3.0.1 on Wed Jun  6 00:23:25 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
