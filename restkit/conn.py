@@ -11,6 +11,7 @@ import ssl
 import time
 
 from socketpool import Connector
+from socketpool.util import is_connected
 
 CHUNK_SIZE = 16 * 1024
 MAX_BODY = 1024 * 112
@@ -47,12 +48,7 @@ class Connection(Connector):
 
     def is_connected(self):
         if self._connected:
-            try:
-                r, _, _ = self.backend_mod.Select([self._s], [], [], 0)
-                if not r:
-                    return True
-            except (ValueError, select.error,):
-                return False
+            return is_connected(self._s)
         return False
 
     def handle_exception(self, exception):
