@@ -230,9 +230,9 @@ class Client(object):
 
                 if p.status_code != 200:
                     raise ProxyError("Tunnel connection failed: %d %s" %
-                            (resp.status_int, body))
-
-                _ = p.body_string()
+                            (p.status_code(), p.body_string()))
+                # read body
+                p.body_string()
 
             else:
                 headers = []
