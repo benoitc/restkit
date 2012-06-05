@@ -3,6 +3,29 @@
 News
 ====
 
+4.1.3 / 2012-06-06
+------------------
+
+- improvment: Enable multivqlue field in multipart POST content
+- fix Content-Type for multipart content type
+- Fix debian packaging
+- Support cookie in response and request
+- use http-parser 0.7.5
+- improve Error handling
+- improve disconnections support
+- support socketpool 0.4.1: improve connection reuse & keepalive.
+
+4.1.2 / 2012-02-06
+------------------
+
+- proxy contrib: set content length if provided
+- use latest http-parser 0.7.4
+
+4.1.1 / 2012-02-01
+------------------
+
+- update doc
+
 4.1.0 / 2012-01-31
 ------------------
 
@@ -34,7 +57,7 @@ News
 3.3.0 / 2011-06-20
 ------------------
 
-- New HTTP parser, using python `http-parser <https://github.com/benoitc/http-parser>`_ 
+- New HTTP parser, using python `http-parser <https://github.com/benoitc/http-parser>`_
   in C based on  http-parser from Ryan Dahl.
 - Fix UnboundLocalError
 - Sync oauth with last python-oauth2 (fix POST & encoding issues)
@@ -62,8 +85,8 @@ Breaking changes:
   fully threadsafe.
 - Improve error report.
 - Handle case where the connection is closed but the OS still accept
-  sending. From the man: "When  the message does not fit into the send 
-  buffer of the socket, send() normally blocks, unless th socket has 
+  sending. From the man: "When  the message does not fit into the send
+  buffer of the socket, send() normally blocks, unless th socket has
   been placed in nonblocking I/O mode.""" . Spotted by loftus on irc.
   Thanks.
 
@@ -84,7 +107,7 @@ Breaking changes:
 - New Connection management: Better concurrency handling and iddle
   connections are now closed after a time.
 - Improved Client.
-- Fix redirect 
+- Fix redirect
 - Better error handling
 - Timeout can now be set on each request.
 - Major refactoring. consolidation of some module, ease the HTTP parser
@@ -99,10 +122,10 @@ Breaking changes:
    connections are reusing connections using TConnectionManager (10
    connections per route).
  - Improved Gevent & Eventlet support
- - Added an ``decompress`` option to ``request`` function and ``Resource`` 
+ - Added an ``decompress`` option to ``request`` function and ``Resource``
    instance to decompress the body or not. By default it's true.
  - Added ``params_dict`` to keywords arguments of ``Resource`` instances
-   methods. Allows you to pass any argument to the query. 
+   methods. Allows you to pass any argument to the query.
  - Fix response 100-continue
  - Fix compressed atatchments
  - Fix body readline
@@ -129,7 +152,7 @@ More details `here <https://github.com/benoitc/restkit/compare/2.1.1...2.1.3>`_ 
 
 2.1.6 / 2010-09-
 -----------------
- - Fix debian packaging 
+ - Fix debian packaging
  - Fix oauth
 
 2.1.4 / 2008-08-11
@@ -191,8 +214,8 @@ Breaking changes:
 - **Default HttpResponse isn't any more persistent**. You have to save it to reuse it. A persistent response will be provided in restkit 2.1 .
 - Deprecate HttpResponse body, unicode_body and body_file properties. They are replaced  by body_string and body_stream methods.
 - Resource arguments
-- Complete refactoring of filters. Now they have to be declared when you create a resource or http client. An on_connect method can be used in filter now. This method is used before the connection happen, it's useful for proxy support for example. 
-- Oauth2 filter has been simplfied, see `example <authentication.html>`_ 
+- Complete refactoring of filters. Now they have to be declared when you create a resource or http client. An on_connect method can be used in filter now. This method is used before the connection happen, it's useful for proxy support for example.
+- Oauth2 filter has been simplfied, see `example <authentication.html>`_
 
 1.3.1 / 2010-04-09
 ------------------
