@@ -375,8 +375,9 @@ class Client(object):
                 if conn is not None:
                     conn.close()
 
-                if e[0] not in (errno.EAGAIN, errno.EPIPE, errno.EBADF) or \
-                                tries >= self.max_tries:
+                errors = (errno.EAGAIN, errno.EPIPE, errno.EBADF,
+                        errno.ECONNRESET)
+                if e[0] not in errors or tries >= self.max_tries:
                     raise RequestError("socket.error: %s" % str(e))
 
                 # should raised an exception in other cases
