@@ -100,15 +100,20 @@ class Client(object):
         of tries.
         :param max_header_count:  determines the maximum HTTP header count
         allowed. by default no limit.
-        :param manager: the manager to use. By default we use the global
-        one.
-        :parama response_class: the response class to use
+        :param pool: the pool to use inherited from socketpool.Pool. By
+        default we use the global one.
+        :param response_class: the response class to use
         :param timeout: the default timeout of the connection
         (SO_TIMEOUT)
 
         :param max_tries: the number of tries before we give up a
         connection
         :param wait_tries: number of time we wait between each tries.
+        :attr pool_size: int, default 10. Maximum number of connections we
+        keep in the default pool.
+        :attr max_conn: int, default 150. Maximum number of connections we
+        create outside the pool before raising the exception MaxConnectionError.
+        If None, the number of connections won't be limited.
         :param ssl_args: named argument, see ssl module for more
         informations
         """
