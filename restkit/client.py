@@ -466,7 +466,11 @@ class Client(object):
 
         if self.follow_redirect:
             if p.status_code() in (301, 302, 307,):
-                connection.close()
+
+                # read full body and release the connection
+                p.body_file().read()
+                connection.release()
+
                 if request.method in ('GET', 'HEAD',) or \
                         self.force_follow_redirect:
                     if hasattr(self.body, 'read'):
@@ -479,7 +483,10 @@ class Client(object):
                     return self.redirect(location, request)
 
             elif p.status_code() == 303 and self.method == "POST":
-                connection.close()
+                # read full body and release the connection
+                p.body_file().read()
+                connection.release()
+
                 request.method = "GET"
                 request.body = None
                 return self.redirect(location, request)
