@@ -399,6 +399,8 @@ class Request(dict):
             query = base_url[4]
         query = parse_qs(query)
         for k, v in self.items():
+            if isinstance(v, unicode):
+                v = v.encode("utf-8")
             query.setdefault(k, []).append(v)
         
         try:
