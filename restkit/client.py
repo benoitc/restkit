@@ -76,7 +76,7 @@ class Client(object):
             use_proxy=False,
             max_tries=3,
             wait_tries=0.3,
-            max_conn=150,
+            max_conn=0,
             pool_size=10,
             backend="thread",
             **ssl_args):
