@@ -248,9 +248,15 @@ class Response(object):
     def can_read(self):
         return not self._already_read
 
-
     def close(self):
         self.connection.release(True)
+
+    def skip_body(self):
+        """ skip the body and release the connection """
+        if not self._already_read:
+            self._body.read()
+            self._already_read = True
+            self.connection.release(self.should_close)
 
     def body_string(self, charset=None, unicode_errors="strict"):
         """ return body string, by default in bytestring """
