@@ -63,7 +63,6 @@ class Connection(Connector):
         self._life = -1
 
     def release(self, should_close=False):
-
         if self._pool is not None:
             if self._connected:
                 if should_close:
