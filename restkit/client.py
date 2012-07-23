@@ -76,7 +76,6 @@ class Client(object):
             use_proxy=False,
             max_tries=3,
             wait_tries=0.3,
-            max_conn=0,
             pool_size=10,
             backend="thread",
             **ssl_args):
@@ -111,9 +110,6 @@ class Client(object):
         :param wait_tries: number of time we wait between each tries.
         :attr pool_size: int, default 10. Maximum number of connections we
         keep in the default pool.
-        :attr max_conn: int, default 150. Maximum number of connections we
-        create outside the pool before raising the exception MaxConnectionError.
-        If None, the number of connections won't be limited.
         :param ssl_args: named argument, see ssl module for more
         informations
         """
@@ -136,7 +132,6 @@ class Client(object):
         session_options = dict(
                 retry_delay=wait_tries,
                 max_size = pool_size,
-                max_conn = max_conn,
                 retry_max = max_tries,
                 timeout = timeout)
 
@@ -152,7 +147,6 @@ class Client(object):
 
         self.max_tries = max_tries
         self.wait_tries = wait_tries
-        self.max_conn = max_conn
         self.pool_size = pool_size
         self.timeout = timeout
 
