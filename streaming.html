@@ -93,23 +93,23 @@
 <p>With Restkit you can easily stream your content to an from a server.</p>
 <div class="section" id="stream-to">
 <h2>Stream to<a class="headerlink" href="#stream-to" title="Permalink to this headline">¶</a></h2>
-<p>To stream a content to a server, pass to your request a file (or file-like object) or an iterator as <cite>payload</cite>. If you use an iterator or a file-like object and Restkit can&#8217;t determine its size (by reading <cite>Content-Length</cite> header or fetching the size of the file), sending will be chunked and Restkit add <cite>Transfer-Encoding: chunked</cite> header to the list of headers.</p>
+<p>To stream a content to a server, pass to your request a file (or file-like object) or an iterator as <cite>body</cite>. If you use an iterator or a file-like object and Restkit can&#8217;t determine its size (by reading <cite>Content-Length</cite> header or fetching the size of the file), sending will be chunked and Restkit add <cite>Transfer-Encoding: chunked</cite> header to the list of headers.</p>
 <p>Here is a quick snippet with a file:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;/some/file&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-  <span class="n">request</span><span class="p">(</span><span class="s">&quot;/some/url&quot;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+  <span class="n">request</span><span class="p">(</span><span class="s">&quot;/some/url&quot;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Here restkit will put the file size in <cite>Content-Length</cite> header.  Another example with an iterator:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restkit</span> <span class="kn">import</span> <span class="n">request</span>
 
 <span class="n">myiterator</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;line 1&#39;</span><span class="p">,</span> <span class="s">&#39;line 2&#39;</span><span class="p">]</span>
-<span class="n">request</span><span class="p">(</span><span class="s">&quot;/some/url&quot;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">myiterator</span><span class="p">)</span>
+<span class="n">request</span><span class="p">(</span><span class="s">&quot;/some/url&quot;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">myiterator</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Sending will be chunked. If you want to send without TE: chunked, you need to add the <cite>Content-Length</cite> header:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">request</span><span class="p">(</span><span class="s">&quot;/some/url&quot;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">myiterator</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">request</span><span class="p">(</span><span class="s">&quot;/some/url&quot;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">myiterator</span><span class="p">,</span>
     <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;content-Length&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
 </pre></div>
 </div>
