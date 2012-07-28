@@ -17,7 +17,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'restkit'
-copyright = u'2010, Benoît Chesneau <benoitc@e-engura.org>'
+copyright = u'2008-2012 Benoît Chesneau <benoitc@e-engura.org>'
 
 
 version = restkit.__version__
