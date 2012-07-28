@@ -60,11 +60,7 @@ class Request(object):
     path = property(_path__get)
 
     def _host__get(self):
-        try:
-            h = self.parsed_url.netloc.encode('ascii')
-        except UnicodeEncodeError:
-            h = self.parsed_url.netloc.encode('idna')
-
+        h = to_bytestring(self.parsed_url.netloc)
         hdr_host = self.headers.iget("host")
         if not hdr_host:
             return h
