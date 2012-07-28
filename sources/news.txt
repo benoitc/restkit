@@ -3,6 +3,12 @@
 News
 ====
 
+4.1.5 / 2012-07-28
+------------------
+
+- catch NoMoreData error on headers parsing
+- fix Host Header
+
 4.1.4 / 2012-07-24
 ------------------
 

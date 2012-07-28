@@ -171,10 +171,16 @@ restkit.contrib.ipython_shell.JSON	restkit.contrib.ipython_shell.JSON-class.html
 restkit.contrib.ipython_shell.JSON.__repr__	restkit.contrib.ipython_shell.JSON-class.html#__repr__
 restkit.contrib.ipython_shell.JSON.__init__	restkit.contrib.ipython_shell.JSON-class.html#__init__
 restkit.contrib.ipython_shell.Request	restkit.contrib.ipython_shell.Request-class.html
-restkit.contrib.ipython_shell.Request.ResponseClass	restkit.contrib.ipython_shell.Response-class.html
 restkit.contrib.ipython_shell.Request.__str__	restkit.contrib.ipython_shell.Request-class.html#__str__
 restkit.contrib.ipython_shell.Request.__call__	restkit.contrib.ipython_shell.Request-class.html#__call__
+restkit.contrib.ipython_shell.Request.ResponseClass	restkit.contrib.ipython_shell.Response-class.html
+restkit.contrib.webob_api.Request.put	restkit.contrib.webob_api.Request-class.html#put
+restkit.contrib.webob_api.Request.post	restkit.contrib.webob_api.Request-class.html#post
+restkit.contrib.webob_api.Request.head	restkit.contrib.webob_api.Request-class.html#head
 restkit.contrib.ipython_shell.Request.get_response	restkit.contrib.ipython_shell.Request-class.html#get_response
+restkit.contrib.webob_api.Request.delete	restkit.contrib.webob_api.Request-class.html#delete
+restkit.contrib.webob_api.Request.get	restkit.contrib.webob_api.Request-class.html#get
+restkit.contrib.webob_api.Request.set_url	restkit.contrib.webob_api.Request-class.html#set_url
 restkit.contrib.ipython_shell.Response	restkit.contrib.ipython_shell.Response-class.html
 restkit.contrib.ipython_shell.Response.__call__	restkit.contrib.ipython_shell.Response-class.html#__call__
 restkit.contrib.ipython_shell.Response.__str__	restkit.contrib.ipython_shell.Response-class.html#__str__
