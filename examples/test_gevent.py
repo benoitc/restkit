@@ -12,8 +12,8 @@ from socketpool import ConnectionPool
 pool = ConnectionPool(factory=Connection, backend="gevent")
 
 urls = [
-        "http://yahoo.fr",
-        "http://google.com",
+        "http://refuge.io",
+        "http://gunicorn.org",
         "http://friendpaste.com",
         "http://benoitc.io",
         "http://couchdb.apache.org"]

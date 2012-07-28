@@ -5,8 +5,8 @@ from restkit import *
 #set_logging("debug")
 
 urls = [
-        "http://yahoo.fr",
-        "http://google.com",
+        "http://refuge.io",
+        "http://gunicorn.org",
         "http://friendpaste.com",
         "http://benoitc.io",
         "http://couchdb.apache.org"]

@@ -14,7 +14,7 @@ import types
 import urlparse
 
 try:
-    from http_parser.http import HttpStream, BadStatusLine
+    from http_parser.http import HttpStream, BadStatusLine, NoMoreData
     from http_parser.reader import SocketReader
 except ImportError:
     raise ImportError("""http-parser isn't installed or out of data.
@@ -25,7 +25,7 @@ from restkit import __version__
 
 from restkit.conn import Connection
 from restkit.errors import RequestError, RequestTimeout, RedirectLimit, \
-NoMoreData, ProxyError
+ProxyError
 from restkit.session import get_session
 from restkit.util import parse_netloc, rewrite_location, to_bytestring
 from restkit.wrappers import Request, Response
@@ -382,7 +382,15 @@ class Client(object):
                 # should raised an exception in other cases
                 request.maybe_rewind(msg=str(e))
 
+            except NoMoreData, e:
+                if conn is not None:
+                    conn.close()
+
+                request.maybe_rewind(msg=str(e))
+                if tries >= self.max_tries:
+                    raise
             except BadStatusLine:
+
                 if conn is not None:
                     conn.release(True)
 
