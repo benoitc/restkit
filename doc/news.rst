@@ -3,6 +3,11 @@
 News
 ====
 
+4.2.0 / 2012-08-01
+------------------
+
+- fix a race condition while releasing the socket on incomplete read
+
 4.1.5 / 2012-07-28
 ------------------
 
