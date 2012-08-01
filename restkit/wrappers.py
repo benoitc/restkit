@@ -151,6 +151,8 @@ class BodyWrapper(object):
         self.resp = resp
         self.body = resp._body
         self.connection = connection
+        self._closed = False
+        self.eof = False
 
     def __enter__(self):
         return self
@@ -160,7 +162,14 @@ class BodyWrapper(object):
 
     def close(self):
         """ release connection """
+        if self._closed:
+            return
+
+        if not self.eof:
+            self.body.read()
+
         self.connection.release(self.resp.should_close)
+        self._closed = True
 
     def __iter__(self):
         return self
@@ -169,24 +178,28 @@ class BodyWrapper(object):
         try:
             return self.body.next()
         except StopIteration:
+            self.eof = True
             self.close()
             raise
 
     def read(self, n=-1):
         data = self.body.read(n)
         if not data:
+            self.eof = True
             self.close()
         return data
 
     def readline(self, limit=-1):
         line = self.body.readline(limit)
         if not line:
+            self.eof = True
             self.close()
         return line
 
     def readlines(self, hint=None):
         lines = self.body.readlines(hint)
         if self.body.close:
+            self.eof = True
             self.close()
         return lines
 

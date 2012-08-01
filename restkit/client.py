@@ -386,7 +386,7 @@ class Client(object):
 
             except NoMoreData, e:
                 if conn is not None:
-                    conn.close()
+                    conn.release(True)
 
                 request.maybe_rewind(msg=str(e))
                 if tries >= self.max_tries:
