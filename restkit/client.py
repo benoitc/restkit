@@ -14,7 +14,9 @@ import types
 import urlparse
 
 try:
-    from http_parser.http import HttpStream, BadStatusLine, NoMoreData
+    from http_parser.http import (
+            HttpStream, BadStatusLine, NoMoreData
+    )
     from http_parser.reader import SocketReader
 except ImportError:
     raise ImportError("""http-parser isn't installed or out of data.
