@@ -3,12 +3,13 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-
+import io
 import mimetypes
 import os
 import re
 
-from restkit.py3compat import text_type
+from restkit.py3compat import (text_type, unicode_to_str, string_types,
+        str_to_bytes, iscallable)
 from restkit.util import to_bytestring, url_quote, url_encode
 
 MIME_BOUNDARY = 'END_OF_PART'
@@ -30,21 +31,31 @@ class BoundaryItem(object):
         self.value = value
         if fname is not None:
             if isinstance(fname, text_type):
-                fname = fname.encode("utf-8").encode("string_escape").replace('"', '\\"')
+                fname = unicode_to_str(fname)
+                fname = fname.encode("unicode-escape").replace(b'"', b'\\"')
             else:
-                fname = fname.encode("string_escape").replace('"', '\\"')
+                fname = fname.replace(b'"', b'\\"')
         self.fname = fname
         if filetype is not None:
             filetype = to_bytestring(filetype)
         self.filetype = filetype
 
-        if isinstance(value, file) and filesize is None:
+        if hasattr(value, 'fileno') and filesize is None:
             try:
                 value.flush()
             except IOError:
                 pass
-            self.size = int(os.fstat(value.fileno())[6])
 
+            if iscallable(value.fileno):
+                try:
+                    self.size = int(os.fstat(value.fileno())[6])
+                except io.UnsupportedOperation:
+                    if hasattr(value, "getvalue"):
+                        self.size = len(value.getvalue())
+                    else:
+                        raise
+            else:
+                self.size = int(os.fstat(value.fileno)[6])
         self._encoded_hdr = None
         self._encoded_bdr = None
 
@@ -69,15 +80,16 @@ class BoundaryItem(object):
             headers.append("")
             headers.append("")
             self._encoded_hdr = CRLF.join(headers)
-        return self._encoded_hdr
+        return str_to_bytes(self._encoded_hdr)
 
     def encode(self, boundary):
         """Returns the string encoding of this parameter"""
         value = self.value
-        if re.search("^--%s$" % re.escape(boundary), value, re.M):
+        if re.search(str_to_bytes("^--%s$" % re.escape(boundary)), value, re.M):
             raise ValueError("boundary found in encoded string")
 
-        return "%s%s%s" % (self.encode_hdr(boundary), value, CRLF)
+        return b"".join([self.encode_hdr(boundary), value, b"\r\n"])
+
 
     def iter_encode(self, boundary, blocksize=16384):
         if not hasattr(self.value, "read"):
@@ -87,12 +99,18 @@ class BoundaryItem(object):
             while True:
                 block = self.value.read(blocksize)
                 if not block:
-                    yield CRLF
+                    yield b"\r\n"
                     return
+
+                if isinstance(block, string_types):
+                    block = str_to_bytes(block)
+
                 yield block
 
     def encode_unreadable_value(self, value):
-            return value
+        if isinstance(value, string_types):
+            value = str_to_bytes(value)
+        return value
 
 
 class MultipartForm(object):
@@ -114,7 +132,7 @@ class MultipartForm(object):
                     filetype = ';'.join([_f for _f in mimetypes.guess_type(fname) if _f])
                 else:
                     filetype = None
-                if not isinstance(value, file) and self._clen is None:
+                if not hasattr(value, 'fileno') and self._clen is None:
                     value = value.read()
 
                 boundary = bitem_cls(name, value, fname, filetype, quote=quote)

@@ -11,23 +11,26 @@ read or restart etc ... It's based on TeeInput from Gunicorn.
 
 """
 import copy
+import io
 import os
 import tempfile
 
 from restkit import conn
-from restkit.py3compat import StringIO, string_types
+from restkit.py3compat import (BytesIO, string_types, iscallable,
+        str_to_bytes)
+
 
 class TeeInput(object):
 
     CHUNK_SIZE = conn.CHUNK_SIZE
 
     def __init__(self, stream):
-        self.buf = StringIO()
+        self.buf = BytesIO()
         self.eof = False
 
         if isinstance(stream, string_types):
-            stream = StringIO(stream)
-            self.tmp = StringIO()
+            stream = BytesIO(stream)
+            self.tmp = BytesIO()
         else:
             self.tmp = tempfile.TemporaryFile()
 
@@ -55,7 +58,7 @@ class TeeInput(object):
                     break
 
         if not self.eof and diff > 0:
-            self._ensure_length(StringIO(), diff)
+            self._ensure_length(BytesIO(), diff)
         self.tmp.seek(offset, whence)
 
     def flush(self):
@@ -67,7 +70,7 @@ class TeeInput(object):
             return self.tmp.read(length)
 
         if length < 0:
-            buf = StringIO()
+            buf = BytesIO()
             buf.write(self.tmp.read())
             while True:
                 chunk = self._tee(self.CHUNK_SIZE)
@@ -76,7 +79,7 @@ class TeeInput(object):
                 buf.write(chunk)
             return buf.getvalue()
         else:
-            dest = StringIO()
+            dest = BytesIO()
             diff = self._tmp_size() - self.tmp.tell()
             if not diff:
                 dest.write(self._tee(length))
@@ -98,10 +101,10 @@ class TeeInput(object):
 
         # now we can get line
         line = self.tmp.readline()
-        if line.find("\n") >=0:
+        if line.find(b"\n") >=0:
             return line
 
-        buf = StringIO()
+        buf = BytesIO()
         buf.write(line)
         while True:
             orig_size = self.tmp.tell()
@@ -110,7 +113,7 @@ class TeeInput(object):
                 break
             self.tmp.seek(orig_size)
             buf.write(self.tmp.readline())
-            if data.find("\n") >= 0:
+            if data.find(b"\n") >= 0:
                 break
         return buf.getvalue()
 
@@ -148,6 +151,8 @@ class TeeInput(object):
         buf2.seek(0, 2)
         chunk = self.stream.read(length)
         if chunk:
+            if isinstance(chunk, string_types):
+                chunk = str_to_bytes(chunk)
             self.tmp.write(chunk)
             self.tmp.flush()
             self.tmp.seek(0, 2)
@@ -163,7 +168,18 @@ class TeeInput(object):
 
     def _tmp_size(self):
         if hasattr(self.tmp, 'fileno'):
-            return int(os.fstat(self.tmp.fileno())[6])
+            if iscallable(self.tmp.fileno):
+                try:
+                    fno = self.tmp.fileno()
+                except io.UnsupportedOperation:
+                    # python 3 exposes fileno as a callable but does
+                    # nothing with it. *sigh*
+                    if hasattr(self.tmp, "getvalue"):
+                        return len(self.tmp.getvalue())
+                    raise
+            else:
+                fno =  self.tmp.fileno
+            return int(os.fstat(fno)[6])
         else:
             return len(self.tmp.getvalue())
 
@@ -178,7 +194,7 @@ class ResponseTeeInput(TeeInput):
     CHUNK_SIZE = conn.CHUNK_SIZE
 
     def __init__(self, resp, connection, should_close=False):
-        self.buf = StringIO()
+        self.buf = BytesIO()
         self.resp = resp
         self.stream =resp.body_stream()
         self.connection = connection
@@ -189,7 +205,7 @@ class ResponseTeeInput(TeeInput):
         clen = int(resp.headers.get('content-length') or -1)
         if clen >= 0:
             if (clen <= conn.MAX_BODY):
-                self.tmp = StringIO()
+                self.tmp = BytesIO()
             else:
                 self.tmp = tempfile.TemporaryFile()
         else:

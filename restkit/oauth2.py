@@ -9,10 +9,10 @@ import random
 import hmac
 import binascii
 
-from hashlib import sha1 as sha
+from hashlib import sha1
 from restkit.py3compat import (urlparse, urlunparse, urlencode,
         parse_qs, parse_qsl, quote, string_types, str_to_unicode,
-        unicode_to_str)
+        unicode_to_str, str_to_bytes)
 from restkit.util import to_bytestring
 from restkit.version import __version__
 
@@ -446,7 +446,13 @@ class Request(dict):
             # section 4.1.1 "OAuth Consumers MUST NOT include an
             # oauth_body_hash parameter on requests with form-encoded
             # request bodies."
-            self['oauth_body_hash'] = base64.b64encode(sha(self.body).digest())
+            body = self.body
+            if isinstance(body, string_types):
+                body = str_to_bytes(body)
+
+            s = sha1()
+            s.update(body)
+            self['oauth_body_hash'] = base64.b64encode(s.digest())
 
         if 'oauth_consumer_key' not in self:
             self['oauth_consumer_key'] = consumer.key
@@ -627,7 +633,11 @@ class SignatureMethod_HMAC_SHA1(SignatureMethod):
         """Builds the base signature string."""
         key, raw = self.signing_base(request, consumer, token)
 
-        hashed = hmac.new(to_bytestring(key), raw, sha)
+        if isinstance(key, string_types):
+            key = str_to_bytes(key)
+        if isinstance(raw, string_types):
+            raw = str_to_bytes(raw)
+        hashed = hmac.new(key, raw, sha1)
 
         # Calculate the digest base 64.
         return binascii.b2a_base64(hashed.digest())[:-1]

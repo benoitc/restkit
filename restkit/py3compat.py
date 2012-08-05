@@ -6,7 +6,7 @@
 import sys
 from restkit.encoding import DEFAULT_ENCODING
 
-
+orig_open = open
 PY3 = sys.version_info[0] == 3
 def no_code(x, encoding=None):
     return x
@@ -74,6 +74,13 @@ if PY3:
     def iscallable(v):
         return isinstance(v, collections.Callable)
 
+    open = orig_open
+
+    def execfile(fname, glob, loc=None):
+        loc = loc if (loc is not None) else glob
+        with open(fname, 'rb') as f:
+            exec(compile(f.read(), fname, 'exec'), glob, loc)
+
 else:
     string_types = basestring,
     integer_types = (int, long)
@@ -130,3 +137,25 @@ else:
     urlencode = urllib.encode
 
     iscallable = callable
+
+    if sys.platform == 'win32':
+        def execfile(fname, glob=None, loc=None):
+            loc = loc if (loc is not None) else glob
+            # The rstrip() is necessary b/c trailing whitespace in files will
+            # cause an IndentationError in Python 2.6 (this was fixed in 2.7,
+            # but we still support 2.6).  See issue 1027.
+            scripttext = __builtin__.open(fname).read().rstrip() + '\n'
+            # compile converts unicode filename to str assuming
+            # ascii. Let's do the conversion before calling compile
+            if isinstance(fname, unicode):
+                filename = unicode_to_str(fname)
+            else:
+                filename = fname
+            exec(compile(scripttext, filename, 'exec'), glob, loc)
+    else:
+        def execfile(fname, *where):
+            if isinstance(fname, unicode):
+                filename = fname.encode(sys.getfilesystemencoding())
+            else:
+                filename = fname
+            __builtin__.execfile(filename, *where)

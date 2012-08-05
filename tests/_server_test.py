@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# Copyright (c) 2008 (c) Benoit Chesneau <benoitc@e-engura.com> 
+# Copyright (c) 2008 (c) Benoit Chesneau <benoitc@e-engura.com>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -16,39 +16,55 @@
 #
 
 import base64
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
+try:
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+except ImportError:
+    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+import io
 import os
 import socket
 import tempfile
 import threading
 import unittest
-import urlparse
-import Cookie
 
 try:
-    from urlparse import parse_qsl, parse_qs
+    import http.cookies as Cookie
 except ImportError:
-    from cgi import parse_qsl, parse_qs
-import urllib
+    import Cookie
+
+
+from restkit.py3compat import (parse_qsl, parse_qs, urlparse, unquote,
+        bytes_to_str, str_to_bytes, string_types, BytesIO, StringIO)
+from restkit.tee import TeeInput
 from restkit.util import to_bytestring
+
+from . import multipart as mp
 
 HOST = 'localhost'
 PORT = (os.getpid() % 31000) + 1024
 
+
+def parse_multipart(fp, headers):
+    env = {'REQUEST_METHOD':'POST',
+           'CONTENT_TYPE': headers.get('content-type'),
+           'wsgi.input': fp}
+    return mp.parse_form_data(environ=env, strict=True, charset='utf-8')
+
 class HTTPTestHandler(BaseHTTPRequestHandler):
 
     def __init__(self, request, client_address, server):
-        self.auth = 'Basic ' + base64.encodestring('test:test')[:-1]
+        self.auth = b'Basic ' + base64.b64encode(str_to_bytes("test:test"))[:-1]
         self.count = 0
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
-        
-        
+
+
     def do_GET(self):
-        self.parsed_uri = urlparse.urlparse(urllib.unquote(self.path))
+        self.parsed_uri = urlparse(unquote(self.path))
         self.query = {}
         for k, v in parse_qsl(self.parsed_uri[4]):
-            self.query[k] = v.decode('utf-8')
+            self.query[k] = v
+        print(self.query)
         path = self.parsed_uri[2]
 
         if path == "/":
@@ -57,7 +73,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
 
         elif path == "/unicode":
             extra_headers = [('Content-type', 'text/plain')]
-            self._respond(200, extra_headers, u"éàù@")
+            self._respond(200, extra_headers, "éàù@")
 
         elif path == "/json":
             content_type = self.headers.get('content-type', 'text/plain')
@@ -97,9 +113,9 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 extra_headers.append(('WWW-Authenticate', 'Basic realm="%s"' % realm))
                 self._respond(401, extra_headers, "")
             else:
-                auth = self.headers['Authorization'][len('Basic')+1:]
-                auth = base64.b64decode(auth).split(':')
-                if auth[0] == "test" and auth[1] == "test":
+                auth = str_to_bytes(self.headers['Authorization'][len('Basic')+1:])
+                auth = base64.b64decode(auth).split(b':')
+                if auth[0] == b"test" and auth[1] == b"test":
                     self._respond(200, extra_headers, "ok")
                 else:
                     self._respond(403, extra_headers, "niet!")
@@ -120,7 +136,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         elif path == "/pool":
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "ok")
-        
+
         elif path == "/cookie":
             c = Cookie.SimpleCookie()
             c["fig"] = "newton"
@@ -128,7 +144,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             for k in c.keys():
                 extra_headers = [('Set-Cookie', str(c[k].output(header='')))]
             self._respond(200, extra_headers, "ok")
-        
+
         elif path == "/cookies":
             c = Cookie.SimpleCookie()
             c["fig"] = "newton"
@@ -139,17 +155,18 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             for k in c.keys():
                 extra_headers.append(('Set-Cookie', str(c[k].output(header=''))))
             self._respond(200, extra_headers, "ok")
-        
+
         else:
-            self._respond(404, 
+            self._respond(404,
                 [('Content-type', 'text/plain')], "Not Found" )
 
 
     def do_POST(self):
-        self.parsed_uri = urlparse.urlparse(self.path)
+        self.parsed_uri = urlparse(self.path)
         self.query = {}
         for k, v in parse_qsl(self.parsed_uri[4]):
-            self.query[k] = v.decode('utf-8')
+            self.query[k] = v
+
         path = self.parsed_uri[2]
         extra_headers = []
         if path == "/":
@@ -191,7 +208,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self._respond(200, extra_headers, "ok")
             else:
                 self.error_Response()
-            
+
         elif path == "/query":
             test = self.query.get("test", False)
             if test and test == "testing":
@@ -220,49 +237,53 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             else:
                 self.error_Response()
         elif path == "/multipart":
-            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
+            ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
             content_length = int(self.headers.get('Content-length', 0))
             if ctype == 'multipart/form-data':
-                req = cgi.parse_multipart(self.rfile, pdict)
+                print(pdict)
+                req, _ = parse_multipart(self.rfile, self.headers)
                 body = req['t'][0]
                 extra_headers = [('Content-type', 'text/plain')]
                 self._respond(200, extra_headers, body)
             else:
                 self.error_Response()
         elif path == "/multipart2":
-            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
-            content_length = int(self.headers.get('Content-length', 0))
+            ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
+            content_length = int(self.headers.get('Content-length', '-1'))
             if ctype == 'multipart/form-data':
-                req = cgi.parse_multipart(self.rfile, pdict)
-                f = req['f'][0]
+                req, files = parse_multipart(self.rfile, self.headers)
+                f = files['f']
+                f.file.seek(0)
                 if not req['a'] == ['aa']:
                     self.error_Response()
                 if not req['b'] == ['bb','éàù@']:
                     self.error_Response()
                 extra_headers = [('Content-type', 'text/plain')]
-                self._respond(200, extra_headers, str(len(f)))
+                import sys
+                sys.stderr.write("ici")
+                self._respond(200, extra_headers, str(len(f.file.read())))
             else:
                 self.error_Response()
         elif path == "/multipart3":
-            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
-            content_length = int(self.headers.get('Content-length', 0))
+            ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
+            content_length = int(self.headers.get('Content-length', '-1'))
             if ctype == 'multipart/form-data':
-                req = cgi.parse_multipart(self.rfile, pdict)
-                f = req['f'][0]
+                req, files = parse_multipart(self.rfile, self.headers)
+                f = files['f']
                 if not req['a'] == ['aa']:
                     self.error_Response()
                 if not req['b'] == ['éàù@']:
                     self.error_Response()
                 extra_headers = [('Content-type', 'text/plain')]
-                self._respond(200, extra_headers, str(len(f)))
+                self._respond(200, extra_headers, str(len(f.file.read())))
             else:
                 self.error_Response()
         elif path == "/multipart4":
-            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
+            ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
             content_length = int(self.headers.get('Content-length', 0))
             if ctype == 'multipart/form-data':
-                req = cgi.parse_multipart(self.rfile, pdict)
-                f = req['f'][0]
+                req, files = parse_multipart(self.rfile, self.headers)
+                f = files['f']
                 if not req['a'] == ['aa']:
                     self.error_Response()
                 if not req['b'] == ['éàù@']:
@@ -299,7 +320,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self.error_Response()
         else:
             self.error_Response('Bad path')
-            
+
     do_PUT = do_POST
 
     def do_DELETE(self):
@@ -343,12 +364,13 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         #if body and "Content-Length" not in keys:
         #    self.send_header("Content-Length", len(body))
         self.end_headers()
+
+        if isinstance(body, string_types):
+            body = str_to_bytes(body)
         self.wfile.write(body)
-        self.wfile.close()
+        self.wfile.flush()
 
     def finish(self):
-        if not self.wfile.closed:
-            self.wfile.flush()
         self.wfile.close()
         self.rfile.close()
 
@@ -358,7 +380,7 @@ def run_server_test():
     if server_thread is not None:
         return
 
-        
+
     server = HTTPServer((HOST, PORT), HTTPTestHandler)
 
     server_thread = threading.Thread(target=server.serve_forever)

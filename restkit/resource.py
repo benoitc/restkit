@@ -55,7 +55,7 @@ class Resource(object):
         self.uri = uri
         if self.basic_auth_url:
             # detect credentials from url
-            u = rlparse(uri)
+            u = urlparse(uri)
             if u.username:
                 password = u.password or ""
 

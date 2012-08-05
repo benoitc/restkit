@@ -90,11 +90,10 @@ def to_bytestring(s):
     """ convert to bytestring an unicode """
     if not isinstance(s, py3compat.string_types):
         return s
-    if isinstance(s, py3compat.text_type) and not py3compat.PY3:
-        return s.encode('utf-8')
-    else:
-        return s
-    return s
+    if isinstance(s, py3compat.text_type):
+        return py3compat.unicode_to_str(s)
+
+    return str(s)
 
 def url_quote(s, charset='utf-8', safe='/:'):
     """URL encode a single string with a given encoding."""
@@ -134,10 +133,10 @@ def url_encode(obj, charset="utf8", encode_keys=False):
 
 def encode(v, charset="utf8"):
     if isinstance(v, py3compat.text_type):
-        v = unicode_to_str(v)
+        v = py3compat.unicode_to_str(v)
     else:
         v = str(v)
-    return v.encode(charset)
+    return v.encode(charset, 'replace')
 
 
 def make_uri(base, *args, **kwargs):
@@ -161,7 +160,7 @@ def make_uri(base, *args, **kwargs):
     _path = []
     trailing_slash = False
     for s in args:
-        if s is not None and isinstance(s, basestring):
+        if s is not None and isinstance(s, py3compat.string_types):
             if len(s) > 1 and s.endswith('/'):
                 trailing_slash = True
             else:

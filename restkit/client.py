@@ -27,9 +27,11 @@ from restkit import __version__
 from restkit.conn import Connection
 from restkit.errors import (RequestError, RequestTimeout, RedirectLimit,
         ProxyError)
-from restkit.py3compat import urlparse, urlunparse, s2b, string_types
+from restkit.py3compat import (urlparse, urlunparse, s2b,
+        str_to_bytes, string_types)
 from restkit.session import get_session
-from restkit.util import parse_netloc, rewrite_location, to_bytestring
+from restkit.util import (parse_netloc, rewrite_location, to_bytestring,
+        url_quote)
 from restkit.wrappers import Request, Response
 
 MAX_CLIENT_TIMEOUT=300
@@ -271,11 +273,12 @@ class Client(object):
         if not accept_encoding:
             accept_encoding = 'identity'
 
+        path = url_quote(request.path)
         if request.is_proxied:
             full_path = ("https://" if request.is_ssl() else "http://") + \
-                    request.host + request.path
+                    request.host + path
         else:
-            full_path = request.path
+            full_path = path
 
         lheaders = [
             "%s %s %s\r\n" % (request.method, full_path, httpver),
@@ -289,7 +292,7 @@ class Client(object):
                 ('user-agent', 'host', 'accept-encoding',)])
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Send headers: %s" % lheaders)
-        return s2b("%s\r\n" % "".join(lheaders))
+        return "%s\r\n" % "".join(lheaders)
 
     def perform(self, request):
         """ perform the request. If an error happen it will first try to
@@ -306,8 +309,8 @@ class Client(object):
                 conn = self.get_connection(request)
 
                 # send headers
-                msg = self.make_headers_string(request,
-                        conn.extra_headers)
+                msg = str_to_bytes(self.make_headers_string(request,
+                    conn.extra_headers))
 
                 # send body
                 if request.body is not None:
@@ -341,12 +344,18 @@ class Client(object):
                         log.debug("send body (chunked: %s)" % chunked)
 
 
-                    if isinstance(request.body, string_types):
-                        if msg is not None:
-                            conn.send(msg + to_bytestring(request.body),
-                                    chunked)
+                    if isinstance(request.body, string_types) or \
+                            isinstance(request.body, bytes):
+
+                        if isinstance(request.body, string_types):
+                            body = str_to_bytes(request.body)
                         else:
-                            conn.send(to_bytestring(request.body), chunked)
+                            body = request.body
+
+                        if msg is not None:
+                            conn.send(msg + body, chunked)
+                        else:
+                            conn.send(body, chunked)
                     else:
                         if msg is not None:
                             conn.send(msg)
@@ -358,7 +367,7 @@ class Client(object):
                         else:
                             conn.sendlines(request.body, chunked)
                     if chunked:
-                        conn.send_chunk("")
+                        conn.send_chunk(b"")
                 else:
                     conn.send(msg)
 
@@ -379,7 +388,7 @@ class Client(object):
 
                 errors = (errno.EAGAIN, errno.EPIPE, errno.EBADF,
                         errno.ECONNRESET)
-                if e[0] not in errors or tries >= self.max_tries:
+                if e.errno not in errors or tries >= self.max_tries:
                     raise RequestError("socket.error: %s" % str(e))
 
                 # should raised an exception in other cases

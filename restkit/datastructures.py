@@ -26,14 +26,14 @@ class MultiDict(DictMixin):
             elif hasattr(args[0], 'iteritems'):
                 items = list(args[0].iteritems())
             elif hasattr(args[0], 'items'):
-                items = args[0].items()
+                items = list(args[0].items())
             else:
                 items = list(args[0])
             self._items = items
         else:
             self._items = []
         if kw:
-            self._items.extend(kw.iteritems())
+            self._items.extend(kw.items())
 
     @classmethod
     def from_fieldstorage(cls, fs):

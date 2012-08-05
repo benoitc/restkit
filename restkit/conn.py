@@ -13,6 +13,8 @@ import time
 from socketpool import Connector
 from socketpool.util import is_connected
 
+from restkit.py3compat import str_to_bytes, string_types
+
 CHUNK_SIZE = 16 * 1024
 MAX_BODY = 1024 * 112
 DNS_TIMEOUT = 60
@@ -85,7 +87,7 @@ class Connection(Connector):
         return self._s
 
     def send_chunk(self, data):
-        chunk = "".join(("%X\r\n" % len(data), data, "\r\n"))
+        chunk = b"".join((str_to_bytes("%X\r\n" % len(data)), data, b"\r\n"))
         self._s.sendall(chunk)
 
     def send(self, data, chunked=False):
@@ -96,6 +98,8 @@ class Connection(Connector):
 
     def sendlines(self, lines, chunked=False):
         for line in list(lines):
+            if isinstance(line, string_types):
+                line = str_to_bytes(line)
             self.send(line, chunked=chunked)
 
 
@@ -108,8 +112,12 @@ class Connection(Connector):
 
         while True:
             binarydata = data.read(CHUNK_SIZE)
-            if binarydata == '':
+            if not binarydata:
                 break
+
+            if isinstance(binarydata, string_types):
+                binarydata = str_to_bytes(binarydata)
+
             self.send(binarydata, chunked=chunked)
 
 

@@ -1,47 +1,49 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 
-import t
 
-from restkit.errors import RequestFailed, ResourceNotFound, \
-Unauthorized
+from restkit.errors import (RequestFailed, ResourceNotFound,
+        Unauthorized)
+from restkit.py3compat import StringIO
 from restkit.resource import Resource
-from _server_test import HOST, PORT
+
+from . import t
+from ._server_test import HOST, PORT
 
 @t.resource_request()
 def test_001(res):
     r = res.get()
     t.eq(r.status_int, 200)
-    t.eq(r.body_string(), "welcome")
+    t.eq(r.body_string(), b"welcome")
 
 @t.resource_request()
 def test_002(res):
     r = res.get('/unicode')
-    t.eq(r.body_string(), "éàù@")
+    t.eq(r.body_string(), str_to_bytes("éàù@"))
 
 @t.resource_request()
 def test_003(res):
     r = res.get('/éàù')
     t.eq(r.status_int, 200)
-    t.eq(r.body_string(), "ok")
+    t.eq(r.body_string(), b"ok")
 
 @t.resource_request()
 def test_004(res):
-    r = res.get(u'/test')
+    r = res.get('/test')
     t.eq(r.status_int, 200)
-    r = res.get(u'/éàù')
+    r = res.get('/éàù')
     t.eq(r.status_int, 200)
 
 @t.resource_request()
 def test_005(res):
     r = res.get('/json', headers={'Content-Type': 'application/json'})
     t.eq(r.status_int, 200)
-    t.raises(RequestFailed, res.get, '/json', 
+    t.raises(RequestFailed, res.get, '/json',
         headers={'Content-Type': 'text/plain'})
-        
+
 @t.resource_request()
 def test_006(res):
     t.raises(ResourceNotFound, res.get, '/unknown')
@@ -61,19 +63,18 @@ def test_008(res):
 @t.resource_request()
 def test_009(res):
     r = res.post('/bytestring', payload="éàù@")
-    t.eq(r.body_string(), "éàù@")
+    t.eq(r.body_string(), str_to_bytes("éàù@"))
 
 @t.resource_request()
 def test_010(res):
-    r = res.post('/unicode', payload=u"éàù@")
+    r = res.post('/unicode', payload="éàù@")
     t.eq(r.body_string(), "éàù@")
-    print "ok"
-    r = res.post('/unicode', payload=u"éàù@")
-    t.eq(r.body_string(charset="utf-8"), u"éàù@")
+    r = res.post('/unicode', payload=b"éàù@")
+    t.eq(r.body_string(charset="utf-8"), "éàù@")
 
 @t.resource_request()
 def test_011(res):
-    r = res.post('/json', payload="test", 
+    r = res.post('/json', payload="test",
             headers={'Content-Type': 'application/json'})
     t.eq(r.status_int, 200)
     t.raises(RequestFailed, res.post, '/json', payload='test',
@@ -86,7 +87,7 @@ def test_012(res):
     t.eq(r.status_int, 200)
     r = res.post('/empty', headers={'Content-Type': 'application/json'})
     t.eq(r.status_int, 200)
-    
+
 @t.resource_request()
 def test_013(res):
     r = res.post('/query', test="testing")
@@ -96,11 +97,11 @@ def test_013(res):
 def test_014(res):
     r = res.post('/form', payload={ "a": "a", "b": "b" })
     t.eq(r.status_int, 200)
-    
+
 @t.resource_request()
 def test_015(res):
     r = res.put(payload="test")
-    t.eq(r.body_string(), 'test')
+    t.eq(r.body_string(), b'test')
 
 @t.resource_request()
 def test_016(res):
@@ -109,28 +110,26 @@ def test_016(res):
 
 @t.resource_request()
 def test_017(res):
-    r = res.delete('/delete')    
+    r = res.delete('/delete')
     t.eq(r.status_int, 200)
 
 @t.resource_request()
 def test_018(res):
     content_length = len("test")
-    import StringIO
-    content = StringIO.StringIO("test")
+    content = StringIO("test")
     r = res.post('/json', payload=content,
             headers={
                 'Content-Type': 'application/json',
                 'Content-Length': str(content_length)
-            }) 
+            })
     t.eq(r.status_int, 200)
 
 @t.resource_request()
 def test_019(res):
-    import StringIO
-    content = StringIO.StringIO("test")
+    content = StringIO("test")
     t.raises(RequestFailed, res.post, '/json', payload=content,
             headers={'Content-Type': 'text/plain'})
-            
+
 def test_020():
     u = "http://test:test@%s:%s/auth" % (HOST, PORT)
     res = Resource(u)
@@ -184,9 +183,8 @@ def test_024(res):
 
 @t.resource_request()
 def test_025(res):
-    import StringIO
     content = 'éàù@'
-    f = StringIO.StringIO('éàù@')
+    f = StringIO('éàù@')
     f.name = 'test.txt'
     b = {'a':'aa','b':'éàù@', 'f':f}
     h = {'content-type':"multipart/form-data"}

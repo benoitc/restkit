@@ -13,7 +13,7 @@ from restkit.datastructures import MultiDict
 from restkit.errors import AlreadyRead, RequestError
 from restkit.forms import multipart_form_encode, form_encode
 from restkit.py3compat import (StringIO, urlparse, urlunparse,
-        string_types)
+        string_types, str_to_bytes)
 from restkit.tee import ResponseTeeInput
 from restkit.util import to_bytestring
 from restkit.util import parse_cookie
@@ -120,8 +120,13 @@ class Request(object):
                     self.is_chunked():
                 clen = len(self._body.getvalue())
             elif isinstance(self._body, string_types):
-                self._body = to_bytestring(self._body)
+                self._body = str_to_bytes(self._body)
                 clen = len(self._body)
+
+            elif isinstance(self._body, bytes):
+
+                clen = len(self._body)
+                print("len %s" % clen)
 
         if clen is not None:
             self.headers['Content-Length'] = clen
@@ -139,7 +144,8 @@ class Request(object):
     def maybe_rewind(self, msg=""):
         if self.body is not None:
             if not hasattr(self.body, 'seek') and \
-                    not isinstance(self.body, string_types):
+                    not isinstance(self.body, string_types) and \
+                    not isinstance(self.body, bytes):
                 raise RequestError("error: '%s', body can't be rewind."
                         % msg)
 

@@ -7,7 +7,7 @@ import base64
 import re
 
 from restkit.oauth2 import Request, SignatureMethod_HMAC_SHA1
-from restkit.py3compat import parse_qsl, urlunparse
+from restkit.py3compat import (parse_qsl, urlunparse, str_to_bytes, b2s)
 
 class BasicAuth(object):
     """ Simple filter to manage basic authentification"""
@@ -16,8 +16,9 @@ class BasicAuth(object):
         self.credentials = (username, password)
 
     def on_request(self, request):
-        encode = base64.b64encode("%s:%s" % self.credentials)
-        request.headers['Authorization'] = 'Basic %s' %  encode
+        encoded = base64.b64encode(str_to_bytes("%s:%s" %  self.credentials))
+
+        request.headers['Authorization'] = 'Basic %s' %  b2s(encoded)
 
 def validate_consumer(consumer):
     """ validate a consumer agains oauth2.Consumer object """
