@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 import base64
 from StringIO import StringIO
-import urlparse
-import urllib
 
 try:
     from webob import Request as BaseRequest
 except ImportError:
     raise ImportError('WebOb (http://pypi.python.org/pypi/WebOb) is required')
 
-from .wsgi_proxy import Proxy
+from restkit.py3compat import StringIO, urlencode, urlsplit, urlunsplit
+from restkit.contrib.wsgi_proxy import Proxy
+
+
 
 __doc__ = '''Subclasses of webob.Request who use restkit to get a
 webob.Response via restkit.ext.wsgi_proxy.Proxy.
@@ -32,7 +33,7 @@ Example::
     <BLANKLINE>
     <?xml version="1.0" encoding="UTF-8"?>
     ...
-    
+
 
 '''
 
@@ -56,14 +57,14 @@ class Request(BaseRequest):
     put = Method('put')
     head = Method('head')
     delete = Method('delete')
-    
+
     def get_response(self):
         if self.content_length < 0:
             self.content_length = 0
         if self.method in ('DELETE', 'GET'):
             self.body = ''
         elif self.method == 'POST' and self.POST:
-            body = urllib.urlencode(self.POST.copy())
+            body = urlencode(self.POST.copy())
             stream = StringIO(body)
             stream.seek(0)
             self.body_file = stream
@@ -80,7 +81,7 @@ class Request(BaseRequest):
         path = url.lstrip('/')
 
         if url.startswith("http://") or url.startswith("https://"):
-            u = urlparse.urlsplit(url)
+            u = urlsplit(url)
             if u.username is not None:
                 password = u.password or ""
                 encode = base64.b64encode("%s:%s" % (u.username, password))
@@ -90,15 +91,15 @@ class Request(BaseRequest):
             self.host = u.netloc.split("@")[-1]
             self.path_info = u.path or "/"
             self.query_string = u.query
-            url = urlparse.urlunsplit((u.scheme, u.netloc.split("@")[-1], 
+            url = urlunsplit((u.scheme, u.netloc.split("@")[-1],
                 u.path, u.query, u.fragment))
         else:
-        
+
             if '?' in path:
                 path, self.query_string = path.split('?', 1)
             self.path_info = '/' + path
-            
+
 
             url = self.url
-        self.scheme, self.host, self.path_info = urlparse.urlparse(url)[0:3]
+        self.scheme, self.host, self.path_info = urlparse(url)[0:3]
 

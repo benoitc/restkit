@@ -12,13 +12,10 @@ read or restart etc ... It's based on TeeInput from Gunicorn.
 """
 import copy
 import os
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
 import tempfile
 
 from restkit import conn
+from restkit.py3compat import StringIO, string_types
 
 class TeeInput(object):
 
@@ -28,7 +25,7 @@ class TeeInput(object):
         self.buf = StringIO()
         self.eof = False
 
-        if isinstance(stream, basestring):
+        if isinstance(stream, string_types):
             stream = StringIO(stream)
             self.tmp = StringIO()
         else:

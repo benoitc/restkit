@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
+import collections
 import os
 import re
 import time
-import urllib
-import urlparse
 import warnings
-import Cookie
+try: #PY3
+    import http.cookies as Cookie
+except ImportError:
+    import Cookie
 
 from restkit.errors import InvalidUrl
+from restkit import py3compat
 
 absolute_http_url_re = re.compile(r"^https?://", re.I)
 
@@ -19,17 +22,17 @@ try:#python 2.6, use subprocess
     import subprocess
     subprocess.Popen  # trigger ImportError early
     closefds = os.name == 'posix'
-    
+
     def popen3(cmd, mode='t', bufsize=0):
         p = subprocess.Popen(cmd, shell=True, bufsize=bufsize,
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             close_fds=closefds)
         p.wait()
         return (p.stdin, p.stdout, p.stderr)
 except ImportError:
     subprocess = None
     popen3 = os.popen3
-    
+
 def locate_program(program):
     if os.path.isabs(program):
         return program
@@ -49,7 +52,7 @@ weekdayname = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 monthname = [None,
              'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-             
+
 def http_date(timestamp=None):
     """Return the current date and time formatted for a message header."""
     if timestamp is None:
@@ -78,26 +81,29 @@ def parse_netloc(uri):
             port = 443
         else:
             port = 80
-            
+
     if host and host[0] == '[' and host[-1] == ']':
         host = host[1:-1]
     return (host, port)
 
 def to_bytestring(s):
-    if not isinstance(s, basestring):
-        raise TypeError("value should be a str or unicode")
-
-    if isinstance(s, unicode):
+    """ convert to bytestring an unicode """
+    if not isinstance(s, py3compat.string_types):
+        return s
+    if isinstance(s, py3compat.text_type) and not py3compat.PY3:
         return s.encode('utf-8')
+    else:
+        return s
     return s
-    
+
 def url_quote(s, charset='utf-8', safe='/:'):
     """URL encode a single string with a given encoding."""
-    if isinstance(s, unicode):
-        s = s.encode(charset)
-    elif not isinstance(s, str):
+
+    if isinstance(s, py3compat.string_types):
+        s = py3compat.unicode_to_str(s).encode(charset)
+    else:
         s = str(s)
-    return urllib.quote(s, safe=safe)
+    return py3compat.quote(s, safe=safe)
 
 
 def url_encode(obj, charset="utf8", encode_keys=False):
@@ -107,35 +113,35 @@ def url_encode(obj, charset="utf8", encode_keys=False):
             items.append((k, v))
     else:
         items = list(items)
-        
+
     tmp = []
     for k, v in items:
-        if encode_keys: 
+        if encode_keys:
             k = encode(k, charset)
-        
+
         if not isinstance(v, (tuple, list)):
             v = [v]
-            
+
         for v1 in v:
             if v1 is None:
                 v1 = ''
-            elif callable(v1):
+            elif py3compat.iscallable(v1):
                 v1 = encode(v1(), charset)
             else:
                 v1 = encode(v1, charset)
-            tmp.append('%s=%s' % (urllib.quote(k), urllib.quote_plus(v1)))
+            tmp.append('%s=%s' % (py3compat.quote(k), py3compat.quote_plus(v1)))
     return '&'.join(tmp)
-                
+
 def encode(v, charset="utf8"):
-    if isinstance(v, unicode):
-        v = v.encode(charset)
+    if isinstance(v, py3compat.text_type):
+        v = unicode_to_str(v)
     else:
         v = str(v)
-    return v
-    
+    return v.encode(charset)
+
 
 def make_uri(base, *args, **kwargs):
-    """Assemble a uri based on a base, any number of path segments, 
+    """Assemble a uri based on a base, any number of path segments,
     and query string parameters.
 
     """
@@ -144,16 +150,16 @@ def make_uri(base, *args, **kwargs):
     charset = kwargs.pop("charset", "utf-8")
     safe = kwargs.pop("safe", "/:")
     encode_keys = kwargs.pop("encode_keys", True)
-    
+
     base_trailing_slash = False
     if base and base.endswith("/"):
         base_trailing_slash = True
         base = base[:-1]
     retval = [base]
-    
+
     # build the path
     _path = []
-    trailing_slash = False       
+    trailing_slash = False
     for s in args:
         if s is not None and isinstance(s, basestring):
             if len(s) > 1 and s.endswith('/'):
@@ -161,15 +167,15 @@ def make_uri(base, *args, **kwargs):
             else:
                 trailing_slash = False
             _path.append(url_quote(s.strip('/'), charset, safe))
-                   
+
     path_str =""
     if _path:
         path_str = "/".join([''] + _path)
         if trailing_slash:
-            path_str = path_str + "/" 
+            path_str = path_str + "/"
     elif base_trailing_slash:
-        path_str = path_str + "/" 
-        
+        path_str = path_str + "/"
+
     if path_str:
         retval.append(path_str)
 
@@ -182,17 +188,17 @@ def make_uri(base, *args, **kwargs):
 
 def rewrite_location(host_uri, location, prefix_path=None):
     prefix_path = prefix_path or ''
-    url = urlparse.urlparse(location)
-    host_url = urlparse.urlparse(host_uri)
+    url = py3compat.urlparse(location)
+    host_url = py3compat.urlparse(host_uri)
 
     if not absolute_http_url_re.match(location):
         # remote server doesn't follow rfc2616
         proxy_uri = '%s%s' % (host_uri, prefix_path)
-        return urlparse.urljoin(proxy_uri, location)
+        return py3compat.urljoin(proxy_uri, location)
     elif url.scheme == host_url.scheme and url.netloc == host_url.netloc:
-        return urlparse.urlunparse((host_url.scheme, host_url.netloc, 
+        return py3compat.urlunparse((host_url.scheme, host_url.netloc,
             prefix_path + url.path, url.params, url.query, url.fragment))
-    
+
     return location
 
 def replace_header(name, value, headers):
@@ -240,14 +246,14 @@ def parse_cookie(cookie, final_url):
             return {}
     else:
         c = cookie
-    
+
     cookiedict = {}
 
     for key in c.keys():
         cook = c.get(key)
         cookiedict[key] = cook.value
     return cookiedict
-    
+
 
 class deprecated_property(object):
     """
@@ -287,4 +293,4 @@ class deprecated_property(object):
                 'The attribute %s is deprecated: %s' % (self.attr, self.message),
                 DeprecationWarning,
                 stacklevel=3)
-    
+

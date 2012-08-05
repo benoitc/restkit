@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 try:
     from UserDict import DictMixin
-except ImportError:    
+except ImportError:
     from collections import MutableMapping as DictMixin
- 
- 
+
+
 class MultiDict(DictMixin):
 
     """
@@ -104,7 +104,7 @@ class MultiDict(DictMixin):
         """
         result = {}
         multi = {}
-        for key, value in self.iteritems():
+        for key, value in self.items():
             if key in result:
                 # We do this to not clobber any lists that are
                 # *actual* values in this dictionary:
@@ -122,7 +122,7 @@ class MultiDict(DictMixin):
         Returns a dictionary where each key is associated with a list of values.
         """
         r = {}
-        for key, val in self.iteritems():
+        for key, val in self.items():
             r.setdefault(key, []).append(val)
         return r
 
@@ -159,8 +159,8 @@ class MultiDict(DictMixin):
 
     def pop(self, key, *args):
         if len(args) > 1:
-            raise TypeError, "pop expected at most 2 arguments, got "\
-                              + repr(1 + len(args))
+            raise TypeError("pop expected at most 2 arguments, got "\
+                              + repr(1 + len(args)))
         for i in range(len(self._items)):
             if self._items[i][0] == key:
                 v = self._items[i][1]
@@ -174,8 +174,8 @@ class MultiDict(DictMixin):
     def ipop(self, key, *args):
         """ like pop but case insensitive """
         if len(args) > 1:
-            raise TypeError, "pop expected at most 2 arguments, got "\
-                              + repr(1 + len(args))
+            raise TypeError("pop expected at most 2 arguments, got "\
+                              + repr(1 + len(args)))
 
         lkey = key.lower()
         for i, item in enumerate(self._items):
@@ -206,7 +206,7 @@ class MultiDict(DictMixin):
             self.update(kwargs)
 
     def __repr__(self):
-        items = ', '.join(['(%r, %r)' % v for v in self.iteritems()])
+        items = ', '.join(['(%r, %r)' % v for v in self.items()])
         return '%s([%s])' % (self.__class__.__name__, items)
 
     def __len__(self):

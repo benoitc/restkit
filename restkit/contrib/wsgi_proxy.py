@@ -3,15 +3,9 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-import urlparse
-
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
-
 from restkit.client import Client
 from restkit.conn import MAX_BODY
+from restkit.py3compat import StringIO, urlparse
 from restkit.util import rewrite_location
 
 ALLOWED_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
@@ -141,7 +135,7 @@ class HostProxy(Proxy):
     def __init__(self, uri, **kwargs):
         super(HostProxy, self).__init__(**kwargs)
         self.uri = uri.rstrip('/')
-        self.scheme, self.net_loc = urlparse.urlparse(self.uri)[0:2]
+        self.scheme, self.net_loc = urlparse(self.uri)[0:2]
 
     def extract_uri(self, environ):
         environ['HTTP_HOST'] = self.net_loc

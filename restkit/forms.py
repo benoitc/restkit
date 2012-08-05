@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 
 import mimetypes
 import os
 import re
-import urllib
 
-
+from restkit.py3compat import text_type
 from restkit.util import to_bytestring, url_quote, url_encode
 
 MIME_BOUNDARY = 'END_OF_PART'
@@ -30,7 +29,7 @@ class BoundaryItem(object):
             self.size = len(value)
         self.value = value
         if fname is not None:
-            if isinstance(fname, unicode):
+            if isinstance(fname, text_type):
                 fname = fname.encode("utf-8").encode("string_escape").replace('"', '\\"')
             else:
                 fname = fname.encode("string_escape").replace('"', '\\"')
@@ -112,7 +111,7 @@ class MultipartForm(object):
             if hasattr(value, "read"):
                 fname = getattr(value, 'name')
                 if fname is not None:
-                    filetype = ';'.join(filter(None, mimetypes.guess_type(fname)))
+                    filetype = ';'.join([_f for _f in mimetypes.guess_type(fname) if _f])
                 else:
                     filetype = None
                 if not isinstance(value, file) and self._clen is None:

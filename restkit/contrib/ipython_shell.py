@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
-
-from StringIO import StringIO
-import urlparse
 
 try:
     from IPython.config.loader import Config
@@ -12,7 +9,7 @@ try:
 except ImportError:
     raise ImportError('IPython (http://pypi.python.org/pypi/ipython) >=0.11' +\
                     'is required.')
-                    
+
 try:
     import webob
 except ImportError:
@@ -21,6 +18,7 @@ except ImportError:
 from webob import Response as BaseResponse
 
 from restkit import __version__
+from restkit.py3compat import StringIO, string_types
 from restkit.contrib.console import common_indent, json
 from restkit.contrib.webob_api import Request as BaseRequest
 
@@ -47,7 +45,7 @@ class Response(BaseResponse):
             skip_body = False
         return BaseResponse.__str__(self, skip_body=skip_body)
     def __call__(self):
-        print self
+        print(self)
 
 
 class Request(BaseRequest):
@@ -60,7 +58,7 @@ class Request(BaseRequest):
                 stream = a
                 a.seek(0)
                 continue
-            elif isinstance(a, basestring):
+            elif isinstance(a, string_types):
                 if a.startswith('http'):
                     url = a
                 elif a.startswith('/'):
@@ -85,7 +83,7 @@ class Request(BaseRequest):
         return BaseRequest.__str__(self, skip_body=skip_body)
 
     def __call__(self):
-        print self
+        print(self)
 
 
 class ContentTypes(object):
@@ -115,7 +113,7 @@ class RestShell(InteractiveShellEmbed):
         super(RestShell, self).__init__(config = cfg,
                 banner1= 'restkit shell %s' % __version__,
                 exit_msg="quit restcli shell", user_ns=user_ns)
-        
+
 
 class ShellClient(object):
     methods = dict(
@@ -172,10 +170,10 @@ class ShellClient(object):
         def req(*args, **kwargs):
             resp = self.request(k.upper(), *args, **kwargs)
             self.shell.user_ns.update(dict(resp=resp))
-
-            print resp
+            print (resp)
             return resp
-        req.func_name = k
+        if hasattr(req, 'func_name'):
+            req.func_name = k
         req.__name__ = k
         req.__doc__ =  """send a HTTP %s""" % k.upper()
         return req
@@ -208,8 +206,8 @@ class ShellClient(object):
             doc = '  >>> %s(%s)' % (k, args)
             methods += '%-65.65s # send a HTTP %s\n' % (doc, k)
         ns['methods'] = methods
-        print HELP.strip() % ns
-        print ''
+        print(HELP.strip() % ns)
+        print('')
 
     def __repr__(self):
         return '<shellclient>'
