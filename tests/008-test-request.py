@@ -100,6 +100,7 @@ def test_004():
     h = {'content-type':"multipart/form-data"}
 
     body, headers = multipart_form_encode(b, h, uuid.uuid4().hex)
+    print body
     r = request(u, method='POST', body=body, headers=headers)
     headers.update(h)
     t.eq(r.status_int, 200)

@@ -273,12 +273,11 @@ class Client(object):
         if not accept_encoding:
             accept_encoding = 'identity'
 
-        path = url_quote(request.path)
         if request.is_proxied:
             full_path = ("https://" if request.is_ssl() else "http://") + \
-                    request.host + path
+                    request.host + request.path
         else:
-            full_path = path
+            full_path = request.path
 
         lheaders = [
             "%s %s %s\r\n" % (request.method, full_path, httpver),
