@@ -64,8 +64,11 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         self.query = {}
         for k, v in parse_qsl(self.parsed_uri[4]):
             self.query[k] = v
-        print(self.query)
         path = self.parsed_uri[2]
+
+        import sys
+        sys.stderr.write("got %s\n" % path)
+
 
         if path == "/":
             extra_headers = [('Content-type', 'text/plain')]
@@ -168,6 +171,9 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             self.query[k] = v
 
         path = self.parsed_uri[2]
+
+        import sys
+        sys.stderr.write("got %s\n" % path)
         extra_headers = []
         if path == "/":
             content_type = self.headers.get('content-type', 'text/plain')
@@ -222,7 +228,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             content_length = int(self.headers.get('Content-length', 0))
             body = self.rfile.read(content_length)
             form = parse_qs(body)
-            if form['a'] == ["a"] and form["b"] == ["b"]:
+            if form[b'a'] == [b"a"] and form[b"b"] == [b"b"]:
                 self._respond(200, extra_headers, "ok")
             else:
                 self.error_Response()
@@ -232,7 +238,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             content_length = int(self.headers.get('Content-length', 0))
             body = self.rfile.read(content_length)
             form = parse_qs(body)
-            if form['a'] == ["a", "c"] and form["b"] == ["b"]:
+            if form[b'a'] == [b"a", b"c"] and form[b"b"] == [b"b"]:
                 self._respond(200, extra_headers, "ok")
             else:
                 self.error_Response()
@@ -359,14 +365,16 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         for k, v in extra_headers:
             self.send_header(k, v)
             keys.append(k)
-        if body:
-            body = to_bytestring(body)
+
         #if body and "Content-Length" not in keys:
         #    self.send_header("Content-Length", len(body))
         self.end_headers()
 
         if isinstance(body, string_types):
             body = str_to_bytes(body)
+
+        import sys
+        sys.stderr.write(bytes_to_str(b"send" + body + b"\n"))
         self.wfile.write(body)
         self.wfile.flush()
 

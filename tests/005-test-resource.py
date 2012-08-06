@@ -58,18 +58,18 @@ def test_007(res):
 @t.resource_request()
 def test_008(res):
     r = res.post(payload="test")
-    t.eq(r.body_string(), "test")
+    t.eq(r.body_string(), b"test")
 
 @t.resource_request()
 def test_009(res):
     r = res.post('/bytestring', payload="éàù@")
-    t.eq(r.body_string(), str_to_bytes("éàù@"))
+    t.eq(r.body_string(), "éàù@")
 
 @t.resource_request()
 def test_010(res):
     r = res.post('/unicode', payload="éàù@")
     t.eq(r.body_string(), "éàù@")
-    r = res.post('/unicode', payload=b"éàù@")
+    r = res.post('/unicode', payload="éàù@")
     t.eq(r.body_string(charset="utf-8"), "éàù@")
 
 @t.resource_request()

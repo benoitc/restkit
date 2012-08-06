@@ -275,9 +275,9 @@ class Client(object):
 
         if request.is_proxied:
             full_path = ("https://" if request.is_ssl() else "http://") + \
-                    request.host + request.path
+                    request.host + to_bytestring(request.path)
         else:
-            full_path = request.path
+            full_path = to_bytestring(request.path)
 
         lheaders = [
             "%s %s %s\r\n" % (request.method, full_path, httpver),
@@ -308,8 +308,8 @@ class Client(object):
                 conn = self.get_connection(request)
 
                 # send headers
-                msg = str_to_bytes(self.make_headers_string(request,
-                    conn.extra_headers))
+                msg = bytearray(self.make_headers_string(request,
+                    conn.extra_headers), 'latin1')
 
                 # send body
                 if request.body is not None:
