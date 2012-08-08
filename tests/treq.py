@@ -186,7 +186,7 @@ class response(object):
             if line != body[:len(line)]:
                 raise AssertionError("Invalid body data read: %r != %r" % (
                                                     line, body[:len(line)]))
-                body = body[len(line):]
+            body = body[len(line):]
         if len(body):
             raise AssertionError("Failed to read entire body: %r" % body)
         data = req.body.readlines(sizes())
