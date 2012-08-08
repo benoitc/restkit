@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 import base64
@@ -15,10 +15,10 @@ from restkit.oauth2 import Request, SignatureMethod_HMAC_SHA1
 
 class BasicAuth(object):
     """ Simple filter to manage basic authentification"""
-    
+
     def __init__(self, username, password):
         self.credentials = (username, password)
-    
+
     def on_request(self, request):
         encode = base64.b64encode("%s:%s" % self.credentials)
         request.headers['Authorization'] = 'Basic %s' %  encode
@@ -28,7 +28,7 @@ def validate_consumer(consumer):
     if not hasattr(consumer, "key"):
         raise ValueError("Invalid consumer.")
     return consumer
-    
+
 def validate_token(token):
     """ validate a token agains oauth2.Token object """
     if token is not None and not hasattr(token, "key"):
@@ -39,22 +39,22 @@ def validate_token(token):
 class OAuthFilter(object):
     """ oauth filter """
 
-    def __init__(self, path, consumer, token=None, method=None, 
+    def __init__(self, path, consumer, token=None, method=None,
             realm=""):
         """ Init OAuthFilter
-        
+
         :param path: path or regexp. * mean all path on wicth oauth can be
         applied.
         :param consumer: oauth consumer, instance of oauth2.Consumer
         :param token: oauth token, instance of oauth2.Token
         :param method: oauth signature method
-        
-        token and method signature are optionnals. Consumer should be an 
-        instance of `oauth2.Consumer`, token an  instance of `oauth2.Toke` 
+
+        token and method signature are optionnals. Consumer should be an
+        instance of `oauth2.Consumer`, token an  instance of `oauth2.Toke`
         signature method an instance of `oauth2.SignatureMethod`.
 
         """
-        
+
         if path.endswith('*'):
             self.match = re.compile("%s.*" % path.rsplit('*', 1)[0])
         else:
@@ -63,11 +63,11 @@ class OAuthFilter(object):
         self.token = validate_token(token)
         self.method = method or SignatureMethod_HMAC_SHA1()
         self.realm = realm
-  
+
     def on_path(self, request):
         path = request.parsed_url.path or "/"
         return (self.match.match(path) is not None)
-        
+
     def on_request(self, request):
         if not self.on_path(request):
             return
@@ -83,22 +83,22 @@ class OAuthFilter(object):
                 # we are in a form try to get oauth params from here
                 form = True
                 params = dict(parse_qsl(request.body))
-            
-        # update params from quey parameters    
+
+        # update params from quey parameters
         params.update(parse_qsl(parsed_url.query))
-      
+
         raw_url = urlunparse((parsed_url.scheme, parsed_url.netloc,
                 parsed_url.path, '', '', ''))
-        
-        oauth_req = Request.from_consumer_and_token(self.consumer, 
-                        token=self.token, http_method=request.method, 
+
+        oauth_req = Request.from_consumer_and_token(self.consumer,
+                        token=self.token, http_method=request.method,
                         http_url=raw_url, parameters=params)
-                    
+
         oauth_req.sign_request(self.method, self.consumer, self.token)
-        
+
         if form:
             request.body = oauth_req.to_postdata()
-            
+
             request.headers['Content-Length'] = len(request.body)
         elif request.method in ('GET', 'HEAD'):
             request.original_url = request.url

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 import base64
@@ -32,7 +32,7 @@ Example::
     <BLANKLINE>
     <?xml version="1.0" encoding="UTF-8"?>
     ...
-    
+
 
 '''
 
@@ -56,7 +56,7 @@ class Request(BaseRequest):
     put = Method('put')
     head = Method('head')
     delete = Method('delete')
-    
+
     def get_response(self):
         if self.content_length < 0:
             self.content_length = 0
@@ -90,14 +90,14 @@ class Request(BaseRequest):
             self.host = u.netloc.split("@")[-1]
             self.path_info = u.path or "/"
             self.query_string = u.query
-            url = urlparse.urlunsplit((u.scheme, u.netloc.split("@")[-1], 
+            url = urlparse.urlunsplit((u.scheme, u.netloc.split("@")[-1],
                 u.path, u.query, u.fragment))
         else:
-        
+
             if '?' in path:
                 path, self.query_string = path.split('?', 1)
             self.path_info = '/' + path
-            
+
 
             url = self.url
         self.scheme, self.host, self.path_info = urlparse.urlparse(url)[0:3]

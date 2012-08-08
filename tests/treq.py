@@ -13,7 +13,7 @@ import random
 from StringIO import StringIO
 import urlparse
 
-from restkit.datastructures import MultiDict 
+from restkit.datastructures import MultiDict
 from restkit.errors import ParseException
 from restkit.http import Request, Unreader
 
@@ -22,7 +22,7 @@ class IterUnreader(Unreader):
     def __init__(self, iterable, **kwargs):
         self.buf = StringIO()
         self.iter = iter(iterable)
-        
+
 
     def _data(self):
         if not self.iter:
@@ -32,7 +32,7 @@ class IterUnreader(Unreader):
         except StopIteration:
             self.iter = None
             return ""
-     
+
 
 dirname = os.path.dirname(__file__)
 random.seed()
@@ -56,7 +56,7 @@ def uri(data):
     ret["fragment"] = parts.fragment or None
     return ret
 
-    
+
 def load_response_py(fname):
     config = globals().copy()
     config["uri"] = uri
@@ -98,27 +98,27 @@ class response(object):
     def send_bytes(self):
         for d in self.data:
             yield d
-    
+
     def send_random(self):
         maxs = len(self.data) / 10
         read = 0
         while read < len(self.data):
             chunk = random.randint(1, maxs)
             yield self.data[read:read+chunk]
-            read += chunk                
+            read += chunk
 
     # These functions define the sizes that the
     # read functions will read with.
 
     def size_all(self):
         return -1
-    
+
     def size_bytes(self):
         return 1
-    
+
     def size_small_random(self):
         return random.randint(0, 4)
-    
+
     def size_random(self):
         return random.randint(1, 4096)
 
@@ -150,7 +150,7 @@ class response(object):
         if len(body):
             raise AssertionError("Failed to read entire body: %r" % body)
         elif len(data):
-            raise AssertionError("Read beyond expected body: %r" % data)        
+            raise AssertionError("Read beyond expected body: %r" % data)
         data = req.body.read(sizes())
         if data:
             raise AssertionError("Read after body finished: %r" % data)
@@ -172,7 +172,7 @@ class response(object):
         if len(body):
             raise AssertionError("Failed to read entire body: %r" % body)
         elif len(data):
-            raise AssertionError("Read beyond expected body: %r" % data)        
+            raise AssertionError("Read beyond expected body: %r" % data)
         data = req.body.readline(sizes())
         if data:
             raise AssertionError("Read data after body finished: %r" % data)
@@ -194,7 +194,7 @@ class response(object):
         data = req.body.readlines(sizes())
         if data:
             raise AssertionError("Read data after body finished: %r" % data)
-    
+
     def match_iter(self, req, body, sizes):
         """\
         This skips sizes because there's its not part of the iter api.
@@ -216,7 +216,7 @@ class response(object):
 
     # Construct a series of test cases from the permutations of
     # send, size, and match functions.
-    
+
     def gen_cases(self):
         def get_funs(p):
             return [v for k, v in inspect.getmembers(self) if k.startswith(p)]

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 from StringIO import StringIO
@@ -12,7 +12,7 @@ try:
 except ImportError:
     raise ImportError('IPython (http://pypi.python.org/pypi/ipython) >=0.11' +\
                     'is required.')
-                    
+
 try:
     import webob
 except ImportError:
@@ -115,7 +115,7 @@ class RestShell(InteractiveShellEmbed):
         super(RestShell, self).__init__(config = cfg,
                 banner1= 'restkit shell %s' % __version__,
                 exit_msg="quit restcli shell", user_ns=user_ns)
-        
+
 
 class ShellClient(object):
     methods = dict(

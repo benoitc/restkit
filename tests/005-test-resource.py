@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 
@@ -39,9 +39,9 @@ def test_004(res):
 def test_005(res):
     r = res.get('/json', headers={'Content-Type': 'application/json'})
     t.eq(r.status_int, 200)
-    t.raises(RequestFailed, res.get, '/json', 
+    t.raises(RequestFailed, res.get, '/json',
         headers={'Content-Type': 'text/plain'})
-        
+
 @t.resource_request()
 def test_006(res):
     t.raises(ResourceNotFound, res.get, '/unknown')
@@ -73,7 +73,7 @@ def test_010(res):
 
 @t.resource_request()
 def test_011(res):
-    r = res.post('/json', payload="test", 
+    r = res.post('/json', payload="test",
             headers={'Content-Type': 'application/json'})
     t.eq(r.status_int, 200)
     t.raises(RequestFailed, res.post, '/json', payload='test',
@@ -86,7 +86,7 @@ def test_012(res):
     t.eq(r.status_int, 200)
     r = res.post('/empty', headers={'Content-Type': 'application/json'})
     t.eq(r.status_int, 200)
-    
+
 @t.resource_request()
 def test_013(res):
     r = res.post('/query', test="testing")
@@ -96,7 +96,7 @@ def test_013(res):
 def test_014(res):
     r = res.post('/form', payload={ "a": "a", "b": "b" })
     t.eq(r.status_int, 200)
-    
+
 @t.resource_request()
 def test_015(res):
     r = res.put(payload="test")
@@ -109,7 +109,7 @@ def test_016(res):
 
 @t.resource_request()
 def test_017(res):
-    r = res.delete('/delete')    
+    r = res.delete('/delete')
     t.eq(r.status_int, 200)
 
 @t.resource_request()
@@ -121,7 +121,7 @@ def test_018(res):
             headers={
                 'Content-Type': 'application/json',
                 'Content-Length': str(content_length)
-            }) 
+            })
     t.eq(r.status_int, 200)
 
 @t.resource_request()
@@ -130,7 +130,7 @@ def test_019(res):
     content = StringIO.StringIO("test")
     t.raises(RequestFailed, res.post, '/json', payload=content,
             headers={'Content-Type': 'text/plain'})
-            
+
 def test_020():
     u = "http://test:test@%s:%s/auth" % (HOST, PORT)
     res = Resource(u)

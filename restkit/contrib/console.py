@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -
 #
-# This file is part of restkit released under the MIT license. 
+# This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
 from __future__ import with_statement
@@ -15,8 +15,8 @@ try:
     from pygments.formatters import TerminalFormatter
 except ImportError:
     pygments = False
-    
-# import json   
+
+# import json
 try:
     import simplejson as json
 except ImportError:
@@ -45,14 +45,14 @@ def external(cmd, data):
         return child_stdout.read()
     except:
         return data
-        
+
 def indent_xml(data):
     tidy_cmd = locate_program("tidy")
     if tidy_cmd:
         cmd = " ".join([tidy_cmd, '-qi', '-wrap', '70', '-utf8', data])
         return external(cmd, data)
     return data
-    
+
 def indent_json(data):
     if not json:
         return data
@@ -77,23 +77,23 @@ def indent(mimetype, data):
     if mimetype in common_indent:
         return common_indent[mimetype](data)
     return data
-    
+
 def prettify(response, cli=True):
     if not pygments or not 'content-type' in response.headers:
         return response.body_string()
-        
+
     ctype = response.headers['content-type']
     try:
         mimetype, encoding = ctype.split(";")
     except ValueError:
         mimetype = ctype.split(";")[0]
-        
+
     # indent body
     body = indent(mimetype, response.body_string())
-    
+
     # get pygments mimetype
     mimetype = pretties.get(mimetype, mimetype)
-    
+
     try:
         lexer = get_lexer_for_mimetype(mimetype)
         body = pygments.highlight(body, lexer, TerminalFormatter())
@@ -206,7 +206,7 @@ def main():
         else:
             fname = os.path.normpath(os.path.join(os.getcwd(),opts.input))
             body = open(fname, 'r')
-    
+
     if opts.headers:
         for header in opts.headers:
             try:
@@ -226,10 +226,10 @@ def main():
             method = 'POST'
         else:
             method=opts.method.upper()
-            
+
         resp = request(args[0], method=method, body=body,
                     headers=headers, follow_redirect=opts.follow_redirect)
-                        
+
         if opts.output and opts.output != '-':
             with open(opts.output, 'wb') as f:
                 if opts.server_response:
@@ -264,11 +264,11 @@ def main():
                     print prettify(resp)
                 else:
                     print resp.body_string()
-        
+
     except Exception, e:
         sys.stderr.write("An error happened: %s" % str(e))
         sys.stderr.flush()
         sys.exit(1)
 
     sys.exit(0)
-    
+

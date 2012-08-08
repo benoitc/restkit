@@ -14,9 +14,7 @@ import types
 import urlparse
 
 try:
-    from http_parser.http import (
-            HttpStream, BadStatusLine, NoMoreData
-    )
+    from http_parser.http import  HttpStream, BadStatusLine, NoMoreData
     from http_parser.reader import SocketReader
 except ImportError:
     raise ImportError("""http-parser isn't installed or out of data.
@@ -26,8 +24,8 @@ except ImportError:
 from restkit import __version__
 
 from restkit.conn import Connection
-from restkit.errors import RequestError, RequestTimeout, RedirectLimit, \
-ProxyError
+from restkit.errors import (RequestError, RequestTimeout, RedirectLimit,
+        ProxyError)
 from restkit.session import get_session
 from restkit.util import parse_netloc, rewrite_location, to_bytestring
 from restkit.wrappers import Request, Response
