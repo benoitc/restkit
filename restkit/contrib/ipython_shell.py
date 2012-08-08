@@ -47,7 +47,7 @@ class Response(BaseResponse):
             skip_body = False
         return BaseResponse.__str__(self, skip_body=skip_body)
     def __call__(self):
-        print self
+        print(str(self))
 
 
 class Request(BaseRequest):
@@ -85,7 +85,7 @@ class Request(BaseRequest):
         return BaseRequest.__str__(self, skip_body=skip_body)
 
     def __call__(self):
-        print self
+        print(str(self))
 
 
 class ContentTypes(object):
@@ -172,8 +172,7 @@ class ShellClient(object):
         def req(*args, **kwargs):
             resp = self.request(k.upper(), *args, **kwargs)
             self.shell.user_ns.update(dict(resp=resp))
-
-            print resp
+            print(resp)
             return resp
         req.func_name = k
         req.__name__ = k
@@ -208,8 +207,8 @@ class ShellClient(object):
             doc = '  >>> %s(%s)' % (k, args)
             methods += '%-65.65s # send a HTTP %s\n' % (doc, k)
         ns['methods'] = methods
-        print HELP.strip() % ns
-        print ''
+        print(HELP.strip() % ns)
+        print('')
 
     def __repr__(self):
         return '<shellclient>'

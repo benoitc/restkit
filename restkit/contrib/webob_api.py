@@ -23,7 +23,7 @@ Example::
 
     >>> req = Request.blank('http://pypi.python.org/pypi/restkit')
     >>> resp = req.get_response()
-    >>> print resp #doctest: +ELLIPSIS
+    >>> print(resp) #doctest: +ELLIPSIS
     200 OK
     Date: ...
     Transfer-Encoding: chunked
