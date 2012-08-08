@@ -3,7 +3,7 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-from restkit.errors import (RequestFailed, ResourceNotFound, Unauthorized
+from restkit.errors import RequestFailed, ResourceNotFound, Unauthorized
 from restkit.resource import Resource
 from restkit.py3compat import StringIO
 
