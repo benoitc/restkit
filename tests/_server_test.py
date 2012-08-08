@@ -54,9 +54,8 @@ class FieldStorage(cgi.FieldStorage):
         return bool(self.list or self.file)
 
     def make_file(self, binary=None):
-
         import tempfile
-        return tempfile.TemporaryFile()
+        return tempfile.TemporaryFile("w+b")
 
 
 def parse_multipart(fp, headers):
@@ -67,6 +66,8 @@ def parse_multipart(fp, headers):
     sys.stderr.write('got clen %s\n' % headers.get('content-length', 0))
     args = dict(fp=fp, environ=environ, keep_blank_values=True)
     if PY3:
+        args['fp'] = NCTextIOWrapper(args['fp'], encoding='ISO-8859-1',
+                                         newline='\n')
         args['encoding'] = 'ISO-8859-1'
 
     sys.stderr.write( "%s\n" % str(args))
@@ -76,7 +77,7 @@ def parse_multipart(fp, headers):
         post[item.name] = item if item.filename else item.value
 
 
-    sys.stderr.write("post %s\n\n" % str(form.list))
+    sys.stderr.write("post %s\n\n" % str(post))
     return post
 
 
