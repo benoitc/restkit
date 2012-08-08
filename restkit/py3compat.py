@@ -121,20 +121,20 @@ else:
         MAXSIZE = int((1 << 63) - 1)
     del X
 
-    import urlparse
-    urlparse = urlparse.urlparse
-    urlunparse = urlparse.urlunparse
-    urlsplit = urlparse.urlsplit
-    urlunsplit = urlparse.urlunsplit
-    parse_qsl = urlparse.parse_qsl
-    parse_qs = urlparse.parse_qs
-    urljoin = urlparse.urljoin
+    import urlparse as orig_urlparse
+    urlparse = orig_urlparse.urlparse
+    urlunparse = orig_urlparse.urlunparse
+    urlsplit = orig_urlparse.urlsplit
+    urlunsplit = orig_urlparse.urlunsplit
+    parse_qsl = orig_urlparse.parse_qsl
+    parse_qs = orig_urlparse.parse_qs
+    urljoin = orig_urlparse.urljoin
 
     import urllib
     quote = urllib.quote
     quote_plus = urllib.quote_plus
     unquote = urllib.unquote
-    urlencode = urllib.encode
+    urlencode = urllib.urlencode
 
     iscallable = callable
 
