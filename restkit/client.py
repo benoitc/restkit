@@ -360,15 +360,15 @@ class Client(object):
                     conn.send(msg)
 
                 return self.get_response(request, conn)
-            except socket.gaierror, e:
+            except socket.gaierror as e:
                 if conn is not None:
                     conn.release(True)
                 raise RequestError(str(e))
-            except socket.timeout, e:
+            except socket.timeout as e:
                 if conn is not None:
                     conn.release(True)
                 raise RequestTimeout(str(e))
-            except socket.error, e:
+            except socket.error as e:
                 if log.isEnabledFor(logging.DEBUG):
                     log.debug("socket error: %s" % str(e))
                 if conn is not None:
@@ -376,13 +376,13 @@ class Client(object):
 
                 errors = (errno.EAGAIN, errno.EPIPE, errno.EBADF,
                         errno.ECONNRESET)
-                if e[0] not in errors or tries >= self.max_tries:
+                if e.errno not in errors or tries >= self.max_tries:
                     raise RequestError("socket.error: %s" % str(e))
 
                 # should raised an exception in other cases
                 request.maybe_rewind(msg=str(e))
 
-            except NoMoreData, e:
+            except NoMoreData as e:
                 if conn is not None:
                     conn.release(True)
 

@@ -186,7 +186,7 @@ def main():
         try:
             from restkit.contrib import ipython_shell as shell
             shell.main(options=opts, *args)
-        except Exception, e:
+        except Exception as e:
             print >>sys.stderr, str(e)
             sys.exit(1)
         return
@@ -265,7 +265,7 @@ def main():
                 else:
                     print resp.body_string()
 
-    except Exception, e:
+    except Exception as e:
         sys.stderr.write("An error happened: %s" % str(e))
         sys.stderr.flush()
         sys.exit(1)
