@@ -11,7 +11,6 @@ import socket
 import ssl
 import traceback
 import types
-import urlparse
 
 try:
     from http_parser.http import  HttpStream, BadStatusLine, NoMoreData
@@ -26,6 +25,7 @@ from restkit import __version__
 from restkit.conn import Connection
 from restkit.errors import (RequestError, RequestTimeout, RedirectLimit,
         ProxyError)
+from restkit.py3compat import urlparse, urlunparse
 from restkit.session import get_session
 from restkit.util import parse_netloc, rewrite_location, to_bytestring
 from restkit.wrappers import Request, Response
@@ -203,7 +203,7 @@ class Client(object):
             request.is_proxied = True
 
             proxy_settings, proxy_auth =  _get_proxy_auth(proxy_settings)
-            addr = parse_netloc(urlparse.urlparse(proxy_settings))
+            addr = parse_netloc(urlparse(proxy_settings))
 
             if is_ssl:
                 if proxy_auth:
@@ -519,10 +519,10 @@ def _get_proxy_auth(proxy_settings):
     proxy_password = proxy_password or ""
 
     if not proxy_username:
-        u = urlparse.urlparse(proxy_settings)
+        u = urlparse(proxy_settings)
         if u.username:
             proxy_password = u.password or proxy_password
-            proxy_settings = urlparse.urlunparse((u.scheme,
+            proxy_settings = urlunparse((u.scheme,
                 u.netloc.split("@")[-1], u.path, u.params, u.query,
                 u.fragment))
 

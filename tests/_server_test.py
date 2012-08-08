@@ -23,14 +23,9 @@ import socket
 import tempfile
 import threading
 import unittest
-import urlparse
-import Cookie
 
-try:
-    from urlparse import parse_qsl, parse_qs
-except ImportError:
-    from cgi import parse_qsl, parse_qs
-import urllib
+from restkit.py3compat import (parse_qs, parse_qsl, unquote, urlparse,
+        Cookie)
 from restkit.util import to_bytestring
 
 HOST = 'localhost'
@@ -45,7 +40,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
 
 
     def do_GET(self):
-        self.parsed_uri = urlparse.urlparse(urllib.unquote(self.path))
+        self.parsed_uri = urlparse(unquote(self.path))
         self.query = {}
         for k, v in parse_qsl(self.parsed_uri[4]):
             self.query[k] = v.decode('utf-8')
@@ -146,7 +141,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
 
 
     def do_POST(self):
-        self.parsed_uri = urlparse.urlparse(self.path)
+        self.parsed_uri = urlparse(self.path)
         self.query = {}
         for k, v in parse_qsl(self.parsed_uri[4]):
             self.query[k] = v.decode('utf-8')

@@ -9,6 +9,7 @@ import t
 from restkit.errors import RequestFailed, ResourceNotFound, \
 Unauthorized
 from restkit.resource import Resource
+from restkit.py3compat import StringIO
 from _server_test import HOST, PORT
 
 @t.resource_request()
@@ -115,8 +116,7 @@ def test_017(res):
 @t.resource_request()
 def test_018(res):
     content_length = len("test")
-    import StringIO
-    content = StringIO.StringIO("test")
+    content = StringIO("test")
     r = res.post('/json', payload=content,
             headers={
                 'Content-Type': 'application/json',
@@ -126,8 +126,7 @@ def test_018(res):
 
 @t.resource_request()
 def test_019(res):
-    import StringIO
-    content = StringIO.StringIO("test")
+    content = StringIO("test")
     t.raises(RequestFailed, res.post, '/json', payload=content,
             headers={'Content-Type': 'text/plain'})
 
@@ -184,9 +183,8 @@ def test_024(res):
 
 @t.resource_request()
 def test_025(res):
-    import StringIO
     content = 'éàù@'
-    f = StringIO.StringIO('éàù@')
+    f = StringIO('éàù@')
     f.name = 'test.txt'
     b = {'a':'aa','b':'éàù@', 'f':f}
     h = {'content-type':"multipart/form-data"}

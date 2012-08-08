@@ -10,12 +10,11 @@ import t
 import inspect
 import os
 import random
-from StringIO import StringIO
-import urlparse
 
 from restkit.datastructures import MultiDict
 from restkit.errors import ParseException
 from restkit.http import Request, Unreader
+from restkit.py3compat import StringIO, urlparse, execfile
 
 class IterUnreader(Unreader):
 
@@ -39,7 +38,7 @@ random.seed()
 
 def uri(data):
     ret = {"raw": data}
-    parts = urlparse.urlparse(data)
+    parts = urlparse(data)
     ret["scheme"] = parts.scheme or None
     ret["host"] = parts.netloc.rsplit(":", 1)[0] or None
     ret["port"] = parts.port or 80

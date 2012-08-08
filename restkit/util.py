@@ -6,12 +6,11 @@
 import os
 import re
 import time
-import urllib
-import urlparse
 import warnings
-import Cookie
 
 from restkit.errors import InvalidUrl
+from restkit.py3compat import (string_types, iscallable, quote,
+        quote_plus, urlparse, urljoin, urlunparse, Cookie)
 
 absolute_http_url_re = re.compile(r"^https?://", re.I)
 
@@ -84,7 +83,7 @@ def parse_netloc(uri):
     return (host, port)
 
 def to_bytestring(s):
-    if not isinstance(s, basestring):
+    if not isinstance(s, string_types):
         raise TypeError("value should be a str or unicode")
 
     if isinstance(s, unicode):
@@ -97,7 +96,7 @@ def url_quote(s, charset='utf-8', safe='/:'):
         s = s.encode(charset)
     elif not isinstance(s, str):
         s = str(s)
-    return urllib.quote(s, safe=safe)
+    return quote(s, safe=safe)
 
 
 def url_encode(obj, charset="utf8", encode_keys=False):
@@ -119,11 +118,11 @@ def url_encode(obj, charset="utf8", encode_keys=False):
         for v1 in v:
             if v1 is None:
                 v1 = ''
-            elif callable(v1):
+            elif iscallable(v1):
                 v1 = encode(v1(), charset)
             else:
                 v1 = encode(v1, charset)
-            tmp.append('%s=%s' % (urllib.quote(k), urllib.quote_plus(v1)))
+            tmp.append('%s=%s' % (quote(k), quote_plus(v1)))
     return '&'.join(tmp)
 
 def encode(v, charset="utf8"):
@@ -155,7 +154,7 @@ def make_uri(base, *args, **kwargs):
     _path = []
     trailing_slash = False
     for s in args:
-        if s is not None and isinstance(s, basestring):
+        if s is not None and isinstance(s, string_types):
             if len(s) > 1 and s.endswith('/'):
                 trailing_slash = True
             else:
@@ -182,15 +181,15 @@ def make_uri(base, *args, **kwargs):
 
 def rewrite_location(host_uri, location, prefix_path=None):
     prefix_path = prefix_path or ''
-    url = urlparse.urlparse(location)
-    host_url = urlparse.urlparse(host_uri)
+    url = urlparse(location)
+    host_url = urlparse(host_uri)
 
     if not absolute_http_url_re.match(location):
         # remote server doesn't follow rfc2616
         proxy_uri = '%s%s' % (host_uri, prefix_path)
-        return urlparse.urljoin(proxy_uri, location)
+        return urljoin(proxy_uri, location)
     elif url.scheme == host_url.scheme and url.netloc == host_url.netloc:
-        return urlparse.urlunparse((host_url.scheme, host_url.netloc,
+        return urlunparse((host_url.scheme, host_url.netloc,
             prefix_path + url.path, url.params, url.query, url.fragment))
 
     return location

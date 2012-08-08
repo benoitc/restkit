@@ -10,14 +10,13 @@ import imghdr
 import os
 import socket
 import threading
-import Queue
-import urlparse
 import sys
 import tempfile
 import time
 
-import t
+from . import t
 from restkit.filters import BasicAuth
+from restkit.py3compat import Queue
 
 
 LONG_BODY_PART = """This is a relatively long body, that we send to the client...

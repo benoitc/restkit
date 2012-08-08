@@ -5,13 +5,9 @@
 
 import base64
 import re
-try:
-    from urlparse import parse_qsl
-except ImportError:
-    from cgi import parse_qsl
-from urlparse import urlunparse
 
 from restkit.oauth2 import Request, SignatureMethod_HMAC_SHA1
+from restkit.py3compat import parse_sql, urlunparse
 
 class BasicAuth(object):
     """ Simple filter to manage basic authentification"""

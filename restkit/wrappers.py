@@ -7,14 +7,13 @@ import cgi
 import copy
 import mimetypes
 import os
-from StringIO import StringIO
-import types
-import urlparse
 import uuid
 
 from restkit.datastructures import MultiDict
 from restkit.errors import AlreadyRead, RequestError
 from restkit.forms import multipart_form_encode, form_encode
+from restkit.py3compat import (StringIO, urlparse, urlunparse,
+        string_types)
 from restkit.tee import ResponseTeeInput
 from restkit.util import to_bytestring
 from restkit.util import parse_cookie
@@ -48,14 +47,14 @@ class Request(object):
     def _parsed_url(self):
         if self.url is None:
             raise ValueError("url isn't set")
-        return urlparse.urlparse(self.url)
+        return urlparse(self.url)
     parsed_url = property(_parsed_url, doc="parsed url")
 
     def _path__get(self):
         parsed_url = self.parsed_url
         path = parsed_url.path or '/'
 
-        return urlparse.urlunparse(('','', path, parsed_url.params,
+        return urlunparse(('','', path, parsed_url.params,
             parsed_url.query, parsed_url.fragment))
     path = property(_path__get)
 
@@ -120,7 +119,7 @@ class Request(object):
             elif hasattr(self._body, 'getvalue') and not \
                     self.is_chunked():
                 clen = len(self._body.getvalue())
-            elif isinstance(self._body, types.StringTypes):
+            elif isinstance(self._body, string_types):
                 self._body = to_bytestring(self._body)
                 clen = len(self._body)
 
@@ -140,7 +139,7 @@ class Request(object):
     def maybe_rewind(self, msg=""):
         if self.body is not None:
             if not hasattr(self.body, 'seek') and \
-                    not isinstance(self.body, types.StringTypes):
+                    not isinstance(self.body, string_types):
                 raise RequestError("error: '%s', body can't be rewind."
                         % msg)
 

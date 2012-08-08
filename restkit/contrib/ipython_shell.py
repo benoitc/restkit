@@ -3,9 +3,6 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-from StringIO import StringIO
-import urlparse
-
 try:
     from IPython.config.loader import Config
     from IPython.frontend.terminal.embed  import InteractiveShellEmbed
@@ -23,7 +20,7 @@ from webob import Response as BaseResponse
 from restkit import __version__
 from restkit.contrib.console import common_indent, json
 from restkit.contrib.webob_api import Request as BaseRequest
-
+from restkit.py3compat import StringIO, string_types
 
 class Stream(StringIO):
     def __repr__(self):
@@ -60,7 +57,7 @@ class Request(BaseRequest):
                 stream = a
                 a.seek(0)
                 continue
-            elif isinstance(a, basestring):
+            elif isinstance(a, string_types):
                 if a.startswith('http'):
                     url = a
                 elif a.startswith('/'):

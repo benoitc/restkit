@@ -8,6 +8,7 @@ import uuid
 import t
 from restkit import request
 from restkit.forms import multipart_form_encode
+from restkit.py3compat import StringIO
 
 from _server_test import HOST, PORT
 
@@ -127,10 +128,9 @@ def test_006():
     t.eq(r.body_string(), content)
 
 def test_007():
-    import StringIO
     u = "http://%s:%s/multipart4" % (HOST, PORT)
     content = 'éàù@'
-    f = StringIO.StringIO('éàù@')
+    f = StringIO('éàù@')
     f.name = 'test.txt'
     b = {'a':'aa','b':'éàù@', 'f':f}
     h = {'content-type':"multipart/form-data"}

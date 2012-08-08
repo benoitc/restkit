@@ -18,8 +18,9 @@ except ImportError:
     import traceback
     traceback.print_exc()
 
-import urlparse
 import logging
+
+from restkit.py3compat import urlparse, urlunparse
 
 LOG_LEVELS = {
     "critical": logging.CRITICAL,
@@ -92,11 +93,11 @@ def request(url,
     """
 
     # detect credentials from url
-    u = urlparse.urlparse(url)
+    u = urlparse(url)
     if u.username is not None:
         password = u.password or ""
         filters = kwargs.get('filters') or []
-        url = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
+        url = urlunparse((u.scheme, u.netloc.split("@")[-1],
             u.path, u.params, u.query, u.fragment))
         filters.append(BasicAuth(u.username, password))
 

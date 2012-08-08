@@ -7,14 +7,13 @@
 from __future__ import with_statement
 
 import os
-from StringIO import StringIO
 import tempfile
 
 dirname = os.path.dirname(__file__)
 
 from restkit.client import Client
 from restkit.resource import Resource
-
+from restkit.py3compat import StringIO
 from _server_test import HOST, PORT, run_server_test
 run_server_test()
 

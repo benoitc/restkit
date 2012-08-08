@@ -7,9 +7,8 @@
 import mimetypes
 import os
 import re
-import urllib
 
-
+from restkit.py3compat import text_type
 from restkit.util import to_bytestring, url_quote, url_encode
 
 MIME_BOUNDARY = 'END_OF_PART'
@@ -30,7 +29,7 @@ class BoundaryItem(object):
             self.size = len(value)
         self.value = value
         if fname is not None:
-            if isinstance(fname, unicode):
+            if isinstance(fname, text_type):
                 fname = fname.encode("utf-8").encode("string_escape").replace('"', '\\"')
             else:
                 fname = fname.encode("string_escape").replace('"', '\\"')

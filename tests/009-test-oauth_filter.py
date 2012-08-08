@@ -12,14 +12,9 @@
 # Key: bd37aed57e15df53
 # Secret: 0e9e6413a9ef49510a4f68ed02cd
 
-try:
-    from urlparse import parse_qs, parse_qsl
-except ImportError:
-    from cgi import parse_qs, parse_qsl
-import urllib
-
 from restkit import request, OAuthFilter
 from restkit.oauth2 import Consumer
+from restkit.py3compat import parse_qs, parse_qsl, urlencode
 import t
 
 
@@ -50,7 +45,7 @@ class oauth_request(object):
     def __call__(self, func):
         def run():
             o = OAuthFilter('*', self.consumer)
-            func(o, self.url, urllib.urlencode(self.body))
+            func(o, self.url, urlencode(self.body))
         run.func_name = func.func_name
         return run
 
