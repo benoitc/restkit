@@ -3,14 +3,12 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-try:
-    from UserDict import DictMixin
-except ImportError:
-    from collections import MutableMapping as DictMixin
+from collections import MutableMapping
+
+from restkit.py3compat import PY3, iteritems_, itervalues_
 
 
-class MultiDict(DictMixin):
-
+class MultiDict(MutableMapping):
     """
         An ordered dictionary that can have multiple values for each key.
         Adds the methods getall, getone, mixed and extend and add to the normal
@@ -19,21 +17,33 @@ class MultiDict(DictMixin):
 
     def __init__(self, *args, **kw):
         if len(args) > 1:
-            raise TypeError("MultiDict can only be called with one positional argument")
+            raise TypeError("MultiDict can only be called with one positional "
+                            "argument")
         if args:
-            if isinstance(args[0], MultiDict):
-                items = args[0]._items
-            elif hasattr(args[0], 'iteritems'):
+            if hasattr(args[0], 'iteritems'):
                 items = list(args[0].iteritems())
             elif hasattr(args[0], 'items'):
-                items = args[0].items()
+                items = list(args[0].items())
             else:
                 items = list(args[0])
             self._items = items
         else:
             self._items = []
         if kw:
-            self._items.extend(kw.iteritems())
+            self._items.extend(kw.items())
+
+    @classmethod
+    def view_list(cls, lst):
+        """
+        Create a dict that is a view on the given list
+        """
+        if not isinstance(lst, list):
+            raise TypeError(
+                "%s.view_list(obj) takes only actual list objects, not %r"
+                % (cls.__name__, lst))
+        obj = cls()
+        obj._items = lst
+        return obj
 
     @classmethod
     def from_fieldstorage(cls, fs):
@@ -42,11 +52,17 @@ class MultiDict(DictMixin):
         """
         obj = cls()
         # fs.list can be None when there's nothing to parse
+        if PY3: # pragma: no cover
+            decode = lambda b: b
+        else:
+            decode = lambda b: b.decode('utf8')
         for field in fs.list or ():
+            field.name = decode(field.name)
             if field.filename:
+                field.filename = decode(field.filename)
                 obj.add(field.name, field)
             else:
-                obj.add(field.name, field.value)
+                obj.add(field.name, decode(field.value))
         return obj
 
     def __getitem__(self, key):
@@ -72,7 +88,11 @@ class MultiDict(DictMixin):
         """
         Return a list of all values matching the key (may be an empty list)
         """
-        return [v for k, v in self._items if k == key]
+        result = []
+        for k, v in self._items:
+            if key == k:
+                result.append(v)
+        return result
 
     def iget(self, key):
         """like get but case insensitive """
@@ -104,7 +124,7 @@ class MultiDict(DictMixin):
         """
         result = {}
         multi = {}
-        for key, value in self.iteritems():
+        for key, value in self.items():
             if key in result:
                 # We do this to not clobber any lists that are
                 # *actual* values in this dictionary:
@@ -122,7 +142,7 @@ class MultiDict(DictMixin):
         Returns a dictionary where each key is associated with a list of values.
         """
         r = {}
-        for key, val in self.iteritems():
+        for key, val in self.items():
             r.setdefault(key, []).append(val)
         return r
 
@@ -145,7 +165,7 @@ class MultiDict(DictMixin):
     has_key = __contains__
 
     def clear(self):
-        self._items = []
+        del self._items[:]
 
     def copy(self):
         return self.__class__(self)
@@ -159,8 +179,8 @@ class MultiDict(DictMixin):
 
     def pop(self, key, *args):
         if len(args) > 1:
-            raise TypeError, "pop expected at most 2 arguments, got "\
-                              + repr(1 + len(args))
+            raise TypeError("pop expected at most 2 arguments, got %s"
+                             % repr(1 + len(args)))
         for i in range(len(self._items)):
             if self._items[i][0] == key:
                 v = self._items[i][1]
@@ -174,12 +194,12 @@ class MultiDict(DictMixin):
     def ipop(self, key, *args):
         """ like pop but case insensitive """
         if len(args) > 1:
-            raise TypeError, "pop expected at most 2 arguments, got "\
-                              + repr(1 + len(args))
+            raise TypeError("pop expected at most 2 arguments, got %s"
+                             % repr(1 + len(args)))
 
         lkey = key.lower()
-        for i, item in enumerate(self._items):
-            if item[0].lower() == lkey:
+        for i in range(len(self._items)):
+            if self._items[i][0].lower() == lkey:
                 v = self._items[i][1]
                 del self._items[i]
                 return v
@@ -190,6 +210,18 @@ class MultiDict(DictMixin):
 
     def popitem(self):
         return self._items.pop()
+
+    def update(self, *args, **kw):
+        if args:
+            lst = args[0]
+            if len(lst) != len(dict(lst)):
+                # this does not catch the cases where we overwrite existing
+                # keys, but those would produce too many warning
+                msg = ("Behavior of MultiDict.update() has changed "
+                    "and overwrites duplicate keys. Consider using .extend()"
+                )
+                warnings.warn(msg, UserWarning, stacklevel=2)
+        MutableMapping.update(self, *args, **kw)
 
     def extend(self, other=None, **kwargs):
         if other is None:
@@ -206,8 +238,8 @@ class MultiDict(DictMixin):
             self.update(kwargs)
 
     def __repr__(self):
-        items = ', '.join(['(%r, %r)' % v for v in self.iteritems()])
-        return '%s([%s])' % (self.__class__.__name__, items)
+        items = map('(%r, %r)'.__mod__, _hide_passwd(self.items()))
+        return '%s([%s])' % (self.__class__.__name__, ', '.join(items))
 
     def __len__(self):
         return len(self._items)
@@ -216,26 +248,32 @@ class MultiDict(DictMixin):
     ## All the iteration:
     ##
 
-    def keys(self):
-        return [k for k, v in self._items]
-
     def iterkeys(self):
         for k, v in self._items:
             yield k
+    if PY3: # pragma: no cover
+        keys = iterkeys
+    else:
+        def keys(self):
+            return [k for k, v in self._items]
 
     __iter__ = iterkeys
-
-    def items(self):
-        return self._items[:]
 
     def iteritems(self):
         return iter(self._items)
 
-    def values(self):
-        return [v for k, v in self._items]
+    if PY3: # pragma: no cover
+        items = iteritems
+    else:
+        def items(self):
+            return self._items[:]
 
     def itervalues(self):
         for k, v in self._items:
             yield v
 
-
+    if PY3: # pragma: no cover
+        values = itervalues
+    else:
+        def values(self):
+            return [v for k, v in self._items]

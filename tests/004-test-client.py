@@ -3,8 +3,6 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-from __future__ import with_statement
-
 import cgi
 import imghdr
 import os
@@ -83,7 +81,7 @@ def test_001(u, c):
 @t.client_request("/unicode")
 def test_002(u, c):
     r = c.request(u)
-    t.eq(r.body_string(charset="utf-8"), u"éàù@")
+    t.eq(r.body_string(charset="utf-8"), "éàù@")
 
 @t.client_request("/éàù")
 def test_003(u, c):
@@ -161,7 +159,7 @@ def test_011(u, c):
 
 @t.client_request('/unicode')
 def test_012(u, c):
-    r = c.request(u, 'POST', body=u"éàù@")
+    r = c.request(u, 'POST', body="éàù@")
     t.eq(r.body_string(), "éàù@")
 
 

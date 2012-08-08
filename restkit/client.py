@@ -10,7 +10,6 @@ import time
 import socket
 import ssl
 import traceback
-import types
 
 try:
     from http_parser.http import  HttpStream, BadStatusLine, NoMoreData
@@ -25,7 +24,7 @@ from restkit import __version__
 from restkit.conn import Connection
 from restkit.errors import (RequestError, RequestTimeout, RedirectLimit,
         ProxyError)
-from restkit.py3compat import urlparse, urlunparse
+from restkit.py3compat import string_types, urlparse, urlunparse
 from restkit.session import get_session
 from restkit.util import parse_netloc, rewrite_location, to_bytestring
 from restkit.wrappers import Request, Response
@@ -338,7 +337,7 @@ class Client(object):
                         log.debug("send body (chunked: %s)" % chunked)
 
 
-                    if isinstance(request.body, types.StringTypes):
+                    if isinstance(request.body, string_types):
                         if msg is not None:
                             conn.send(msg + to_bytestring(request.body),
                                     chunked)

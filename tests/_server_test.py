@@ -16,7 +16,10 @@
 #
 
 import base64
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+try:
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+except ImportError: #PY2
+    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
 import os
 import socket
@@ -52,7 +55,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
 
         elif path == "/unicode":
             extra_headers = [('Content-type', 'text/plain')]
-            self._respond(200, extra_headers, u"éàù@")
+            self._respond(200, extra_headers, "éàù@")
 
         elif path == "/json":
             content_type = self.headers.get('content-type', 'text/plain')

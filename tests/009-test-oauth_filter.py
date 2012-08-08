@@ -14,7 +14,7 @@
 
 from restkit import request, OAuthFilter
 from restkit.oauth2 import Consumer
-from restkit.py3compat import parse_qs, parse_qsl, urlencode
+from restkit.py3compat import PY3, parse_qs, parse_qsl, urlencode
 
 
 from . import t
@@ -48,7 +48,10 @@ class oauth_request(object):
         def run():
             o = OAuthFilter('*', self.consumer)
             func(o, self.url, urlencode(self.body))
-        run.func_name = func.func_name
+        if PY3:
+            run.__name__ = func.__name__
+        else:
+            run.func_name = func.func_name
         return run
 
 @oauth_request('request_token')
@@ -68,8 +71,6 @@ def test_002(o, u, b):
 @oauth_request('two_legged')
 def test_003(o, u, b):
     r = request(u, "POST", body=b, filters=[o])
-    import sys
-    print >>sys.stderr, r.body_string()
     t.eq(r.status_int, 200)
 
 @oauth_request('two_legged')

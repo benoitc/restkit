@@ -85,6 +85,13 @@ if PY3:
     Cookie = http.cookies
     import queue
     Queue = queue
+
+    def iteritems_(d):
+        return d.items()
+
+    def itervalues_(d):
+        return d.values()
+
 else:
     string_types = basestring,
     integer_types = (int, long)
@@ -169,3 +176,9 @@ else:
 
     import Queue
     Queue = Queue
+
+    def iteritems_(d):
+        return d.iteritems()
+
+    def itervalues_(d):
+        return d.itervalues()

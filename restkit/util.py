@@ -9,7 +9,7 @@ import time
 import warnings
 
 from restkit.errors import InvalidUrl
-from restkit.py3compat import (string_types, iscallable, quote,
+from restkit.py3compat import (text_type, string_types, iscallable, quote,
         quote_plus, urlparse, urljoin, urlunparse, Cookie)
 
 absolute_http_url_re = re.compile(r"^https?://", re.I)
@@ -84,15 +84,15 @@ def parse_netloc(uri):
 
 def to_bytestring(s):
     if not isinstance(s, string_types):
-        raise TypeError("value should be a str or unicode")
+        raise TypeError("value should be a str or text_type")
 
-    if isinstance(s, unicode):
+    if isinstance(s, text_type):
         return s.encode('utf-8')
     return s
 
 def url_quote(s, charset='utf-8', safe='/:'):
     """URL encode a single string with a given encoding."""
-    if isinstance(s, unicode):
+    if isinstance(s, text_type):
         s = s.encode(charset)
     elif not isinstance(s, str):
         s = str(s)
@@ -126,7 +126,7 @@ def url_encode(obj, charset="utf8", encode_keys=False):
     return '&'.join(tmp)
 
 def encode(v, charset="utf8"):
-    if isinstance(v, unicode):
+    if isinstance(v, text_type):
         v = v.encode(charset)
     else:
         v = str(v)

@@ -29,9 +29,9 @@ def test_003(res):
 
 @t.resource_request()
 def test_004(res):
-    r = res.get(u'/test')
+    r = res.get('/test')
     t.eq(r.status_int, 200)
-    r = res.get(u'/éàù')
+    r = res.get('/éàù')
     t.eq(r.status_int, 200)
 
 @t.resource_request()
@@ -64,11 +64,10 @@ def test_009(res):
 
 @t.resource_request()
 def test_010(res):
-    r = res.post('/unicode', payload=u"éàù@")
+    r = res.post('/unicode', payload="éàù@")
     t.eq(r.body_string(), "éàù@")
-    print "ok"
-    r = res.post('/unicode', payload=u"éàù@")
-    t.eq(r.body_string(charset="utf-8"), u"éàù@")
+    r = res.post('/unicode', payload="éàù@")
+    t.eq(r.body_string(charset="utf-8"), "éàù@")
 
 @t.resource_request()
 def test_011(res):

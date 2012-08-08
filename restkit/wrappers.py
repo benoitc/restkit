@@ -173,13 +173,14 @@ class BodyWrapper(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         try:
             return self.body.next()
         except StopIteration:
             self.eof = True
             self.close()
             raise
+    next = __next__
 
     def read(self, n=-1):
         data = self.body.read(n)
@@ -251,7 +252,7 @@ class Response(object):
         return key in self.headers
 
     def __iter__(self):
-        return self.headers.iteritems()
+        return self.headers.items()
 
     def can_read(self):
         return not self._already_read

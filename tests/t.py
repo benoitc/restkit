@@ -11,7 +11,7 @@ dirname = os.path.dirname(__file__)
 
 from restkit.client import Client
 from restkit.resource import Resource
-from restkit.py3compat import StringIO
+from restkit.py3compat import PY3, StringIO
 
 from ._server_test import HOST, PORT, run_server_test
 
@@ -71,7 +71,10 @@ class client_request(object):
         def run():
             cli = Client(timeout=300)
             func(self.url, cli)
-        run.func_name = func.func_name
+        if PY3:
+            run.__name__ = func.__name__
+        else:
+            run.func_name = func.func_name
         return run
 
 class resource_request(object):
@@ -86,7 +89,10 @@ class resource_request(object):
         def run():
             res = Resource(self.url)
             func(res)
-        run.func_name = func.func_name
+        if PY3:
+            run.__name__ = func.__name__
+        else:
+            run.func_name = func.func_name
         return run
 
 

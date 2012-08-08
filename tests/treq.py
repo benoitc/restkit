@@ -10,7 +10,8 @@ import random
 from restkit.datastructures import MultiDict
 from restkit.errors import ParseException
 from restkit.http import Request, Unreader
-from restkit.py3compat import StringIO, urlparse, execfile
+from restkit.py3compat import PY3, StringIO, urlparse
+from restkit.py3compat import execfile as _execfile
 
 from . import t
 
@@ -25,7 +26,7 @@ class IterUnreader(Unreader):
         if not self.iter:
             return ""
         try:
-            return self.iter.next()
+            return next(self.iter)
         except StopIteration:
             self.iter = None
             return ""
@@ -57,7 +58,7 @@ def uri(data):
 def load_response_py(fname):
     config = globals().copy()
     config["uri"] = uri
-    execfile(fname, config)
+    _execfile(fname, config)
     return config["response"]
 
 class response(object):
@@ -185,7 +186,7 @@ class response(object):
             if line != body[:len(line)]:
                 raise AssertionError("Invalid body data read: %r != %r" % (
                                                     line, body[:len(line)]))
-            body = body[len(line):]
+                body = body[len(line):]
         if len(body):
             raise AssertionError("Failed to read entire body: %r" % body)
         data = req.body.readlines(sizes())
@@ -206,7 +207,7 @@ class response(object):
         if len(body):
             raise AssertionError("Failed to read entire body: %r" % body)
         try:
-            data = iter(req.body).next()
+            data = next(iter(req.body))
             raise AssertionError("Read data after body finished: %r" % data)
         except StopIteration:
             pass
@@ -229,9 +230,14 @@ class response(object):
 
         ret = []
         for (mt, sz, sn) in cfgs:
-            mtn = mt.func_name[6:]
-            szn = sz.func_name[5:]
-            snn = sn.func_name[5:]
+            if PY3:
+                mtn = mt.__name__[6:]
+                szn = sz.__name__[5:]
+                snn = sn.__name__[5:]
+            else:
+                mtn = mt.func_name[6:]
+                szn = sz.func_name[5:]
+                snn = sn.func_name[5:]
             def test_req(sn, sz, mt):
                 self.check(sn, sz, mt)
             desc = "%s: MT: %s SZ: %s SN: %s" % (self.name, mtn, szn, snn)
