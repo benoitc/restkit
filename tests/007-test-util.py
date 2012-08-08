@@ -3,9 +3,9 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-
-import t
 from restkit import util
+
+from . import t
 
 def test_001():
     qs = {'a': "a"}

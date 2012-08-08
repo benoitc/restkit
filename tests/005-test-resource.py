@@ -3,14 +3,12 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-
-import t
-
-from restkit.errors import RequestFailed, ResourceNotFound, \
-Unauthorized
+from restkit.errors import (RequestFailed, ResourceNotFound, Unauthorized
 from restkit.resource import Resource
 from restkit.py3compat import StringIO
-from _server_test import HOST, PORT
+
+from . import t
+from ._server_test import HOST, PORT
 
 @t.resource_request()
 def test_001(res):

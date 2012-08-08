@@ -15,7 +15,9 @@
 from restkit import request, OAuthFilter
 from restkit.oauth2 import Consumer
 from restkit.py3compat import parse_qs, parse_qsl, urlencode
-import t
+
+
+from . import t
 
 
 class oauth_request(object):

@@ -3,10 +3,6 @@
 # This file is part of the pywebmachine package released
 # under the MIT license.
 
-from __future__ import with_statement
-
-import t
-
 import inspect
 import os
 import random
@@ -15,6 +11,8 @@ from restkit.datastructures import MultiDict
 from restkit.errors import ParseException
 from restkit.http import Request, Unreader
 from restkit.py3compat import StringIO, urlparse, execfile
+
+from . import t
 
 class IterUnreader(Unreader):
 

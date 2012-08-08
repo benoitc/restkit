@@ -3,9 +3,10 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-import t
-from _server_test import HOST, PORT
 from restkit.contrib import wsgi_proxy
+
+from . import t
+from ._server_test import HOST, PORT
 
 root_uri = "http://%s:%s" % (HOST, PORT)
 

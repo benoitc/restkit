@@ -4,8 +4,6 @@
 # This file is part of gunicorn released under the MIT license.
 # See the NOTICE for more information.
 
-from __future__ import with_statement
-
 import os
 import tempfile
 
@@ -14,7 +12,10 @@ dirname = os.path.dirname(__file__)
 from restkit.client import Client
 from restkit.resource import Resource
 from restkit.py3compat import StringIO
-from _server_test import HOST, PORT, run_server_test
+
+from ._server_test import HOST, PORT, run_server_test
+
+# launch the test server
 run_server_test()
 
 def data_source(fname):
