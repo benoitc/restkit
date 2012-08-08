@@ -7,9 +7,9 @@ from restkit.version import version_info, __version__
 
 try:
     from restkit.conn import Connection
-    from restkit.errors import ResourceNotFound, Unauthorized, RequestFailed,\
-RedirectLimit, RequestError, InvalidUrl, ResponseError, ProxyError, \
-ResourceError, ResourceGone
+    from restkit.errors import (ResourceNotFound, Unauthorized,
+            RequestFailed, RedirectLimit, RequestError, InvalidUrl,
+            ResponseError, ProxyError, ResourceError, ResourceGone)
     from restkit.client import Client, MAX_FOLLOW_REDIRECTS
     from restkit.wrappers import Request, Response, ClientResponse
     from restkit.resource import Resource
