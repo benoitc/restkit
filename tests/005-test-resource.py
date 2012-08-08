@@ -13,6 +13,7 @@ from restkit.resource import Resource
 from . import t
 from ._server_test import HOST, PORT
 
+
 @t.resource_request()
 def test_001(res):
     r = res.get()
@@ -22,7 +23,7 @@ def test_001(res):
 @t.resource_request()
 def test_002(res):
     r = res.get('/unicode')
-    t.eq(r.body_string(), str_to_bytes("éàù@"))
+    t.eq(r.body_string(), "éàù@")
 
 @t.resource_request()
 def test_003(res):
@@ -152,6 +153,7 @@ def test_022(res):
     l = int(os.fstat(f.fileno())[6])
     b = {'a':'aa','b':['bb','éàù@'], 'f':f}
     h = {'content-type':"multipart/form-data"}
+    print("ici")
     r = res.post('/multipart2', payload=b, headers=h)
     t.eq(r.status_int, 200)
     t.eq(int(r.body_string()), l)

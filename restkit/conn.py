@@ -101,7 +101,8 @@ class Connection(Connector):
             if isinstance(line, string_types):
                 line = str_to_bytes(line)
             self.send(line, chunked=chunked)
-
+        import sys
+        sys.stderr.write("body sent\n")
 
     # TODO: add support for sendfile api
     def sendfile(self, data, chunked=False):

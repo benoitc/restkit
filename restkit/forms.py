@@ -9,7 +9,7 @@ import os
 import re
 
 from restkit.py3compat import (text_type, unicode_to_str, string_types,
-        str_to_bytes, iscallable)
+        str_to_bytes, bytes_to_str, iscallable)
 from restkit.util import to_bytestring, url_quote, url_encode
 
 MIME_BOUNDARY = 'END_OF_PART'
@@ -25,10 +25,33 @@ class BoundaryItem(object):
                  quote=url_quote):
         self.quote = quote
         self.name = quote(name)
+
+        self.size = 0
+        # set value
         if value is not None and not hasattr(value, 'read'):
             value = self.encode_unreadable_value(value)
             self.size = len(value)
+        else:
+            if hasattr(value, 'fileno') and filesize is None:
+                try:
+                    value.flush()
+                except IOError:
+                    pass
+
+                if iscallable(value.fileno):
+                    try:
+                        self.size = int(os.fstat(value.fileno())[6])
+                    except io.UnsupportedOperation:
+                        if hasattr(value, "getvalue"):
+                            self.size = len(value.getvalue())
+                        else:
+                            raise
+            else:
+                self.size = int(os.fstat(value.fileno)[6])
+
         self.value = value
+
+        # set filename
         if fname is not None:
             if isinstance(fname, text_type):
                 fname = unicode_to_str(fname)
@@ -36,26 +59,13 @@ class BoundaryItem(object):
             else:
                 fname = fname.replace(b'"', b'\\"')
         self.fname = fname
+
+        # set filetype if needed
         if filetype is not None:
             filetype = to_bytestring(filetype)
         self.filetype = filetype
 
-        if hasattr(value, 'fileno') and filesize is None:
-            try:
-                value.flush()
-            except IOError:
-                pass
 
-            if iscallable(value.fileno):
-                try:
-                    self.size = int(os.fstat(value.fileno())[6])
-                except io.UnsupportedOperation:
-                    if hasattr(value, "getvalue"):
-                        self.size = len(value.getvalue())
-                    else:
-                        raise
-            else:
-                self.size = int(os.fstat(value.fileno)[6])
         self._encoded_hdr = None
         self._encoded_bdr = None
 
@@ -67,7 +77,7 @@ class BoundaryItem(object):
             headers = ["--%s" % boundary]
             if self.fname:
                 disposition = 'form-data; name="%s"; filename="%s"' % (self.name,
-                        self.fname)
+                        os.path.basename(bytes_to_str(self.fname)))
             else:
                 disposition = 'form-data; name="%s"' % self.name
             headers.append("Content-Disposition: %s" % disposition)
@@ -77,9 +87,7 @@ class BoundaryItem(object):
                 filetype = "text/plain; charset=utf-8"
             headers.append("Content-Type: %s" % filetype)
             headers.append("Content-Length: %i" % self.size)
-            headers.append("")
-            headers.append("")
-            self._encoded_hdr = CRLF.join(headers)
+            self._encoded_hdr = "\r\n".join(headers)
         return str_to_bytes(self._encoded_hdr)
 
     def encode(self, boundary):
@@ -91,23 +99,29 @@ class BoundaryItem(object):
         return b"".join([self.encode_hdr(boundary), value, b"\r\n"])
 
 
+    def get_size(self, boundary):
+        return len(self.encode_hdr(boundary)) + self.size + 2
+
     def iter_encode(self, boundary, blocksize=16384):
         if not hasattr(self.value, "read"):
             yield self.encode(boundary)
         else:
+            if hasattr(self.value, 'seek'):
+                try:
+                    self.value.seek(0)
+                except:
+                    pass
+
             yield self.encode_hdr(boundary)
             while True:
                 block = self.value.read(blocksize)
                 if not block:
-                    yield b"\r\n"
-                    return
-
-                if isinstance(block, string_types):
-                    block = str_to_bytes(block)
-
+                    break
                 yield block
+            yield b"\r\n"
 
     def encode_unreadable_value(self, value):
+        """ encode the value to bytes if needed """
         if isinstance(value, string_types):
             value = str_to_bytes(value)
         return value
@@ -117,7 +131,7 @@ class MultipartForm(object):
     def __init__(self, params, boundary, headers, bitem_cls=BoundaryItem,
                  quote=url_quote):
         self.boundary = boundary
-        self.tboundary = "--%s--%s" % (boundary, CRLF)
+        self.tboundary = str_to_bytes("--%s--\r\n" % boundary)
         self.boundaries = []
         self._clen = headers.get('Content-Length')
 
@@ -132,6 +146,10 @@ class MultipartForm(object):
                     filetype = ';'.join([_f for _f in mimetypes.guess_type(fname) if _f])
                 else:
                     filetype = None
+
+                # pass the full value
+                # should be improved later by streaming the content
+                # instead of keeping it in memory
                 if not hasattr(value, 'fileno') and self._clen is None:
                     value = value.read()
 
@@ -149,18 +167,15 @@ class MultipartForm(object):
         if self._clen is None or recalc:
             self._clen = 0
             for boundary in self.boundaries:
-                self._clen += boundary.size
-                self._clen += len(boundary.encode_hdr(self.boundary))
-                self._clen += len(CRLF)
+                self._clen += boundary.get_size(self.boundary)
             self._clen += len(self.tboundary)
-        return int(self._clen)
+        return self._clen
 
     def __iter__(self):
         for boundary in self.boundaries:
             for block in boundary.iter_encode(self.boundary):
                 yield block
         yield self.tboundary
-
 
 def multipart_form_encode(params, headers, boundary, quote=url_quote):
     """Creates a tuple with MultipartForm instance as body and dict as headers

@@ -23,7 +23,9 @@ except ImportError:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import io
 import os
+import select
 import socket
+import sys
 import tempfile
 import threading
 import unittest
@@ -34,22 +36,49 @@ except ImportError:
     import Cookie
 
 
-from restkit.py3compat import (parse_qsl, parse_qs, urlparse, unquote,
+from restkit.py3compat import (PY3, parse_qsl, parse_qs, urlparse, unquote,
         bytes_to_str, str_to_bytes, string_types, BytesIO, StringIO)
 from restkit.tee import TeeInput
 from restkit.util import to_bytestring
 
-from . import multipart as mp
-
 HOST = 'localhost'
 PORT = (os.getpid() % 31000) + 1024
 
+if PY3:
+    from io import TextIOWrapper
+    class NCTextIOWrapper(TextIOWrapper):
+        def close(self): pass # Keep wrapped buffer open.
+
+class FieldStorage(cgi.FieldStorage):
+    def __nonzero__(self):
+        return bool(self.list or self.file)
+
+    def make_file(self, binary=None):
+
+        import tempfile
+        return tempfile.TemporaryFile()
+
 
 def parse_multipart(fp, headers):
-    env = {'REQUEST_METHOD':'POST',
-           'CONTENT_TYPE': headers.get('content-type'),
-           'wsgi.input': fp}
-    return mp.parse_form_data(environ=env, strict=True, charset='utf-8')
+    environ = {'CONTENT_TYPE':
+            headers.get('content-type'),'REQUEST_METHOD': 'POST',
+            'CONTENT_LENGTH': headers.get('content-length', '0')}
+
+    sys.stderr.write('got clen %s\n' % headers.get('content-length', 0))
+    args = dict(fp=fp, environ=environ, keep_blank_values=True)
+    if PY3:
+        args['encoding'] = 'ISO-8859-1'
+
+    sys.stderr.write( "%s\n" % str(args))
+    form = FieldStorage(**args)
+    post = {}
+    for item in (form.list or []):
+        post[item.name] = item if item.filename else item.value
+
+
+    sys.stderr.write("post %s\n\n" % str(form.list))
+    return post
+
 
 class HTTPTestHandler(BaseHTTPRequestHandler):
 
@@ -65,11 +94,6 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         for k, v in parse_qsl(self.parsed_uri[4]):
             self.query[k] = v
         path = self.parsed_uri[2]
-
-        import sys
-        sys.stderr.write("got %s\n" % path)
-
-
         if path == "/":
             extra_headers = [('Content-type', 'text/plain')]
             self._respond(200, extra_headers, "welcome")
@@ -171,29 +195,39 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             self.query[k] = v
 
         path = self.parsed_uri[2]
-
         import sys
-        sys.stderr.write("got %s\n" % path)
+        sys.stderr.write("path %s\n" % path)
+
+        nbytes = int(self.headers.get('content-length') or 0)
+        data = self.rfile.read(nbytes)
+
+        req_body = BytesIO(data)
+
+        # throw away additional data [see bug #427345]
+        while select.select([self.rfile], [], [], 0)[0]:
+            if not self.rfile.read(1):
+                break
+
         extra_headers = []
         if path == "/":
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))
             content_length = int(self.headers.get('Content-length', '-1'))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             self._respond(200, extra_headers, body)
 
         elif path == "/bytestring":
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))
             content_length = int(self.headers.get('Content-length', '-1'))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             self._respond(200, extra_headers, body)
 
         elif path == "/unicode":
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))
             content_length = int(self.headers.get('Content-length', '-1'))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             self._respond(200, extra_headers, body)
 
         elif path == "/json":
@@ -203,13 +237,13 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             else:
                 extra_headers.append(('Content-type', content_type))
                 content_length = int(self.headers.get('Content-length', 0))
-                body = self.rfile.read(content_length)
+                body = req_body.read(content_length)
                 self._respond(200, extra_headers, body)
         elif path == "/empty":
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))
             content_length = int(self.headers.get('Content-length', 0))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             if body == "":
                 self._respond(200, extra_headers, "ok")
             else:
@@ -226,7 +260,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))
             content_length = int(self.headers.get('Content-length', 0))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             form = parse_qs(body)
             if form[b'a'] == [b"a"] and form[b"b"] == [b"b"]:
                 self._respond(200, extra_headers, "ok")
@@ -236,7 +270,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))
             content_length = int(self.headers.get('Content-length', 0))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             form = parse_qs(body)
             if form[b'a'] == [b"a", b"c"] and form[b"b"] == [b"b"]:
                 self._respond(200, extra_headers, "ok")
@@ -244,10 +278,9 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
                 self.error_Response()
         elif path == "/multipart":
             ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
-            content_length = int(self.headers.get('Content-length', 0))
+            content_length = int(self.headers.get('Content-length', '0'))
             if ctype == 'multipart/form-data':
-                print(pdict)
-                req, _ = parse_multipart(self.rfile, self.headers)
+                req = parse_multipart(req_body, self.headers)
                 body = req['t'][0]
                 extra_headers = [('Content-type', 'text/plain')]
                 self._respond(200, extra_headers, body)
@@ -257,16 +290,13 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
             content_length = int(self.headers.get('Content-length', '-1'))
             if ctype == 'multipart/form-data':
-                req, files = parse_multipart(self.rfile, self.headers)
-                f = files['f']
-                f.file.seek(0)
+                req = parse_multipart(req_body, self.headers)
+                f = req['f']
                 if not req['a'] == ['aa']:
                     self.error_Response()
                 if not req['b'] == ['bb','éàù@']:
                     self.error_Response()
                 extra_headers = [('Content-type', 'text/plain')]
-                import sys
-                sys.stderr.write("ici")
                 self._respond(200, extra_headers, str(len(f.file.read())))
             else:
                 self.error_Response()
@@ -274,8 +304,8 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
             content_length = int(self.headers.get('Content-length', '-1'))
             if ctype == 'multipart/form-data':
-                req, files = parse_multipart(self.rfile, self.headers)
-                f = files['f']
+                req = parse_multipart(req_body, self.headers)
+                f = req['f']
                 if not req['a'] == ['aa']:
                     self.error_Response()
                 if not req['b'] == ['éàù@']:
@@ -288,8 +318,8 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
             content_length = int(self.headers.get('Content-length', 0))
             if ctype == 'multipart/form-data':
-                req, files = parse_multipart(self.rfile, self.headers)
-                f = files['f']
+                req = parse_multipart(req_body, self.headers)
+                f = req['f']
                 if not req['a'] == ['aa']:
                     self.error_Response()
                 if not req['b'] == ['éàù@']:
@@ -302,24 +332,24 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-type', content_type))
             content_length = int(self.headers.get('Content-length', 0))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             self._respond(200, extra_headers, str(len(body)))
         elif path == "/large":
             content_type = self.headers.get('content-type', 'text/plain')
             extra_headers.append(('Content-Type', content_type))
             content_length = int(self.headers.get('Content-length', 0))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             extra_headers.append(('Content-Length', str(len(body))))
             self._respond(200, extra_headers, body)
         elif path == "/list":
             content_length = int(self.headers.get('Content-length', 0))
-            body = self.rfile.read(content_length)
+            body = req_body.read(content_length)
             extra_headers.append(('Content-Length', str(len(body))))
             self._respond(200, extra_headers, body)
         elif path == "/chunked":
             te = (self.headers.get("transfer-encoding") == "chunked")
             if te:
-                body = self.rfile.read(29)
+                body = req_body.read(29)
                 extra_headers.append(('Content-Length', "29"))
                 self._respond(200, extra_headers, body)
             else:
@@ -366,6 +396,9 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             self.send_header(k, v)
             keys.append(k)
 
+        if body:
+            body = to_bytestring(body)
+
         #if body and "Content-Length" not in keys:
         #    self.send_header("Content-Length", len(body))
         self.end_headers()
@@ -373,14 +406,10 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         if isinstance(body, string_types):
             body = str_to_bytes(body)
 
-        import sys
-        sys.stderr.write(bytes_to_str(b"send" + body + b"\n"))
         self.wfile.write(body)
+        sys.stderr.write("yokidoki")
         self.wfile.flush()
 
-    def finish(self):
-        self.wfile.close()
-        self.rfile.close()
 
 server_thread = None
 def run_server_test():

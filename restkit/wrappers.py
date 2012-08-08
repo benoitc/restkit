@@ -171,9 +171,9 @@ class BodyWrapper(object):
             return
 
         if not self.eof:
-            self.body.read()
-
-        self.connection.release(self.resp.should_close)
+            self.connection.release(True)
+        else:
+            self.connection.release(self.resp.should_close)
         self._closed = True
 
     def __iter__(self):
