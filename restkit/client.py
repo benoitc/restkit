@@ -219,22 +219,9 @@ class Client(object):
                 proxy_pieces = '%s%s%s\r\n' % (proxy_connect, proxy_auth,
                         user_agent)
 
-
                 conn = self._pool.get(host=addr[0], port=addr[1],
                     pool=self._pool, is_ssl=is_ssl,
-                    extra_headers=[], **self.ssl_args)
-
-
-                conn.send(proxy_pieces)
-                p = HttpStream(SocketReader(conn.socket()), kind=1,
-                    decompress=True)
-
-                if p.status_code != 200:
-                    raise ProxyError("Tunnel connection failed: %d %s" %
-                            (p.status_code(), p.body_string()))
-                # read body
-                p.body_string()
-
+                    extra_headers=[], proxy_pieces=proxy_pieces, **self.ssl_args)
             else:
                 headers = []
                 if proxy_auth:
