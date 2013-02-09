@@ -61,3 +61,7 @@ License
 -------
 
 restkit is available under the MIT license.
+
+.. _Chunked transfer encoding: http://en.wikipedia.org/wiki/Chunked_transfer_encoding
+.. _Basic Authentification: http://www.ietf.org/rfc/rfc2617.txt
+.. _OAuth: http://oauth.net/
