@@ -1,17 +1,358 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
-          "DTD/xhtml1-frameset.dtd">
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title> API Documentation </title>
+  <title>restkit</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
 </head>
-<frameset cols="20%,80%">
-  <frameset rows="30%,70%">
-    <frame src="toc.html" name="moduleListFrame"
-           id="moduleListFrame" />
-    <frame src="toc-everything.html" name="moduleFrame"
-           id="moduleFrame" />
-  </frameset>
-  <frame src="restkit-module.html" name="mainFrame" id="mainFrame" />
-</frameset>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;restkit
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package restkit</h1><p class="nomargin-top"><span class="codelink"><a href="restkit-pysrc.html">source&nbsp;code</a></span></p>
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        4.2.1
+      </p>
+</div><!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="restkit.client-module.html">restkit.client</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.conn-module.html">restkit.conn</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib-module.html">restkit.contrib</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="restkit.contrib.console-module.html">restkit.contrib.console</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.ipython_shell-module.html">restkit.contrib.ipython_shell</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.webob_api-module.html">restkit.contrib.webob_api</a></strong>: <em class="summary">Subclasses of webob.Request who use restkit to get a webob.Response
+        via restkit.ext.wsgi_proxy.Proxy.</em>    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.webob_helper-module.html">restkit.contrib.webob_helper</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.contrib.wsgi_proxy-module.html">restkit.contrib.wsgi_proxy</a></strong>    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="restkit.datastructures-module.html">restkit.datastructures</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.errors-module.html">restkit.errors</a></strong>: <em class="summary">exception classes.</em>    </li>
+    <li> <strong class="uidlink"><a href="restkit.filters-module.html">restkit.filters</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.forms-module.html">restkit.forms</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.oauth2-module.html">restkit.oauth2</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.resource-module.html">restkit.resource</a></strong>: <em class="summary">restkit.resource
+~~~~~~~~~~~~~~~~</em>    </li>
+    <li> <strong class="uidlink"><a href="restkit.session-module.html">restkit.session</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.tee-module.html">restkit.tee</a></strong>: <em class="summary">TeeInput replace old FileInput.</em>    </li>
+    <li> <strong class="uidlink"><a href="restkit.util-module.html">restkit.util</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.version-module.html">restkit.version</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="restkit.wrappers-module.html">restkit.wrappers</a></strong>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="set_logging"></a><span class="summary-sig-name">set_logging</span>(<span class="summary-sig-arg">level</span>,
+        <span class="summary-sig-arg">handler</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Set level of logging, and choose where to display/save logs (file or 
+      standard output).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit-pysrc.html#set_logging">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="restkit-module.html#request" class="summary-sig-name">request</a>(<span class="summary-sig-arg">url</span>,
+        <span class="summary-sig-arg">method</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">GET</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">body</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Quick shortcut method to pass a request</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="restkit-pysrc.html#request">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="restkit-module.html#LOG_LEVELS" class="summary-name">LOG_LEVELS</a> = <code title="{'critical': 50, 'debug': 10, 'error': 40, 'info': 20, 'warning': 30}"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">critical</code><code class="variable-quote">'</code><code class="variable-op">: </code>50<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">debug</code><code class="variable-quote">'</code><code class="variable-op">: </code>10<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">error</code><code class="variable-quote">'</code><code class="variable-op">: </code>40<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">info</code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'restkit'"><code class="variable-quote">'</code><code class="variable-string">restkit</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="request"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">request</span>(<span class="sig-arg">url</span>,
+        <span class="sig-arg">method</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">GET</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">body</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">headers</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="restkit-pysrc.html#request">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Quick shortcut method to pass a request
+
+:param url: str, url string
+:param method: str, by default GET. http verbs
+:param body: the body, could be a string, an iterator or a file-like object
+:param headers: dict or list of tupple, http headers
+
+Client parameters
+~~~~~~~~~~~~~~~~~
+
+:param follow_redirect: follow redirection, by default False
+:param max_ollow_redirect: number of redirections available
+:filters: http filters to pass
+:param decompress: allows the client to decompress the response
+body
+:param max_status_line_garbage: defines the maximum number of ignorable
+lines before we expect a HTTP response's status line. With
+HTTP/1.1 persistent connections, the problem arises that broken
+scripts could return a wrong Content-Length (there are more
+bytes sent than specified).  Unfortunately, in some cases, this
+cannot be detected after the bad response, but only before the
+next one. So the client is abble to skip bad lines using this
+limit. 0 disable garbage collection, None means unlimited number
+of tries.
+:param max_header_count:  determines the maximum HTTP header count
+allowed. by default no limit.
+:param manager: the manager to use. By default we use the global
+one.
+:parama response_class: the response class to use
+:param timeout: the default timeout of the connection
+(SO_TIMEOUT)
+
+:param max_tries: the number of tries before we give up a
+connection
+:param wait_tries: number of time we wait between each tries.
+:param ssl_args: ssl named arguments,
+See http://docs.python.org/library/ssl.html informations
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="LOG_LEVELS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">LOG_LEVELS</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">critical</code><code class="variable-quote">'</code><code class="variable-op">: </code>50<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">debug</code><code class="variable-quote">'</code><code class="variable-op">: </code>10<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">error</code><code class="variable-quote">'</code><code class="variable-op">: </code>40<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">info</code><code class="variable-quote">'</code><code class="variable-op">: </code>20<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">warning</code><code class="variable-quote">'</code><code class="variable-op">: </code>30<code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Feb  9 17:17:55 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
 </html>
