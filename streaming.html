@@ -116,7 +116,7 @@
 </div>
 <div class="section" id="stream-from">
 <h2>Stream from<a class="headerlink" href="#stream-from" title="Permalink to this headline">¶</a></h2>
-<p>Each requests return a <a class="reference external" href="api/restkit.client-module.html#HttpResponse">HttpResponse</a> object. If you want to receive the content in a streaming fashion you just have to use the <cite>body_stream</cite> member of the response. You can <cite>iter</cite> on it or just use as a file-like object (read, readline, readlines, ...).</p>
+<p>Each requests return a <a class="reference external" href="http://benoitc.github.com/restkit/api/restkit.client.HttpResponse-class.html" title="Epydoc crossreference"><tt class="xref py py-class docutils literal"><span class="pre">restkit.client.HttpResponse</span></tt></a> object. If you want to receive the content in a streaming fashion you just have to use the <cite>body_stream</cite> member of the response. You can <cite>iter</cite> on it or just use as a file-like object (read, readline, readlines, ...).</p>
 <p><strong>Attention</strong>: Since 2.0, response.body are just streamed and aren&#8217;t persistent. In previous version, the implementation may cause problem with memory or storage usage.</p>
 <p>Quick snippet with iteration:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>

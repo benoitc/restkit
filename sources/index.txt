@@ -6,9 +6,9 @@
 Welcome to RESTKit's documentation!
 ===================================
 
-Restkit is an HTTP resource kit for `Python <http://python.org>`_. It allows you to easily access to HTTP resource and build objects around it. It's the base of `couchdbkit <http://www.couchdbkit.org>`_ a Python `CouchDB <http://couchdb.org>`_ framework. 
+Restkit is an HTTP resource kit for `Python <http://python.org>`_. It allows you to easily access to HTTP resource and build objects around it. It's the base of `couchdbkit <http://www.couchdbkit.org>`_ a Python `CouchDB <http://couchdb.org>`_ framework.
 
-You can simply use  :api:`restkit.request` function to do any HTTP requests.
+You can simply use  :class:`restkit.request` function to do any HTTP requests.
 
 Usage example, get a friendpaste paste::
 
@@ -17,12 +17,12 @@ Usage example, get a friendpaste paste::
   >>> r.body_string()
   'welcome to friendpaste'
   >>> r.headers
-  {'status': '200 OK', 'transfer-encoding': 'chunked', 'set-cookie': 
+  {'status': '200 OK', 'transfer-encoding': 'chunked', 'set-cookie':
   'FRIENDPASTE_SID=b581975029d689119d3e89416e4c2f6480a65d96; expires=Sun,
   14-Mar-2010 03:29:31 GMT; Max-Age=1209600; Path=/', 'server': 'nginx/0.7.62',
   'connection': 'keep-alive', 'date': 'Sun, 28 Feb 2010 03:29:31 GMT',
   'content-type': 'text/plain'}
-  
+
 of from a resource:
 
   >>> from restkit import Resource
@@ -30,13 +30,13 @@ of from a resource:
   >>> r = res.get('/1ZSEoJeOarc3ULexzWOk5Y_633433316631/raw')
   >>> r.body_string()
   'welcome to friendpaste'
-  
+
 but you can do more like building object mapping HTTP resources, ....
 
 
 .. toctree::
-   :maxdepth: 2 
-   
+   :maxdepth: 2
+
    resource
    pool
    authentication
