@@ -6,15 +6,12 @@
 import sys, os
 import restkit
 
-sys.path.append(os.getcwd())
+CURDIR = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(os.path.join(CURDIR, '..', '..'))
+sys.path.append(os.path.join(CURDIR, '..'))
+sys.path.append(os.path.join(CURDIR, '.'))
 
-DOCS_DIR = os.path.abspath(os.path.dirname(__file__))
-# for gunicorn_ext.py
-sys.path.append(os.path.join(DOCS_DIR, os.pardir))
-# To make sure we get this version of gunicorn
-sys.path.insert(0, os.path.join(DOCS_DIR, os.pardir, os.pardir))
-
-
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'epydoc_ext',
         'sphinxtogithub']
@@ -25,17 +22,23 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'restkit'
-copyright = u'2008-2012 Benoît Chesneau <benoitc@e-engura.org>'
-
+copyright = u'2008-2013 Benoît Chesneau <benoitc@e-engura.org>'
 
 version = restkit.__version__
 release = version
 
 
 exclude_trees = ['_build']
-pygments_style = 'fruity'
-html_theme = 'basic'
-html_theme_path = [""]
+
+if on_rtd:
+    pygments_style = 'sphinx'
+    html_theme = 'default'
+else:
+    pygments_style = 'fruity'
+    html_theme = 'basic'
+    html_theme_path = [""]
+
+
 html_static_path = ['_static']
 
 htmlhelp_basename = 'restkitdoc'
