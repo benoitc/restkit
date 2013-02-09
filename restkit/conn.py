@@ -9,6 +9,7 @@ import select
 import socket
 import ssl
 import time
+import cStringIO
 
 from socketpool import Connector
 from socketpool.util import is_connected
@@ -21,15 +22,20 @@ DNS_TIMEOUT = 60
 class Connection(Connector):
 
     def __init__(self, host, port, backend_mod=None, pool=None,
-            is_ssl=False, extra_headers=[],  **ssl_args):
+            is_ssl=False, extra_headers=[], proxy_pieces=None, **ssl_args):
 
         # connect the socket, if we are using an SSL connection, we wrap
         # the socket.
         self._s = backend_mod.Socket(socket.AF_INET, socket.SOCK_STREAM)
         self._s.connect((host, port))
+        if proxy_pieces:
+            self._s.sendall(proxy_pieces)
+            response = cStringIO.StringIO()
+            while response.getvalue()[-4:] != '\r\n\r\n':
+                response.write(self._s.recv(1))
+            response.close()
         if is_ssl:
             self._s = ssl.wrap_socket(self._s, **ssl_args)
-
 
         self.extra_headers = extra_headers
         self.is_ssl = is_ssl
