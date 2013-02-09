@@ -249,7 +249,7 @@ class Client(object):
         else:
             httpver = "HTTP/1.0"
 
-        ua = headers.iget('user_agent')
+        ua = headers.iget('user-agent')
         if not ua:
             ua = USER_AGENT
         host = request.host
