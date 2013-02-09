@@ -69,6 +69,14 @@ Content
    client
    shell
    wsgi_proxy
+
+
+API
+---
+
+.. toctree::
+   :maxdepth: 2
+
    api
 
 .. _Chunked transfer encoding: http://en.wikipedia.org/wiki/Chunked_transfer_encoding
