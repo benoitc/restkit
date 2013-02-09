@@ -6,7 +6,7 @@ Installation
 Requirements
 ------------
 
-- **Python 2.5 or newer** (Python 3.x will be supported soon)
+- **Python 2.6 or newer** (Python 3.x will be supported soon)
 - setuptools >= 0.6c6
 - nosetests (for the test suite only)
 
@@ -22,7 +22,7 @@ recent version of distribute installed::
 
 To install or upgrade to the latest released version of restkit::
 
-    $ pip install http-parser
+    $ pip install -r requirements.txt
     $ pip install restkit
 
 
@@ -30,7 +30,7 @@ Note: if you get an error on MacOSX try to install with the following
 arguments::
 
     $ env ARCHFLAGS="-arch i386 -arch x86_64" pip install http-parser
-    
+
 Installation from source
 ------------------------
 
