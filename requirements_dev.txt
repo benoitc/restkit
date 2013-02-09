@@ -2,4 +2,4 @@ http-parser>=0.8.1
 nose
 webob
 sphinx
-epydoc
+ipython

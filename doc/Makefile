@@ -10,7 +10,7 @@ GHPIMPORT     = ${PWD}/ghp-import
 SPHINXTOGITHUB = ${PWD}/sphinxtogithub.py
 EPYDOC = epydoc
 SITEMAPGEN    = ${PWD}/sitemap_gen.py
- 
+
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
@@ -36,14 +36,13 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 
 html: clean
-	@mkdir -p _build/html/api
-	$(EPYDOC) -o _build/html/api ../restkit
+	@mkdir -p api
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	${SITEMAPGEN} --config=sitemap_config.xml
-    
+
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
-	
+
 github:
 	@echo "Send to github"
 	$(GHPIMPORT) -p $(BUILDDIR)/html

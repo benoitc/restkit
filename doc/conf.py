@@ -13,8 +13,7 @@ sys.path.append(os.path.join(CURDIR, '.'))
 
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'epydoc_ext',
-        'sphinxtogithub']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinxtogithub']
 
 templates_path = ['_templates']
 

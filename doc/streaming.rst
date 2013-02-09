@@ -30,7 +30,7 @@ Sending will be chunked. If you want to send without TE: chunked, you need to ad
 Stream from
 -----------
 
-Each requests return a :api:`restkit.client.HttpResponse` object. If you want to receive the content in a streaming fashion you just have to use the `body_stream` member of the response. You can `iter` on it or just use as a file-like object (read, readline, readlines, ...).
+Each requests return a :class:`restkit.wrappers.Response` object. If you want to receive the content in a streaming fashion you just have to use the `body_stream` member of the response. You can `iter` on it or just use as a file-like object (read, readline, readlines, ...).
 
 **Attention**: Since 2.0, response.body are just streamed and aren't persistent. In previous version, the implementation may cause problem with memory or storage usage.
 
