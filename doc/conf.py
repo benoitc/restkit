@@ -8,6 +8,14 @@ import restkit
 
 sys.path.append(os.getcwd())
 
+DOCS_DIR = os.path.abspath(os.path.dirname(__file__))
+# for gunicorn_ext.py
+sys.path.append(os.path.join(DOCS_DIR, os.pardir))
+# To make sure we get this version of gunicorn
+sys.path.insert(0, os.path.join(DOCS_DIR, os.pardir, os.pardir))
+
+
+
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'epydoc_ext',
         'sphinxtogithub']
 
