@@ -33,19 +33,9 @@ of from a resource:
 
 but you can do more like building object mapping HTTP resources, ....
 
+.. note::
+   restkit source code is hosted on `Github  <http://github.com/benoitc/restkit.git>`_
 
-.. toctree::
-   :maxdepth: 2
-
-   resource
-   pool
-   authentication
-   streaming
-   green
-   client
-   shell
-   wsgi_proxy
-   api
 
 Features
 --------
@@ -60,9 +50,26 @@ Features
 - Support `Chunked transfer encoding`_ in both ways.
 - Support `Basic Authentification`_ and `OAuth`_.
 - Multipart forms and url-encoded forms
+- Streaming support
 - Proxy handling
 - HTTP Filters, you can hook requests in responses with your own callback
-- Compatible with Python 2.x (>= 2.5)
+- Compatible with Python 2.x (>= 2.6)
+
+Content
+-------
+
+.. toctree::
+   :maxdepth: 2
+
+   resource
+   pool
+   authentication
+   streaming
+   green
+   client
+   shell
+   wsgi_proxy
+   api
 
 .. _Chunked transfer encoding: http://en.wikipedia.org/wiki/Chunked_transfer_encoding
 .. _Basic Authentification: http://www.ietf.org/rfc/rfc2617.txt
