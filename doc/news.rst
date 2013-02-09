@@ -9,6 +9,7 @@ News
 - bump http-parser requirement to 0.8.1
 - fix User-Agent typo
 - fix https request by proxy
+- move from epydoc to sphinx
 
 4.2.0 / 2012-08-01
 ------------------
