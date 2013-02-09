@@ -36,7 +36,6 @@ but you can do more like building object mapping HTTP resources, ....
 .. note::
    restkit source code is hosted on `Github  <http://github.com/benoitc/restkit.git>`_
 
-
 Features
 --------
 
@@ -54,6 +53,7 @@ Features
 - Proxy handling
 - HTTP Filters, you can hook requests in responses with your own callback
 - Compatible with Python 2.x (>= 2.6)
+
 
 Content
 -------
@@ -74,6 +74,8 @@ Content
 
 API
 ---
+
+The changelog is available :ref:`here <news>` .
 
 .. toctree::
    :maxdepth: 2
