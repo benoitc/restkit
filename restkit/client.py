@@ -42,23 +42,22 @@ USER_AGENT = "restkit/%s" % __version__
 log = logging.getLogger(__name__)
 
 class Client(object):
-
-    """ A client handle a connection at a time. A client is threadsafe,
+    """A client handle a connection at a time. A client is threadsafe,
     but an handled shouldn't be shared between threads. All connections
     are shared between threads via a pool.
+    ::
 
-    >>> from restkit import *
-    >>> c = Client()
-    >>> r = c.request("http://google.com")
-    r>>> r.status
-    '301 Moved Permanently'
-    >>> r.body_string()
-    '<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">\n<TITLE>301 Moved</TITLE></HEAD><BODY>\n<H1>301 Moved</H1>\nThe document has moved\n<A HREF="http://www.google.com/">here</A>.\r\n</BODY></HTML>\r\n'
-    >>> c.follow_redirect = True
-    >>> r = c.request("http://google.com")
-    >>> r.status
-    '200 OK'
-
+        >>> from restkit import *
+        >>> c = Client()
+        >>> r = c.request("http://google.com")
+        >>> r.status
+        '301 Moved Permanently'
+        >>> r.body_string()
+        '<HTML><HEAD><meta http-equiv="content-type [...]'
+        >>> c.follow_redirect = True
+        >>> r = c.request("http://google.com")
+        >>> r.status
+        '200 OK'
     """
 
     version = (1, 1)
@@ -85,35 +84,30 @@ class Client(object):
         Client parameters
         ~~~~~~~~~~~~~~~~~
 
-        :param follow_redirect: follow redirection, by default False
-        :param max_ollow_redirect: number of redirections available
-        :filters: http filters to pass
-        :param decompress: allows the client to decompress the response
-        body
-        :param max_status_line_garbage: defines the maximum number of ignorable
-        lines before we expect a HTTP response's status line. With
-        HTTP/1.1 persistent connections, the problem arises that broken
-        scripts could return a wrong Content-Length (there are more
-        bytes sent than specified).  Unfortunately, in some cases, this
-        cannot be detected after the bad response, but only before the
-        next one. So the client is abble to skip bad lines using this
-        limit. 0 disable garbage collection, None means unlimited number
-        of tries.
-        :param max_header_count:  determines the maximum HTTP header count
-        allowed. by default no limit.
-        :param pool: the pool to use inherited from socketpool.Pool. By
-        default we use the global one.
-        :param response_class: the response class to use
-        :param timeout: the default timeout of the connection
-        (SO_TIMEOUT)
-
-        :param max_tries: the number of tries before we give up a
+        - follow_redirect: follow redirection, by default False
+        - max_ollow_redirect: number of redirections available
+        - filters: http filters to pass
+        - decompress: allows the client to decompress the response body
+        - max_status_line_garbage: defines the maximum number of ignorable
+          lines before we expect a HTTP response's status line. With HTTP/1.1
+          persistent connections, the problem arises that broken scripts could
+          return a wrong Content-Length (there are more bytes sent than
+          specified).  Unfortunately, in some cases, this cannot be detected
+          after the bad response, but only before the next one. So the client
+          is abble to skip bad lines using this limit. 0 disable garbage
+          collection, None means unlimited number of tries.
+        - max_header_count:  determines the maximum HTTP header count allowed.
+          by default no limit.
+        - pool: the pool to use inherited from socketpool.Pool. By default we
+          use the global one.
+        - response_class: the response class to use
+        - timeout: the default timeout of the connection (SO_TIMEOUT)
+        - max_tries: the number of tries before we give up a
         connection
-        :param wait_tries: number of time we wait between each tries.
-        :attr pool_size: int, default 10. Maximum number of connections we
-        keep in the default pool.
-        :param ssl_args: named argument, see ssl module for more
-        informations
+        - wait_tries: number of time we wait between each tries.
+        - pool_size: int, default 10. Maximum number of connections we keep in
+          the default pool.
+        - ssl_args: named argument, see ssl module for more informations
         """
         self.follow_redirect = follow_redirect
         self.force_follow_redirect = force_follow_redirect
