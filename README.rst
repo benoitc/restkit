@@ -49,7 +49,7 @@ recent version of distribute installed::
 To install from source, run the following command::
 
     $ git clone https://github.com/benoitc/restkit.git
-    $ cd gaffer
+    $ cd restkit
     $ pip install -r requirements.txt
     $ python setup.py install
 
