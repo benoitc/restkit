@@ -53,7 +53,7 @@ def main():
             license = 'MIT',
             url = 'http://benoitc.github.com/restkit',
             classifiers = CLASSIFIERS,
-            packages = find_packages(),
+            packages = find_packages(exclude=['tests']),
             data_files = DATA_FILES,
             scripts = SCRIPTS,
             zip_safe =  False,
