@@ -70,10 +70,15 @@ def test_002(o, u, b):
 
 @oauth_request('two_legged')
 def test_003(o, u, b):
-    r = request(u, "POST", body=b, filters=[o])
+    r = request(u, "POST", body=b, filters=[o],
+                headers={"Content-type": "application/x-www-form-urlencoded"})
     import sys
     print >>sys.stderr, r.body_string()
     t.eq(r.status_int, 200)
+    # Because this is a POST and an application/x-www-form-urlencoded, the OAuth
+    # can include the OAuth parameters directly into the body of the form, however
+    # it MUST NOT include the 'oauth_body_hash' parameter in these circumstances.
+    t.isnotin("oauth_body_hash", r.request.body)
 
 @oauth_request('two_legged')
 def test_004(o, u, b):
