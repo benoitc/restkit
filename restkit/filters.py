@@ -89,11 +89,12 @@ class OAuthFilter(object):
       
         raw_url = urlunparse((parsed_url.scheme, parsed_url.netloc,
                 parsed_url.path, '', '', ''))
-        
+
         oauth_req = Request.from_consumer_and_token(self.consumer, 
                         token=self.token, http_method=request.method, 
-                        http_url=raw_url, parameters=params)
-                    
+                        http_url=raw_url, parameters=params,
+                        is_form_encoded=form)
+
         oauth_req.sign_request(self.method, self.consumer, self.token)
         
         if form:
