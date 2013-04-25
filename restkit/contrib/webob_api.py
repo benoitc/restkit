@@ -57,7 +57,7 @@ class Request(BaseRequest):
     head = Method('head')
     delete = Method('delete')
     
-    def get_response(self):
+    def get_response(self, application=None):
         if self.content_length < 0:
             self.content_length = 0
         if self.method in ('DELETE', 'GET'):
@@ -71,7 +71,7 @@ class Request(BaseRequest):
             if 'form' not in self.content_type:
                 self.content_type = 'application/x-www-form-urlencoded'
         self.server_name = self.host
-        return BaseRequest.get_response(self, PROXY)
+        return BaseRequest.get_response(self, application or PROXY)
 
     __call__ = get_response
 
