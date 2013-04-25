@@ -116,7 +116,7 @@ class Proxy(object):
         if method == "HEAD":
             return StringIO()
 
-        return response.tee()
+        return response.body_stream()
 
 class TransparentProxy(Proxy):
     """A proxy based on HTTP_HOST environ variable"""
