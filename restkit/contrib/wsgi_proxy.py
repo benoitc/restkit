@@ -169,3 +169,138 @@ def make_host_proxy(global_config, uri=None, **local_config):
     uri = uri.rstrip('/')
     config = get_config(local_config)
     return HostProxy(uri, **config)
+
+
+
+# (c) 2005 Ian Bicking and contributors; written for Paste (http://pythonpaste.org)
+# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+
+import httplib
+import urlparse
+import urllib
+
+from paste import httpexceptions
+from paste.util.converters import aslist
+
+# Remove these headers from response (specify lower case header
+# names):
+filtered_headers = (
+    'transfer-encoding',
+    'connection',
+    'keep-alive',
+    'proxy-authenticate',
+    'proxy-authorization',
+    'te',
+    'trailers',
+    'upgrade',
+)
+
+class PasteLikeProxy(object):
+
+    def __init__(self, address, allowed_request_methods=(),
+                 suppress_http_headers=(), **kwargs):
+        self.address = address
+        self.parsed = urlparse.urlsplit(address)
+        self.scheme = self.parsed[0].lower()
+        self.host = self.parsed[1]
+        self.path = self.parsed[2]
+        self.allowed_request_methods = [
+            x.lower() for x in allowed_request_methods if x]
+
+        self.suppress_http_headers = [
+            x.lower() for x in suppress_http_headers if x]
+
+    def __call__(self, environ, start_response):
+        if (self.allowed_request_methods and
+            environ['REQUEST_METHOD'].lower() not in self.allowed_request_methods):
+            return httpexceptions.HTTPBadRequest("Disallowed")(environ, start_response)
+
+        if self.scheme == 'http':
+            ConnClass = httplib.HTTPConnection
+        elif self.scheme == 'https':
+            ConnClass = httplib.HTTPSConnection
+        else:
+            raise ValueError(
+                "Unknown scheme for %r: %r" % (self.address, self.scheme))
+        conn = ConnClass(self.host)
+        headers = {}
+        for key, value in environ.items():
+            if key.startswith('HTTP_'):
+                key = key[5:].lower().replace('_', '-')
+                if key == 'host' or key in self.suppress_http_headers:
+                    continue
+                headers[key] = value
+        headers['host'] = self.host
+        if 'REMOTE_ADDR' in environ:
+            headers['x-forwarded-for'] = environ['REMOTE_ADDR']
+        if environ.get('CONTENT_TYPE'):
+            headers['content-type'] = environ['CONTENT_TYPE']
+        if environ.get('CONTENT_LENGTH'):
+            if environ['CONTENT_LENGTH'] == '-1':
+                # This is a special case, where the content length is basically undetermined
+                body = environ['wsgi.input'].read(-1)
+                headers['content-length'] = str(len(body))
+            else:
+                headers['content-length'] = environ['CONTENT_LENGTH'] 
+                length = int(environ['CONTENT_LENGTH'])
+                body = environ['wsgi.input'].read(length)
+        else:
+            body = ''
+
+        path_info = urllib.quote(environ['PATH_INFO'])
+        if self.path:
+            request_path = path_info
+            if request_path and request_path[0] == '/':
+                request_path = request_path[1:]
+
+            path = urlparse.urljoin(self.path, request_path)
+        else:
+            path = path_info
+        if environ.get('QUERY_STRING'):
+            path += '?' + environ['QUERY_STRING']
+
+        conn.request(environ['REQUEST_METHOD'],
+                     path,
+                     body, headers)
+        res = conn.getresponse()
+        headers_out = parse_headers(res.msg)
+
+        status = '%s %s' % (res.status, res.reason)
+        start_response(status, headers_out)
+        # @@: Default?
+        length = res.getheader('content-length')
+        if length is not None:
+            body = res.read(int(length))
+        else:
+            body = res.read()
+        conn.close()
+        return [body]
+
+
+def parse_headers(message):
+    """
+    Turn a Message object into a list of WSGI-style headers.
+    """
+    headers_out = []
+    for full_header in message.headers:
+        if not full_header:
+            # Shouldn't happen, but we'll just ignore
+            continue
+        if full_header[0].isspace():
+            # Continuation line, add to the last header
+            if not headers_out:
+                raise ValueError(
+                    "First header starts with a space (%r)" % full_header)
+            last_header, last_value = headers_out.pop()
+            value = last_value + ' ' + full_header.strip()
+            headers_out.append((last_header, value))
+            continue
+        try:
+            header, value = full_header.split(':', 1)
+        except:
+            raise ValueError("Invalid header: %r" % full_header)
+        value = value.strip()
+        if header.lower() not in filtered_headers:
+            headers_out.append((header, value))
+    return headers_out
