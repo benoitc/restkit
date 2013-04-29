@@ -269,13 +269,7 @@ class PasteLikeProxy(object):
             # See: http://www.python.org/dev/peps/pep-0333/#handling-the-content-length-header
             body = res.body_stream()
         else:
-            length = res.headers.get('Content-Length')
-            if length is not None:
-                body = res.tee().read(int(length))
-            else:
-                body = res.tee().read()
-            body = [body]
-            res.close()
+            body = res.tee()
         return body
 
 
