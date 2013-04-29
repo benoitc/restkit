@@ -260,7 +260,7 @@ class PasteProxy(object):
         res = conn.request(u'%s://%s%s' % (self.scheme, self.host, path),
                            environ['REQUEST_METHOD'],
                            body=body, headers=headers)
-        headers_out = parse_headers(res.headerslist, stream=self.stream)
+        headers_out = filter_headers(res.headerslist, stream=self.stream)
 
         status = res.status
         start_response(status, headers_out)
@@ -282,9 +282,9 @@ class PasteProxy(object):
         return body
 
 
-def parse_headers(headers_list, stream=False):
+def filter_headers(headers_list, stream=False):
     """
-    Turn a Message object into a list of WSGI-style headers.
+    Filter headers list of WSGI-style headers.
     """
     headers_out = []
     for header, value in headers_list:
