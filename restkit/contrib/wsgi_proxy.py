@@ -231,6 +231,7 @@ class PasteLikeProxy(object):
             headers['x-forwarded-for'] = environ['REMOTE_ADDR']
         if environ.get('CONTENT_TYPE'):
             headers['content-type'] = environ['CONTENT_TYPE']
+
         if environ.get('CONTENT_LENGTH'):
             if environ['CONTENT_LENGTH'] == '-1':
                 # This is a special case, where the content length is basically undetermined
