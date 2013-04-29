@@ -211,19 +211,14 @@ class PasteLikeProxy(object):
         self.suppress_http_headers = [
             x.lower() for x in suppress_http_headers if x]
 
+        self.client = Client(**kwargs)
+
     def __call__(self, environ, start_response):
         if (self.allowed_request_methods and
             environ['REQUEST_METHOD'].lower() not in self.allowed_request_methods):
             return httpexceptions.HTTPBadRequest("Disallowed")(environ, start_response)
 
-        if self.scheme == 'http':
-            ConnClass = httplib.HTTPConnection
-        elif self.scheme == 'https':
-            ConnClass = httplib.HTTPSConnection
-        else:
-            raise ValueError(
-                "Unknown scheme for %r: %r" % (self.address, self.scheme))
-        conn = ConnClass(self.host)
+        conn = self.client
         headers = {}
         for key, value in environ.items():
             if key.startswith('HTTP_'):
@@ -260,47 +255,29 @@ class PasteLikeProxy(object):
         if environ.get('QUERY_STRING'):
             path += '?' + environ['QUERY_STRING']
 
-        conn.request(environ['REQUEST_METHOD'],
-                     path,
-                     body, headers)
-        res = conn.getresponse()
-        headers_out = parse_headers(res.msg)
+        res = conn.request(u'%s://%s%s' % (self.scheme, self.host, path),
+                           environ['REQUEST_METHOD'],
+                           body=body, headers=headers)
+        headers_out = parse_headers(res.headerslist)
 
-        status = '%s %s' % (res.status, res.reason)
+        status = res.status
         start_response(status, headers_out)
         # @@: Default?
-        length = res.getheader('content-length')
+        length = res.headers.get('Content-Length')
         if length is not None:
-            body = res.read(int(length))
+            body = res.tee().read(int(length))
         else:
-            body = res.read()
-        conn.close()
+            body = res.tee().read()
+        res.close()
         return [body]
 
 
-def parse_headers(message):
+def parse_headers(headers_list):
     """
     Turn a Message object into a list of WSGI-style headers.
     """
     headers_out = []
-    for full_header in message.headers:
-        if not full_header:
-            # Shouldn't happen, but we'll just ignore
-            continue
-        if full_header[0].isspace():
-            # Continuation line, add to the last header
-            if not headers_out:
-                raise ValueError(
-                    "First header starts with a space (%r)" % full_header)
-            last_header, last_value = headers_out.pop()
-            value = last_value + ' ' + full_header.strip()
-            headers_out.append((last_header, value))
-            continue
-        try:
-            header, value = full_header.split(':', 1)
-        except:
-            raise ValueError("Invalid header: %r" % full_header)
-        value = value.strip()
+    for header, value in headers_list:
         if header.lower() not in filtered_headers:
             headers_out.append((header, value))
     return headers_out
