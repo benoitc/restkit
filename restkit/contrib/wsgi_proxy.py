@@ -196,7 +196,7 @@ filtered_headers = (
     'upgrade',
 )
 
-class PasteLikeProxy(object):
+class PasteProxy(object):
 
     def __init__(self, address, allowed_request_methods=(),
                  suppress_http_headers=(), stream=False, **kwargs):
