@@ -267,9 +267,18 @@ class PasteLikeProxy(object):
         # @@: Default?
         if self.stream:
             # See: http://www.python.org/dev/peps/pep-0333/#handling-the-content-length-header
-            body = res.body_stream()
+            if self.stream == 'safe':
+                body = res.tee()
+            else:
+                body = res.body_stream()
         else:
-            body = res.tee()
+            length = res.headers.get('Content-Length')
+            if length is not None:
+                body = res.body_string()[:int(length)]
+            else:
+                body = res.body_string()
+            body = [body]
+            res.close()
         return body
 
 
