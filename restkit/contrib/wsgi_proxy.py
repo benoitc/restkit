@@ -199,7 +199,7 @@ filtered_headers = (
 class PasteLikeProxy(object):
 
     def __init__(self, address, allowed_request_methods=(),
-                 suppress_http_headers=(), **kwargs):
+                 suppress_http_headers=(), stream=False, **kwargs):
         self.address = address
         self.parsed = urlparse.urlsplit(address)
         self.scheme = self.parsed[0].lower()
@@ -211,6 +211,7 @@ class PasteLikeProxy(object):
         self.suppress_http_headers = [
             x.lower() for x in suppress_http_headers if x]
 
+        self.stream = stream
         self.client = Client(**kwargs)
 
     def __call__(self, environ, start_response):
@@ -259,26 +260,37 @@ class PasteLikeProxy(object):
         res = conn.request(u'%s://%s%s' % (self.scheme, self.host, path),
                            environ['REQUEST_METHOD'],
                            body=body, headers=headers)
-        headers_out = parse_headers(res.headerslist)
+        headers_out = parse_headers(res.headerslist, stream=self.stream)
 
         status = res.status
         start_response(status, headers_out)
         # @@: Default?
-        length = res.headers.get('Content-Length')
-        if length is not None:
-            body = res.tee().read(int(length))
+        if self.stream:
+            # See: http://www.python.org/dev/peps/pep-0333/#handling-the-content-length-header
+            body = res.body_stream()
         else:
-            body = res.tee().read()
-        res.close()
-        return [body]
+            length = res.headers.get('Content-Length')
+            if length is not None:
+                body = res.tee().read(int(length))
+            else:
+                body = res.tee().read()
+            body = [body]
+            res.close()
+        return body
 
 
-def parse_headers(headers_list):
+def parse_headers(headers_list, stream=False):
     """
     Turn a Message object into a list of WSGI-style headers.
     """
     headers_out = []
     for header, value in headers_list:
+        if stream:
+            # Suppress 'content-length' header:
+            #     - The WSGI server CAN stream the response, if possible
+            # See: http://www.python.org/dev/peps/pep-0333/#handling-the-content-length-header
+            if header.lower() == 'content-length':
+                continue
         if header.lower() not in filtered_headers:
             headers_out.append((header, value))
     return headers_out
