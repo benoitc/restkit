@@ -1,1 +1,1 @@
-http-parser>=0.8.1
+http-parser>=0.8.3
