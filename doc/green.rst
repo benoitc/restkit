@@ -34,7 +34,7 @@ Here is a quick crawler example using Gevent::
         allurls.extend(urls)
 
     def fetch(u):
-        r = request(u, follow_redirect=True, pool=Pool)
+        r = request(u, follow_redirect=True, pool=pool)
         print "RESULT: %s: %s (%s)" % (u, r.status, len(r.body_string()))
 
     def extract():
