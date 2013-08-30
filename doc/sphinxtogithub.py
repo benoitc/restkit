@@ -2,9 +2,21 @@
  
 import optparse as op
 import os
+import re
+import sphinx
 import sys
 import shutil
 
+
+def get_number(text):
+    m = re.match("[0-9]+", text)
+    if m:
+        return int(m.group(0))
+    else:
+        return 0
+
+def get_sphinx_version():
+    return tuple(get_number(x) for x in sphinx.__version__.split("."))
 
 class NoDirectoriesError(Exception):
     "Error thrown when no directories starting with an underscore are found"
@@ -51,10 +63,14 @@ class FileHandler(object):
     def process(self):
 
         text = self.opener(self.name).read()
+        if get_sphinx_version() >= (1, 2):
+            text = text.decode("utf-8")
 
         for replacer in self.replacers:
             text = replacer.process( text )
 
+        if get_sphinx_version() >= (1, 2):
+            text = text.encode("utf-8")
         self.opener(self.name, "w").write(text)
 
 class Remover(object):
