@@ -65,7 +65,7 @@ def main():
                 ]},
             install_requires = [
                 'http-parser>=0.8.3',
-                'socketpool>=0.5.0'],
+                'socketpool>=0.5.3'],
             test_suite = 'nose.collector'
         )
 
