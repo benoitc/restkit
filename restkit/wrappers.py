@@ -5,6 +5,7 @@
 
 import cgi
 import copy
+import logging
 import mimetypes
 import os
 from StringIO import StringIO
@@ -18,6 +19,8 @@ from restkit.forms import multipart_form_encode, form_encode
 from restkit.tee import ResponseTeeInput
 from restkit.util import to_bytestring
 from restkit.util import parse_cookie
+
+log = logging.getLogger(__name__)
 
 class Request(object):
 
@@ -143,6 +146,8 @@ class Request(object):
                     not isinstance(self.body, types.StringTypes):
                 raise RequestError("error: '%s', body can't be rewind."
                         % msg)
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("restart request: %s" % msg)
 
 
 class BodyWrapper(object):
