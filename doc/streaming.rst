@@ -1,7 +1,7 @@
-Stream you content
-==================
+Stream your content
+===================
 
-With Restkit you can easily stream your content to an from a server.
+With Restkit you can easily stream your content to and from a server.
 
 Stream to
 ---------
