@@ -1,9 +1,9 @@
 Reuses connections
 ==================
 
-Reusing connections is good. Restkit can maintain for you the http
-connections and reuse them if the server allows it. To do that restkit
-is using the `socketpool module
+Reusing connections is good. Restkit can maintain http
+connections for you and reuse them if the server allows it. To do that restkit
+uses the `socketpool module
 <https://github.com/benoitc/socketpool>`_ ::
 
     from restkit import *
@@ -15,11 +15,11 @@ is using the `socketpool module
 
 .. NOTE::
     
-    By default, restkit use a generic session object globaly abvailable. 
+    By default, restkit uses a generic session object that is globally available. 
     You can change its settings by using the
     **restkit.sesssion.set_session** function.
   
-Restkit provides also Pool working with `eventlet <http://eventlet.net>`_ or `gevent <http://gevent.net>`_.
+Restkit also provides a Pool that works with `eventlet <http://eventlet.net>`_ or `gevent <http://gevent.net>`_.
 
 Example of usage with Gevent::
 
