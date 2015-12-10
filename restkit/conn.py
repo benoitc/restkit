@@ -22,11 +22,14 @@ DNS_TIMEOUT = 60
 class Connection(Connector):
 
     def __init__(self, host, port, backend_mod=None, pool=None,
-            is_ssl=False, extra_headers=[], proxy_pieces=None, **ssl_args):
+            is_ssl=False, extra_headers=[], proxy_pieces=None, timeout=None,
+            **ssl_args):
 
         # connect the socket, if we are using an SSL connection, we wrap
         # the socket.
         self._s = backend_mod.Socket(socket.AF_INET, socket.SOCK_STREAM)
+        if timeout is not None:
+            self._s.settimeout(timeout)
         self._s.connect((host, port))
         if proxy_pieces:
             self._s.sendall(proxy_pieces)

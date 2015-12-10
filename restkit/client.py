@@ -185,6 +185,7 @@ class Client(object):
         if not conn:
             conn = self._pool.get(host=addr[0], port=addr[1],
                     pool=self._pool, is_ssl=is_ssl,
+                    timeout=self.timeout,
                     extra_headers=extra_headers, **self.ssl_args)
 
 
@@ -215,6 +216,7 @@ class Client(object):
 
                 conn = self._pool.get(host=addr[0], port=addr[1],
                     pool=self._pool, is_ssl=is_ssl,
+                    timeout=self.timeout,
                     extra_headers=[], proxy_pieces=proxy_pieces, **self.ssl_args)
             else:
                 headers = []
@@ -223,6 +225,7 @@ class Client(object):
 
                 conn = self._pool.get(host=addr[0], port=addr[1],
                         pool=self._pool, is_ssl=False,
+                        timeout=self.timeout,
                         extra_headers=[], **self.ssl_args)
             return conn
 
