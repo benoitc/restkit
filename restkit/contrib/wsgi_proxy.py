@@ -169,3 +169,131 @@ def make_host_proxy(global_config, uri=None, **local_config):
     uri = uri.rstrip('/')
     config = get_config(local_config)
     return HostProxy(uri, **config)
+
+
+
+# (c) 2005 Ian Bicking and contributors; written for Paste (http://pythonpaste.org)
+# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+
+import httplib
+import urlparse
+import urllib
+
+from paste import httpexceptions
+from paste.util.converters import aslist
+
+# Remove these headers from response (specify lower case header
+# names):
+filtered_headers = (
+    'transfer-encoding',
+    'connection',
+    'keep-alive',
+    'proxy-authenticate',
+    'proxy-authorization',
+    'te',
+    'trailers',
+    'upgrade',
+)
+
+class PasteProxy(object):
+
+    def __init__(self, address, allowed_request_methods=(),
+                 suppress_http_headers=(), stream=False, **kwargs):
+        self.address = address
+        self.parsed = urlparse.urlsplit(address)
+        self.scheme = self.parsed[0].lower()
+        self.host = self.parsed[1]
+        self.path = self.parsed[2]
+        self.allowed_request_methods = [
+            x.lower() for x in allowed_request_methods if x]
+
+        self.suppress_http_headers = [
+            x.lower() for x in suppress_http_headers if x]
+
+        self.stream = stream
+        self.client = Client(**kwargs)
+
+    def __call__(self, environ, start_response):
+        if (self.allowed_request_methods and
+            environ['REQUEST_METHOD'].lower() not in self.allowed_request_methods):
+            return httpexceptions.HTTPBadRequest("Disallowed")(environ, start_response)
+
+        conn = self.client
+        headers = {}
+        for key, value in environ.items():
+            if key.startswith('HTTP_'):
+                key = key[5:].lower().replace('_', '-')
+                if key == 'host' or key in self.suppress_http_headers:
+                    continue
+                headers[key] = value
+        headers['host'] = self.host
+        if 'REMOTE_ADDR' in environ:
+            headers['x-forwarded-for'] = environ['REMOTE_ADDR']
+        if environ.get('CONTENT_TYPE'):
+            headers['content-type'] = environ['CONTENT_TYPE']
+
+        if environ.get('CONTENT_LENGTH'):
+            if environ['CONTENT_LENGTH'] == '-1':
+                # This is a special case, where the content length is basically undetermined
+                body = environ['wsgi.input'].read(-1)
+                headers['content-length'] = str(len(body))
+            else:
+                headers['content-length'] = environ['CONTENT_LENGTH'] 
+                length = int(environ['CONTENT_LENGTH'])
+                body = environ['wsgi.input'].read(length)
+        else:
+            body = ''
+
+        path_info = urllib.quote(environ['PATH_INFO'])
+        if self.path:
+            request_path = path_info
+            if request_path and request_path[0] == '/':
+                request_path = request_path[1:]
+
+            path = urlparse.urljoin(self.path, request_path)
+        else:
+            path = path_info
+        if environ.get('QUERY_STRING'):
+            path += '?' + environ['QUERY_STRING']
+
+        res = conn.request(u'%s://%s%s' % (self.scheme, self.host, path),
+                           environ['REQUEST_METHOD'],
+                           body=body, headers=headers)
+        headers_out = filter_headers(res.headerslist, stream=self.stream)
+
+        status = res.status
+        start_response(status, headers_out)
+        # @@: Default?
+        if self.stream:
+            # See: http://www.python.org/dev/peps/pep-0333/#handling-the-content-length-header
+            if self.stream == 'safe':
+                body = res.tee()
+            else:
+                body = res.body_stream()
+        else:
+            length = res.headers.get('Content-Length')
+            if length is not None:
+                body = res.body_string()[:int(length)]
+            else:
+                body = res.body_string()
+            body = [body]
+            res.close()
+        return body
+
+
+def filter_headers(headers_list, stream=False):
+    """
+    Filter headers list of WSGI-style headers.
+    """
+    headers_out = []
+    for header, value in headers_list:
+        if stream:
+            # Suppress 'content-length' header:
+            #     - The WSGI server CAN stream the response, if possible
+            # See: http://www.python.org/dev/peps/pep-0333/#handling-the-content-length-header
+            if header.lower() == 'content-length':
+                continue
+        if header.lower() not in filtered_headers:
+            headers_out.append((header, value))
+    return headers_out
