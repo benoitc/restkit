@@ -115,7 +115,7 @@ def test_006(u, c):
 @t.client_request('http://e-engura.com/images/logo.gif')
 def test_007(u, c):
     r = c.request(u)
-    print(r.status)
+    print((r.status))
     t.eq(r.status_int, 200)
     fd, fname = tempfile.mkstemp(suffix='.gif')
     f = os.fdopen(fd, "wb")

@@ -257,7 +257,7 @@ class Response(object):
         return key in self.headers
 
     def __iter__(self):
-        return iter(self.headers.items())
+        return iter(list(self.headers.items()))
 
     def can_read(self):
         return not self._already_read

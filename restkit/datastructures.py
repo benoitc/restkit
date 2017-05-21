@@ -33,7 +33,7 @@ class MultiDict(DictMixin):
         else:
             self._items = []
         if kw:
-            self._items.extend(iter(kw.items()))
+            self._items.extend(iter(list(kw.items())))
 
     @classmethod
     def from_fieldstorage(cls, fs):
@@ -104,7 +104,7 @@ class MultiDict(DictMixin):
         """
         result = {}
         multi = {}
-        for key, value in self.items():
+        for key, value in list(self.items()):
             if key in result:
                 # We do this to not clobber any lists that are
                 # *actual* values in this dictionary:
@@ -122,7 +122,7 @@ class MultiDict(DictMixin):
         Returns a dictionary where each key is associated with a list of values.
         """
         r = {}
-        for key, val in self.items():
+        for key, val in list(self.items()):
             r.setdefault(key, []).append(val)
         return r
 
@@ -206,7 +206,7 @@ class MultiDict(DictMixin):
             self.update(kwargs)
 
     def __repr__(self):
-        items = ', '.join(['(%r, %r)' % v for v in self.items()])
+        items = ', '.join(['(%r, %r)' % v for v in list(self.items())])
         return '%s([%s])' % (self.__class__.__name__, items)
 
     def __len__(self):

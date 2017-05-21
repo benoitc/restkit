@@ -56,7 +56,7 @@ Usage: python sitemap_gen.py --config=config.xml [--help] [--testing]
 import sys
 if sys.hexversion < 0x02020000:
   print('This script requires Python 2.2 or later.')
-  print('Currently run with version: %s' % sys.version)
+  print(('Currently run with version: %s' % sys.version))
   sys.exit(1)
 
 import fnmatch
@@ -428,7 +428,7 @@ class Output:
       hash = md5.new(text).digest()
       if hash not in self._warns_shown:
         self._warns_shown[hash] = 1
-        print('[WARNING] ' + text)
+        print(('[WARNING] ' + text))
       else:
         self.Log('(suppressed) [WARNING] ' + text, 3)
       self.num_warns = self.num_warns + 1
@@ -441,7 +441,7 @@ class Output:
       hash = md5.new(text).digest()
       if hash not in self._errors_shown:
         self._errors_shown[hash] = 1
-        print('[ERROR] ' + text)
+        print(('[ERROR] ' + text))
       else:
         self.Log('(suppressed) [ERROR] ' + text, 3)
       self.num_errors = self.num_errors + 1
@@ -451,7 +451,7 @@ class Output:
     """ Output an error and terminate the program. """
     if text:
       text = encoder.NarrowText(text, None)
-      print('[FATAL] ' + text)
+      print(('[FATAL] ' + text))
     else:
       print('Fatal error.')
     sys.exit(1)
@@ -1912,7 +1912,7 @@ class Sitemap(xml.sax.handler.ContentHandler):
       self._filters.append(Filter(attributes))
 
     elif tag == 'url':
-     print(type(attributes))
+     print((type(attributes)))
      self._inputs.append(InputURL(attributes))
 
     elif tag == 'urllist':

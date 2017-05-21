@@ -95,7 +95,7 @@ def test_007(req):
     resp = req.get_response(proxy)
     body = resp.body
 
-    print(resp.location)
+    print((resp.location))
     assert resp.location == '%s/complete_redirect' % root_uri, str(resp)
 
 @with_webob

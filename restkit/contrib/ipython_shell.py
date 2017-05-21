@@ -208,7 +208,7 @@ class ShellClient(object):
             doc = '  >>> %s(%s)' % (k, args)
             methods += '%-65.65s # send a HTTP %s\n' % (doc, k)
         ns['methods'] = methods
-        print(HELP.strip() % ns)
+        print((HELP.strip() % ns))
         print('')
 
     def __repr__(self):

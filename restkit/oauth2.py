@@ -324,7 +324,7 @@ class Request(dict):
             self.url = to_unicode(url)
         self.method = method
         if parameters is not None:
-            for k, v in parameters.items():
+            for k, v in list(parameters.items()):
                 k = to_unicode(k)
                 v = to_unicode_optional_iterator(v)
                 self[k] = v
@@ -361,7 +361,7 @@ class Request(dict):
  
     def get_nonoauth_parameters(self):
         """Get any non-OAuth parameters."""
-        return dict([(k, v) for k, v in self.items() 
+        return dict([(k, v) for k, v in list(self.items()) 
                     if not k.startswith('oauth_')])
  
     def to_header(self, realm=''):
@@ -381,7 +381,7 @@ class Request(dict):
     def to_postdata(self):
         """Serialize as post data for a POST request."""
         d = {}
-        for k, v in self.items():
+        for k, v in list(self.items()):
             d[k.encode('utf-8')] = to_utf8_optional_iterator(v)
 
         # tell urlencode to deal with sequence values and map them correctly
@@ -431,7 +431,7 @@ class Request(dict):
     def get_normalized_parameters(self):
         """Return a string that contains the parameters that must be signed."""
         items = []
-        for key, value in self.items():
+        for key, value in list(self.items()):
             if key == 'oauth_signature':
                 continue
             # 1.0a/9.1.1 states that kvp must be sorted by key, then by value,
@@ -588,7 +588,7 @@ class Request(dict):
     def _split_url_string(param_str):
         """Turn URL string into parameters."""
         parameters = parse_qs(param_str.encode('utf-8'), keep_blank_values=True)
-        for k, v in parameters.items():
+        for k, v in list(parameters.items()):
             parameters[k] = urllib.parse.unquote(v[0])
         return parameters
 
