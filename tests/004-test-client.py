@@ -3,20 +3,20 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from __future__ import with_statement
+
 
 import cgi
 import imghdr
 import os
 import socket
 import threading
-import Queue
-import urlparse
+import queue
+import urllib.parse
 import sys
 import tempfile
 import time
 
-import t
+from . import t
 from restkit.filters import BasicAuth
 
 
@@ -84,7 +84,7 @@ def test_001(u, c):
 @t.client_request("/unicode")
 def test_002(u, c):
     r = c.request(u)
-    t.eq(r.body_string(charset="utf-8"), u"éàù@")
+    t.eq(r.body_string(charset="utf-8"), "éàù@")
     
 @t.client_request("/éàù")
 def test_003(u, c):
@@ -115,7 +115,7 @@ def test_006(u, c):
 @t.client_request('http://e-engura.com/images/logo.gif')
 def test_007(u, c):
     r = c.request(u)
-    print r.status
+    print(r.status)
     t.eq(r.status_int, 200)
     fd, fname = tempfile.mkstemp(suffix='.gif')
     f = os.fdopen(fd, "wb")
@@ -162,7 +162,7 @@ def test_011(u, c):
 
 @t.client_request('/unicode')
 def test_012(u, c):
-    r = c.request(u, 'POST', body=u"éàù@")
+    r = c.request(u, 'POST', body="éàù@")
     t.eq(r.body_string(), "éàù@")
            
 

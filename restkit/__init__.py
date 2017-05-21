@@ -18,7 +18,7 @@ except ImportError:
     import traceback
     traceback.print_exc()
 
-import urlparse
+import urllib.parse
 import logging
 
 LOG_LEVELS = {
@@ -85,11 +85,11 @@ def request(url, method='GET', body=None, headers=None, **kwargs):
     """
 
     # detect credentials from url
-    u = urlparse.urlparse(url)
+    u = urllib.parse.urlparse(url)
     if u.username is not None:
         password = u.password or ""
         filters = kwargs.get('filters') or []
-        url = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
+        url = urllib.parse.urlunparse((u.scheme, u.netloc.split("@")[-1],
             u.path, u.params, u.query, u.fragment))
         filters.append(BasicAuth(u.username, password))
 

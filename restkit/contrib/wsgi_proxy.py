@@ -3,12 +3,12 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-import urlparse
+import urllib.parse
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 from restkit.client import Client
 from restkit.conn import MAX_BODY
@@ -73,7 +73,7 @@ class Proxy(object):
         uri = host_uri + path_info
 
         new_headers = {}
-        for k, v in environ.items():
+        for k, v in list(environ.items()):
             if k.startswith('HTTP_'):
                 k = k[5:].replace('_', '-').title()
                 new_headers[k] = v
@@ -141,7 +141,7 @@ class HostProxy(Proxy):
     def __init__(self, uri, **kwargs):
         super(HostProxy, self).__init__(**kwargs)
         self.uri = uri.rstrip('/')
-        self.scheme, self.net_loc = urlparse.urlparse(self.uri)[0:2]
+        self.scheme, self.net_loc = urllib.parse.urlparse(self.uri)[0:2]
 
     def extract_uri(self, environ):
         environ['HTTP_HOST'] = self.net_loc

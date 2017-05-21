@@ -16,21 +16,21 @@
 #
 
 import base64
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 import cgi
 import os
 import socket
 import tempfile
 import threading
 import unittest
-import urlparse
-import Cookie
+import urllib.parse
+import http.cookies
 
 try:
-    from urlparse import parse_qsl, parse_qs
+    from urllib.parse import parse_qsl, parse_qs
 except ImportError:
     from cgi import parse_qsl, parse_qs
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from restkit.util import to_bytestring
 
 HOST = 'localhost'
@@ -45,7 +45,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
         
         
     def do_GET(self):
-        self.parsed_uri = urlparse.urlparse(urllib.unquote(self.path))
+        self.parsed_uri = urllib.parse.urlparse(urllib.parse.unquote(self.path))
         self.query = {}
         for k, v in parse_qsl(self.parsed_uri[4]):
             self.query[k] = v.decode('utf-8')
@@ -57,7 +57,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
 
         elif path == "/unicode":
             extra_headers = [('Content-type', 'text/plain')]
-            self._respond(200, extra_headers, u"éàù@")
+            self._respond(200, extra_headers, "éàù@")
 
         elif path == "/json":
             content_type = self.headers.get('content-type', 'text/plain')
@@ -122,21 +122,21 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
             self._respond(200, extra_headers, "ok")
         
         elif path == "/cookie":
-            c = Cookie.SimpleCookie()
+            c = http.cookies.SimpleCookie()
             c["fig"] = "newton"
             c['fig']['path'] = "/"
-            for k in c.keys():
+            for k in list(c.keys()):
                 extra_headers = [('Set-Cookie', str(c[k].output(header='')))]
             self._respond(200, extra_headers, "ok")
         
         elif path == "/cookies":
-            c = Cookie.SimpleCookie()
+            c = http.cookies.SimpleCookie()
             c["fig"] = "newton"
             c['fig']['path'] = "/"
             c["sugar"] = "wafer"
             c['sugar']['path'] = "/"
             extra_headers = []
-            for k in c.keys():
+            for k in list(c.keys()):
                 extra_headers.append(('Set-Cookie', str(c[k].output(header=''))))
             self._respond(200, extra_headers, "ok")
         
@@ -146,7 +146,7 @@ class HTTPTestHandler(BaseHTTPRequestHandler):
 
 
     def do_POST(self):
-        self.parsed_uri = urlparse.urlparse(self.path)
+        self.parsed_uri = urllib.parse.urlparse(self.path)
         self.query = {}
         for k, v in parse_qsl(self.parsed_uri[4]):
             self.query[k] = v.decode('utf-8')

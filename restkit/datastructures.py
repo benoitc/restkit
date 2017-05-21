@@ -24,16 +24,16 @@ class MultiDict(DictMixin):
             if isinstance(args[0], MultiDict):
                 items = args[0]._items
             elif hasattr(args[0], 'iteritems'):
-                items = list(args[0].iteritems())
+                items = list(args[0].items())
             elif hasattr(args[0], 'items'):
-                items = args[0].items()
+                items = list(args[0].items())
             else:
                 items = list(args[0])
             self._items = items
         else:
             self._items = []
         if kw:
-            self._items.extend(kw.iteritems())
+            self._items.extend(iter(kw.items()))
 
     @classmethod
     def from_fieldstorage(cls, fs):
@@ -104,7 +104,7 @@ class MultiDict(DictMixin):
         """
         result = {}
         multi = {}
-        for key, value in self.iteritems():
+        for key, value in self.items():
             if key in result:
                 # We do this to not clobber any lists that are
                 # *actual* values in this dictionary:
@@ -122,7 +122,7 @@ class MultiDict(DictMixin):
         Returns a dictionary where each key is associated with a list of values.
         """
         r = {}
-        for key, val in self.iteritems():
+        for key, val in self.items():
             r.setdefault(key, []).append(val)
         return r
 
@@ -159,8 +159,8 @@ class MultiDict(DictMixin):
 
     def pop(self, key, *args):
         if len(args) > 1:
-            raise TypeError, "pop expected at most 2 arguments, got "\
-                              + repr(1 + len(args))
+            raise TypeError("pop expected at most 2 arguments, got "\
+                              + repr(1 + len(args)))
         for i in range(len(self._items)):
             if self._items[i][0] == key:
                 v = self._items[i][1]
@@ -174,8 +174,8 @@ class MultiDict(DictMixin):
     def ipop(self, key, *args):
         """ like pop but case insensitive """
         if len(args) > 1:
-            raise TypeError, "pop expected at most 2 arguments, got "\
-                              + repr(1 + len(args))
+            raise TypeError("pop expected at most 2 arguments, got "\
+                              + repr(1 + len(args)))
 
         lkey = key.lower()
         for i, item in enumerate(self._items):
@@ -195,9 +195,9 @@ class MultiDict(DictMixin):
         if other is None:
             pass
         elif hasattr(other, 'items'):
-            self._items.extend(other.items())
+            self._items.extend(list(other.items()))
         elif hasattr(other, 'keys'):
-            for k in other.keys():
+            for k in list(other.keys()):
                 self._items.append((k, other[k]))
         else:
             for k, v in other:
@@ -206,7 +206,7 @@ class MultiDict(DictMixin):
             self.update(kwargs)
 
     def __repr__(self):
-        items = ', '.join(['(%r, %r)' % v for v in self.iteritems()])
+        items = ', '.join(['(%r, %r)' % v for v in self.items()])
         return '%s([%s])' % (self.__class__.__name__, items)
 
     def __len__(self):

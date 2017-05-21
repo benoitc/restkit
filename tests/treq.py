@@ -3,15 +3,15 @@
 # This file is part of the pywebmachine package released
 # under the MIT license.
 
-from __future__ import with_statement
 
-import t
+
+from . import t
 
 import inspect
 import os
 import random
-from StringIO import StringIO
-import urlparse
+from io import StringIO
+import urllib.parse
 
 from restkit.datastructures import MultiDict 
 from restkit.errors import ParseException
@@ -28,7 +28,7 @@ class IterUnreader(Unreader):
         if not self.iter:
             return ""
         try:
-            return self.iter.next()
+            return next(self.iter)
         except StopIteration:
             self.iter = None
             return ""
@@ -39,7 +39,7 @@ random.seed()
 
 def uri(data):
     ret = {"raw": data}
-    parts = urlparse.urlparse(data)
+    parts = urllib.parse.urlparse(data)
     ret["scheme"] = parts.scheme or None
     ret["host"] = parts.netloc.rsplit(":", 1)[0] or None
     ret["port"] = parts.port or 80
@@ -60,7 +60,7 @@ def uri(data):
 def load_response_py(fname):
     config = globals().copy()
     config["uri"] = uri
-    execfile(fname, config)
+    exec(compile(open(fname).read(), fname, 'exec'), config)
     return config["response"]
 
 class response(object):
@@ -209,7 +209,7 @@ class response(object):
         if len(body):
             raise AssertionError("Failed to read entire body: %r" % body)
         try:
-            data = iter(req.body).next()
+            data = next(iter(req.body))
             raise AssertionError("Read data after body finished: %r" % data)
         except StopIteration:
             pass
@@ -232,9 +232,9 @@ class response(object):
 
         ret = []
         for (mt, sz, sn) in cfgs:
-            mtn = mt.func_name[6:]
-            szn = sz.func_name[5:]
-            snn = sn.func_name[5:]
+            mtn = mt.__name__[6:]
+            szn = sz.__name__[5:]
+            snn = sn.__name__[5:]
             def test_req(sn, sz, mt):
                 self.check(sn, sz, mt)
             desc = "%s: MT: %s SZ: %s SN: %s" % (self.name, mtn, szn, snn)

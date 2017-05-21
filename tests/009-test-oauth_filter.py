@@ -13,14 +13,14 @@
 # Secret: 0e9e6413a9ef49510a4f68ed02cd
 
 try:
-    from urlparse import parse_qs, parse_qsl
+    from urllib.parse import parse_qs, parse_qsl
 except ImportError:
     from cgi import parse_qs, parse_qsl
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from restkit import request, OAuthFilter
 from restkit.oauth2 import Consumer
-import t
+from . import t
 
 
 class oauth_request(object):
@@ -50,8 +50,8 @@ class oauth_request(object):
     def __call__(self, func):
         def run():
             o = OAuthFilter('*', self.consumer)
-            func(o, self.url, urllib.urlencode(self.body))
-        run.func_name = func.func_name
+            func(o, self.url, urllib.parse.urlencode(self.body))
+        run.__name__ = func.__name__
         return run
         
 @oauth_request('request_token')
@@ -73,7 +73,7 @@ def test_003(o, u, b):
     r = request(u, "POST", body=b, filters=[o],
                 headers={"Content-type": "application/x-www-form-urlencoded"})
     import sys
-    print >>sys.stderr, r.body_string()
+    print(r.body_string(), file=sys.stderr)
     t.eq(r.status_int, 200)
     # Because this is a POST and an application/x-www-form-urlencoded, the OAuth
     # can include the OAuth parameters directly into the body of the form, however

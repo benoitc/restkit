@@ -9,7 +9,7 @@ import select
 import socket
 import ssl
 import time
-import cStringIO
+import io
 
 from socketpool import Connector
 from socketpool.util import is_connected
@@ -33,7 +33,7 @@ class Connection(Connector):
         self._s.connect((host, port))
         if proxy_pieces:
             self._s.sendall(proxy_pieces)
-            response = cStringIO.StringIO()
+            response = io.StringIO()
             while response.getvalue()[-4:] != '\r\n\r\n':
                 response.write(self._s.recv(1))
             response.close()

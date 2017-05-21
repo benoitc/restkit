@@ -3,7 +3,7 @@
 # This file is part of restkit released under the MIT license.
 # See the NOTICE for more information.
 
-import urlparse
+import urllib.parse
 
 from webob import Request
 from restkit.contrib.wsgi_proxy import HostProxy
@@ -22,7 +22,7 @@ def application(environ, start_response):
     req = Request(environ)
     if 'RAW_URI' in req.environ:
         # gunicorn so we use real path non encoded
-        u = urlparse.urlparse(req.environ['RAW_URI'])
+        u = urllib.parse.urlparse(req.environ['RAW_URI'])
         req.environ['PATH_INFO'] = u.path
 
     # do smth like adding oauth headers ..

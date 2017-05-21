@@ -8,9 +8,9 @@ import copy
 import logging
 import mimetypes
 import os
-from StringIO import StringIO
+from io import StringIO
 import types
-import urlparse
+import urllib.parse
 import uuid
 
 from restkit.datastructures import MultiDict
@@ -51,14 +51,14 @@ class Request(object):
     def _parsed_url(self):
         if self.url is None:
             raise ValueError("url isn't set")
-        return urlparse.urlparse(self.url)
+        return urllib.parse.urlparse(self.url)
     parsed_url = property(_parsed_url, doc="parsed url")
 
     def _path__get(self):
         parsed_url = self.parsed_url
         path = parsed_url.path or '/'
 
-        return urlparse.urlunparse(('','', path, parsed_url.params,
+        return urllib.parse.urlunparse(('','', path, parsed_url.params,
             parsed_url.query, parsed_url.fragment))
     path = property(_path__get)
 
@@ -123,7 +123,7 @@ class Request(object):
             elif hasattr(self._body, 'getvalue') and not \
                     self.is_chunked():
                 clen = len(self._body.getvalue())
-            elif isinstance(self._body, types.StringTypes):
+            elif isinstance(self._body, str):
                 self._body = to_bytestring(self._body)
                 clen = len(self._body)
 
@@ -143,7 +143,7 @@ class Request(object):
     def maybe_rewind(self, msg=""):
         if self.body is not None:
             if not hasattr(self.body, 'seek') and \
-                    not isinstance(self.body, types.StringTypes):
+                    not isinstance(self.body, str):
                 raise RequestError("error: '%s', body can't be rewind."
                         % msg)
         if log.isEnabledFor(logging.DEBUG):
@@ -179,9 +179,9 @@ class BodyWrapper(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         try:
-            return self.body.next()
+            return next(self.body)
         except StopIteration:
             self.eof = True
             self.close()
@@ -225,7 +225,7 @@ class Response(object):
         self.status = resp.status()
         self.status_int = resp.status_code()
         self.version = resp.version()
-        self.headerslist = self.headers.items()
+        self.headerslist = list(self.headers.items())
         self.location = self.headers.get('location')
         self.final_url = request.url
         self.should_close = not resp.should_keep_alive()
@@ -257,7 +257,7 @@ class Response(object):
         return key in self.headers
 
     def __iter__(self):
-        return self.headers.iteritems()
+        return iter(self.headers.items())
 
     def can_read(self):
         return not self._already_read

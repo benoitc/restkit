@@ -5,11 +5,11 @@
 
 import os
 import uuid
-import t
+from . import t
 from restkit import request
 from restkit.forms import multipart_form_encode
 
-from _server_test import HOST, PORT
+from ._server_test import HOST, PORT
 
 LONG_BODY_PART = """This is a relatively long body, that we send to the client...
 This is a relatively long body, that we send to the client...
@@ -127,10 +127,10 @@ def test_006():
     t.eq(r.body_string(), content)
 
 def test_007():
-    import StringIO
+    import io
     u = "http://%s:%s/multipart4" % (HOST, PORT)
     content = 'éàù@'
-    f = StringIO.StringIO('éàù@')
+    f = io.StringIO('éàù@')
     f.name = 'test.txt'
     b = {'a':'aa','b':'éàù@', 'f':f}
     h = {'content-type':"multipart/form-data"}

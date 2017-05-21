@@ -5,9 +5,9 @@
 # See the NOTICE for more information.
 
 import base64
-from StringIO import StringIO
-import urlparse
-import urllib
+from io import StringIO
+import urllib.parse
+import urllib.request, urllib.parse, urllib.error
 
 try:
     from webob import Request as BaseRequest
@@ -63,7 +63,7 @@ class Request(BaseRequest):
         if self.method in ('DELETE', 'GET'):
             self.body = ''
         elif self.method == 'POST' and self.POST:
-            body = urllib.urlencode(self.POST.copy())
+            body = urllib.parse.urlencode(self.POST.copy())
             stream = StringIO(body)
             stream.seek(0)
             self.body_file = stream
@@ -80,7 +80,7 @@ class Request(BaseRequest):
         path = url.lstrip('/')
 
         if url.startswith("http://") or url.startswith("https://"):
-            u = urlparse.urlsplit(url)
+            u = urllib.parse.urlsplit(url)
             if u.username is not None:
                 password = u.password or ""
                 encode = base64.b64encode("%s:%s" % (u.username, password))
@@ -90,7 +90,7 @@ class Request(BaseRequest):
             self.host = u.netloc.split("@")[-1]
             self.path_info = u.path or "/"
             self.query_string = u.query
-            url = urlparse.urlunsplit((u.scheme, u.netloc.split("@")[-1], 
+            url = urllib.parse.urlunsplit((u.scheme, u.netloc.split("@")[-1], 
                 u.path, u.query, u.fragment))
         else:
         
@@ -100,5 +100,5 @@ class Request(BaseRequest):
             
 
             url = self.url
-        self.scheme, self.host, self.path_info = urlparse.urlparse(url)[0:3]
+        self.scheme, self.host, self.path_info = urllib.parse.urlparse(url)[0:3]
 

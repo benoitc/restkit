@@ -20,8 +20,8 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 
-project = u'restkit'
-copyright = u'2008-2013 Benoît Chesneau <benoitc@e-engura.org>'
+project = 'restkit'
+copyright = '2008-2013 Benoît Chesneau <benoitc@e-engura.org>'
 
 version = restkit.__version__
 release = version
@@ -43,6 +43,6 @@ html_static_path = ['_static']
 htmlhelp_basename = 'restkitdoc'
 
 latex_documents = [
-  ('index', 'restkit.tex', u'restkit Documentation',
-   u'Benoît Chesneau', 'manual'),
+  ('index', 'restkit.tex', 'restkit Documentation',
+   'Benoît Chesneau', 'manual'),
 ]

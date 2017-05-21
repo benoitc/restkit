@@ -11,7 +11,7 @@ restkit.resource
 This module provide a common interface for all HTTP request.
 """
 from copy import copy
-import urlparse
+import urllib.parse
 
 from restkit.errors import ResourceNotFound, Unauthorized, \
 RequestFailed, ResourceGone
@@ -55,7 +55,7 @@ class Resource(object):
         self.uri = uri
         if self.basic_auth_url:
             # detect credentials from url
-            u = urlparse.urlparse(uri)
+            u = urllib.parse.urlparse(uri)
             if u.username:
                 password = u.password or ""
 
@@ -65,7 +65,7 @@ class Resource(object):
                 client_opts['filters'] = filters
 
                 # update uri
-                self.uri = urlparse.urlunparse((u.scheme, u.netloc.split("@")[-1],
+                self.uri = urllib.parse.urlunparse((u.scheme, u.netloc.split("@")[-1],
                     u.path, u.params, u.query, u.fragment))
 
         self.client_opts = client_opts
