@@ -11,7 +11,7 @@ import socket
 import ssl
 import traceback
 import types
-import urlparse
+import urllib.parse
 
 try:
     from http_parser.http import (
@@ -200,7 +200,7 @@ class Client(object):
             request.is_proxied = True
 
             proxy_settings, proxy_auth =  _get_proxy_auth(proxy_settings)
-            addr = parse_netloc(urlparse.urlparse(proxy_settings))
+            addr = parse_netloc(urllib.parse.urlparse(proxy_settings))
 
             if is_ssl:
                 if proxy_auth:
@@ -268,7 +268,7 @@ class Client(object):
         ]
 
         lheaders.extend(["%s: %s\r\n" % (k, str(v)) for k, v in \
-                headers.items() if k.lower() not in \
+                list(headers.items()) if k.lower() not in \
                 ('user-agent', 'host', 'accept-encoding',)])
         if log.isEnabledFor(logging.DEBUG):
             log.debug("Send headers: %s" % lheaders)
@@ -324,7 +324,7 @@ class Client(object):
                         log.debug("send body (chunked: %s)" % chunked)
 
 
-                    if isinstance(request.body, types.StringTypes):
+                    if isinstance(request.body, str):
                         if msg is not None:
                             conn.send(msg + to_bytestring(request.body),
                                     chunked)
@@ -346,15 +346,15 @@ class Client(object):
                     conn.send(msg)
 
                 return self.get_response(request, conn)
-            except socket.gaierror, e:
+            except socket.gaierror as e:
                 if conn is not None:
                     conn.release(True)
                 raise RequestError(str(e))
-            except socket.timeout, e:
+            except socket.timeout as e:
                 if conn is not None:
                     conn.release(True)
                 raise RequestTimeout(str(e))
-            except socket.error, e:
+            except socket.error as e:
                 if log.isEnabledFor(logging.DEBUG):
                     log.debug("socket error: %s" % str(e))
                 if conn is not None:
@@ -368,7 +368,7 @@ class Client(object):
                 # should raised an exception in other cases
                 request.maybe_rewind(msg=str(e))
 
-            except NoMoreData, e:
+            except NoMoreData as e:
                 if conn is not None:
                     conn.release(True)
 
@@ -505,10 +505,10 @@ def _get_proxy_auth(proxy_settings):
     proxy_password = proxy_password or ""
 
     if not proxy_username:
-        u = urlparse.urlparse(proxy_settings)
+        u = urllib.parse.urlparse(proxy_settings)
         if u.username:
             proxy_password = u.password or proxy_password
-            proxy_settings = urlparse.urlunparse((u.scheme,
+            proxy_settings = urllib.parse.urlunparse((u.scheme,
                 u.netloc.split("@")[-1], u.path, u.params, u.query,
                 u.fragment))
 

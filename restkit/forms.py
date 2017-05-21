@@ -7,7 +7,7 @@
 import mimetypes
 import os
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 
 from restkit.util import to_bytestring, url_quote, url_encode
@@ -30,7 +30,7 @@ class BoundaryItem(object):
             self.size = len(value)
         self.value = value
         if fname is not None:
-            if isinstance(fname, unicode):
+            if isinstance(fname, str):
                 fname = fname.encode("utf-8").encode("string_escape").replace('"', '\\"')
             else:
                 fname = fname.encode("string_escape").replace('"', '\\"')
@@ -105,14 +105,14 @@ class MultipartForm(object):
         self._clen = headers.get('Content-Length')
 
         if hasattr(params, 'items'):
-            params = params.items()
+            params = list(params.items())
 
         for param in params:
             name, value = param
             if hasattr(value, "read"):
                 fname = getattr(value, 'name')
                 if fname is not None:
-                    filetype = ';'.join(filter(None, mimetypes.guess_type(fname)))
+                    filetype = ';'.join([_f for _f in mimetypes.guess_type(fname) if _f])
                 else:
                     filetype = None
                 if not isinstance(value, file) and self._clen is None:

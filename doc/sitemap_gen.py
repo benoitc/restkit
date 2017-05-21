@@ -55,8 +55,8 @@ Usage: python sitemap_gen.py --config=config.xml [--help] [--testing]
 # entire file has been parsed.
 import sys
 if sys.hexversion < 0x02020000:
-  print 'This script requires Python 2.2 or later.'
-  print 'Currently run with version: %s' % sys.version
+  print('This script requires Python 2.2 or later.')
+  print(('Currently run with version: %s' % sys.version))
   sys.exit(1)
 
 import fnmatch
@@ -68,8 +68,8 @@ import re
 import stat
 import time
 import types
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import xml.sax
 
 # True and False were introduced in Python2.2.2
@@ -113,7 +113,7 @@ ACCESSLOG_CLF_PATTERN = re.compile(
   )
 
 # Match patterns for lastmod attributes
-DATE_PATTERNS = map(re.compile, [
+DATE_PATTERNS = list(map(re.compile, [
   r'^\d\d\d\d$',
   r'^\d\d\d\d-\d\d$',
   r'^\d\d\d\d-\d\d-\d\d$',
@@ -121,7 +121,7 @@ DATE_PATTERNS = map(re.compile, [
   r'^\d\d\d\d-\d\d-\d\dT\d\d:\d\d[+-]\d\d:\d\d$',
   r'^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?Z$',
   r'^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?[+-]\d\d:\d\d$',
-  ])
+  ]))
 
 # Match patterns for changefreq attributes
 CHANGEFREQ_PATTERNS = [
@@ -286,7 +286,7 @@ class Encoder:
 
   def NarrowText(self, text, encoding):
     """ Narrow a piece of arbitrary text """
-    if type(text) != types.UnicodeType:
+    if type(text) != str:
       return text
 
     # Try the passed in preference
@@ -338,13 +338,13 @@ class Encoder:
 
   def WidenText(self, text, encoding):
     """ Widen a piece of arbitrary text """
-    if type(text) != types.StringType:
+    if type(text) != bytes:
       return text
 
     # Try the passed in preference
     if encoding:
       try:
-        result = unicode(text, encoding)
+        result = str(text, encoding)
         if not encoding in self._learned:
           self._learned.append(encoding)
         return result
@@ -356,7 +356,7 @@ class Encoder:
     # Try the user preference
     if self._user:
       try:
-        return unicode(text, self._user)
+        return str(text, self._user)
       except UnicodeError:
         pass
       except LookupError:
@@ -367,13 +367,13 @@ class Encoder:
     # Look through learned defaults, knock any failing ones out of the list
     while self._learned:
       try:
-        return unicode(text, self._learned[0])
+        return str(text, self._learned[0])
       except:
         del self._learned[0]
 
     # When all other defaults are exhausted, use UTF-8
     try:
-      return unicode(text, ENC_UTF8)
+      return str(text, ENC_UTF8)
     except UnicodeError:
       pass
 
@@ -418,7 +418,7 @@ class Output:
     if text:
       text = encoder.NarrowText(text, None)
       if self._verbose >= level:
-        print text
+        print(text)
   #end def Log
 
   def Warn(self, text):
@@ -426,9 +426,9 @@ class Output:
     if text:
       text = encoder.NarrowText(text, None)
       hash = md5.new(text).digest()
-      if not self._warns_shown.has_key(hash):
+      if hash not in self._warns_shown:
         self._warns_shown[hash] = 1
-        print '[WARNING] ' + text
+        print(('[WARNING] ' + text))
       else:
         self.Log('(suppressed) [WARNING] ' + text, 3)
       self.num_warns = self.num_warns + 1
@@ -439,9 +439,9 @@ class Output:
     if text:
       text = encoder.NarrowText(text, None)
       hash = md5.new(text).digest()
-      if not self._errors_shown.has_key(hash):
+      if hash not in self._errors_shown:
         self._errors_shown[hash] = 1
-        print '[ERROR] ' + text
+        print(('[ERROR] ' + text))
       else:
         self.Log('(suppressed) [ERROR] ' + text, 3)
       self.num_errors = self.num_errors + 1
@@ -451,16 +451,16 @@ class Output:
     """ Output an error and terminate the program. """
     if text:
       text = encoder.NarrowText(text, None)
-      print '[FATAL] ' + text
+      print(('[FATAL] ' + text))
     else:
-      print 'Fatal error.'
+      print('Fatal error.')
     sys.exit(1)
   #end def Fatal
 
   def SetVerbose(self, level):
     """ Sets the verbose level. """
     try:
-      if type(level) != types.IntType:
+      if type(level) != int:
         level = int(level)
       if (level >= 0) and (level <= 3):
         self._verbose = level
@@ -510,7 +510,7 @@ class URL(object):
     if not loc:
       return False
     narrow = encoder.NarrowText(loc, None)
-    (scheme, netloc, path, query, frag) = urlparse.urlsplit(narrow)
+    (scheme, netloc, path, query, frag) = urllib.parse.urlsplit(narrow)
     if (not scheme) or (not netloc):
       return False
     return True
@@ -526,21 +526,21 @@ class URL(object):
     narrow = encoder.NarrowText(loc, None)
 
     # Escape components individually
-    (scheme, netloc, path, query, frag) = urlparse.urlsplit(narrow)
+    (scheme, netloc, path, query, frag) = urllib.parse.urlsplit(narrow)
     unr    = '-._~'
     sub    = '!$&\'()*+,;='
-    netloc = urllib.quote(netloc, unr + sub + '%:@/[]')
-    path   = urllib.quote(path,   unr + sub + '%:@/')
-    query  = urllib.quote(query,  unr + sub + '%:@/?')
-    frag   = urllib.quote(frag,   unr + sub + '%:@/?')
+    netloc = urllib.parse.quote(netloc, unr + sub + '%:@/[]')
+    path   = urllib.parse.quote(path,   unr + sub + '%:@/')
+    query  = urllib.parse.quote(query,  unr + sub + '%:@/?')
+    frag   = urllib.parse.quote(frag,   unr + sub + '%:@/?')
 
     # Try built-in IDNA encoding on the netloc
     try:
-      (ignore, widenetloc, ignore, ignore, ignore) = urlparse.urlsplit(loc)
+      (ignore, widenetloc, ignore, ignore, ignore) = urllib.parse.urlsplit(loc)
       for c in widenetloc:
-        if c >= unichr(128):
+        if c >= chr(128):
           netloc = widenetloc.encode(ENC_IDNA)
-          netloc = urllib.quote(netloc, unr + sub + '%:@/[]')
+          netloc = urllib.parse.quote(netloc, unr + sub + '%:@/[]')
           break
     except UnicodeError:
       # urlsplit must have failed, based on implementation differences in the
@@ -557,7 +557,7 @@ class URL(object):
       bad_netloc = True
 
     # Put it all back together
-    narrow = urlparse.urlunsplit((scheme, netloc, path, query, frag))
+    narrow = urllib.parse.urlunsplit((scheme, netloc, path, query, frag))
 
     # I let '%' through.  Fix any that aren't pre-existing escapes.
     HEXDIG = '0123456789abcdefABCDEF'
@@ -596,14 +596,14 @@ class URL(object):
 
   def Validate(self, base_url, allow_fragment):
     """ Verify the data in this URL is well-formed, and override if not. """
-    assert type(base_url) == types.StringType
+    assert type(base_url) == bytes
     
     # Test (and normalize) the ref
     if not self.loc:
       output.Warn('Empty URL')
       return False
     if allow_fragment:
-      self.loc = urlparse.urljoin(base_url, self.loc)
+      self.loc = urllib.parse.urljoin(base_url, self.loc)
     if not self.loc.startswith(base_url):
       output.Warn('Discarded URL for not starting with the base_url: %s' %
                   self.loc)
@@ -674,9 +674,9 @@ class URL(object):
     for attribute in self.__slots__:
       value = getattr(self, attribute)
       if value:
-        if type(value) == types.UnicodeType:
+        if type(value) == str:
           value = encoder.NarrowText(value, None)
-        elif type(value) != types.StringType:
+        elif type(value) != bytes:
           value = str(value)
         value = xml.sax.saxutils.escape(value)
         out = out + ('  <%s>%s</%s>\n' % (attribute, value, attribute))
@@ -700,7 +700,7 @@ class NewsURL(URL):
 
   def Validate(self, base_url, allow_fragment):
     """ Verify the data in this News URL is well-formed, and override if not. """
-    assert type(base_url) == types.StringType
+    assert type(base_url) == bytes
 
     if not URL.Validate(self, base_url, allow_fragment):
       return False
@@ -722,9 +722,9 @@ class NewsURL(URL):
     for attribute in self.__slots__:
       value = getattr(self, attribute)
       if value:
-        if type(value) == types.UnicodeType:
+        if type(value) == str:
           value = encoder.NarrowText(value, None)
-        elif type(value) != types.StringType:
+        elif type(value) != bytes:
           value = str(value)
           value = xml.sax.saxutils.escape(value)
         if attribute in NEWS_SPECIFIC_TAGS:
@@ -840,7 +840,7 @@ class InputURL:
       return
     
     url = URL()
-    for attr in attributes.keys():
+    for attr in list(attributes.keys()):
       if attr == 'href':
         url.TrySetAttribute('loc', attributes[attr])
       else:
@@ -1086,7 +1086,7 @@ class InputDirectory:
     if not url.endswith('/'):
       url = url + '/'
     if not url.startswith(base_url):
-      url = urlparse.urljoin(base_url, url)
+      url = urllib.parse.urljoin(base_url, url)
       if not url.startswith(base_url):
         output.Error('The directory URL "%s" is not relative to the '
                     'base_url: %s' % (url, base_url))
@@ -1461,7 +1461,7 @@ class FilePathGenerator:
   def GeneratePath(self, instance):
     """ Generates the iterations, as described above. """
     prefix = self._path + self._prefix
-    if type(instance) == types.IntType:
+    if type(instance) == int:
       if instance:
         return '%s%d%s' % (prefix, instance, self._suffix)
       return prefix + self._suffix
@@ -1472,7 +1472,7 @@ class FilePathGenerator:
     """ Generates iterations, but as a URL instead of a path. """
     prefix = root_url + self._prefix
     retval = None
-    if type(instance) == types.IntType:
+    if type(instance) == int:
       if instance:
         retval = '%s%d%s' % (prefix, instance, self._suffix)
       else:
@@ -1502,13 +1502,13 @@ class PerURLStatistics:
   def Consume(self, url):
     """ Log some stats for the URL.  At the moment, that means extension. """
     if url and url.loc:
-      (scheme, netloc, path, query, frag) = urlparse.urlsplit(url.loc)
+      (scheme, netloc, path, query, frag) = urllib.parse.urlsplit(url.loc)
       if not path:
         return
 
       # Recognize directories
       if path.endswith('/'):
-        if self._extensions.has_key('/'):
+        if '/' in self._extensions:
           self._extensions['/'] = self._extensions['/'] + 1
         else:
           self._extensions['/'] = 1
@@ -1525,12 +1525,12 @@ class PerURLStatistics:
       if i > 0:
         assert i < len(path)
         ext = path[i:].lower()
-        if self._extensions.has_key(ext):
+        if ext in self._extensions:
           self._extensions[ext] = self._extensions[ext] + 1
         else:
           self._extensions[ext] = 1
       else:
-        if self._extensions.has_key('(no extension)'):
+        if '(no extension)' in self._extensions:
           self._extensions['(no extension)'] = self._extensions[
             '(no extension)'] + 1
         else:
@@ -1541,7 +1541,7 @@ class PerURLStatistics:
     """ Dump out stats to the output. """
     if len(self._extensions):
       output.Log('Count of file extensions on URLs:', 1)
-      set = self._extensions.keys()
+      set = list(self._extensions.keys())
       set.sort()
       for ext in set:
         output.Log(' %7d  %s' % (self._extensions[ext], ext), 1)
@@ -1617,8 +1617,8 @@ class Sitemap(xml.sax.handler.ContentHandler):
     # Unify various forms of False
     if all_good:
       if self._suppress:
-        if (type(self._suppress) == types.StringType) or (type(self._suppress)
-                                 == types.UnicodeType):
+        if (type(self._suppress) == bytes) or (type(self._suppress)
+                                 == str):
           if (self._suppress == '0') or (self._suppress.lower() == 'false'):
             self._suppress = False
 
@@ -1702,7 +1702,7 @@ class Sitemap(xml.sax.handler.ContentHandler):
 
     # Note the sighting
     hash = url.MakeHash()
-    if self._urls.has_key(hash):
+    if hash in self._urls:
       dup = self._urls[hash]
       if dup > 0:
         dup = dup + 1
@@ -1780,7 +1780,7 @@ class Sitemap(xml.sax.handler.ContentHandler):
       file  = None
     except IOError:
       output.Fatal('Couldn\'t write out to file: %s' % filename)
-    os.chmod(filename, 0644)
+    os.chmod(filename, 0o644)
 
     # Flush
     self._set = []
@@ -1821,7 +1821,7 @@ class Sitemap(xml.sax.handler.ContentHandler):
       fd = None
     except IOError:
       output.Fatal('Couldn\'t write out to file: %s' % filename)
-    os.chmod(filename, 0644)
+    os.chmod(filename, 0o644)
   #end def WriteIndex
 
   def NotifySearch(self):
@@ -1839,8 +1839,8 @@ class Sitemap(xml.sax.handler.ContentHandler):
         raise IOError
       #end def http_error_default
     #end class ExceptionURLOpener
-    old_opener = urllib._urlopener
-    urllib._urlopener = ExceptionURLopener()
+    old_opener = urllib.request._urlopener
+    urllib.request._urlopener = ExceptionURLopener()
 
     # Build the URL we want to send in
     if self._sitemaps > 1:
@@ -1850,7 +1850,7 @@ class Sitemap(xml.sax.handler.ContentHandler):
 
     # Test if we can hit it ourselves
     try:
-      u = urllib.urlopen(url)
+      u = urllib.request.urlopen(url)
       u.close()
     except IOError:
       output.Error('When attempting to access our generated Sitemap at the '
@@ -1866,21 +1866,21 @@ class Sitemap(xml.sax.handler.ContentHandler):
       query_map             = ping[3]
       query_attr            = ping[5]
       query_map[query_attr] = url
-      query = urllib.urlencode(query_map)
-      notify = urlparse.urlunsplit((ping[0], ping[1], ping[2], query, ping[4]))
+      query = urllib.parse.urlencode(query_map)
+      notify = urllib.parse.urlunsplit((ping[0], ping[1], ping[2], query, ping[4]))
 
       # Send the notification
       output.Log('Notifying: %s' % ping[1], 0)
       output.Log('Notification URL: %s' % notify, 2)
       try:
-        u = urllib.urlopen(notify)
+        u = urllib.request.urlopen(notify)
         u.read()
         u.close()
       except IOError:
         output.Warn('Cannot contact: %s' % ping[1])
 
     if old_opener:
-      urllib._urlopener = old_opener
+      urllib.request._urlopener = old_opener
   #end def NotifySearch
 
   def startElement(self, tag, attributes):
@@ -1912,7 +1912,7 @@ class Sitemap(xml.sax.handler.ContentHandler):
       self._filters.append(Filter(attributes))
 
     elif tag == 'url':
-     print type(attributes)
+     print((type(attributes)))
      self._inputs.append(InputURL(attributes))
 
     elif tag == 'urllist':
@@ -1955,7 +1955,7 @@ def ValidateAttributes(tag, attributes, goodattributes):
   """ Makes sure 'attributes' does not contain any attribute not
       listed in 'goodattributes' """
   all_good = True
-  for attr in attributes.keys():
+  for attr in list(attributes.keys()):
     if not attr in goodattributes:
       output.Error('Unknown %s attribute: %s' % (tag, attr))
       all_good = False
@@ -1977,9 +1977,9 @@ def ExpandPathAttribute(src, attrib):
     return [src]
 
   # If this isn't actually a dictionary, make it one
-  if type(src) != types.DictionaryType:
+  if type(src) != dict:
     tmp = {}
-    for key in src.keys():
+    for key in list(src.keys()):
       tmp[key] = src[key]
     src = tmp
   # Create N new dictionaries
@@ -2036,7 +2036,7 @@ def CreateSitemapFromFile(configpath, suppress_notify):
     xml.sax.parse(configpath, sitemap)
   except IOError:
     output.Error('Cannot read configuration file: %s' % configpath)
-  except xml.sax._exceptions.SAXParseException, e:
+  except xml.sax._exceptions.SAXParseException as e:
     output.Error('XML error in the config file (line %d, column %d): %s' %
                  (e._linenum, e._colnum, e.getMessage()))
   except xml.sax._exceptions.SAXReaderNotAvailable:
@@ -2065,9 +2065,9 @@ def ProcessCommandFlags(args):
   for a in args:
     try:
       rcg = rc.search(a).groupdict()
-      if rcg.has_key('key'):
+      if 'key' in rcg:
         flags[rcg['key']] = rcg['value']
-      if rcg.has_key('option'):
+      if 'option' in rcg:
         flags[rcg['option']] = rcg['option']
     except AttributeError:
       return None
@@ -2081,10 +2081,10 @@ def ProcessCommandFlags(args):
 
 if __name__ == '__main__':
   flags = ProcessCommandFlags(sys.argv[1:])
-  if not flags or not flags.has_key('config') or flags.has_key('help'):
+  if not flags or 'config' not in flags or 'help' in flags:
     output.Log(__usage__, 0)
   else:
-    suppress_notify = flags.has_key('testing')
+    suppress_notify = 'testing' in flags
     sitemap = CreateSitemapFromFile(flags['config'], suppress_notify)
     if not sitemap:
       output.Log('Configuration file errors -- exiting.', 0)

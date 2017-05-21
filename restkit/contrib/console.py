@@ -3,7 +3,7 @@
 # This file is part of restkit released under the MIT license. 
 # See the NOTICE for more information.
 
-from __future__ import with_statement
+
 import os
 import optparse as op
 import sys
@@ -186,8 +186,8 @@ def main():
         try:
             from restkit.contrib import ipython_shell as shell
             shell.main(options=opts, *args)
-        except Exception, e:
-            print >>sys.stderr, str(e)
+        except Exception as e:
+            print(str(e), file=sys.stderr)
             sys.exit(1)
         return
 
@@ -243,29 +243,29 @@ def main():
         else:
             if opts.server_response:
                 if opts.prettify:
-                    print "\n\033[0m\033[95mServer response from %s:\n\033[0m" % (
-                                                                    resp.final_url)
+                    print("\n\033[0m\033[95mServer response from %s:\n\033[0m" % (
+                                                                    resp.final_url))
                     for k, v in resp.headerslist:
-                        print "\033[94m%s\033[0m: %s" % (k, v)
-                    print "\033[0m"
+                        print("\033[94m%s\033[0m: %s" % (k, v))
+                    print("\033[0m")
                 else:
-                    print "Server response from %s:\n" % (resp.final_url)
+                    print("Server response from %s:\n" % (resp.final_url))
                     for k, v in resp.headerslist:
-                        print "%s: %s" % (k, v)
-                    print ""
+                        print("%s: %s" % (k, v))
+                    print("")
 
                 if opts.output == '-':
                     if opts.prettify:
-                        print prettify(resp)
+                        print(prettify(resp))
                     else:
-                        print resp.body_string()
+                        print(resp.body_string())
             else:
                 if opts.prettify:
-                    print prettify(resp)
+                    print(prettify(resp))
                 else:
-                    print resp.body_string()
+                    print(resp.body_string())
         
-    except Exception, e:
+    except Exception as e:
         sys.stderr.write("An error happened: %s" % str(e))
         sys.stderr.flush()
         sys.exit(1)

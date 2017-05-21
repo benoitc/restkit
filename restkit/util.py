@@ -6,12 +6,13 @@
 import os
 import re
 import time
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import warnings
-import Cookie
+import http.cookies
 
 from restkit.errors import InvalidUrl
+import collections
 
 absolute_http_url_re = re.compile(r"^https?://", re.I)
 
@@ -84,20 +85,20 @@ def parse_netloc(uri):
     return (host, port)
 
 def to_bytestring(s):
-    if not isinstance(s, basestring):
+    if not isinstance(s, str):
         raise TypeError("value should be a str or unicode")
 
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         return s.encode('utf-8')
     return s
     
 def url_quote(s, charset='utf-8', safe='/:'):
     """URL encode a single string with a given encoding."""
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode(charset)
     elif not isinstance(s, str):
         s = str(s)
-    return urllib.quote(s, safe=safe)
+    return urllib.parse.quote(s, safe=safe)
 
 
 def url_encode(obj, charset="utf8", encode_keys=False):
@@ -119,15 +120,15 @@ def url_encode(obj, charset="utf8", encode_keys=False):
         for v1 in v:
             if v1 is None:
                 v1 = ''
-            elif callable(v1):
+            elif isinstance(v1, collections.Callable):
                 v1 = encode(v1(), charset)
             else:
                 v1 = encode(v1, charset)
-            tmp.append('%s=%s' % (urllib.quote(k), urllib.quote_plus(v1)))
+            tmp.append('%s=%s' % (urllib.parse.quote(k), urllib.parse.quote_plus(v1)))
     return '&'.join(tmp)
                 
 def encode(v, charset="utf8"):
-    if isinstance(v, unicode):
+    if isinstance(v, str):
         v = v.encode(charset)
     else:
         v = str(v)
@@ -155,7 +156,7 @@ def make_uri(base, *args, **kwargs):
     _path = []
     trailing_slash = False       
     for s in args:
-        if s is not None and isinstance(s, basestring):
+        if s is not None and isinstance(s, str):
             if len(s) > 1 and s.endswith('/'):
                 trailing_slash = True
             else:
@@ -182,15 +183,15 @@ def make_uri(base, *args, **kwargs):
 
 def rewrite_location(host_uri, location, prefix_path=None):
     prefix_path = prefix_path or ''
-    url = urlparse.urlparse(location)
-    host_url = urlparse.urlparse(host_uri)
+    url = urllib.parse.urlparse(location)
+    host_url = urllib.parse.urlparse(host_uri)
 
     if not absolute_http_url_re.match(location):
         # remote server doesn't follow rfc2616
         proxy_uri = '%s%s' % (host_uri, prefix_path)
-        return urlparse.urljoin(proxy_uri, location)
+        return urllib.parse.urljoin(proxy_uri, location)
     elif url.scheme == host_url.scheme and url.netloc == host_url.netloc:
-        return urlparse.urlunparse((host_url.scheme, host_url.netloc, 
+        return urllib.parse.urlunparse((host_url.scheme, host_url.netloc, 
             prefix_path + url.path, url.params, url.query, url.fragment))
     
     return location
@@ -221,7 +222,7 @@ def replace_headers(new_headers, headers):
         if len(found) == len(new_headers):
             return
 
-    for k, v in new_headers.items():
+    for k, v in list(new_headers.items()):
         if k not in found:
             headers.append((k.title(), v))
     return headers
@@ -231,11 +232,11 @@ def parse_cookie(cookie, final_url):
     if cookie == '':
         return {}
 
-    if not isinstance(cookie, Cookie.BaseCookie):
+    if not isinstance(cookie, http.cookies.BaseCookie):
         try:
-            c = Cookie.SimpleCookie()
+            c = http.cookies.SimpleCookie()
             c.load(cookie)
-        except Cookie.CookieError:
+        except http.cookies.CookieError:
             # Invalid cookie
             return {}
     else:
@@ -243,7 +244,7 @@ def parse_cookie(cookie, final_url):
     
     cookiedict = {}
 
-    for key in c.keys():
+    for key in list(c.keys()):
         cook = c.get(key)
         cookiedict[key] = cook.value
     return cookiedict

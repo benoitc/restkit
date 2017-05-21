@@ -17,7 +17,7 @@ for i in range(10):
 
 def fetch(u):
     r = request(u, follow_redirect=True)
-    print "RESULT: %s: %s (%s)" % (u, r.status, len(r.body_string()))
+    print(("RESULT: %s: %s (%s)" % (u, r.status, len(r.body_string()))))
 
 def spawn(u):
     t =  threading.Thread(target=fetch, args=[u])
@@ -30,4 +30,4 @@ def extract():
     [t.join() for t in threads]
 
 t = timeit.Timer(stmt=extract)
-print "%.2f s" % t.timeit(number=1)
+print(("%.2f s" % t.timeit(number=1)))

@@ -4,10 +4,10 @@
 # This file is part of gunicorn released under the MIT license. 
 # See the NOTICE for more information.
 
-from __future__ import with_statement
+
 
 import os
-from StringIO import StringIO
+from io import StringIO
 import tempfile
 
 dirname = os.path.dirname(__file__)
@@ -15,7 +15,7 @@ dirname = os.path.dirname(__file__)
 from restkit.client import Client
 from restkit.resource import Resource
 
-from _server_test import HOST, PORT, run_server_test
+from ._server_test import HOST, PORT, run_server_test
 run_server_test()
 
 def data_source(fname):
@@ -71,7 +71,7 @@ class client_request(object):
         def run():
             cli = Client(timeout=300)
             func(self.url, cli)
-        run.func_name = func.func_name
+        run.__name__ = func.__name__
         return run
         
 class resource_request(object):
@@ -86,7 +86,7 @@ class resource_request(object):
         def run():
             res = Resource(self.url)
             func(res)
-        run.func_name = func.func_name
+        run.__name__ = func.__name__
         return run
         
         

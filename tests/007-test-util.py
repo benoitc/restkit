@@ -4,7 +4,7 @@
 # See the NOTICE for more information.
 
 
-import t
+from . import t
 from restkit import util
 
 def test_001():

@@ -4,12 +4,12 @@
 # See the NOTICE for more information.
 
 
-import t
+from . import t
 
 from restkit.errors import RequestFailed, ResourceNotFound, \
 Unauthorized
 from restkit.resource import Resource
-from _server_test import HOST, PORT
+from ._server_test import HOST, PORT
 
 @t.resource_request()
 def test_001(res):
@@ -30,9 +30,9 @@ def test_003(res):
 
 @t.resource_request()
 def test_004(res):
-    r = res.get(u'/test')
+    r = res.get('/test')
     t.eq(r.status_int, 200)
-    r = res.get(u'/éàù')
+    r = res.get('/éàù')
     t.eq(r.status_int, 200)
 
 @t.resource_request()
@@ -65,11 +65,11 @@ def test_009(res):
 
 @t.resource_request()
 def test_010(res):
-    r = res.post('/unicode', payload=u"éàù@")
+    r = res.post('/unicode', payload="éàù@")
     t.eq(r.body_string(), "éàù@")
-    print "ok"
-    r = res.post('/unicode', payload=u"éàù@")
-    t.eq(r.body_string(charset="utf-8"), u"éàù@")
+    print("ok")
+    r = res.post('/unicode', payload="éàù@")
+    t.eq(r.body_string(charset="utf-8"), "éàù@")
 
 @t.resource_request()
 def test_011(res):
@@ -115,8 +115,8 @@ def test_017(res):
 @t.resource_request()
 def test_018(res):
     content_length = len("test")
-    import StringIO
-    content = StringIO.StringIO("test")
+    import io
+    content = io.StringIO("test")
     r = res.post('/json', payload=content,
             headers={
                 'Content-Type': 'application/json',
@@ -126,8 +126,8 @@ def test_018(res):
 
 @t.resource_request()
 def test_019(res):
-    import StringIO
-    content = StringIO.StringIO("test")
+    import io
+    content = io.StringIO("test")
     t.raises(RequestFailed, res.post, '/json', payload=content,
             headers={'Content-Type': 'text/plain'})
             
@@ -184,9 +184,9 @@ def test_024(res):
 
 @t.resource_request()
 def test_025(res):
-    import StringIO
+    import io
     content = 'éàù@'
-    f = StringIO.StringIO('éàù@')
+    f = io.StringIO('éàù@')
     f.name = 'test.txt'
     b = {'a':'aa','b':'éàù@', 'f':f}
     h = {'content-type':"multipart/form-data"}
