@@ -2020,6 +2020,9 @@ def OpenFileForRead(path, logtext):
 
 def TimestampISO8601(t):
   """Seconds since epoch (1970-01-01) --> ISO 8601 time string."""
+  sde = int(os.environ.get('SOURCE_DATE_EPOCH', time.time()))
+  if t > sde:
+    t = sde
   return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(t))
 #end def TimestampISO8601
 
