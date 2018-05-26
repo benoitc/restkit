@@ -112,7 +112,7 @@ def test_006(u, c):
     t.eq(r.body_string(), "ok")
     
 
-@t.client_request('http://e-engura.com/images/logo.gif')
+@t.client_request('http://www.lsmod.de/~bernhard/mirror/e-engura.com/images/logo.gif')
 def test_007(u, c):
     r = c.request(u)
     print r.status
@@ -124,7 +124,7 @@ def test_007(u, c):
     t.eq(imghdr.what(fname), 'gif')
     
 
-@t.client_request('http://e-engura.com/images/logo.gif')
+@t.client_request('http://www.lsmod.de/~bernhard/mirror/e-engura.com/images/logo.gif')
 def test_008(u, c):
     r = c.request(u)
     t.eq(r.status_int, 200)
