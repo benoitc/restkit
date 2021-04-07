@@ -2,7 +2,7 @@ Usage with Eventlet and Gevent
 ==============================
 
 Restkit can be used with `eventlet`_ or `gevent`_ and provide specific
-connection manager to manage iddle connections for them.
+connection manager to manage idle connections for them.
 
 Use it with gevent:
 -------------------
